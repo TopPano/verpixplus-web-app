@@ -1,5 +1,5 @@
-# verpix-web-app
-Web application for Verpix.
+# verpixplus-web-app
+Web application for Verpix Plus.
 
 ## Getting Started
 
