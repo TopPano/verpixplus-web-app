@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 if (process.env.BROWSER) {
@@ -10,11 +10,10 @@ if (process.env.BROWSER) {
 export default class Brand extends Component {
   render() {
     return (
-      <Link to={'/'} className='brand-component'>
+      <Link to={'/'} className='brand-component logo'>
         <img
-          className={'brand' + (this.props.alwaysShow ? ' brand-always-show' : '')}
           src='/static/images/header/logo.png'
-          alt='Verpix'
+          alt='Verpix Plus'
         />
       </Link>
     );
@@ -24,5 +23,6 @@ export default class Brand extends Component {
 Brand.displayName = 'Brand';
 
 Brand.propTypes = {
-  alwaysShow: PropTypes.bool.isRequired
+};
+Brand.defaultProps = {
 };

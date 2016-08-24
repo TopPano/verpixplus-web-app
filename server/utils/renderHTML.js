@@ -6,10 +6,13 @@ export default function renderHTML(html, initialState, config, shareContent, env
   const isProduction = (env === 'production');
   const robotsMeta = isProduction ? 'index,follow' : 'noindex,nofollow';
   const gaSrcUrl = isProduction ? 'https://www.google-analytics.com/analytics.js' : 'https://www.google-analytics.com/analytics_debug.js';
-  const vendorScript = isProduction ? `<script type="text/javascript" src="${config.staticUrl}/static/build/vendor.bundle.js"></script>` : '';
+  const vendorScript = isProduction ? `<script type="text/javascript" src="/static/build/vendor.bundle.js"></script>` : '';
 
   return `
     <!doctype html>
+    <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+    <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+    <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
     <html>
     <head>
       <meta charset="utf8">
@@ -28,8 +31,16 @@ export default function renderHTML(html, initialState, config, shareContent, env
       <meta property="og:url" content="${shareContent.url}">
       <title>${SITE_CONTENT.SITE_NAME}</title>
       <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-      <link rel="stylesheet" href="${config.staticUrl}/static/build/app.css">
+      <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
+      <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/static/plugins/unify/css/style.css">
+      <link rel="stylesheet" href="/static/plugins/unify/css/headers/header-default.css">
+      <link rel="stylesheet" href="/static/plugins/unify/css/footers/footer-v1.css">
+      <link rel="stylesheet" href="/static/plugins/animate.css">
+      <link rel="stylesheet" href="/static/plugins/line-icons/line-icons.css">
+      <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
+      <link rel="stylesheet" href="/static/plugins/unify/css/custom.css">
+      <link rel="stylesheet" href="/static/build/app.css">
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -41,12 +52,12 @@ export default function renderHTML(html, initialState, config, shareContent, env
       </script>
     </head>
     <body>
-      <div id="app">${html}</div>
+      <div id="app" class="wrapper page-option-v1">${html}</div>
 
       <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
       <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
       ${vendorScript}
-      <script type="text/javascript" src="${config.staticUrl}/static/build/app.js"></script>
+      <script type="text/javascript" src="/static/build/app.js"></script>
     </body>
     </html>
   `;
