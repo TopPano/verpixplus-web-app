@@ -4,6 +4,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
+import SITE_CONTENT from 'content/site/en-us.json';
+
 if (process.env.BROWSER) {
   require('./Topbar.css');
 }
@@ -23,6 +25,8 @@ export default class Topbar extends Component {
               <li><Link to="#">{"繁體中文"}</Link></li>
             </ul>
           </li>
+          <li className="topbar-devider"></li>
+          <li><Link to={'/faq'}>{SITE_CONTENT.HEADER.FAQ}</Link></li>
           <li className="topbar-devider"></li>
           <li><Link to={'/'}>{"login"}</Link></li>
         </ul>
