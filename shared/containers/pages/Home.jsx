@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import NewsFeedPageContainer from './NewsFeed';
-import LoginPageContainer from './Login';
+import LandingPageContainer from './Landing';
 
 class HomePageContainer extends Component {
   static propTyes = {
@@ -20,7 +20,7 @@ class HomePageContainer extends Component {
           <NewsFeedPageContainer />
         }
         {!isAuthenticated &&
-          <LoginPageContainer />
+          <LandingPageContainer />
         }
       </div>
     );
