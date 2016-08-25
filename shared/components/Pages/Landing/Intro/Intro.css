@@ -1,0 +1,5 @@
+.intro-component {
+  .bg-image-v2 {
+    background: url(/static/images/landing/intro-bg.jpg) repeat fixed;
+  }
+}
