@@ -33,13 +33,10 @@ export default function renderHTML(html, initialState, config, shareContent, env
       <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">
       <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
       <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static/plugins/unify/css/style.css">
-      <link rel="stylesheet" href="/static/plugins/unify/css/headers/header-default.css">
-      <link rel="stylesheet" href="/static/plugins/unify/css/footers/footer-v1.css">
-      <link rel="stylesheet" href="/static/plugins/animate.css">
-      <link rel="stylesheet" href="/static/plugins/line-icons/line-icons.css">
+      <link rel="stylesheet" href="/static/plugins/unify/css/unify.min.css">
+      <link rel="stylesheet" href="/static/plugins/animate.min.css">
+      <link rel="stylesheet" href="/static/plugins/line-icons/line-icons.min.css">
       <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/static/plugins/unify/css/custom.css">
       <link rel="stylesheet" href="/static/build/app.css">
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
