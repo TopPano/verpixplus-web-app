@@ -10,7 +10,12 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
-import { fetchComponentsData, genShareContent, renderHTML } from './utils';
+import {
+  fetchComponentsData,
+  genShareContent,
+  renderHTML,
+  isAllowedUrl
+} from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
@@ -30,7 +35,6 @@ app.use((req, res) => {
   const accessToken = req.cookies.accessToken || null;
   const matchViewer = req.url.match(/(\/viewer\/@)+/);
   const isViewerPage = matchViewer && matchViewer.index === 0;
-  const isFAQPage = (req.url === '/faq');
 
   if (accessToken) {
     // restore the client state
@@ -44,8 +48,7 @@ app.use((req, res) => {
       created: req.cookies.created
     };
   } else {
-    // it's not allow to access pages other than Login and Viewer without authentication
-    if (!isViewerPage && !isFAQPage && !req.url.match(/^\/$/ig)) {
+    if (!isViewerPage && !isAllowedUrl(req.url) && !req.url.match(/^\/$/ig)) {
       return res.redirect(302, '/');
     }
   }

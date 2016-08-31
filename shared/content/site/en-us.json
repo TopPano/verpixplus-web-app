@@ -4,8 +4,11 @@
     "DEFAULT_CAPTION": "Verpix",
     "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
   },
-  "FOOTER": {
+  "HEADER": {
     "FAQ": "FAQ",
+    "SIGN_IN": "sigin in"
+  },
+  "FOOTER": {
     "TERMS_OF_USE": "Terms of Use",
     "PRIVACY_POLICY": "Privacy Policy",
     "TWITTER": "Follow @Verpix"
