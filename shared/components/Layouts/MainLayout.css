@@ -1,2 +1,5 @@
-body {
+@import 'Common.css';
+
+html, body {
+  height: 100%;
 }

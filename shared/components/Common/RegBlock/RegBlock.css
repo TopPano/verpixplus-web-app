@@ -1,0 +1,7 @@
+.reg-block-component {
+  height: 100vh;
+  .reg-block {
+    border: solid 1px #eee;
+    box-shadow: 0 0 3px #eee;
+  }
+}

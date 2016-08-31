@@ -1,4 +1,17 @@
 {
+  "HEADER": {
+    "SIGN_IN": {
+      "TITLE": "Sign In",
+      "SWITCH_TO": {
+        "NAME": "Sign Up",
+        "DESC": "Dont have an account?"
+      }
+    }
+  },
+  "INPUTS": {
+    "EMAIL": "Email",
+    "PWD": "Password"
+  },
   "ERR_MSG": {
     "USERNAME": {
       "EMPTY": "Please enter your name.",

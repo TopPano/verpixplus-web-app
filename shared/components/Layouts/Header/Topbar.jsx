@@ -28,7 +28,7 @@ export default class Topbar extends Component {
           <li className="topbar-devider"></li>
           <li><Link to={'/faq'}>{SITE_CONTENT.HEADER.FAQ}</Link></li>
           <li className="topbar-devider"></li>
-          <li><Link to={'/'}>{"login"}</Link></li>
+          <li><Link to={'/signin'}>{SITE_CONTENT.HEADER.SIGN_IN}</Link></li>
         </ul>
       </div>
     );

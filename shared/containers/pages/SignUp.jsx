@@ -3,12 +3,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Login from '../../components/Pages/Login';
-import { loginUser, facebookTokenLogin, registerUser, resetErrMsg } from '../../actions/user';
+import SignIn from 'components/Pages/SignIn';
+import { loginUser, facebookTokenLogin, registerUser, resetErrMsg } from 'actions/user';
 
 import { sendEvent } from 'lib/utils/googleAnalytics';
 
-class LoginPageContainer extends Component {
+class SignInPageContainer extends Component {
   static propTyes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired
@@ -28,13 +28,14 @@ class LoginPageContainer extends Component {
     this.props.dispatch(registerUser({username, email, password}));
     sendEvent('login page', 'join', 'email');
   }
+
   cleanErrMsg = () => {
     this.props.dispatch(resetErrMsg());
   }
 
   render() {
     return (
-      <Login
+      <SignIn
         user={this.props.user}
         loginUser={this.login}
         facebookLogin={this.facebookLogin}
@@ -52,4 +53,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(LoginPageContainer);
+export default connect(mapStateToProps)(SignInPageContainer);
