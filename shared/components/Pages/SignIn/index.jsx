@@ -24,11 +24,11 @@ class SignIn extends Component {
     super(props);
 
     // Bind "this" to member functions
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // Handler for click RegBlockBtn
-  handleClick(e) {
+  // Handler for RegBlock submit
+  handleSubmit(e) {
     e.preventDefault();
 
     const emailVal = this.refs.email.getValue();
@@ -41,10 +41,13 @@ class SignIn extends Component {
 
   // Render RegBlockInputs
   renderInputs(props) {
-    return props.reduce((pre, cur) => [...pre, <RegBlockInput {...cur} />], []);
+    return props.reduce((pre, cur, idx) => [...pre, <RegBlockInput key={idx} {...cur} />], []);
   }
 
   render() {
+    const blockProps = {
+      handleSubmit: this.handleSubmit
+    }
     const headerProps = {
       title: CONTENT.HEADER.SIGN_IN.TITLE,
       switchTo: {
@@ -66,13 +69,13 @@ class SignIn extends Component {
       placeHolder: CONTENT.INPUTS.PWD
     }];
     const btnProps = {
-      handleClick: this.handleClick
+      text: CONTENT.BTN.SIGN_IN.TEXT
     };
     const inputs = this.renderInputs(inputsProps);
 
     return (
       <div className="sign-in-component">
-        <RegBlock>
+        <RegBlock {...blockProps} >
           <RegBlockHeader {...headerProps} />
           {inputs}
           <hr />

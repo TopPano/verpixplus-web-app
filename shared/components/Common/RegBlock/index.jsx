@@ -1,12 +1,13 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 if (process.env.BROWSER) {
   require('./RegBlock.css');
 }
 
 const propTypes = {
+  handleSubmit: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -18,11 +19,16 @@ class RegBlock extends Component {
   }
 
   render() {
+    const { handleSubmit } = this.props;
+
     return (
       <div className="reg-block-component container container-center-row">
-        <div className="reg-block">
+        <form
+          className="reg-block"
+          onSubmit={handleSubmit}
+        >
           {this.props.children}
-        </div>
+        </form>
       </div>
     );
   }

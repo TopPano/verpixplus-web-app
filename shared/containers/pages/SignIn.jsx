@@ -1,15 +1,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 
 import SignIn from 'components/Pages/SignIn';
 import { loginUser } from 'actions/user';
 import { sendEvent } from 'lib/utils/googleAnalytics';
 
 const propTypes = {
-  children: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  children: PropTypes.object
 };
 
 const defaultProps = {
@@ -30,23 +28,19 @@ class SignInPageContainer extends Component {
   }
 
   render() {
+    const { children } = this.props;
+
     return (
       <SignIn
-        user={this.props.user}
         signIn={this.signIn}
-      />
+      >
+        {children}
+      </SignIn>
     );
-  }
-}
-
-function mapStateToProps(state) {
-  const { user } = state;
-  return {
-    user
   }
 }
 
 SignInPageContainer.propTypes = propTypes;
 SignInPageContainer.defaultProps = defaultProps;
 
-export default connect(mapStateToProps)(SignInPageContainer);
+export default SignInPageContainer;

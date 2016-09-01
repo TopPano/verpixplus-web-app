@@ -7,7 +7,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  handleClick: PropTypes.func.isRequired
+  text: PropTypes.string.isRequired
 };
 
 const defaultProps = {
@@ -19,7 +19,7 @@ class RegBlockBtn extends Component {
   }
 
   render() {
-    const { handleClick } = this.props;
+    const { text } = this.props;
 
     return (
       <div className="reg-block-btn-component row">
@@ -27,9 +27,8 @@ class RegBlockBtn extends Component {
           <button
             type="submit"
             className="btn-u btn-block"
-            onClick={handleClick}
           >
-            {"Log In"}
+            {text}
           </button>
         </div>
       </div>

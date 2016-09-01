@@ -4,13 +4,18 @@
       "TITLE": "Sign In",
       "SWITCH_TO": {
         "NAME": "Sign Up",
-        "DESC": "Dont have an account?"
+        "DESC": "Don't have an account?"
       }
     }
   },
   "INPUTS": {
     "EMAIL": "Email",
     "PWD": "Password"
+  },
+  "BTN": {
+    "SIGN_IN": {
+      "TEXT": "Sign In"
+    }
   },
   "ERR_MSG": {
     "USERNAME": {
