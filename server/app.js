@@ -13,8 +13,7 @@ import { RouterContext, match } from 'react-router';
 import {
   fetchComponentsData,
   genShareContent,
-  renderHTML,
-  isAllowedUrl
+  renderHTML
 } from './utils';
 
 import routes from 'shared/routes';
@@ -28,6 +27,18 @@ const app = new Express();
 
 app.use('/static', Express.static('public/static'));
 app.use(cookieParser());
+
+// Use this middleware to set up hot module reloading via webpack
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const config = require('../webpack.config');
+
+  const compiler = webpack(config);
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 // This is fired every time the server side receives a request
 app.use((req, res) => {
@@ -47,17 +58,15 @@ app.use((req, res) => {
       email: req.cookies.email,
       created: req.cookies.created
     };
-  } else {
-    if (!isViewerPage && !isAllowedUrl(req.url) && !req.url.match(/^\/$/ig)) {
-      return res.redirect(302, '/');
-    }
   }
 
   const store = configureStore(initState);
 
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.send(500, error.message);
+  match({ routes: routes(accessToken), location: req.url }, (err, redirectLocation, renderProps) => {
+    if (err) {
+      res.send(500, err.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (!renderProps) {
       res.send(404, 'Not found')
     } else {
@@ -80,7 +89,7 @@ app.use((req, res) => {
         );
         const shareContent = genShareContent(req, isViewerPage, initialState.post);
 
-        return renderHTML(html, initialState, clientConfig, shareContent, 'production');
+        return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
       })
       .then(html => {
         // Send the rendered page back to the client
