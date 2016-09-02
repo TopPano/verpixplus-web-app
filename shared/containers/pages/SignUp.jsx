@@ -3,54 +3,54 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import SignIn from 'components/Pages/SignIn';
-import { loginUser, facebookTokenLogin, registerUser, resetErrMsg } from 'actions/user';
-
+import SignUp from 'components/Pages/SignUp';
+import { registerUser } from 'actions/user';
 import { sendEvent } from 'lib/utils/googleAnalytics';
 
-class SignInPageContainer extends Component {
-  static propTyes = {
-    children: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
-  };
+const propTypes = {
+  children: PropTypes.object
+};
 
-  login = (email, password) => {
-    this.props.dispatch(loginUser({email, password}));
-    sendEvent('login page', 'login', 'email');
+const defaultProps = {
+};
+
+class SignUpPageContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    // Bind "this" to member functions
+    this.signUp = this.signUp.bind(this);
   }
 
-  facebookLogin = (token) => {
-    this.props.dispatch(facebookTokenLogin(token));
-    sendEvent('login page', 'login', 'facebook');
-  }
-
-  join = (username, email, password) => {
-    this.props.dispatch(registerUser({username, email, password}));
+  // Wrapper function for dispatching sign up
+  signUp(username, email, password, callback) {
+    this.props.dispatch(registerUser({
+      username,
+      email,
+      password
+    }, callback));
     sendEvent('login page', 'join', 'email');
   }
 
-  cleanErrMsg = () => {
-    this.props.dispatch(resetErrMsg());
-  }
-
   render() {
+    const { children } = this.props;
+
     return (
-      <SignIn
-        user={this.props.user}
-        loginUser={this.login}
-        facebookLogin={this.facebookLogin}
-        joinUser={this.join}
-        cleanErrMsg={this.cleanErrMsg}
-      />
+      <SignUp
+        signUp={this.signUp}
+      >
+        {children}
+      </SignUp>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { user } = state;
+SignUpPageContainer.propTypes = propTypes;
+SignUpPageContainer.defaultProps = defaultProps;
+
+function mapStateToProps() {
   return {
-    user
-  }
+  };
 }
 
-export default connect(mapStateToProps)(SignInPageContainer);
+export default connect(mapStateToProps)(SignUpPageContainer);

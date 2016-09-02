@@ -7,6 +7,7 @@ import MainLayout from './containers/layouts/MainLayout';
 
 import HomePageContainer from './containers/pages/Home';
 import SignInPageContainer from './containers/pages/SignIn';
+import SignUpPageContainer from './containers/pages/SignUp';
 import FAQPageComponent from './components/Pages/FAQ';
 
 function isAuthenticated(accessToken) {
@@ -43,6 +44,7 @@ export default function routes(accessToken) {
         <IndexRoute component={HomePageContainer} />
         <Route path="faq"component={FAQPageComponent} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
+        <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
         <Redirect from="*" to="/" />
       </Route>
     </Route>
