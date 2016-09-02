@@ -1,0 +1,60 @@
+{
+  "HEADER": {
+    "SIGN_IN": {
+      "TITLE": "Sign In",
+      "SWITCH_TO": {
+        "NAME": "Sign Up",
+        "DESC": "Don't have an account?"
+      }
+    },
+    "SIGN_UP": {
+      "TITLE": "Sign Up",
+      "SWITCH_TO": {
+        "NAME": "Sign In",
+        "DESC": "Have an account?"
+      }
+    }
+  },
+  "INPUTS": {
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "PWD": "Password",
+    "CONFIRM_PWD": "Confirm Password"
+  },
+  "BTN": {
+    "SIGN_IN": {
+      "TEXT": "Sign In"
+    },
+    "SIGN_UP": {
+      "TEXT": "Sign Up"
+    }
+  },
+  "OTHERS": {
+    "SIGN_UP": {
+      "AGREE": "By joining, you agree to our ",
+      "AND": " and "
+    }
+  },
+  "ERR_MSG": {
+    "USERNAME": {
+      "EMPTY": "Please enter your name.",
+      "INVALID": "Please try another name."
+    },
+    "EMAIL": {
+      "EMPTY": "Please enter your email.",
+      "INVALID": "The email address is not valid."
+    },
+    "PWD": {
+      "EMPTY": "Please enter your password.",
+      "NOT_MATCHED": "These passwords don't match."
+    },
+    "CONFIRM_PWD": {
+      "EMPTY": "Please enter your password again."
+    },
+    "AJAX": {
+      "EXISTED": "The email address already exists.",
+      "UNAUTHORIZED": "The email and password don't match.",
+      "OTHERS": "Something wrong with server.\nPlease try again later."
+    }
+  }
+}

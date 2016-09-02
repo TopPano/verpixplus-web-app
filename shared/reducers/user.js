@@ -8,7 +8,6 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
   FACEBOOK_TOKEN_LOGIN_SUCCESS,
-  RESET_USER_ERROR_MESSAGE,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
@@ -104,11 +103,6 @@ export default function user(state=DEFAULT_STATE, action) {
         isAuthenticated: false,
         errorMessage: action.message
       });
-    case RESET_USER_ERROR_MESSAGE:
-      if(state.errorMessage) {
-        state.errorMessage = undefined;
-      }
-      return state;
     default:
       return state;
   }

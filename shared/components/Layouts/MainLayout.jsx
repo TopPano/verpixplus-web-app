@@ -14,13 +14,11 @@ if (process.env.BROWSER) {
 export default class MainLayout extends Component {
   static propTypes = {
     children: PropTypes.object,
-    isAuthenticated: PropTypes.bool.isRequired,
     currentLocation: PropTypes.string.isRequired
   };
 
   render() {
-    const { isAuthenticated, currentLocation } = this.props;
-    const isInLoginPage = !isAuthenticated && (currentLocation === '/');
+    const { currentLocation } = this.props;
     const matchViewer = currentLocation.match(/(\/viewer\/@)+/);
     const isInViewerPage = matchViewer && matchViewer.index === 0;
     const isInEmbeddedViewer = isInViewerPage && isIframe();
@@ -31,11 +29,11 @@ export default class MainLayout extends Component {
 
     return (
       <div>
-        {!isInLoginPage && !isInEmbeddedViewer && <HeaderContainer /> }
+        {!isInEmbeddedViewer && <HeaderContainer />}
           <Content>
             {this.props.children}
           </Content>
-        { !isInEmbeddedViewer && <Footer /> }
+        {!isInEmbeddedViewer && <Footer />}
       </div>
     );
   }
