@@ -3,9 +3,7 @@ import { push } from 'react-router-redux';
 import isFunction from 'lodash/isFunction';
 
 import api from 'lib/api';
-import { loadNewsFeed } from './post';
 import config from 'etc/client';
-import { DEFAULT_FOLLOWING_USER } from 'constants/common';
 import Promise from 'lib/utils/promise';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
@@ -84,13 +82,18 @@ function loginError(message) {
   }
 }
 
-export function loginUser(creds, successRedirectUrl='/') {
+export function loginUser(creds, callback, successRedirectUrl='/') {
   return (dispatch) => {
     if (!creds.email || !creds.password) {
-      return dispatch(loginError('Missing Login Information'));
+      const message = 'Missing Login Information';
+
+      if (isFunction(callback)) {
+        callback({ message });
+      }
+      return dispatch(loginError(message));
     }
 
-    let init = {
+    const init = {
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -110,16 +113,9 @@ export function loginUser(creds, successRedirectUrl='/') {
       if(data) {
         dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
         dispatch(push(successRedirectUrl));
-
-        // Follow our default person if this user has empty following list.
-        const userId = data.userId, authToken = data.id;
-        api.users.getProfile(userId, authToken).then((response) => {
-          if(response.profile.following === 0) {
-            dispatch(followUser(userId, DEFAULT_FOLLOWING_USER, () => {
-              dispatch(loadNewsFeed({authToken}))
-            }));
-          }
-        });
+        if (isFunction(callback)) {
+          callback(null);
+        }
       } else {
         var error = new Error('Failed to get user login data');
         error.status = 500;
@@ -127,6 +123,9 @@ export function loginUser(creds, successRedirectUrl='/') {
       }
     }).catch((err) => {
       dispatch(loginError(err.message));
+      if (isFunction(callback)) {
+        callback(err);
+      }
     });
   }
 }
@@ -164,16 +163,6 @@ export function facebookTokenLogin(token, successRedirectUrl='/') {
       }
     }).catch((err) => {
       dispatch(loginError(err.message));
-    });
-  }
-}
-
-export const RESET_USER_ERROR_MESSAGE = 'RESET_USER_ERROR_MESSAGE';
-
-export function resetErrMsg() {
-  return (dispatch) => {
-    dispatch({
-      type: RESET_USER_ERROR_MESSAGE
     });
   }
 }

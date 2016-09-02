@@ -1,2 +1,7 @@
 .reg-block-input-component {
+  .form-control:focus {
+    &.err {
+      border-color: #D490A9;
+    }
+  }
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import SignIn from 'components/Pages/SignIn';
 import { loginUser } from 'actions/user';
@@ -22,8 +23,11 @@ class SignInPageContainer extends Component {
   }
 
   // Wrapper function for dispatching sign in
-  signIn(email, password) {
-    this.props.dispatch(loginUser({email, password}));
+  signIn(email, password, callback) {
+    this.props.dispatch(loginUser({
+      email,
+      password
+    }, callback));
     sendEvent('login page', 'login', 'email');
   }
 
@@ -43,4 +47,9 @@ class SignInPageContainer extends Component {
 SignInPageContainer.propTypes = propTypes;
 SignInPageContainer.defaultProps = defaultProps;
 
-export default SignInPageContainer;
+function mapStateToProps() {
+  return {
+  };
+}
+
+export default connect(mapStateToProps)(SignInPageContainer);
