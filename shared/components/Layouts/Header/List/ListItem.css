@@ -1,0 +1,5 @@
+.list-item-component {
+  a {
+    transition: color .15s linear;
+  }
+}
