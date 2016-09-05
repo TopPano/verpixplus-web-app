@@ -5,21 +5,19 @@ import Express from 'express';
 import cookieParser from 'cookie-parser';
 import qs from 'qs';
 
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import config from '../webpack.config';
-
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
-import { fetchComponentsData, genShareContent, renderHTML } from './utils';
+import {
+  fetchComponentsData,
+  genShareContent,
+  renderHTML
+} from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
-import DevTools from 'containers/DevTools';
 import Promise from 'lib/utils/promise';
 
 import serverConfig from 'etc/server';
@@ -31,9 +29,16 @@ app.use('/static', Express.static('public/static'));
 app.use(cookieParser());
 
 // Use this middleware to set up hot module reloading via webpack
-const compiler = webpack(config);
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-app.use(webpackHotMiddleware(compiler));
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const config = require('../webpack.config');
+
+  const compiler = webpack(config);
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 // This is fired every time the server side receives a request
 app.use((req, res) => {
@@ -41,7 +46,6 @@ app.use((req, res) => {
   const accessToken = req.cookies.accessToken || null;
   const matchViewer = req.url.match(/(\/viewer\/@)+/);
   const isViewerPage = matchViewer && matchViewer.index === 0;
-  const isFAQPage = (req.url === '/faq');
 
   if (accessToken) {
     // restore the client state
@@ -54,18 +58,15 @@ app.use((req, res) => {
       email: req.cookies.email,
       created: req.cookies.created
     };
-  } else {
-    // it's not allow to access pages other than Login and Viewer without authentication
-    if (!isViewerPage && !isFAQPage && !req.url.match(/^\/$/ig)) {
-      return res.redirect(302, '/');
-    }
   }
 
   const store = configureStore(initState);
 
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.send(500, error.message);
+  match({ routes: routes(accessToken), location: req.url }, (err, redirectLocation, renderProps) => {
+    if (err) {
+      res.send(500, err.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (!renderProps) {
       res.send(404, 'Not found')
     } else {
@@ -83,13 +84,12 @@ app.use((req, res) => {
           <Provider store={store}>
             <div>
               <RouterContext {...renderProps} />
-              <DevTools />
             </div>
           </Provider>
         );
         const shareContent = genShareContent(req, isViewerPage, initialState.post);
 
-        return renderHTML(html, initialState, clientConfig, shareContent, 'development');
+        return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
       })
       .then(html => {
         // Send the rendered page back to the client

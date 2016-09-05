@@ -6,7 +6,7 @@ if (process.env.BROWSER) {
   require('./Content.css');
 }
 
-class ContentComponent extends React.Component {
+export default class Content extends React.Component {
   render() {
     return (
       <div className="content-component">
@@ -16,10 +16,9 @@ class ContentComponent extends React.Component {
   }
 }
 
-ContentComponent.displayName = 'LayoutContentContentComponent';
+Content.displayName = 'Content';
 
-// Uncomment properties you need
-// ContentComponent.propTypes = {};
-// ContentComponent.defaultProps = {};
-
-export default ContentComponent;
+Content.propTypes = {
+};
+Content.defaultProps = {
+};

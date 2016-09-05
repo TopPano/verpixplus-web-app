@@ -2,35 +2,40 @@
 
 import React, { Component, PropTypes } from 'react';
 import Brand from './Brand';
+import Topbar from './Topbar'
 import List from './List';
+import ListBtn from './ListBtn';
 
 if (process.env.BROWSER) {
   require('./Header.css');
 }
 
-class HeaderComponent extends Component {
+export default class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    const isLogin = this.props.username ? true : false;
     return (
-      <div className="header-component navbar-fixed-top">
-        <Brand alwaysShow={!isLogin} />
-        {isLogin &&
-          <List {...this.props} />
-        }
+      <div className='header-component header'>
+        <div className='container'>
+          <Brand />
+          <Topbar />
+          <ListBtn />
+        </div>
+        <List />
       </div>
     );
   }
 }
 
-HeaderComponent.displayName = 'LayoutHeaderHeaderComponent';
+Header.displayName = 'LayoutHeaderHeaderComponent';
 
-HeaderComponent.propTypes = {
+Header.propTypes = {
   username: PropTypes.string,
   profilePhotoUrl: PropTypes.string,
   userId: PropTypes.string,
   logoutUser: PropTypes.func
 };
-HeaderComponent.defaultProps = {
+Header.defaultProps = {
 };
-
-export default HeaderComponent;

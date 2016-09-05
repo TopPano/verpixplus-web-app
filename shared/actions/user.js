@@ -1,12 +1,9 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
-import isFunction from 'lodash/isFunction';
 
 import api from 'lib/api';
-import { loadNewsFeed } from './post';
 import config from 'etc/client';
-import { DEFAULT_FOLLOWING_USER } from 'constants/common';
-import Promise from 'lib/utils/promise';
+import { Promise, execute } from 'lib/utils';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -27,7 +24,9 @@ function registerError(message) {
 export function registerUser(creds, successRedirectUrl='/') {
   return (dispatch) => {
     if (!creds.username || !creds.email || !creds.password) {
-      return dispatch(registerError('Missing Registration Information'));
+      const message = 'Missing Registration Information';
+
+      return dispatch(registerError(message));
     }
 
     let init = {
@@ -48,7 +47,10 @@ export function registerUser(creds, successRedirectUrl='/') {
       return res.json();
     }).then((data) => {
       if(data) {
-        dispatch(loginUser({ email: creds.email, password: creds.password }, successRedirectUrl));
+        dispatch(loginUser({
+          email: creds.email,
+          password: creds.password
+        }, successRedirectUrl));
       } else {
         var error = new Error('Failed to register new user');
         error.status = 500;
@@ -87,10 +89,12 @@ function loginError(message) {
 export function loginUser(creds, successRedirectUrl='/') {
   return (dispatch) => {
     if (!creds.email || !creds.password) {
-      return dispatch(loginError('Missing Login Information'));
+      const message = 'Missing Login Information';
+
+      return dispatch(loginError(message));
     }
 
-    let init = {
+    const init = {
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -110,16 +114,6 @@ export function loginUser(creds, successRedirectUrl='/') {
       if(data) {
         dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
         dispatch(push(successRedirectUrl));
-
-        // Follow our default person if this user has empty following list.
-        const userId = data.userId, authToken = data.id;
-        api.users.getProfile(userId, authToken).then((response) => {
-          if(response.profile.following === 0) {
-            dispatch(followUser(userId, DEFAULT_FOLLOWING_USER, () => {
-              dispatch(loadNewsFeed({authToken}))
-            }));
-          }
-        });
       } else {
         var error = new Error('Failed to get user login data');
         error.status = 500;
@@ -168,12 +162,12 @@ export function facebookTokenLogin(token, successRedirectUrl='/') {
   }
 }
 
-export const RESET_USER_ERROR_MESSAGE = 'RESET_USER_ERROR_MESSAGE';
+export const CLEAR_USER_ERR_MSG = 'CLEAR_USER_ERR_MSG';
 
-export function resetErrMsg() {
+export function clearUserErrMsg() {
   return (dispatch) => {
     dispatch({
-      type: RESET_USER_ERROR_MESSAGE
+      type: CLEAR_USER_ERR_MSG
     });
   }
 }
@@ -256,9 +250,7 @@ export function followUser(followerId, followeeId, callback) {
         followerId,
         followeeId
       });
-      if(isFunction(callback)) {
-        callback();
-      }
+      execute(callback);
     }).catch((error) => {
       dispatch({
         type: FOLLOW_USER_FAILURE,

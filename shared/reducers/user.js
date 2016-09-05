@@ -8,7 +8,7 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
   FACEBOOK_TOKEN_LOGIN_SUCCESS,
-  RESET_USER_ERROR_MESSAGE,
+  CLEAR_USER_ERR_MSG,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
@@ -22,7 +22,7 @@ const DEFAULT_STATE = {
   profilePhotoUrl: undefined,
   email: undefined,
   created: undefined,
-  errorMessage: undefined
+  errMsg: ''
 };
 
 function updateStateForLoginSuccess(
@@ -54,7 +54,7 @@ function updateStateForLoginSuccess(
     profilePhotoUrl: _profilePhotoUrl,
     email,
     created,
-    errorMessage: undefined
+    errMsg: ''
   });
 }
 
@@ -95,20 +95,19 @@ export default function user(state=DEFAULT_STATE, action) {
         profilePhotoUrl: undefined,
         email: undefined,
         created: undefined,
-        errorMessage: undefined
+        errMsg: ''
       });
     case REGISTER_USER_FAILURE:
     case LOGIN_USER_FAILURE:
       return merge({}, state, {
         isFetching: false,
         isAuthenticated: false,
-        errorMessage: action.message
+        errMsg: action.message
       });
-    case RESET_USER_ERROR_MESSAGE:
-      if(state.errorMessage) {
-        state.errorMessage = undefined;
-      }
-      return state;
+    case CLEAR_USER_ERR_MSG:
+      return merge({}, state, {
+        errMsg: ''
+      });
     default:
       return state;
   }
