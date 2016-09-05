@@ -4,10 +4,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import SignUp from 'components/Pages/SignUp';
-import { registerUser } from 'actions/user';
+import { registerUser, clearUserErrMsg } from 'actions/user';
 import { sendEvent } from 'lib/utils/googleAnalytics';
 
 const propTypes = {
+  errMsg: PropTypes.string.isRequired,
   children: PropTypes.object
 };
 
@@ -20,24 +21,32 @@ class SignUpPageContainer extends Component {
 
     // Bind "this" to member functions
     this.signUp = this.signUp.bind(this);
+    this.clearErrMsg = this.clearErrMsg.bind(this);
   }
 
   // Wrapper function for dispatching sign up
-  signUp(username, email, password, callback) {
+  signUp(username, email, password) {
     this.props.dispatch(registerUser({
       username,
       email,
       password
-    }, callback));
-    sendEvent('login page', 'join', 'email');
+    }));
+    sendEvent('signup page', 'signup', 'email');
+  }
+
+  // Wrapper function for dispatching clear error message
+  clearErrMsg() {
+    this.props.dispatch(clearUserErrMsg());
   }
 
   render() {
-    const { children } = this.props;
+    const { errMsg, children } = this.props;
 
     return (
       <SignUp
+        errMsg={errMsg}
         signUp={this.signUp}
+        clearErrMsg={this.clearErrMsg}
       >
         {children}
       </SignUp>
@@ -48,8 +57,11 @@ class SignUpPageContainer extends Component {
 SignUpPageContainer.propTypes = propTypes;
 SignUpPageContainer.defaultProps = defaultProps;
 
-function mapStateToProps() {
+function mapStateToProps(state) {
+  const { errMsg } = state.user;
+
   return {
+    errMsg
   };
 }
 

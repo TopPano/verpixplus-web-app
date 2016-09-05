@@ -23,7 +23,9 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  signUp: PropTypes.func.isRequired
+  errMsg: PropTypes.string.isRequired,
+  signUp: PropTypes.func.isRequired,
+  clearErrMsg: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -35,7 +37,6 @@ class SignUp extends Component {
 
     // Bind "this" to member functions
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSubmitErr = this.handleSubmitErr.bind(this);
   }
 
   // Username validation
@@ -46,21 +47,11 @@ class SignUp extends Component {
     return result && result[0] === name;
   }
 
-  // Handler for response error from remote server
-  handleSubmitErr(err) {
-    if (err && err.message) {
-      const errBlock = this.refs.err;
-
-      // TODO: Handle for more error message.
-      errBlock.show(ERR_MSG.AJAX.OTHERS);
-    }
-  }
-
   // Handler for RegBlock submit
   handleSubmit(e) {
     e.preventDefault();
 
-    this.refs.err.hide();
+    this.refs.err.clear();
 
     const username = this.refs.username;
     const confirmPwd = this.refs.confirmPwd;
@@ -108,7 +99,7 @@ class SignUp extends Component {
       return;
     }
 
-    signUp(usernameVal, emailVal, pwdVal, this.handleSubmitErr);
+    signUp(usernameVal, emailVal, pwdVal);
   }
 
   // Render RegBlockInputs
@@ -117,6 +108,7 @@ class SignUp extends Component {
   }
 
   render() {
+    const { errMsg, clearErrMsg } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
@@ -129,6 +121,8 @@ class SignUp extends Component {
       }
     };
     const errProps = {
+      errMsg,
+      clearErrMsg,
       ref: 'err'
     };
     const inputsProps = [{

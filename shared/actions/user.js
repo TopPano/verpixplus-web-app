@@ -21,12 +21,11 @@ function registerError(message) {
   }
 }
 
-export function registerUser(creds, callback, successRedirectUrl='/') {
+export function registerUser(creds, successRedirectUrl='/') {
   return (dispatch) => {
     if (!creds.username || !creds.email || !creds.password) {
       const message = 'Missing Registration Information';
 
-      execute(callback, { message });
       return dispatch(registerError(message));
     }
 
@@ -51,14 +50,13 @@ export function registerUser(creds, callback, successRedirectUrl='/') {
         dispatch(loginUser({
           email: creds.email,
           password: creds.password
-        }, callback, successRedirectUrl));
+        }, successRedirectUrl));
       } else {
         var error = new Error('Failed to register new user');
         error.status = 500;
         Promise.reject(error);
       }
     }).catch((err) => {
-      execute(callback, err);
       dispatch(registerError(err.message));
     });
   }
@@ -88,12 +86,11 @@ function loginError(message) {
   }
 }
 
-export function loginUser(creds, callback, successRedirectUrl='/') {
+export function loginUser(creds, successRedirectUrl='/') {
   return (dispatch) => {
     if (!creds.email || !creds.password) {
       const message = 'Missing Login Information';
 
-      execute(callback, { message });
       return dispatch(loginError(message));
     }
 
@@ -117,7 +114,6 @@ export function loginUser(creds, callback, successRedirectUrl='/') {
       if(data) {
         dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
         dispatch(push(successRedirectUrl));
-        execute(callback, null);
       } else {
         var error = new Error('Failed to get user login data');
         error.status = 500;
@@ -125,7 +121,6 @@ export function loginUser(creds, callback, successRedirectUrl='/') {
       }
     }).catch((err) => {
       dispatch(loginError(err.message));
-      execute(callback, err);
     });
   }
 }
@@ -163,6 +158,16 @@ export function facebookTokenLogin(token, successRedirectUrl='/') {
       }
     }).catch((err) => {
       dispatch(loginError(err.message));
+    });
+  }
+}
+
+export const CLEAR_USER_ERR_MSG = 'CLEAR_USER_ERR_MSG';
+
+export function clearUserErrMsg() {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_USER_ERR_MSG
     });
   }
 }

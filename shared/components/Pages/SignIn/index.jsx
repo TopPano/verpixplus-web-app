@@ -18,7 +18,9 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  signIn: PropTypes.func.isRequired
+  errMsg: PropTypes.string.isRequired,
+  signIn: PropTypes.func.isRequired,
+  clearErrMsg: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -30,28 +32,13 @@ class SignIn extends Component {
 
     // Bind "this" to member functions
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSubmitErr = this.handleSubmitErr.bind(this);
-  }
-
-  // Handler for response error from remote server
-  handleSubmitErr(err) {
-    if (err && err.message) {
-      const errBlock = this.refs.err;
-
-      // TODO: Handle for more error message.
-      if (err.message === 'Unauthorized') {
-        errBlock.show(ERR_MSG.AJAX.UNAUTHORIZED);
-      } else {
-        errBlock.show(ERR_MSG.AJAX.OTHERS);
-      }
-    }
   }
 
   // Handler for RegBlock submit
   handleSubmit(e) {
     e.preventDefault();
 
-    this.refs.err.hide();
+    this.refs.err.clear();
 
     const email = this.refs.email;
     const pwd = this.refs.pwd;
@@ -75,7 +62,7 @@ class SignIn extends Component {
       return;
     }
 
-    signIn(emailVal, pwdVal, this.handleSubmitErr);
+    signIn(emailVal, pwdVal);
   }
 
   // Render RegBlockInputs
@@ -84,6 +71,7 @@ class SignIn extends Component {
   }
 
   render() {
+    const { errMsg, clearErrMsg } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
@@ -96,6 +84,8 @@ class SignIn extends Component {
       }
     };
     const errProps = {
+      errMsg,
+      clearErrMsg,
       ref: 'err'
     };
     const inputsProps = [{
