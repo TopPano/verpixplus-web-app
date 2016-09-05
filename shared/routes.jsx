@@ -26,7 +26,7 @@ function redirectIfAuth(accessToken, nextState, replace) {
   }
 }
 
-// Uncomment the function is needed
+// Uncomment the function if needed
 /*
 function redirectIfNotAuth(accessToken, nextState, replace) {
   if (!isAuthenticated(accessToken)) {
@@ -42,7 +42,7 @@ export default function routes(accessToken) {
     <Route component={App}>
       <Route path="/" component={MainLayout}>
         <IndexRoute component={HomePageContainer} />
-        <Route path="faq"component={FAQPageComponent} />
+        <Route path="faq" component={FAQPageComponent} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
         <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
         <Redirect from="*" to="/" />
