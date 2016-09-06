@@ -20,9 +20,11 @@ const defaultProps = {
 class FileLoader extends Component {
   constructor(props) {
     super(props);
+
     // Bind "this" to callback functions
     this.handleDropFile = this.handleDropFile.bind(this);
     this.handleClickBtn = this.handleClickBtn.bind(this);
+
     // Accepted MIME types for dropzone
     // TODO: Support for more image and video types
     this.acceptTypes = '';
@@ -51,7 +53,8 @@ class FileLoader extends Component {
     return (
       <div className="file-loader-component fill">
         <Dropzone
-          className="dropzone fill container-center-row"
+          className="dropzone fill container-center-row bg-color-light"
+          activeClassName="isDragged"
           ref="dropzone"
           onDrop={this.handleDropFile}
           disableClick={true}
