@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/lib/Col';
 
 import { MODE } from 'constants/editor';
 import FileLoader from './FileLoader';
+import Sidebar from './Sidebar';
 
 if (process.env.BROWSER) {
   require('./Editor.css');
@@ -39,10 +40,11 @@ class Editor extends Component {
     return (
       <div className="editor-component container-full">
         <Row className="fill">
-          <Col md={9} sm={8} className="editor-main bg-color-light">
+          <Col md={9} sm={8} className="editor-main">
             <FileLoader />
           </Col>
-          <Col md={3} sm={4} className="editor-bar bg-color-dark">
+          <Col md={3} sm={4} className="editor-sidebar">
+            <Sidebar />
           </Col>
         </Row>
       </div>
