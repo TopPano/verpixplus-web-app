@@ -153,7 +153,7 @@ class SignUp extends Component {
     const inputs = this.renderInputs(inputsProps);
 
     return (
-      <div className="sign-up-component">
+      <div className="sign-up-component container-fullpage">
         <RegBlock {...blockProps} >
           <RegBlockHeader {...headerProps} />
           <RegBlockErr {...errProps} />

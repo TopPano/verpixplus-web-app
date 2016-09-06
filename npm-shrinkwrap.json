@@ -1,6 +1,6 @@
 {
-  "name": "verpix-web-app",
-  "version": "0.0.1",
+  "name": "verpixplus-web-app",
+  "version": "1.0.1",
   "dependencies": {
     "abab": {
       "version": "1.0.3",
@@ -178,6 +178,11 @@
       "version": "1.0.0",
       "from": "async-each@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/async-each/-/async-each-1.0.0.tgz"
+    },
+    "attr-accept": {
+      "version": "1.0.3",
+      "from": "attr-accept@>=1.0.3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/attr-accept/-/attr-accept-1.0.3.tgz"
     },
     "autoprefixer": {
       "version": "6.3.6",
@@ -4492,6 +4497,11 @@
       "version": "15.1.0",
       "from": "react-dom@15.1.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.1.0.tgz"
+    },
+    "react-dropzone": {
+      "version": "3.6.0",
+      "from": "react-dropzone@latest",
+      "resolved": "https://registry.npmjs.org/react-dropzone/-/react-dropzone-3.6.0.tgz"
     },
     "react-facebook-login": {
       "version": "2.1.4",

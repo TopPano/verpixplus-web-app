@@ -21,7 +21,7 @@ class Landing extends Component {
   }
   render() {
     return (
-      <div className="landing-component">
+      <div className="landing-component container-fullpage">
         <Intro />
         <ServiceBlock />
       </div>

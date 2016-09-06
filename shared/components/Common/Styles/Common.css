@@ -44,6 +44,10 @@
   flex-direction: row;
 }
 
+.container-fullpage {
+  min-height: 100vh;
+}
+
 /* Customized styles for Bootstrap Modal Dialog. */
 .modal-backdrop.in {
   opacity: 0.25;

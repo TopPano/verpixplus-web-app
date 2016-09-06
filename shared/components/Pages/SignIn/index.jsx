@@ -106,7 +106,7 @@ class SignIn extends Component {
     const inputs = this.renderInputs(inputsProps);
 
     return (
-      <div className="sign-in-component">
+      <div className="sign-in-component container-fullpage">
         <RegBlock {...blockProps} >
           <RegBlockHeader {...headerProps} />
           <RegBlockErr {...errProps} />

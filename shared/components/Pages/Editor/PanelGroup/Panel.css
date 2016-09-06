@@ -1,0 +1,9 @@
+.panel-component {
+  .panel-heading-v2 {
+    cursor: pointer;
+    i.pull-right {
+      top: 7px;
+      position: relative;
+    }
+  }
+}
