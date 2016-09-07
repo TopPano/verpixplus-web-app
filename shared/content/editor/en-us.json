@@ -2,5 +2,11 @@
   "FILE_LOADER": {
     "BTN": "CHOOSE FILE",
     "DESC": "Or drag & drop your video anywhere"
+  },
+  "EDIT_PANEL": {
+    "DESC": {
+      "TITLE": "Description",
+      "PLACE_HOLDER": "Write description here"
+    }
   }
 }

@@ -61,10 +61,10 @@ class Sidebar extends Component {
 
     return (
       <div className="sidebar-component fill bg-color-dark">
-        <div className="menu container bg-color-light-grey">
+        <div className="menu bg-color-light-grey">
           {menuItems}
         </div>
-        <div className="panel-wrapper container">
+        <div className="panel-wrapper">
           {panels[selectedIdx]}
         </div>
       </div>

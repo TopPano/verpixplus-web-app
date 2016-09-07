@@ -1,2 +1,17 @@
 .edit-item-component {
+  padding-bottom: 15px;
+
+  .panel-heading {
+    padding-left: 0;
+    padding-right: 0;
+
+    i.pull-right {
+      top: 7px;
+      position: relative;
+    }
+  }
+
+  .content-wrapper {
+    margin-top: 10px;
+  }
 }

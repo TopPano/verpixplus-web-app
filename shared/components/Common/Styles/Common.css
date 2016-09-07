@@ -48,6 +48,10 @@
   min-height: 100vh;
 }
 
+textarea {
+  resize: none;
+}
+
 /* Customized styles for Bootstrap Modal Dialog. */
 .modal-backdrop.in {
   opacity: 0.25;
