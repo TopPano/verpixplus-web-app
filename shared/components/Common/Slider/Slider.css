@@ -1,0 +1,15 @@
+.slider-component {
+  background-color: #e5e5e5;
+
+  .rc-slider-handle {
+    border: 2px solid #e5e5e5;
+    transition: border-color .3s;
+    &:hover, &:active {
+      border-color: #999;
+    }
+  }
+
+  .rc-slider-track {
+    background-color: transparent;
+  }
+}

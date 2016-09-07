@@ -41,8 +41,8 @@ class EditItem extends Component {
     const arrowClass = classNames({
       'fa': true,
       'pull-right': true,
-      'fa-arrow-circle-up': active,
-      'fa-arrow-circle-down': !active
+      'fa-caret-up': active,
+      'fa-caret-down': !active
     });
 
     return (

@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 
 import EditItemDesc from './EditItemDesc';
+import EditItemAdjust from './EditItemAdjust';
+import EditItemSettings from './EditItemSettings';
 
 if (process.env.BROWSER) {
   require('./EditPanel.css');
@@ -23,6 +25,8 @@ class EditPanel extends Component {
     return (
       <div className="edit-panel-component">
         <EditItemDesc />
+        <EditItemAdjust />
+        <EditItemSettings />
       </div>
     );
   }

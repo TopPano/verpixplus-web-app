@@ -7,6 +7,17 @@
     "DESC": {
       "TITLE": "Description",
       "PLACE_HOLDER": "Write description here"
+    },
+    "ADJUST": {
+      "TITLE": "Adjustment",
+      "BRIGHTNESS": "Brightness",
+      "CONTRAST": "Contrast",
+      "SATURATION": "Saturation"
+    },
+    "SETTINGS": {
+      "TITLE": "Settings",
+      "SAVE": "Save",
+      "DELETE": "Delete"
     }
   }
 }

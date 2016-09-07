@@ -26,7 +26,7 @@ class EditItemDesc extends Component {
     return (
       <div className="edit-item-desc-component">
         <EditItem
-          icon="pencil"
+          icon="comment"
           title={CONTENT.TITLE}
         >
           <textarea
