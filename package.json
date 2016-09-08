@@ -103,6 +103,7 @@
     "redux-logger": "2.6.1",
     "redux-thunk": "2.1.0",
     "screenfull": "3.0.0",
+    "swiper": "3.3.1",
     "three": "0.77.1",
     "urlencode": "1.1.0",
     "validator": "5.3.0"

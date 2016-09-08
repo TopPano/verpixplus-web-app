@@ -8,6 +8,9 @@
       "TITLE": "Description",
       "PLACE_HOLDER": "Write description here"
     },
+    "FILTER": {
+      "TITLE": "Filter"
+    },
     "ADJUST": {
       "TITLE": "Adjustment",
       "BRIGHTNESS": "Brightness",

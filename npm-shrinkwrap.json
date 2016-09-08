@@ -5206,6 +5206,11 @@
       "from": "svgo@>=0.6.1 <0.7.0",
       "resolved": "https://registry.npmjs.org/svgo/-/svgo-0.6.6.tgz"
     },
+    "swiper": {
+      "version": "3.3.1",
+      "from": "swiper@3.3.1",
+      "resolved": "https://registry.npmjs.org/swiper/-/swiper-3.3.1.tgz"
+    },
     "symbol-observable": {
       "version": "0.2.4",
       "from": "symbol-observable@>=0.2.3 <0.3.0",

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import EditItemDesc from './EditItemDesc';
+import EditItemFilter from './EditItemFilter';
 import EditItemAdjust from './EditItemAdjust';
 import EditItemSettings from './EditItemSettings';
 
@@ -26,6 +27,7 @@ class EditPanel extends Component {
       <div className="edit-panel-component">
         <EditItemDesc />
         <EditItemAdjust />
+        <EditItemFilter />
         <EditItemSettings />
       </div>
     );
