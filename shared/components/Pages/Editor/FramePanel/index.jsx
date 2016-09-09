@@ -34,8 +34,10 @@ class FramePanel extends Component {
 
   // Handler for Frame Trimmer range change
   handleRangeChange(value) {
-    const newLower = value[0];
-    const newUpper = value[1];
+    const { totalFrames } = this.props;
+    const { lower, upper } = this.state;
+    let newLower = value[0];
+    let newUpper = value[1];
     const range = newUpper - newLower + 1;
 
     if (range <= FRAME.LIMIT) {
@@ -43,6 +45,18 @@ class FramePanel extends Component {
         lower: newLower,
         upper: newUpper
       });
+    } else {
+      if (lower !== newLower) {
+        newLower = upper - FRAME.LIMIT + 1;
+        this.setState({
+          lower: newLower >= 1 ? newLower : 1
+        });
+      } else if (upper !== newUpper) {
+        newUpper = lower + FRAME.LIMIT - 1;
+        this.setState({
+          upper: newUpper <= totalFrames ? newUpper : totalFrames
+        });
+      }
     }
   }
 

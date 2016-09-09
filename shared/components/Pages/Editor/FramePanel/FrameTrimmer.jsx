@@ -42,7 +42,7 @@ class FrameTrimmer extends Component {
     };
 
     return (
-      <div className="frame-trimmer-component">
+      <div className="frame-trimmer-component clickable">
         <Slider {...sliderProps} />
       </div>
     );
