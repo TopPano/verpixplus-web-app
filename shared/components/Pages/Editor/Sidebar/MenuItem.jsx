@@ -27,8 +27,8 @@ class MenuItem extends Component {
     const itemClass = classNames({
       'menu-item-component': true,
       'btn-u': true,
-      'bg-color-light-grey': true,
-      'active': active
+      'bg-color-light-grey': !active,
+      'bg-color-dark': active
     });
 
     return (
