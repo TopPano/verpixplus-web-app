@@ -13,13 +13,17 @@ const propTypes = {
   text: PropTypes.string,
   imageClass: PropTypes.string,
   active: PropTypes.bool,
+  rounded: PropTypes.bool,
+  disabled: PropTypes.bool,
   handleClick: PropTypes.func
 };
 
 const defaultProps = {
   text: '',
-  active: false,
   imageClass: '',
+  active: false,
+  rounded: false,
+  disabled: false,
   handleClick: () => {}
 };
 
@@ -29,7 +33,7 @@ class ImageCarouselItem extends Component{
   }
 
   render() {
-    const { src, text, imageClass, active, handleClick } = this.props;
+    const { src, text, imageClass, active, rounded, disabled, handleClick } = this.props;
     const othersClass = imageClass.split(' ').reduce((pre, cur) => {
       return merge({}, pre, {
         [cur]: true
@@ -41,6 +45,15 @@ class ImageCarouselItem extends Component{
       'clickable': true,
       'active': active
     }, othersClass));
+    const imgClass = classNames({
+      'rounded': rounded,
+      'disabled': disabled
+    });
+    const textClass = classNames({
+      'item-text': true,
+      'text-center': true,
+      'rounded-bottom': rounded
+    });
 
     return (
       <div
@@ -48,12 +61,12 @@ class ImageCarouselItem extends Component{
         onClick={handleClick}
       >
         <img
-          className="rounded"
+          className={imgClass}
           src={src}
         />
         {
           text &&
-          <div className="item-text text-center">{text}</div>
+          <div className={textClass}>{text}</div>
         }
       </div>
     );

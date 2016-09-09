@@ -35,6 +35,7 @@ class EditItemFilter extends Component {
       images,
       carouselClass: 'filter-carousel',
       imageClass: 'filter-image',
+      rounded: true,
       isVertical: true
     };
 

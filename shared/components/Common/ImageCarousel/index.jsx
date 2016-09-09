@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import merge from 'lodash/merge';
 
 import Carousel from 'components/Common/Carousel';
 import ImageCarouselItem from './ImageCarouselItem';
@@ -18,14 +19,18 @@ const propTypes = {
   carouselclass: PropTypes.string,
   imageclass: PropTypes.string,
   spaceBetween: PropTypes.number,
-  isVertical: PropTypes.bool
+  rounded: PropTypes.bool,
+  isVertical: PropTypes.bool,
+  options: PropTypes.object
 };
 
 const defaultProps = {
   carouselclass: '',
   imageclass: '',
   spaceBetween: 5,
-  isVertical: false
+  rounded: false,
+  isVertical: false,
+  options: {}
 };
 
 class ImageCarousel extends Component{
@@ -50,7 +55,7 @@ class ImageCarousel extends Component{
   // Render list of items
   renderItemList(propsList) {
     const { selectedIdx } = this.state;
-    const { imageClass } = this.props;
+    const { imageClass, disabled, rounded } = this.props;
 
     return renderList(propsList, (props, idx) => {
       return (
@@ -58,6 +63,8 @@ class ImageCarousel extends Component{
           key={idx}
           active={idx === selectedIdx}
           imageClass={imageClass}
+          rounded={rounded}
+          disabled={disabled}
           {...props}
         />
       );
@@ -65,16 +72,16 @@ class ImageCarousel extends Component{
   }
 
   render() {
-    const { images, carouselClass, spaceBetween, isVertical } = this.props;
+    const { images, carouselClass, spaceBetween, isVertical, options } = this.props;
     const carouselProps = {
-      options: {
+      options: merge({}, {
         freeMode: true,
         slidesPerView: 'auto',
         slideToClickedSlide: true,
         direction: isVertical ? 'vertical' : 'horizontal',
         mousewheelControl: true,
         spaceBetween
-      },
+      }, options),
       carouselClass: carouselClass,
       onClick: this.handleClick
     };

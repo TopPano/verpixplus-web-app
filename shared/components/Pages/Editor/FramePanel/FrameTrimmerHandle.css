@@ -1,0 +1,10 @@
+.frame-trimmer-handle-component {
+  .handle-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 15px;
+    color: #e5e5e5;
+  }
+}

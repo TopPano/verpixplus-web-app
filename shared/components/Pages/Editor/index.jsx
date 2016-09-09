@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/lib/Col';
 
 import { MODE } from 'constants/editor';
 import FileLoader from './FileLoader';
+import PlayerPanel from './PlayerPanel';
+import FramePanel from './FramePanel';
 import Sidebar from './Sidebar';
 
 if (process.env.BROWSER) {
@@ -28,11 +30,19 @@ class Editor extends Component {
 
   render() {
     const { mode } = this.props;
+    let mainComponent;
 
     if (mode === MODE.UPLOAD) {
       // Upload mode
+      mainComponent =
+        <FileLoader />;
     } else if (mode === MODE.EDIT) {
       // Edit mode
+      mainComponent =
+        <div className="main-wrapper fill">
+          <PlayerPanel />
+          <FramePanel />
+        </div>
     } else  {
       // TODO: any other case ?
     }
@@ -41,7 +51,7 @@ class Editor extends Component {
       <div className="editor-component container-full">
         <Row className="fill">
           <Col md={9} sm={8} className="editor-main">
-            <FileLoader />
+            {mainComponent}
           </Col>
           <Col md={3} sm={4} className="editor-sidebar">
             <Sidebar />

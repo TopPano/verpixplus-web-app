@@ -1,0 +1,11 @@
+@import 'Variables.css';
+
+.frame-trimmer-component {
+  .frame-slider {
+    background-color: $color-black;
+
+    .rc-slider-track {
+      background-color: #e5e5e5;
+    }
+  }
+}

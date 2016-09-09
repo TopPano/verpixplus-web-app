@@ -16,6 +16,10 @@
     }
 
     .editor-main {
+      .main-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
     }
 
     .editor-sidebar {

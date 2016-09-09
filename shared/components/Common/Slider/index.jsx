@@ -1,7 +1,8 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactSlider from 'rc-slider';
+import classNames from 'classnames';
 
 if (process.env.BROWSER) {
   require('rc-slider/assets/index.css');
@@ -9,10 +10,12 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-}
+  sliderClass: PropTypes.string
+};
 
 const defaultProps = {
-}
+  sliderClass: ''
+};
 
 class Slider extends Component{
   constructor(props) {
@@ -20,9 +23,12 @@ class Slider extends Component{
   }
 
   render() {
+    const otherClass = this.props.sliderClass;
+    const sliderClass = classNames('slider-component', otherClass);
+
     return (
       <ReactSlider
-        className="slider-component"
+        className={sliderClass}
         {...this.props}
       />
     );

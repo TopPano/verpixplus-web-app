@@ -17,3 +17,7 @@ export const EMBED = {
   DEFAULT_WIDTH: 480,
   DEFAULT_HEIGHT: 640
 };
+
+export const FRAME = {
+  LIMIT: 100
+};
