@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import EditItem from './EditItem';
+import SidebarItem from '../SidebarItem';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 
 const CONTENT = EDITOR_CONTENT.EDIT_PANEL.DESC;
@@ -25,7 +25,7 @@ class EditItemDesc extends Component {
   render() {
     return (
       <div className="edit-item-desc-component">
-        <EditItem
+        <SidebarItem
           icon="comment"
           title={CONTENT.TITLE}
         >
@@ -34,7 +34,7 @@ class EditItemDesc extends Component {
             rows="4"
             placeholder={CONTENT.PLACE_HOLDER}
           />
-        </EditItem>
+        </SidebarItem>
       </div>
     );
   }

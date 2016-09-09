@@ -2,6 +2,9 @@
 
 import React, { Component } from 'react';
 
+import ShareSocial from './ShareSocial';
+import ShareEmbed from './ShareEmbed';
+
 if (process.env.BROWSER) {
   require('./SharePanel.css');
 }
@@ -20,6 +23,8 @@ class SharePanel extends Component {
   render() {
     return (
       <div className="share-panel-component">
+        <ShareSocial />
+        <ShareEmbed />
       </div>
     );
   }

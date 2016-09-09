@@ -5,7 +5,7 @@ import range from 'lodash/range';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import ImageCarousel from 'components/Common/ImageCarousel';
-import EditItem from './EditItem';
+import SidebarItem from '../SidebarItem';
 
 const CONTENT = EDITOR_CONTENT.EDIT_PANEL.FILTER;
 
@@ -40,12 +40,12 @@ class EditItemFilter extends Component {
 
     return (
       <div className="edit-item-filter-component">
-        <EditItem
+        <SidebarItem
           icon="filter"
           title={CONTENT.TITLE}
         >
           <ImageCarousel {...imgCarouselProps} />
-        </EditItem>
+        </SidebarItem>
       </div>
     );
   }

@@ -5,7 +5,7 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import classNames from 'classnames';
 
 if (process.env.BROWSER) {
-  require('./EditItem.css');
+  require('./SidebarItem.css');
 }
 
 const propTypes = {
@@ -16,7 +16,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-class EditItem extends Component {
+class SidebarItem extends Component {
   constructor(props) {
     super(props);
 
@@ -46,7 +46,7 @@ class EditItem extends Component {
     });
 
     return (
-      <div className="edit-item-component">
+      <div className="sidebar-item-component">
         <div
           className="panel-heading overflow-h clickable"
           onClick={this.HandleClickHeading}
@@ -67,7 +67,7 @@ class EditItem extends Component {
   }
 }
 
-EditItem.propTypes = propTypes;
-EditItem.defaultProps = defaultProps;
+SidebarItem.propTypes = propTypes;
+SidebarItem.defaultProps = defaultProps;
 
-export default EditItem;
+export default SidebarItem;

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import { renderList } from 'lib/utils';
-import EditItem from './EditItem';
+import SidebarItem from '../SidebarItem';
 import Adjust from './Adjust';
 
 const CONTENT = EDITOR_CONTENT.EDIT_PANEL.ADJUST;
@@ -50,12 +50,12 @@ class EditItemAdjust extends Component {
 
     return (
       <div className="edit-item-adjust-component">
-        <EditItem
+        <SidebarItem
           icon="adjust"
           title={CONTENT.TITLE}
         >
           {adjustList}
-        </EditItem>
+        </SidebarItem>
       </div>
     );
   }

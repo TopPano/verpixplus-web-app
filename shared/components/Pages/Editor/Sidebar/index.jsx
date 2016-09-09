@@ -38,6 +38,7 @@ class Sidebar extends Component {
     return renderList(propsList, (cur, idx) => {
       return (
         <MenuItem
+          key={idx}
           icon={cur.icon}
           active={this.state.selectedIdx === idx}
           handleClick={this.select.bind(this, idx)}
@@ -55,8 +56,8 @@ class Sidebar extends Component {
     }];
     const menuItems = this.renderMenuItems(menuItemsProps);
     const panels = [
-      <EditPanel />,
-      <SharePanel />
+      <EditPanel key="edit-panel" />,
+      <SharePanel key="share-panel" />
     ];
 
     return (

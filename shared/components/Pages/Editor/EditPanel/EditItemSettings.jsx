@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import IconButton from 'components/Common/IconButton';
-import EditItem from './EditItem';
+import SidebarItem from '../SidebarItem';
 
 const CONTENT = EDITOR_CONTENT.EDIT_PANEL.SETTINGS;
 
@@ -40,7 +40,7 @@ class EditItemSettings extends Component {
   render() {
     return (
       <div className="edit-item-settings-component">
-        <EditItem
+        <SidebarItem
           icon="cog"
           title={CONTENT.TITLE}
         >
@@ -56,7 +56,7 @@ class EditItemSettings extends Component {
             text={CONTENT.DELETE}
             handleClick={this.handleClickDelete}
           />
-        </EditItem>
+        </SidebarItem>
       </div>
     );
   }

@@ -22,5 +22,16 @@
       "SAVE": "Save",
       "DELETE": "Delete"
     }
+  },
+  "SHARE_PANEL": {
+    "SOCIAL": {
+      "TITLE": "Share"
+    },
+    "EMBED": {
+      "TITLE": "Embed",
+      "INSTALL": "SDK Installation",
+      "USAGE": "Usage",
+      "COPIED": "Copied"
+    }
   }
 }

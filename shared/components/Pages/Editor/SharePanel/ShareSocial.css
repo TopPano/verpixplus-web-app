@@ -1,0 +1,9 @@
+.share-social-component {
+  .share-icon {
+    background-color: #3b3b3b;
+    transition: background-color .3s ease;
+    &:hover {
+      background-color: #95a5a6;
+    }
+  }
+}
