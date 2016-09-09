@@ -13,6 +13,6 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 15px;
-    color: #e5e5e5;
+    color: $color-black;
   }
 }
