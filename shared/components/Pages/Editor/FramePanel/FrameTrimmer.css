@@ -2,10 +2,10 @@
 
 .frame-trimmer-component {
   .frame-slider {
-    background-color: $color-black;
+    background-color: #eee;
 
     .rc-slider-track {
-      background-color: #e5e5e5;
+      background-color: $color-green;
     }
   }
 }

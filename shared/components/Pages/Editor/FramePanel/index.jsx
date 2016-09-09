@@ -63,7 +63,7 @@ class FramePanel extends Component {
     };
 
     return (
-      <div className="frame-panel-component bg-color-dark">
+      <div className="frame-panel-component bg-color-light">
         <div className="text-center">{`Frames: ${trimmedFrames} / ${totalFrames}`}</div>
         <div className="margin-bottom-30" />
         <FrameTrimmer {...trimmerProps} />

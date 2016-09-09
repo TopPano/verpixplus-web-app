@@ -25,7 +25,7 @@ class FrameTrimmerhandle extends Component {
 
     return (
       <div
-        className="frame-trimmer-handle-component rc-slider-handle"
+        className="rc-slider-handle frame-trimmer-handle-component"
         style={style}
       >
         <strong className="handle-value">

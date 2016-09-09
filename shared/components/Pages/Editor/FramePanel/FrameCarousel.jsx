@@ -32,14 +32,10 @@ class FrameCarousel extends Component {
         disabled: !inRange(idx + 1, lower, upper)
       };
     });
-    const options = {
-      centeredSlides: true
-    };
     const imgCarouselProps = {
       images: _images,
       carouselClass: 'frame-carousel rounded',
-      imageClass: 'frame-image',
-      options
+      imageClass: 'frame-image'
     };
 
     return (

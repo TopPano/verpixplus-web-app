@@ -45,13 +45,13 @@ class EditItemSettings extends Component {
           title={CONTENT.TITLE}
         >
           <IconButton
-            className="btn-u text-uppercase margin-right-10"
+            className="btn-u text-uppercase rounded margin-right-10"
             icon="floppy-o"
             text={CONTENT.SAVE}
             handleClick={this.handleClickSave}
           />
           <IconButton
-            className="btn-u btn-u-red text-uppercase"
+            className="btn-u btn-u-red text-uppercase rounded"
             icon="trash-o"
             text={CONTENT.DELETE}
             handleClick={this.handleClickDelete}
