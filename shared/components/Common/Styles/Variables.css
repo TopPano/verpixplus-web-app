@@ -1,40 +1,4 @@
 $color-black: black;
-$color-grey: #333333;
-
-$text-color-primary: white;
-$text-font-family: Helvetica;
-$text-font-rootsz: 16px;
-
-/* Variables for layout. */
-$layout-padding: 15px;
-$layout-bg-color: #202525;
-$header-height: 50px;
-$header-bg-color: black;
-$footer-height: 25px;
-$footer-bg-color: $header-bg-color;
-
-/* Variables for counter component. */
-$counter-icon-length: 32px;
-$counter-count-width: 50px;
-$counter-count-padding: 5px;
-
-/* Variables for personal page. */
-$personal-profile-length: 100px;
-$personal-profilebg-width: 891px;
-$personal-profilebg-height: 70px;
-$personal-profilebg-margin: calc(($personal-profile-length - $personal-profilebg-height) / 2);
-$personal-profilename-padding: 10px;
-$personal-summarymain-margin: 20px;
-$personal-fg-top: 55px;
-$personal-fg-height: 87px;
-$personal-summary-height: calc($personal-fg-top + $personal-fg-height);
-
-$sm-personal-profile-length: 70px;
-$sm-personal-profilebg-height: 65px;
-$sm-personal-profilebg-margin: calc(($sm-personal-profile-length - $sm-personal-profilebg-height) / 2);
-$sm-personal-summarymain-margin: 10px;
-$personal-fg-top: 55px;
-$sm-personal-fg-top: 55px;
-$sm-personal-fg-height: 50px;
-$sm-personal-summary-height: calc($sm-personal-fg-top + $sm-personal-fg-height);
-
+$color-white: white;
+$color-green: #72c02c;
+$color-green-dark: #327000;

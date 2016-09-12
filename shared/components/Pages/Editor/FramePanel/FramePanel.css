@@ -1,0 +1,9 @@
+@import 'Variables.css';
+
+.frame-panel-component {
+  padding: 20px 40px;
+
+  * {
+    color: $color-black
+  }
+}

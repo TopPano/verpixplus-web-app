@@ -8,6 +8,7 @@ import MainLayout from './containers/layouts/MainLayout';
 import HomePageContainer from './containers/pages/Home';
 import SignInPageContainer from './containers/pages/SignIn';
 import SignUpPageContainer from './containers/pages/SignUp';
+import EditorPageContainer from './containers/pages/Editor';
 import FAQPageComponent from './components/Pages/FAQ';
 
 function isAuthenticated(accessToken) {
@@ -26,17 +27,15 @@ function redirectIfAuth(accessToken, nextState, replace) {
   }
 }
 
-// Uncomment the function if needed
-/*
 function redirectIfNotAuth(accessToken, nextState, replace) {
   if (!isAuthenticated(accessToken)) {
     replace('/');
   }
 }
-*/
 
 export default function routes(accessToken) {
   const _redirectIfAuth = redirectIfAuth.bind(this, accessToken);
+  const _redirectIfNotAuth = redirectIfNotAuth.bind(this, accessToken);
 
   return (
     <Route component={App}>
@@ -45,6 +44,8 @@ export default function routes(accessToken) {
         <Route path="faq" component={FAQPageComponent} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
         <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
+        <Route component={EditorPageContainer} path='/edit/@:postId' onEnter={_redirectIfNotAuth} />
+        <Route component={EditorPageContainer} path='/upload' onEnter={_redirectIfNotAuth} />
         <Redirect from="*" to="/" />
       </Route>
     </Route>

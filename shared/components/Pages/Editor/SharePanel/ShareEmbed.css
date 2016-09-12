@@ -1,0 +1,15 @@
+.share-embed-component {
+  .inputs-wrapper {
+    * {
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    input {
+      border: none;
+      width: 60px !important;
+      height: 30px;
+      max-width: 40%;
+    }
+  }
+}

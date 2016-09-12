@@ -1,0 +1,10 @@
+.sidebar-component {
+  .menu {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .panel-wrapper {
+    padding: 10px 25px;
+  }
+}

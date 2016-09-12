@@ -1,0 +1,8 @@
+.file-loader-component {
+  .dropzone {
+    transition: background-color 0.3s linear;
+    &.isDragged {
+      background-color: #d7d7d7 !important;
+    }
+  }
+}

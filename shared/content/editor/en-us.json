@@ -1,0 +1,37 @@
+{
+  "FILE_LOADER": {
+    "BTN": "CHOOSE FILE",
+    "DESC": "Or drag & drop your video anywhere"
+  },
+  "EDIT_PANEL": {
+    "DESC": {
+      "TITLE": "Description",
+      "PLACE_HOLDER": "Write description here"
+    },
+    "FILTER": {
+      "TITLE": "Filter"
+    },
+    "ADJUST": {
+      "TITLE": "Adjustment",
+      "BRIGHTNESS": "Brightness",
+      "CONTRAST": "Contrast",
+      "SATURATION": "Saturation"
+    },
+    "SETTINGS": {
+      "TITLE": "Settings",
+      "SAVE": "Save",
+      "DELETE": "Delete"
+    }
+  },
+  "SHARE_PANEL": {
+    "SOCIAL": {
+      "TITLE": "Share"
+    },
+    "EMBED": {
+      "TITLE": "Embed",
+      "INSTALL": "SDK Installation",
+      "USAGE": "Usage",
+      "COPIED": "Copied"
+    }
+  }
+}
