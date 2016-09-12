@@ -24,7 +24,7 @@ const defaultProps = {
   onClick: () => {}
 }
 
-class Carousel extends Component{
+class Carousel extends Component {
   constructor(props) {
     super(props);
 
@@ -50,7 +50,7 @@ class Carousel extends Component{
   }
 
   // Update Swiper instance
-  componentDidpdate() {
+  componentDidUpdate() {
     if (process.env.BROWSER) {
       this.swiper.update();
     }

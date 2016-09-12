@@ -17,7 +17,7 @@ const defaultProps = {
   handleClick: () => {}
 }
 
-class IconButton extends Component{
+class IconButton extends Component {
   constructor(props) {
     super(props);
   }

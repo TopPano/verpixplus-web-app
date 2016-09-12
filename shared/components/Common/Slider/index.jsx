@@ -17,7 +17,7 @@ const defaultProps = {
   sliderClass: ''
 };
 
-class Slider extends Component{
+class Slider extends Component {
   constructor(props) {
     super(props);
   }
