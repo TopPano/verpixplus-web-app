@@ -15,12 +15,13 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  postId: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
-  postId: PropTypes.string
+  isProcessing: PropTypes.bool.isRequired,
+  progress: PropTypes.number.isRequired
 };
 
 const defaultProps = {
-  postId: ''
 };
 
 class Editor extends Component {
@@ -32,12 +33,19 @@ class Editor extends Component {
     const { mode } = this.props;
     let mainComponent;
 
-    if (mode === MODE.UPLOAD) {
-      // Upload mode
+    if (mode === MODE.WAIT_FILE) {
+      // Wait for user to choose file
       mainComponent =
         <FileLoader />;
+    } else if (mode === MODE.CREATE) {
+      // After choosing file, creates a new post
+      mainComponent =
+        <div className="main-wrapper fill">
+          <PlayerPanel />
+          <FramePanel />
+        </div>
     } else if (mode === MODE.EDIT) {
-      // Edit mode
+      // Edit an old post
       mainComponent =
         <div className="main-wrapper fill">
           <PlayerPanel />

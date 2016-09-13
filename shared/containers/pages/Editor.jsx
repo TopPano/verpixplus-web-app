@@ -1,12 +1,14 @@
 'use strict';
 
-import React, { Component } from 'react';
-import startsWith from 'lodash/startsWith';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-import { MODE } from 'constants/editor';
+import { connectDataFetchers } from 'lib/utils';
+import { initEditor } from 'actions/editor';
 import Editor from 'components/Pages/Editor';
 
 const propTypes = {
+  editor: PropTypes.object.isRequired
 };
 
 const defaultProps = {
@@ -18,24 +20,10 @@ class EditorPageContainer extends Component {
   }
 
   render() {
-    const { location, params } = this.props;
-    let editorProps = {};
-
-    if (startsWith(location.pathname, '/upload')) {
-      editorProps = {
-        mode: MODE.UPLOAD
-      };
-    } else if (startsWith(location.pathname, '/edit')){
-      editorProps = {
-        mode: MODE.EDIT,
-        postId: params.postId
-      };
-    } else {
-      // TODO: any other case ?
-    }
+    const { editor } = this.props;
 
     return (
-      <Editor {...editorProps} >
+      <Editor {...editor} >
         {this.props.children}
       </Editor>
     );
@@ -45,4 +33,13 @@ class EditorPageContainer extends Component {
 EditorPageContainer.propTypes = propTypes;
 EditorPageContainer.defaultProps = defaultProps;
 
-export default EditorPageContainer;
+function mapStateToProps(state) {
+  const { editor } = state;
+  return {
+    editor
+  };
+}
+
+export default connect(mapStateToProps)(
+  connectDataFetchers(EditorPageContainer, [ initEditor ])
+);

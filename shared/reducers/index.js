@@ -6,6 +6,7 @@ import person from './person';
 import newsFeed from './newsFeed';
 import explorer from './explorer';
 import like from './like';
+import editor from './editor';
 
 const rootReducers = combineReducers({
   user,
@@ -14,6 +15,7 @@ const rootReducers = combineReducers({
   newsFeed,
   explorer,
   like,
+  editor,
   routing
 })
 
