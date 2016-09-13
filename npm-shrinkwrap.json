@@ -4503,6 +4503,11 @@
       "from": "rc-animate@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/rc-animate/-/rc-animate-2.3.1.tgz"
     },
+    "rc-progress": {
+      "version": "2.0.1",
+      "from": "rc-progress@latest",
+      "resolved": "https://registry.npmjs.org/rc-progress/-/rc-progress-2.0.1.tgz"
+    },
     "rc-slider": {
       "version": "4.0.1",
       "from": "rc-slider@latest",
