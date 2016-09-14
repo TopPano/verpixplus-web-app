@@ -19,6 +19,8 @@ const propTypes = {
   mode: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
+  dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dimension: PropTypes.object.isRequired,
   convertFile: PropTypes.func.isRequired
 };
 
@@ -35,6 +37,8 @@ class Editor extends Component {
       mode,
       isProcessing,
       progress,
+      dataUrls,
+      dimension,
       convertFile
     } = this.props;
     let mainComponent;
@@ -53,7 +57,10 @@ class Editor extends Component {
       mainComponent =
         <div className="main-wrapper fill">
           <PlayerPanel />
-          <FramePanel />
+          <FramePanel
+            images={dataUrls}
+            dimension={dimension}
+          />
         </div>
     } else if (mode === MODE.EDIT) {
       // Edit an old post

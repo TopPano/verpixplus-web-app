@@ -68,8 +68,8 @@ export function convert({ mediaType, source }) {
 
       new FrameConverter().convert(source, (progress) => {
         dispatch(convertProgress(progress));
-      }).then((frames) => {
-        dispatch(convertSuccess(frames));
+      }).then((result) => {
+        dispatch(convertSuccess(result));
       }).catch((errMsg) => {
         dispatch(convertFailure(errMsg));
       });
@@ -78,6 +78,5 @@ export function convert({ mediaType, source }) {
     } else {
       dispatch(convertFailure(`Meida type: ${mediaType} is not supported`));
     }
-
   };
 }

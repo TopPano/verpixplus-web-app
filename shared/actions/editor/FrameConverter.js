@@ -18,6 +18,7 @@ export default class FrameConverter {
         this.srcVideo = video;
         this.videoCurTime = 0;
         this.frames = [];
+        this.frameUrls = [],
         this.progress = 0;
         this.hiddenCan = document.createElement('CANVAS');
         this.hiddenCan.setAttribute('width', this.srcVideo.videoWidth);
@@ -27,8 +28,8 @@ export default class FrameConverter {
           if (!this.isConverting) {
             this.isConverting = true;
             this.videoCurTime = this.srcVideo.currentTime;
-            this.captureFrame(handleProgress, (frames) => {
-              resolve(frames);
+            this.captureFrame(handleProgress, (result) => {
+              resolve(result);
             });
           }
         }, false);
@@ -41,7 +42,14 @@ export default class FrameConverter {
   captureFrame(handleProgress, handleComplete) {
     if (this.srcVideo.ended) {
       this.isConverting = false;
-      execute(handleComplete, this.frames);
+      execute(handleComplete, {
+        data: this.frames,
+        dataUrls: this.frameUrls,
+        dimension: {
+          width: this.srcVideo.videoWidth,
+          height: this.srcVideo.videoHeight
+        }
+      });
       return;
     }
 
@@ -63,6 +71,7 @@ export default class FrameConverter {
         const progress = this.videoCurTime / this.srcVideo.duration;
 
         this.frames.push(curFrame);
+        this.frameUrls.push(this.hiddenCan.toDataURL('image/jpeg'));
         execute(handleProgress, progress);
       }
     }

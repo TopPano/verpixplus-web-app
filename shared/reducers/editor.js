@@ -14,7 +14,9 @@ const DEFAULT_STATE = {
   mode: '',
   isProcessing: false,
   progress: 0,
-  result: undefined,
+  data: [],
+  dataUrls: [],
+  dimension: { width: 0, height: 0 },
   errMsg: ''
 };
 
@@ -42,7 +44,9 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
-        result: action.result
+        data: action.result.data,
+        dataUrls: action.result.dataUrls,
+        dimension: action.result.dimension
       });
     case CONVERT_FAILURE:
       return merge({}, state, {

@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import range from 'lodash/range';
 
 import { FRAME } from 'constants/editor';
 import FrameTrimmer from './FrameTrimmer';
@@ -12,11 +11,14 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  totalFrames: PropTypes.number
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired
 };
 
 const defaultProps = {
-  totalFrames: 150
 };
 
 class FramePanel extends Component {
@@ -34,8 +36,8 @@ class FramePanel extends Component {
 
   // Handler for Frame Trimmer range change
   handleRangeChange(value) {
-    const { totalFrames } = this.props;
     const { lower, upper } = this.state;
+    const totalFrames = this.props.images.length;
     let newLower = value[0];
     let newUpper = value[1];
     const range = newUpper - newLower + 1;
@@ -61,8 +63,9 @@ class FramePanel extends Component {
   }
 
   render() {
-    const { totalFrames } = this.props;
+    const { images, dimension } = this.props;
     const { lower, upper } = this.state;
+    const totalFrames = images.length;
     const trimmedFrames = upper - lower + 1;
     const trimmerProps = {
       min: 1,
@@ -71,7 +74,8 @@ class FramePanel extends Component {
       onChange: this.handleRangeChange
     };
     const carouselProps = {
-      images: range(0, totalFrames).map(() => 'http://static.boredpanda.com/blog/wp-content/uploads/2015/06/pallas-cat-manul-14__880.jpg'),
+      images,
+      dimension,
       lower,
       upper
     };
@@ -83,6 +87,7 @@ class FramePanel extends Component {
         <FrameTrimmer {...trimmerProps} />
         <div className="margin-bottom-15" />
         <FrameCarousel {...carouselProps} />
+        <div className="margin-bottom-15" />
       </div>
     );
   }

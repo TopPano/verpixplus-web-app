@@ -3,15 +3,9 @@
 .frame-carousel-component {
   .frame-carousel {
     width: 100%;
-    height: 100px;
 
     * {
       color: $color-white !important;
-    }
-
-    .frame-image {
-      width: 70px;
-      height: 100%;
     }
   }
 }
