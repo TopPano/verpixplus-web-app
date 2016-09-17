@@ -22,7 +22,7 @@ export function initEditor({ params = {}, location = {} }) {
       // TODO: Handle Edit mode
       dispatch({
         type: INIT_EDIT,
-        mediaId: params.postId
+        mediaId: params.mediaId
       });
     } else {
       // Other cases, redirect to home page
