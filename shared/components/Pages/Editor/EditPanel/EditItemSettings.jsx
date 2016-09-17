@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import IconButton from 'components/Common/IconButton';
@@ -13,6 +13,13 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mediaType: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
+  create: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -29,7 +36,18 @@ class EditItemSettings extends Component {
 
   // Handler for clicking save button
   handleClickSave() {
-    // TODO: Implement this function
+    const {
+      mediaType,
+      data,
+      dimension,
+      create
+    } = this.props;
+
+    create({
+      mediaType,
+      data,
+      dimension
+    });
   }
 
   // Handler for clicking delete button

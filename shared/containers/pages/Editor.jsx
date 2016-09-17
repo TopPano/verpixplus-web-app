@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
-  convert
+  convert,
+  createMedia
 } from 'actions/editor';
 import Editor from 'components/Pages/Editor';
 
@@ -23,10 +24,20 @@ class EditorPageContainer extends Component {
 
     // Bind "this" to member function
     this.convertFile = this.convertFile.bind(this);
+    this.create = this.create.bind(this);
   }
 
+  // Wrapper for dispatching convert function,
+  // which convert a video to a series of frames (livephoto)
+  // or convet an image to panophoto
   convertFile({ mediaType, source }) {
     this.props.dispatch(convert({ mediaType, source }));
+  }
+
+  // Wrapper for dispatching createMedia function,
+  // which create a post for livephoto or panophoto
+  create(params) {
+    this.props.dispatch(createMedia(params));
   }
 
   render() {
@@ -36,6 +47,7 @@ class EditorPageContainer extends Component {
       <Editor
         {...editor}
         convertFile={this.convertFile}
+        create={this.create}
       >
         {this.props.children}
       </Editor>

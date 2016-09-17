@@ -5,19 +5,24 @@ import {
   CONVERT_REQUEST,
   CONVERT_PROGRESS,
   CONVERT_SUCCESS,
-  CONVERT_FAILURE
+  CONVERT_FAILURE,
+  CREATE_MEDIA_REQUEST,
+  CREATE_MEDIA_PROGRESS,
+  CREATE_MEDIA_SUCCESS,
+  CREATE_MEDIA_FAILURE
 } from 'actions/editor';
 import { MODE } from 'constants/editor';
 
 const DEFAULT_STATE = {
-  postId: '',
+  mediaId: '',
   mode: '',
+  mediaType: '',
   isProcessing: false,
   progress: 0,
   data: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
-  errMsg: ''
+  err: { message: '' }
 };
 
 export default function editor(state = DEFAULT_STATE, action) {
@@ -28,15 +33,17 @@ export default function editor(state = DEFAULT_STATE, action) {
       });
     case INIT_EDIT:
       return merge({}, state, {
-        postId: action.postId,
+        mediaId: action.mediaId,
         mode: MODE.EDIT
       });
     case CONVERT_REQUEST:
+    case CREATE_MEDIA_REQUEST:
       return merge({}, state, {
         isProcessing: true,
         progress: 0
       });
     case CONVERT_PROGRESS:
+    case CREATE_MEDIA_PROGRESS:
       return merge({}, state, {
         progress: action.progress
       });
@@ -44,13 +51,22 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
+        mediaType: action.mediaType,
         data: action.result.data,
         dataUrls: action.result.dataUrls,
         dimension: action.result.dimension
       });
-    case CONVERT_FAILURE:
+    case CREATE_MEDIA_SUCCESS:
       return merge({}, state, {
+        mediaId: action.response.result.mediaId,
+        mode: MODE.EDIT,
         isProcessing: false
+      });
+    case CONVERT_FAILURE:
+    case CREATE_MEDIA_FAILURE:
+      return merge({}, state, {
+        isProcessing: false,
+        err: action.err
       });
     default:
       return state;

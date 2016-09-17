@@ -23,12 +23,18 @@ class IconButton extends Component{
   }
 
   render() {
-    const { icon, text, className } = this.props;
+    const {
+      icon,
+      text,
+      className,
+      handleClick
+    } = this.props;
 
     return (
       <button
         className={className}
         type="button"
+        onClick={handleClick}
       >
         <i className={`fa fa-${icon}`}></i>
         {` ${text}`}

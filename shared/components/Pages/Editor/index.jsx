@@ -15,13 +15,18 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  postId: PropTypes.string.isRequired,
   mode: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dimension: PropTypes.object.isRequired,
-  convertFile: PropTypes.func.isRequired
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
+  convertFile: PropTypes.func.isRequired,
+  create: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -35,11 +40,14 @@ class Editor extends Component {
   render() {
     const {
       mode,
+      mediaType,
       isProcessing,
       progress,
+      data,
       dataUrls,
       dimension,
-      convertFile
+      convertFile,
+      create
     } = this.props;
     let mainComponent;
 
@@ -67,7 +75,10 @@ class Editor extends Component {
       mainComponent =
         <div className="main-wrapper fill">
           <PlayerPanel />
-          <FramePanel />
+          <FramePanel
+            images={dataUrls}
+            dimension={dimension}
+          />
         </div>
     } else  {
       // TODO: any other case ?
@@ -80,7 +91,12 @@ class Editor extends Component {
             {mainComponent}
           </Col>
           <Col md={3} sm={4} className="editor-sidebar">
-            <Sidebar />
+            <Sidebar
+              mediaType={mediaType}
+              data={data}
+              dimension={dimension}
+              create={create}
+            />
           </Col>
         </Row>
       </div>
