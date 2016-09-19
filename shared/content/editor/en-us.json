@@ -25,7 +25,8 @@
     },
     "SETTINGS": {
       "TITLE": "Settings",
-      "SAVE": "Save",
+      "POST": "Post",
+      "UPDATE": "Update",
       "DELETE": "Delete"
     }
   },

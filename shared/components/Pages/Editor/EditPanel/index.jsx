@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { MODE } from 'constants/editor';
 import EditItemTitle from './EditItemTitle';
 import EditItemCaption from './EditItemCaption';
 import EditItemFilter from './EditItemFilter';
@@ -13,6 +14,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
@@ -35,6 +37,7 @@ class EditPanel extends Component {
 
   render() {
     const {
+      mode,
       mediaType,
       title,
       caption,
@@ -43,6 +46,8 @@ class EditPanel extends Component {
       edit,
       create
     } = this.props;
+    const disabled =
+      mode !== MODE.CREATE && mode !== MODE.EDIT;
 
     return (
       <div className="edit-panel-component">
@@ -54,14 +59,16 @@ class EditPanel extends Component {
           caption={caption}
           edit={edit}
         />
-        <EditItemAdjust />
-        <EditItemFilter />
+        <EditItemAdjust disabled={disabled} />
+        <EditItemFilter disabled={disabled} />
         <EditItemSettings
+          mode={mode}
           mediaType={mediaType}
           title={title}
           caption={caption}
           data={data}
           dimension={dimension}
+          disabled={disabled}
           create={create}
         />
       </div>

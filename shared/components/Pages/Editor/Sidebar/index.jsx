@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
@@ -12,6 +13,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
@@ -60,6 +62,7 @@ class Sidebar extends Component {
   render() {
     const { selectedIdx } = this.state;
     const {
+      mode,
       mediaType,
       title,
       caption,
@@ -68,15 +71,16 @@ class Sidebar extends Component {
       edit,
       create
     } = this.props;
-    const menuItemsProps = [{
+    const editMenuItemProp = {
       icon: 'pencil-square'
-    }, {
+    };
+    const shareMenuItemProp = {
       icon: 'share-alt-square'
-    }];
-    const menuItems = this.renderMenuItems(menuItemsProps);
-    const panels = [
+    };
+    const editPanel =
       <EditPanel
         key="edit-panel"
+        mode={mode}
         mediaType={mediaType}
         title={title}
         caption={caption}
@@ -84,9 +88,22 @@ class Sidebar extends Component {
         dimension={dimension}
         edit={edit}
         create={create}
-      />,
+      />
+    const sharePanel =
       <SharePanel key="share-panel" />
-    ];
+    let menuItemsProps = [];
+    let menuItems;
+    let panels = [];
+
+    if (mode === MODE.WAIT_FILE || mode === MODE.CREATE) {
+      menuItemsProps = [editMenuItemProp];
+      panels = [editPanel];
+    } else if (mode === MODE.EDIT) {
+      menuItemsProps = [editMenuItemProp, shareMenuItemProp];
+      panels = [editPanel, sharePanel];
+    }
+
+    menuItems = this.renderMenuItems(menuItemsProps);
 
     return (
       <div className="sidebar-component fill bg-color-dark">

@@ -66,18 +66,9 @@ class Editor extends Component {
       };
       mainComponent =
         <FilePanel {...filePanelProps} />;
-    } else if (mode === MODE.CREATE) {
-      // After choosing file, creates a new post
-      mainComponent =
-        <div className="main-wrapper fill">
-          <PlayerPanel />
-          <FramePanel
-            images={dataUrls}
-            dimension={dimension}
-          />
-        </div>
-    } else if (mode === MODE.EDIT) {
-      // Edit an old post
+    } else if (mode === MODE.CREATE || mode === MODE.EDIT) {
+      // CREATE mode: after choosing file, creates a new media
+      // EDIT mode: edit an old media
       mainComponent =
         <div className="main-wrapper fill">
           <PlayerPanel />
@@ -98,6 +89,7 @@ class Editor extends Component {
           </Col>
           <Col md={3} sm={4} className="editor-sidebar">
             <Sidebar
+              mode={mode}
               mediaType={mediaType}
               title={title}
               caption={caption}

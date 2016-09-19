@@ -9,11 +9,13 @@ if (process.env.BROWSER) {
 const propTypes = {
   icon: PropTypes.string.isRequired,
   text: PropTypes.string,
+  disabled: PropTypes.bool,
   handleClick: PropTypes.func
 }
 
 const defaultProps = {
   text: '',
+  disabled: false,
   handleClick: () => {}
 }
 
@@ -26,6 +28,7 @@ class IconButton extends Component{
     const {
       icon,
       text,
+      disabled,
       className,
       handleClick
     } = this.props;
@@ -34,6 +37,7 @@ class IconButton extends Component{
       <button
         className={className}
         type="button"
+        disabled={disabled}
         onClick={handleClick}
       >
         <i className={`fa fa-${icon}`}></i>
