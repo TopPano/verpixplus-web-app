@@ -13,6 +13,11 @@ import {
   CREATE_MEDIA_SUCCESS,
   CREATE_MEDIA_FAILURE
 } from 'actions/editor';
+import {
+  GET_MEDIA_REQUEST,
+  GET_MEDIA_SUCCESS,
+  GET_MEDIA_FAILURE
+} from 'actions/media';
 import { MODE } from 'constants/editor';
 
 const DEFAULT_STATE = {
@@ -49,6 +54,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         caption: action.caption
       });
     case CONVERT_REQUEST:
+    case GET_MEDIA_REQUEST:
     case CREATE_MEDIA_REQUEST:
       return merge({}, state, {
         isProcessing: true,
@@ -68,6 +74,26 @@ export default function editor(state = DEFAULT_STATE, action) {
         dataUrls: action.result.dataUrls,
         dimension: action.result.dimension
       });
+    case GET_MEDIA_SUCCESS:
+      // TODO: fill title
+      const {
+        mediaType,
+        // title,
+        caption,
+        imgsData,
+        imgUrls,
+        dimension
+      } = action.response.result;
+
+      return merge({}, state, {
+        isProcessing: false,
+        mediaType,
+        // title,
+        caption,
+        data: imgsData,
+        dataUrls: imgUrls,
+        dimension
+      });
     case CREATE_MEDIA_SUCCESS:
       return merge({}, state, {
         mediaId: action.response.result.mediaId,
@@ -75,6 +101,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         isProcessing: false
       });
     case CONVERT_FAILURE:
+    case GET_MEDIA_FAILURE:
     case CREATE_MEDIA_FAILURE:
       return merge({}, state, {
         isProcessing: false,

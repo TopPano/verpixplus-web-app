@@ -1,14 +1,31 @@
 import { push } from 'react-router-redux';
 import isString from 'lodash/isString';
 import startsWith from 'lodash/startsWith';
+import merge from 'lodash/merge';
 
 import api from 'lib/api';
+import { MEDIA_TYPE } from 'constants/common';
+import { getMedia } from '../media';
+import imageUrlsToData from './imageUrlsToData';
 import FrameConverter from './FrameConverter';
 import concatImages from './concatImages';
-import { MEDIA_TYPE } from 'constants/common';
 
 export const INIT_UPLOAD = 'INIT_UPLOAD';
 export const INIT_EDIT = 'INIT_EDIT';
+
+// Filter function for getMedia.
+// Used to construct images RGBA data from image URLs.
+function constructImagesData(res) {
+  const { imgUrls, dimension } = res.result;
+
+  return imageUrlsToData(imgUrls, dimension).then((imgsData) => {
+    return merge({}, res, {
+      result: {
+        imgsData
+      }
+    });
+  });
+}
 
 // Initialize editor state
 export function initEditor({ params = {}, location = {} }) {
@@ -20,11 +37,17 @@ export function initEditor({ params = {}, location = {} }) {
       });
     } else if (startsWith(location.pathname, '/edit')){
       // Edit
-      // TODO: Handle Edit mode
+      const mediaId = params.mediaId;
+
       dispatch({
         type: INIT_EDIT,
         mediaId: params.mediaId
       });
+
+      dispatch(getMedia({
+        mediaId,
+        filter: constructImagesData
+      }));
     } else {
       // Other cases, redirect to home page
       dispatch(push('/'));

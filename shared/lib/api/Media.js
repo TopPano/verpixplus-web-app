@@ -3,6 +3,12 @@ import Base from './Base';
 import { MEDIA_TYPE } from 'constants/common';
 
 export default class MediaAPI extends Base {
+  getMedia(mediaId) {
+    return this.apiClient.get({
+      url: `media/${mediaId}`
+    });
+  }
+
   postMedia(mediaType, media, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
