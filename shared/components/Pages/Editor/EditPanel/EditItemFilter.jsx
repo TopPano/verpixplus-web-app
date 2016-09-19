@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import range from 'lodash/range';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
@@ -14,9 +14,12 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  // TODO: handle disabled
+  disabled: PropTypes.bool
 };
 
 const defaultProps = {
+  disabled: false
 };
 
 class EditItemFilter extends Component {

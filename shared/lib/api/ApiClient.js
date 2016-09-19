@@ -26,23 +26,25 @@ export default class ApiClient {
     });
   }
 
-  post({url, payload={}, authenticated=false, schema}) {
+  post({ url, payload = {}, authenticated = false, schema, contentType = 'application/json' }) {
     return this.request({
       url,
       method: 'post',
       body: payload,
       authenticated,
-      schema
+      schema,
+      contentType
     });
   }
 
-  put({url, payload={}, authenticated=false}, schema) {
+  put({ url, payload = {}, authenticated = false, schema, contentType = 'application/json' }) {
     return this.request({
       url,
       method: 'put',
       body: payload,
       authenticated,
-      schema
+      schema,
+      contentType
     });
   }
 
@@ -54,13 +56,12 @@ export default class ApiClient {
     });
   }
 
-  request({ url, method, params={}, body={}, authenticated, schema }) {
+  request({ url, method, params = {}, body = {}, authenticated, schema, contentType = 'application/json' }) {
     const urlWithQuery = isEmpty(params) ? `${url}` : `${url}?${queryString.stringify(params)}`;
     const init = {
       method,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json'
       }
     };
 
@@ -81,7 +82,11 @@ export default class ApiClient {
     }
 
     if (method !== 'get' && method !== 'head') {
-      init.body = JSON.stringify(body);
+      if (contentType === 'multipart/form-data') {
+        init.body = body;
+      } else {
+        init.body = JSON.stringify(body);
+      }
     }
 
     return fetch(`${config.apiRoot}/${urlWithQuery}`, init).then((res) => {

@@ -1,0 +1,15 @@
+.file-progress-component {
+  .progress-wrapper {
+    width: 120px;
+    height: 120px;
+    background-color: transparent;
+    position: relative;
+
+    .progress-text {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

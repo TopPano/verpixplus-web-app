@@ -74,7 +74,7 @@ app.use((req, res) => {
         store.dispatch,
         renderProps.components,
         renderProps.params,
-        renderProps.location.query,
+        renderProps.location,
         accessToken
       )
       .then(() => {

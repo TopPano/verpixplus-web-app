@@ -18,6 +18,10 @@ const propTypes = {
   })).isRequired,
   carouselclass: PropTypes.string,
   imageclass: PropTypes.string,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }),
   spaceBetween: PropTypes.number,
   rounded: PropTypes.bool,
   isVertical: PropTypes.bool,
@@ -27,6 +31,10 @@ const propTypes = {
 const defaultProps = {
   carouselclass: '',
   imageclass: '',
+  dimension: {
+    width: 0,
+    height: 0
+  },
   spaceBetween: 5,
   rounded: false,
   isVertical: false,
@@ -55,7 +63,12 @@ class ImageCarousel extends Component{
   // Render list of items
   renderItemList(propsList) {
     const { selectedIdx } = this.state;
-    const { imageClass, disabled, rounded } = this.props;
+    const {
+      imageClass,
+      dimension,
+      disabled,
+      rounded
+    } = this.props;
 
     return renderList(propsList, (props, idx) => {
       return (
@@ -63,6 +76,7 @@ class ImageCarousel extends Component{
           key={idx}
           active={idx === selectedIdx}
           imageClass={imageClass}
+          dimension={dimension}
           rounded={rounded}
           disabled={disabled}
           {...props}

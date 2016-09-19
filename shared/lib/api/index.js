@@ -1,13 +1,13 @@
 import ApiClient from './ApiClient';
 import UsersAPI from './Users';
-import PostsAPI from './Posts';
+import MediaAPI from './Media';
 
 function apiFactory() {
   const api = new ApiClient();
 
   return {
     users: new UsersAPI({ apiClient: api }),
-    posts: new PostsAPI({ apiClient: api })
+    media: new MediaAPI({ apiClient: api })
   };
 }
 

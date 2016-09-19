@@ -1,7 +1,8 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
+import { MODE } from 'constants/editor';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import IconButton from 'components/Common/IconButton';
 import SidebarItem from '../SidebarItem';
@@ -13,9 +14,21 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
+  disabled: PropTypes.bool,
+  create: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  disabled: false
 };
 
 class EditItemSettings extends Component {
@@ -29,7 +42,27 @@ class EditItemSettings extends Component {
 
   // Handler for clicking save button
   handleClickSave() {
-    // TODO: Implement this function
+    const {
+      mode,
+      mediaType,
+      title,
+      caption,
+      data,
+      dimension,
+      create
+    } = this.props;
+
+    if (mode === MODE.CREATE) {
+      create({
+        mediaType,
+        title,
+        caption,
+        data,
+        dimension
+      });
+    } else if (mode === MODE.EDIT) {
+      // TODO: handle EDIT mode
+    }
   }
 
   // Handler for clicking delete button
@@ -38,24 +71,36 @@ class EditItemSettings extends Component {
   }
 
   render() {
+    const {
+      mode,
+      disabled
+    } = this.props;
+    const saveBtnProps = {
+      className: 'btn btn-u text-uppercase rounded margin-right-10',
+      icon: 'floppy-o',
+      text: mode === MODE.WAIT_FILE || mode === MODE.CREATE ? CONTENT.POST :
+            mode === MODE.EDIT ? CONTENT.UPDATE :
+            '',
+      disabled,
+      handleClick: this.handleClickSave
+    }
+
     return (
       <div className="edit-item-settings-component">
         <SidebarItem
           icon="cog"
           title={CONTENT.TITLE}
         >
-          <IconButton
-            className="btn-u text-uppercase rounded margin-right-10"
-            icon="floppy-o"
-            text={CONTENT.SAVE}
-            handleClick={this.handleClickSave}
-          />
-          <IconButton
-            className="btn-u btn-u-red text-uppercase rounded"
-            icon="trash-o"
-            text={CONTENT.DELETE}
-            handleClick={this.handleClickDelete}
-          />
+          <IconButton {...saveBtnProps} />
+          {
+            mode === MODE.EDIT &&
+            <IconButton
+              className="btn btn-u btn-u-red text-uppercase rounded"
+              icon="trash-o"
+              text={CONTENT.DELETE}
+              handleClick={this.handleClickDelete}
+            />
+          }
         </SidebarItem>
       </div>
     );

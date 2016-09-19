@@ -1,10 +1,12 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Dropzone from 'react-dropzone';
 import startsWith from 'lodash/startsWith';
+import isArray from 'lodash/isArray';
 
 import { ACCEPT_TYPES } from 'constants/editor';
+import { MEDIA_TYPE } from 'constants/common';
 import CONTENT from 'content/editor/en-us.json';
 
 if (process.env.BROWSER) {
@@ -12,6 +14,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  convertFile: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -26,21 +29,30 @@ class FileLoader extends Component {
     this.handleClickBtn = this.handleClickBtn.bind(this);
 
     // Accepted MIME types for dropzone
-    // TODO: Support for more image and video types
+    // TODO:
+    // 1. Support image (panophoto)
+    // 2. Support for more image and video types
     this.acceptTypes = '';
-    this.acceptTypes += ACCEPT_TYPES.IMAGE.reduce((pre, cur) => pre + `image/${cur},`, '');
+    // this.acceptTypes += ACCEPT_TYPES.IMAGE.reduce((pre, cur) => pre + `image/${cur},`, '');
     this.acceptTypes += ACCEPT_TYPES.VIDEO.reduce((pre, cur) => pre + `video/${cur},`, '');
   }
 
   // Handler for the file is dropped to zone
   handleDropFile(files) {
-    // We limit user only can choose one file
-    const file = files[0];
+    if (isArray(files) && files[0]) {
+      // We limit user only can choose one file
+      const file = files[0];
+      const { convertFile } = this.props
 
-    if (startsWith(file.type, 'image')) {
-      // TODO: Handle image (panophoto)
-    } else {
-      // Handle video (livephoto)
+      if (startsWith(file.type, 'image')) {
+        // TODO: Handle image (panophoto)
+      } else {
+        // Handle video (livephoto)
+        convertFile({
+          mediaType: MEDIA_TYPE.LIVE_PHOTO,
+          source: file.preview
+        });
+      }
     }
   }
 
@@ -53,7 +65,7 @@ class FileLoader extends Component {
     return (
       <div className="file-loader-component fill">
         <Dropzone
-          className="dropzone fill container-center-row bg-color-light"
+          className="dropzone fill container-center-row"
           activeClassName="isDragged"
           ref="dropzone"
           onDrop={this.handleDropFile}
@@ -66,10 +78,10 @@ class FileLoader extends Component {
             type="button"
             onClick={this.handleClickBtn}
           >
-            {CONTENT.FILE_LOADER.BTN}
+            {CONTENT.FILE_PANEL.LOADER.BTN}
           </button>
           <br />
-          <p>{CONTENT.FILE_LOADER.DESC}</p>
+          <p>{CONTENT.FILE_PANEL.LOADER.DESC}</p>
         </Dropzone>
       </div>
     );
