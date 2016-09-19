@@ -1,7 +1,8 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
+import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
@@ -12,6 +13,17 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
+  edit: PropTypes.func.isRequired,
+  create: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -49,16 +61,49 @@ class Sidebar extends Component {
 
   render() {
     const { selectedIdx } = this.state;
-    const menuItemsProps = [{
+    const {
+      mode,
+      mediaType,
+      title,
+      caption,
+      data,
+      dimension,
+      edit,
+      create
+    } = this.props;
+    const editMenuItemProp = {
       icon: 'pencil-square'
-    }, {
+    };
+    const shareMenuItemProp = {
       icon: 'share-alt-square'
-    }];
-    const menuItems = this.renderMenuItems(menuItemsProps);
-    const panels = [
-      <EditPanel key="edit-panel" />,
+    };
+    const editPanel =
+      <EditPanel
+        key="edit-panel"
+        mode={mode}
+        mediaType={mediaType}
+        title={title}
+        caption={caption}
+        data={data}
+        dimension={dimension}
+        edit={edit}
+        create={create}
+      />
+    const sharePanel =
       <SharePanel key="share-panel" />
-    ];
+    let menuItemsProps = [];
+    let menuItems;
+    let panels = [];
+
+    if (mode === MODE.WAIT_FILE || mode === MODE.CREATE) {
+      menuItemsProps = [editMenuItemProp];
+      panels = [editPanel];
+    } else if (mode === MODE.EDIT) {
+      menuItemsProps = [editMenuItemProp, shareMenuItemProp];
+      panels = [editPanel, sharePanel];
+    }
+
+    menuItems = this.renderMenuItems(menuItemsProps);
 
     return (
       <div className="sidebar-component fill bg-color-dark">

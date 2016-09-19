@@ -57,6 +57,11 @@ textarea {
   resize: none;
 }
 
+/* Customized styles for Bootstrap and Unify */
+.btn:focus {
+  color: inherit;
+}
+
 /* Customized styles for Bootstrap Modal Dialog. */
 .modal-backdrop.in {
   opacity: 0.25;

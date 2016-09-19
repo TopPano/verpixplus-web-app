@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import { renderList } from 'lib/utils';
@@ -14,9 +14,11 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  disabled: PropTypes.bool
 };
 
 const defaultProps = {
+  disabled: false
 };
 
 class EditItemAdjust extends Component {
@@ -30,21 +32,27 @@ class EditItemAdjust extends Component {
   }
 
   render() {
+    const { disabled } = this.props;
     const adjustListProps = [{
       title: CONTENT.BRIGHTNESS,
       min: -100,
       max: 100,
-      initialValue: 0
+      initialValue: 0,
+      disabled
     }, {
       title: CONTENT.CONTRAST,
       min: -100,
       max: 100,
-      initialValue: 0
+      initialValue: 0,
+      disabled
+
     }, {
       title: CONTENT.SATURATION,
       min: -100,
       max: 100,
-      initialValue: 0
+      initialValue: 0,
+      disabled
+
     }];
     const adjustList = this.renderAdjustList(adjustListProps);
 
