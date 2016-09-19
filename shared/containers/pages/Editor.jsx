@@ -7,9 +7,9 @@ import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
   convert,
-  edit,
-  createMedia
+  edit
 } from 'actions/editor';
+import { createMedia } from 'actions/media';
 import Editor from 'components/Pages/Editor';
 
 const propTypes = {

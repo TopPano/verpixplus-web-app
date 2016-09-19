@@ -7,16 +7,15 @@ import {
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
   EDIT_TITLE,
-  EDIT_CAPTION,
-  CREATE_MEDIA_REQUEST,
-  CREATE_MEDIA_PROGRESS,
-  CREATE_MEDIA_SUCCESS,
-  CREATE_MEDIA_FAILURE
+  EDIT_CAPTION
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
   GET_MEDIA_SUCCESS,
-  GET_MEDIA_FAILURE
+  GET_MEDIA_FAILURE,
+  CREATE_MEDIA_REQUEST,
+  CREATE_MEDIA_SUCCESS,
+  CREATE_MEDIA_FAILURE
 } from 'actions/media';
 import { MODE } from 'constants/editor';
 
@@ -61,7 +60,6 @@ export default function editor(state = DEFAULT_STATE, action) {
         progress: 0
       });
     case CONVERT_PROGRESS:
-    case CREATE_MEDIA_PROGRESS:
       return merge({}, state, {
         progress: action.progress
       });
