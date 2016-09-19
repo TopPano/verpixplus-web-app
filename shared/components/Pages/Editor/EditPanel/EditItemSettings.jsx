@@ -14,6 +14,8 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
@@ -38,6 +40,8 @@ class EditItemSettings extends Component {
   handleClickSave() {
     const {
       mediaType,
+      title,
+      caption,
       data,
       dimension,
       create
@@ -45,6 +49,8 @@ class EditItemSettings extends Component {
 
     create({
       mediaType,
+      title,
+      caption,
       data,
       dimension
     });

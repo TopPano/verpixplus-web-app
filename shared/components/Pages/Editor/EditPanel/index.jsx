@@ -2,7 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import EditItemDesc from './EditItemDesc';
+import EditItemTitle from './EditItemTitle';
+import EditItemCaption from './EditItemCaption';
 import EditItemFilter from './EditItemFilter';
 import EditItemAdjust from './EditItemAdjust';
 import EditItemSettings from './EditItemSettings';
@@ -13,11 +14,14 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  edit: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -32,18 +36,30 @@ class EditPanel extends Component {
   render() {
     const {
       mediaType,
+      title,
+      caption,
       data,
       dimension,
+      edit,
       create
     } = this.props;
 
     return (
       <div className="edit-panel-component">
-        <EditItemDesc />
+        <EditItemTitle
+          title={title}
+          edit={edit}
+        />
+        <EditItemCaption
+          caption={caption}
+          edit={edit}
+        />
         <EditItemAdjust />
         <EditItemFilter />
         <EditItemSettings
           mediaType={mediaType}
+          title={title}
+          caption={caption}
           data={data}
           dimension={dimension}
           create={create}

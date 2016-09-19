@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import isString from 'lodash/isString';
 import startsWith from 'lodash/startsWith';
 
 import api from 'lib/api';
@@ -86,6 +87,35 @@ export function convert({ mediaType, source }) {
   };
 }
 
+export const EDIT_TITLE = 'EDIT_TITLE';
+export const EDIT_CAPTION = 'EDIT_CAPTION';
+
+function editTitle(title) {
+  return {
+    type: EDIT_TITLE,
+    title
+  };
+}
+
+function editCaption(caption) {
+  return {
+    type: EDIT_CAPTION,
+    caption
+  };
+}
+
+export function edit({ title, caption }) {
+  return (dispatch) => {
+    if (isString(title)) {
+      dispatch(editTitle(title));
+    }
+
+    if (isString(caption)) {
+      dispatch(editCaption(caption));
+    }
+  }
+}
+
 export const CREATE_MEDIA_REQUEST = 'CREATE_MEDIA_REQUEST';
 export const CREATE_MEDIA_PROGRESS = 'CREATE_MEDIA_PROGRESS';
 export const CREATE_MEDIA_SUCCESS = 'CREATE_MEDIA_SUCCESS';
@@ -118,7 +148,7 @@ function createMediaFailure(err) {
   };
 }
 
-export function createMedia({ mediaType, data, dimension }) {
+export function createMedia({ mediaType, title, caption, data, dimension }) {
   return (dispatch) => {
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       dispatch(createMediaRequest());
@@ -127,8 +157,9 @@ export function createMedia({ mediaType, data, dimension }) {
       concatImages(data).then((concatImgs) => {
         const formData = new FormData();
 
-        // TODO: dynamically value for caption, action and orientation
-        formData.append('caption', '');
+        // TODO: dynamically value for action and orientation
+        formData.append('title', title);
+        formData.append('caption', caption);
         formData.append('action', 'horizontal');
         formData.append('orientation', 'portrait');
         formData.append('width', dimension.width);

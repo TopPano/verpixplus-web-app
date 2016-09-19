@@ -13,11 +13,14 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  edit: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -58,8 +61,11 @@ class Sidebar extends Component {
     const { selectedIdx } = this.state;
     const {
       mediaType,
+      title,
+      caption,
       data,
       dimension,
+      edit,
       create
     } = this.props;
     const menuItemsProps = [{
@@ -72,8 +78,11 @@ class Sidebar extends Component {
       <EditPanel
         key="edit-panel"
         mediaType={mediaType}
+        title={title}
+        caption={caption}
         data={data}
         dimension={dimension}
+        edit={edit}
         create={create}
       />,
       <SharePanel key="share-panel" />

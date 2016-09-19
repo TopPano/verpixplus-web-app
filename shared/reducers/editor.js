@@ -6,6 +6,8 @@ import {
   CONVERT_PROGRESS,
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
+  EDIT_TITLE,
+  EDIT_CAPTION,
   CREATE_MEDIA_REQUEST,
   CREATE_MEDIA_PROGRESS,
   CREATE_MEDIA_SUCCESS,
@@ -18,6 +20,8 @@ const DEFAULT_STATE = {
   mode: '',
   mediaType: '',
   isProcessing: false,
+  title: '',
+  caption: '',
   progress: 0,
   data: [],
   dataUrls: [],
@@ -35,6 +39,14 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
+      });
+    case EDIT_TITLE:
+      return merge({}, state, {
+        title: action.title
+      });
+    case EDIT_CAPTION:
+      return merge({}, state, {
+        caption: action.caption
       });
     case CONVERT_REQUEST:
     case CREATE_MEDIA_REQUEST:

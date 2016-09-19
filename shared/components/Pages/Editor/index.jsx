@@ -19,6 +19,8 @@ const propTypes = {
   mediaType: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
   dimension: PropTypes.shape({
@@ -26,6 +28,7 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   convertFile: PropTypes.func.isRequired,
+  edit: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -43,10 +46,13 @@ class Editor extends Component {
       mediaType,
       isProcessing,
       progress,
+      title,
+      caption,
       data,
       dataUrls,
       dimension,
       convertFile,
+      edit,
       create
     } = this.props;
     let mainComponent;
@@ -93,8 +99,11 @@ class Editor extends Component {
           <Col md={3} sm={4} className="editor-sidebar">
             <Sidebar
               mediaType={mediaType}
+              title={title}
+              caption={caption}
               data={data}
               dimension={dimension}
+              edit={edit}
               create={create}
             />
           </Col>

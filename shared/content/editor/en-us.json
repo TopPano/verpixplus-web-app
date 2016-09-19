@@ -6,8 +6,12 @@
     }
   },
   "EDIT_PANEL": {
-    "DESC": {
-      "TITLE": "Description",
+    "TITLE": {
+      "TITLE": "Title",
+      "PLACE_HOLDER": "Your title"
+    },
+    "CAPTION": {
+      "TITLE": "Caption",
       "PLACE_HOLDER": "Write description here"
     },
     "FILTER": {
