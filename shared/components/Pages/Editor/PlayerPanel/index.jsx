@@ -1,12 +1,15 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+
+import Livephoto from 'components/Common/Livephoto';
 
 if (process.env.BROWSER) {
   require('./PlayerPanel.css');
 }
 
 const propTypes = {
+  imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 };
 
 const defaultProps = {
@@ -18,9 +21,11 @@ class PlayerPanel extends Component {
   }
 
   render() {
+    const { imagesData } = this.props;
+
     return (
       <div className="player-panel-component bg-color-light container-center-col">
-        <img src="http://static.boredpanda.com/blog/wp-content/uploads/2015/06/pallas-cat-manul-14__880.jpg" />
+        <Livephoto photos={imagesData} />
       </div>
     );
   }
