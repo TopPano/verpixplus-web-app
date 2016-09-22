@@ -71,7 +71,9 @@ class Editor extends Component {
       // EDIT mode: edit an old media
       mainComponent =
         <div className="main-wrapper fill">
-          <PlayerPanel />
+          <PlayerPanel
+            imagesData={data}
+          />
           <FramePanel
             images={dataUrls}
             dimension={dimension}
