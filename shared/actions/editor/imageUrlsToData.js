@@ -6,8 +6,7 @@ export default function imageUrlsToData(imgUrls, dimension) {
   return new Promise((resolve, reject) => {
     const imgsData = [];
 
-    for(const idx in imgUrls) {
-      const imgUrl = imgUrls[idx];
+    imgUrls.forEach((imgUrl, idx) => {
       const img = new Image();
 
       img.onload = () => {
@@ -17,7 +16,7 @@ export default function imageUrlsToData(imgUrls, dimension) {
         canvas.width = width;
         canvas.height = height;
         canvasCtx.drawImage(img, 0, 0);
-        imgsData.push(canvasCtx.getImageData(0, 0, width, height));
+        imgsData[idx] = canvasCtx.getImageData(0, 0, width, height);
         
         if (imgsData.length === imgUrls.length) {
           resolve(imgsData);
@@ -29,6 +28,6 @@ export default function imageUrlsToData(imgUrls, dimension) {
       // TODO: set cross origin header in the future
       img.crossOrigin = 'Anonymous';
       img.src = imgUrl;
-    }
+    });
   });
 }
