@@ -7,7 +7,8 @@ import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
   convert,
-  edit
+  edit,
+  applyFilters
 } from 'actions/editor';
 import { createMedia } from 'actions/media';
 import Editor from 'components/Pages/Editor';
@@ -26,6 +27,7 @@ class EditorPageContainer extends Component {
     // Bind "this" to member function
     this.convertFile = this.convertFile.bind(this);
     this.edit = this.edit.bind(this);
+    this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
   }
 
@@ -45,12 +47,17 @@ class EditorPageContainer extends Component {
     }));
   }
 
+  // Wrapper for dispatching applyFilters function,
+  // which update the filters of this media
+  applyFilters(filters) {
+    this.props.dispatch(applyFilters(filters));
+  }
+
   // Wrapper for dispatching createMedia function,
   // which create a post for livephoto or panophoto
   create(params) {
     this.props.dispatch(createMedia(params));
   }
-
 
   render() {
     const { editor } = this.props;
@@ -60,6 +67,7 @@ class EditorPageContainer extends Component {
         {...editor}
         convertFile={this.convertFile}
         edit={this.edit}
+        applyFilters={this.applyFilters}
         create={this.create}
       >
         {this.props.children}

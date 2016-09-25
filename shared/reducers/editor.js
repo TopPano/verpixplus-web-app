@@ -7,7 +7,8 @@ import {
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
   EDIT_TITLE,
-  EDIT_CAPTION
+  EDIT_CAPTION,
+  APPLY_FILTERS
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
@@ -30,6 +31,16 @@ const DEFAULT_STATE = {
   data: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
+  filters: {
+    contrast: 100,
+    brightness: 100,
+    saturate: 100,
+    sepia: 0,
+    grayscale: 0,
+    invert: 0,
+    'hue-rotate': 0,
+    blur: 0
+  },
   err: { message: '' }
 };
 
@@ -51,6 +62,10 @@ export default function editor(state = DEFAULT_STATE, action) {
     case EDIT_CAPTION:
       return merge({}, state, {
         caption: action.caption
+      });
+    case APPLY_FILTERS:
+      return merge({}, state, {
+        filters: action.filters
       });
     case CONVERT_REQUEST:
     case GET_MEDIA_REQUEST:

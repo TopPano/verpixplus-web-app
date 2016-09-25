@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import isArray from 'lodash/isArray';
+import isEqual from 'lodash/isEqual';
 
 import { execute } from 'lib/utils';
 
@@ -17,11 +18,11 @@ const SETUP_PROGRESS = {
 };
 
 const propTypes = {
-  photos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+  photos: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 const defaultProps = {
-  photos: []
 };
 
 class Livephoto extends Component{
@@ -35,13 +36,18 @@ class Livephoto extends Component{
     };
   }
 
-  setup(livephoto, photos) {
+  // Create a livephoto instance
+  setup(livephoto, photos, filters) {
     if (isArray(photos) && photos.length > 0) {
       this.setState({
         setupProgress: SETUP_PROGRESS.SETTING
       });
 
-      window.verpix.createLivephoto(photos, {}, (err, instance) => {
+      const params = {
+        filters
+      };
+
+      window.verpix.createLivephoto(photos, params, (err, instance) => {
         if (err) {
           this.setState({
             setupProgress: SETUP_PROGRESS.ERR
@@ -66,42 +72,72 @@ class Livephoto extends Component{
   // Create a livephoto instance when component is mounted.
   componentDidMount() {
     if (process.env.BROWSER) {
-      const { photos } = this.props;
+      const {
+        photos,
+        filters
+      } = this.props;
       const { livephoto } = this.refs;
 
-      this.setup(livephoto, photos);
+      this.setup(livephoto, photos, filters);
     }
   }
 
-  // Only update when the length of photos is change, to prevent overwhelming update.
-  // FIXME:
-  // It may comsume time but accurate to compare photos bytes by bytes,
-  // how do we choose between accuracy and time consumption ?
-  shouldComponentUpdate(nextProps) {
-    return this.props.photos.length !== nextProps.photos.length;
-  }
 
-  // Update photos of the livephoto instance after re-rending.
-  componentDidUpdate() {
+  // Update the livephoto instance after re-rending.
+  componentDidUpdate(prevProps) {
     if (process.env.BROWSER) {
       const { setupProgress } = this.state;
-      const { photos } = this.props;
-      const { livephoto } = this.refs;
 
       if (setupProgress === SETUP_PROGRESS.INIT) {
         // In componentDidMount,
         // livephoto instance may not be created if photos is empty array,
         // so we should try to create it again in such case.
-        this.setup(livephoto, photos);
+        const {
+          photos,
+          filters
+        } = this.props;
+        const { livephoto } = this.refs;
+
+        this.setup(livephoto, photos, filters);
       } else if (setupProgress === SETUP_PROGRESS.SETTING) {
         this.setupCallback = () => {
-          this.instance.setPhotos(photos);
+          this.updateLivephoto(prevProps);
         };
       } else if (setupProgress === SETUP_PROGRESS.DONE) {
-        this.instance.setPhotos(photos);
+        this.updateLivephoto(prevProps);
       } else {
         // TODO: What to do for other cases ?
       }
+    }
+  }
+
+  // Only update photos only when the length of them is changed,
+  // to prevent overwhelmingly update.
+  // FIXME:
+  // It may comsume time but be accurate to compare photos bytes by bytes,
+  // how do we choose between accuracy and time consumption ?
+  shouldUpdatePhotos(oldPhotos, newPhotos) {
+    return oldPhotos.length !== newPhotos.length;
+  }
+
+  // Only update filters only when the they are changed,
+  // to prevent overwhelmingly update.
+  shouldUpdateFilters(oldFilters, newFilters) {
+    return !isEqual(oldFilters, newFilters);
+  }
+
+  // Update livephoto instance
+  updateLivephoto(prevProps) {
+    const {
+      photos,
+      filters
+    } = this.props;
+
+    if (this.shouldUpdatePhotos(prevProps.photos, photos)) {
+      this.instance.setPhotos(photos);
+    }
+    if (this.shouldUpdateFilters(prevProps.filters, filters)) {
+      this.instance.applyFilters(filters);
     }
   }
 

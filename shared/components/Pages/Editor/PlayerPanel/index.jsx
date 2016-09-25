@@ -9,7 +9,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+  imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 const defaultProps = {
@@ -21,11 +22,17 @@ class PlayerPanel extends Component {
   }
 
   render() {
-    const { imagesData } = this.props;
+    const {
+      imagesData,
+      filters
+    } = this.props;
 
     return (
       <div className="player-panel-component bg-color-light container-center-col">
-        <Livephoto photos={imagesData} />
+        <Livephoto
+          photos={imagesData}
+          filters={filters}
+        />
       </div>
     );
   }

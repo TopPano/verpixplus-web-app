@@ -9,17 +9,16 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  initialValue: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
-  unit: PropTypes.string
+  value: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  unit: PropTypes.string,
+  applyFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  initialValue: 0,
-  min: 0,
-  max: 100,
   unit: '%'
 };
 
@@ -27,29 +26,30 @@ class Adjust extends Component {
   constructor(props) {
     super(props);
 
-    // Bind "this" to memeber functions
+    // Bind "this" to member functions
     this.handleChange = this.handleChange.bind(this);
-    // Initialize values
-    this.state = {
-      value: this.props.initialValue
-    };
   }
 
-  // Handler for value change
+  // Handler for change adjustment value
   handleChange(value) {
-    this.setState({
-      value
+    const {
+      type,
+      applyFilters
+    } = this.props;
+
+    applyFilters({
+      [type]: value
     });
   }
 
   render() {
     const {
       title,
+      value,
       min,
       max,
       unit
     } = this.props;
-    const { value } = this.state;
 
     return (
       <div className="adjust-component margin-bottom-5">

@@ -14,6 +14,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  filters: PropTypes.object.isRequired,
+  applyFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -26,51 +28,63 @@ class FiltersItemAdjusts extends Component {
 
   // Render list of adjustments
   renderAdjustList(propsList) {
-    return renderList(propsList, (props, idx) => <Adjust key={`${idx}${props.title}`} {...props} />);
+    const {
+      filters,
+      applyFilters
+    } = this.props;
+
+    return renderList(propsList, (props, idx) => (
+      <Adjust
+        key={`${idx}${props.title}`}
+        value={filters[props.type]}
+        applyFilters={applyFilters}
+        {...props}
+      />
+    ));
   }
 
   render() {
     const adjustListProps = [{
+      type: 'contrast',
       title: CONTENT.CONTRAST,
       min: 0,
-      max: 200,
-      initialValue: 100
+      max: 200
     }, {
+      type: 'brightness',
       title: CONTENT.BRIGHTNESS,
       min: 0,
-      max: 200,
-      initialValue: 100
+      max: 200
     }, {
+      type: 'saturate',
       title: CONTENT.SATURATE,
       min: 0,
-      max: 200,
-      initialValue: 100
+      max: 200
     }, {
+      type: 'sepia',
       title: CONTENT.SEPIA,
       min: 0,
-      max: 100,
-      initialValue: 0
+      max: 100
     }, {
+      type: 'grayscale',
       title: CONTENT.GRAYSCALE,
       min: 0,
-      max: 100,
-      initialValue: 0
+      max: 100
     }, {
+      type: 'invert',
       title: CONTENT.INVERT,
       min: 0,
-      max: 100,
-      initialValue: 0
+      max: 100
     }, {
+      type: 'hue-rotate',
       title: CONTENT.HUE_ROTATE,
       min: 0,
       max: 360,
-      initialValue: 0,
       unit: 'deg'
     }, {
+      type: 'blur',
       title: CONTENT.BLUR,
       min: 0,
       max: 10,
-      initialValue: 0,
       unit: 'px'
     }];
     const adjustList = this.renderAdjustList(adjustListProps);

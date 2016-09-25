@@ -10,6 +10,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  filters: PropTypes.object.isRequired,
+  applyFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -21,10 +23,18 @@ class FiltersPanel extends Component {
   }
 
   render() {
+    const {
+      filters,
+      applyFilters
+    } = this.props;
+
     return (
       <div className="filters-panel-component">
         <FiltersItemFilters />
-        <FiltersItemAdjusts />
+        <FiltersItemAdjusts
+          filters={filters}
+          applyFilters={applyFilters}
+        />
       </div>
     );
   }

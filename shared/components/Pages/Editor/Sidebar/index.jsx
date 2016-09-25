@@ -23,7 +23,9 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  filters: PropTypes.object.isRequired,
   edit: PropTypes.func.isRequired,
+  applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -69,7 +71,9 @@ class Sidebar extends Component {
       caption,
       data,
       dimension,
+      filters,
       edit,
+      applyFilters,
       create
     } = this.props;
     const editMenuItemProp = {
@@ -94,7 +98,11 @@ class Sidebar extends Component {
         create={create}
       />
     const filtersPanel =
-      <FiltersPanel />
+      <FiltersPanel
+        key="filters-panel"
+        filters={filters}
+        applyFilters={applyFilters}
+      />
     const sharePanel =
       <SharePanel key="share-panel" />
     let menuItemsProps = [];

@@ -32,7 +32,7 @@
       "SATURATE": "Saturate",
       "SEPIA": "sepia",
       "GRAYSCALE": "Grayscale",
-      "INVERT": "invert,",
+      "INVERT": "invert",
       "HUE_ROTATE": "Hue Rotate",
       "BLUR": "Blur"
     }
