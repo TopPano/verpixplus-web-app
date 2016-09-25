@@ -13,14 +13,14 @@ const propTypes = {
   initialValue: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
-  disabled: PropTypes.bool
+  unit: PropTypes.string
 };
 
 const defaultProps = {
   initialValue: 0,
   min: 0,
   max: 100,
-  disabled: false
+  unit: '%'
 };
 
 class Adjust extends Component {
@@ -37,22 +37,26 @@ class Adjust extends Component {
 
   // Handler for value change
   handleChange(value) {
-    const { disabled } = this.props;
-
-    if (!disabled) {
-      this.setState({
-        value
-      });
-    }
+    this.setState({
+      value
+    });
   }
 
   render() {
-    const { title, min, max } = this.props;
+    const {
+      title,
+      min,
+      max,
+      unit
+    } = this.props;
     const { value } = this.state;
 
     return (
-      <div className="adjust-component heading margin-bottom-10">
-        <h5><strong>{`${title} (${value})`}</strong></h5>
+      <div className="adjust-component margin-bottom-5">
+        <div className="panel-heading overflow-h">
+          <h5 className="panel-tile heading-sm pull-left">{title}</h5>
+          <h5 className="adjust-value rounded pull-right">{`${value} ${unit}`}</h5>
+        </div>
         <Slider
           min={min}
           max={max}

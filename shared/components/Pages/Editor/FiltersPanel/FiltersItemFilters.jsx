@@ -7,22 +7,19 @@ import EDITOR_CONTENT from 'content/editor/en-us.json';
 import ImageCarousel from 'components/Common/ImageCarousel';
 import SidebarItem from '../SidebarItem';
 
-const CONTENT = EDITOR_CONTENT.EDIT_PANEL.FILTER;
+const CONTENT = EDITOR_CONTENT.FILTERS_PANEL.FILTERS;
 
 if (process.env.BROWSER) {
-  require('./EditItemFilter.css');
+  require('./FiltersItemFilters.css');
 }
 
 const propTypes = {
-  // TODO: handle disabled
-  disabled: PropTypes.bool
 };
 
 const defaultProps = {
-  disabled: false
 };
 
-class EditItemFilter extends Component {
+class FiltersItemFilters extends Component {
   constructor(props) {
     super(props);
   }
@@ -43,7 +40,7 @@ class EditItemFilter extends Component {
     };
 
     return (
-      <div className="edit-item-filter-component">
+      <div className="filters-item-filters-component">
         <SidebarItem
           icon="filter"
           title={CONTENT.TITLE}
@@ -55,7 +52,7 @@ class EditItemFilter extends Component {
   }
 }
 
-EditItemFilter.propTypes = propTypes;
-EditItemFilter.defaultProps = defaultProps;
+FiltersItemFilters.propTypes = propTypes;
+FiltersItemFilters.defaultProps = defaultProps;
 
-export default EditItemFilter;
+export default FiltersItemFilters;

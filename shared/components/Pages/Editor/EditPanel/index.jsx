@@ -5,8 +5,6 @@ import React, { Component, PropTypes } from 'react';
 import { MODE } from 'constants/editor';
 import EditItemTitle from './EditItemTitle';
 import EditItemCaption from './EditItemCaption';
-import EditItemFilter from './EditItemFilter';
-import EditItemAdjust from './EditItemAdjust';
 import EditItemSettings from './EditItemSettings';
 
 if (process.env.BROWSER) {
@@ -59,8 +57,6 @@ class EditPanel extends Component {
           caption={caption}
           edit={edit}
         />
-        <EditItemAdjust disabled={disabled} />
-        <EditItemFilter disabled={disabled} />
         <EditItemSettings
           mode={mode}
           mediaType={mediaType}

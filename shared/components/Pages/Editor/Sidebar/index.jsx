@@ -6,6 +6,7 @@ import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
+import FiltersPanel from '../FiltersPanel';
 import SharePanel from '../SharePanel';
 
 if (process.env.BROWSER) {
@@ -74,6 +75,9 @@ class Sidebar extends Component {
     const editMenuItemProp = {
       icon: 'pencil-square'
     };
+    const filtersMenuItemProp = {
+      icon: 'picture-o'
+    };
     const shareMenuItemProp = {
       icon: 'share-alt-square'
     };
@@ -89,6 +93,8 @@ class Sidebar extends Component {
         edit={edit}
         create={create}
       />
+    const filtersPanel =
+      <FiltersPanel />
     const sharePanel =
       <SharePanel key="share-panel" />
     let menuItemsProps = [];
@@ -96,8 +102,8 @@ class Sidebar extends Component {
     let panels = [];
 
     if (mode === MODE.WAIT_FILE || mode === MODE.CREATE) {
-      menuItemsProps = [editMenuItemProp];
-      panels = [editPanel];
+      menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
+      panels = [editPanel, filtersPanel];
     } else if (mode === MODE.EDIT) {
       menuItemsProps = [editMenuItemProp, shareMenuItemProp];
       panels = [editPanel, sharePanel];
