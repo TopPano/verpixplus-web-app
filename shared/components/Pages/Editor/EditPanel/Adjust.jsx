@@ -12,13 +12,15 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   initialValue: PropTypes.number,
   min: PropTypes.number,
-  max: PropTypes.number
+  max: PropTypes.number,
+  disabled: PropTypes.bool
 };
 
 const defaultProps = {
   initialValue: 0,
   min: 0,
-  max: 100
+  max: 100,
+  disabled: false
 };
 
 class Adjust extends Component {
@@ -35,9 +37,13 @@ class Adjust extends Component {
 
   // Handler for value change
   handleChange(value) {
-    this.setState({
-      value
-    });
+    const { disabled } = this.props;
+
+    if (!disabled) {
+      this.setState({
+        value
+      });
+    }
   }
 
   render() {

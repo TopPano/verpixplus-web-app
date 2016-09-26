@@ -1,6 +1,7 @@
 /* eslint-disable quotes */
 export const MODE = {
-  UPLOAD: 'UPLOAD',
+  WAIT_FILE: 'WAIT_FILE',
+  CREATE: 'CREATE',
   EDIT: 'EDIT'
 };
 
