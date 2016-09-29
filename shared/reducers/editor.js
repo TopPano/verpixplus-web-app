@@ -6,6 +6,7 @@ import {
   CONVERT_PROGRESS,
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
+  TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
   APPLY_FILTERS
@@ -18,7 +19,7 @@ import {
   CREATE_MEDIA_SUCCESS,
   CREATE_MEDIA_FAILURE
 } from 'actions/media';
-import { MODE } from 'constants/editor';
+import { MODE, FRAMES_LIMIT } from 'constants/editor';
 
 const DEFAULT_STATE = {
   mediaId: '',
@@ -31,6 +32,8 @@ const DEFAULT_STATE = {
   data: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
+  lower: 0,
+  upper: FRAMES_LIMIT,
   filters: {
     contrast: 100,
     brightness: 100,
@@ -54,6 +57,11 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
+      });
+    case TRIM:
+      return merge({}, state, {
+        lower: action.lower,
+        upper: action.upper
       });
     case EDIT_TITLE:
       return merge({}, state, {
@@ -79,13 +87,17 @@ export default function editor(state = DEFAULT_STATE, action) {
         progress: action.progress
       });
     case CONVERT_SUCCESS:
+      const dataLength = action.result.dataUrls.length;
+
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
         mediaType: action.mediaType,
         data: action.result.data,
         dataUrls: action.result.dataUrls,
-        dimension: action.result.dimension
+        dimension: action.result.dimension,
+        lower: 0,
+        upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });
     case GET_MEDIA_SUCCESS:
       // TODO: fill title

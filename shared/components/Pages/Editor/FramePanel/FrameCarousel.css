@@ -1,11 +1,14 @@
-@import 'Variables.css';
-
 .frame-carousel-component {
   .frame-carousel {
+    position: relative;
     width: 100%;
+    background-color: #CCC;
+    padding: 30px 15px 15px 15px;
 
-    * {
-      color: $color-white !important;
+    .swiper-scrollbar {
+      .swiper-scrollbar-drag {
+        cursor: pointer;
+      }
     }
   }
 }

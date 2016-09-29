@@ -7,6 +7,7 @@ import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
   convert,
+  trim,
   edit,
   applyFilters
 } from 'actions/editor';
@@ -29,6 +30,7 @@ class EditorPageContainer extends Component {
     this.edit = this.edit.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
+    this.trim = this.trim.bind(this);
   }
 
   // Wrapper for dispatching convert function,
@@ -36,6 +38,15 @@ class EditorPageContainer extends Component {
   // or convet an image to panophoto
   convertFile({ mediaType, source }) {
     this.props.dispatch(convert({ mediaType, source }));
+  }
+
+  // Wrapper for dispatching trim function,
+  // which trims the range of frames
+  trim({ lower, upper }) {
+    this.props.dispatch(trim({
+      lower,
+      upper
+    }));
   }
 
   // Wrapper for dispatching edit function,
@@ -66,6 +77,7 @@ class EditorPageContainer extends Component {
       <Editor
         {...editor}
         convertFile={this.convertFile}
+        trim={this.trim}
         edit={this.edit}
         applyFilters={this.applyFilters}
         create={this.create}

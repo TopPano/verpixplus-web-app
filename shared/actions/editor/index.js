@@ -1,5 +1,6 @@
 import { push } from 'react-router-redux';
 import isString from 'lodash/isString';
+import isNumber from 'lodash/isNumber';
 import startsWith from 'lodash/startsWith';
 import merge from 'lodash/merge';
 
@@ -104,6 +105,20 @@ export function convert({ mediaType, source }) {
       dispatch(convertFailure({
         message: `Meida type: ${mediaType} is not supported`
       }));
+    }
+  };
+}
+
+export const TRIM = 'TRIM';
+
+export function trim({ lower, upper }) {
+  return (dispatch) => {
+    if (isNumber(lower) && isNumber(upper) && lower <= upper) {
+      dispatch({
+        type: TRIM,
+        lower,
+        upper
+      });
     }
   };
 }

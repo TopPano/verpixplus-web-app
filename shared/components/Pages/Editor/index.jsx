@@ -27,8 +27,11 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  lower: PropTypes.number.isRequired,
+  upper: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   convertFile: PropTypes.func.isRequired,
+  trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
@@ -53,8 +56,11 @@ class Editor extends Component {
       data,
       dataUrls,
       dimension,
-      convertFile,
+      lower,
+      upper,
       filters,
+      convertFile,
+      trim,
       edit,
       applyFilters,
       create
@@ -82,6 +88,9 @@ class Editor extends Component {
           <FramePanel
             images={dataUrls}
             dimension={dimension}
+            lower={lower}
+            upper={upper}
+            trim={trim}
           />
         </div>
     } else  {

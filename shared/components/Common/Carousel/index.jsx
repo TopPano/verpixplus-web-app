@@ -14,12 +14,14 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   options: PropTypes.object,
+  showScrollbar: PropTypes.bool,
   carouselclass: PropTypes.string,
   onClick: PropTypes.func
 }
 
 const defaultProps = {
   options: {},
+  showScrollbar: false,
   carouselclass: '',
   onClick: () => {}
 }
@@ -41,7 +43,9 @@ class Carousel extends Component {
   componentDidMount() {
     if (process.env.BROWSER) {
       const Swiper = require('swiper');
+    const { showScrollbar } = this.props;
       const _options = merge({}, this.props.options, {
+        scrollbar: showScrollbar ? '.swiper-scrollbar' : '',
         onClick: this.handleClick
       });
 
@@ -57,7 +61,10 @@ class Carousel extends Component {
   }
 
   render() {
-    const { carouselClass } = this.props;
+    const {
+      showScrollbar,
+      carouselClass
+    } = this.props;
     const othersClass = carouselClass.split(' ').reduce((pre, cur) => {
       return merge({}, pre, {
         [cur]: true
@@ -73,6 +80,10 @@ class Carousel extends Component {
         <div className="swiper-wrapper">
           {this.props.children}
         </div>
+        {
+          showScrollbar &&
+          <div className="swiper-scrollbar" />
+        }
       </div>
     );
   }

@@ -102,6 +102,7 @@
     "react-dropzone": "3.6.0",
     "react-facebook-login": "2.1.4",
     "react-proptype-conditional-require": "1.0.2",
+    "react-rnd": "4.1.0",
     "react-router": "2.4.1",
     "react-router-redux": "4.0.4",
     "redux-logger": "2.6.1",
