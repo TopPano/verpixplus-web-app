@@ -27,6 +27,7 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   playerMode: PropTypes.string.isRequired,
+  autoplay: PropTypes.bool.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired
 };
@@ -49,10 +50,11 @@ class LivephotoPlayer extends Component {
   componentDidMount() {
     const {
       playerMode,
+      autoplay,
       lower
     } = this.props;
 
-    if (playerMode === PLAYER_MODE.PLAY) {
+    if (autoplay && playerMode === PLAYER_MODE.PLAY) {
       this.play(lower);
     }
   }
@@ -62,16 +64,21 @@ class LivephotoPlayer extends Component {
     const {
       imagesData,
       playerMode,
+      autoplay,
       lower
     } = this.props;
+    const enablePlay =
+      (autoplay && prevProps.playerMode === PLAYER_MODE.PAUSE && playerMode === PLAYER_MODE.PLAY) ||
+      (!prevProps.autoplay && autoplay && playerMode === PLAYER_MODE.PLAY);
+    const enablePause =
+      (prevProps.playerMode === PLAYER_MODE.PLAY && playerMode === PLAYER_MODE.PAUSE) ||
+      (prevProps.autoplay && !autoplay && playerMode === PLAYER_MODE.PLAY);
 
     this.renderImageByIndex(imagesData, currentIdx);
 
-    if (prevProps.playerMode === PLAYER_MODE.PAUSE
-        && playerMode === PLAYER_MODE.PLAY) {
+    if (enablePlay) {
       this.play(lower);
-    } else if (prevProps.playerMode === PLAYER_MODE.PLAY
-              && playerMode === PLAYER_MODE.PAUSE) {
+    } else if (enablePause) {
       this.pause();
     }
   }

@@ -23,7 +23,9 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  autoplay: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
+  playerSetAutoplay: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
@@ -71,7 +73,9 @@ class Sidebar extends Component {
       caption,
       data,
       dimension,
+      autoplay,
       filters,
+      playerSetAutoplay,
       edit,
       applyFilters,
       create
@@ -94,6 +98,8 @@ class Sidebar extends Component {
         caption={caption}
         data={data}
         dimension={dimension}
+        autoplay={autoplay}
+        playerSetAutoplay={playerSetAutoplay}
         edit={edit}
         create={create}
       />

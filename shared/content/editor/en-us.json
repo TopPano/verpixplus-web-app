@@ -16,6 +16,7 @@
     },
     "SETTINGS": {
       "TITLE": "Settings",
+      "AUTOPLAY": "Autoplay",
       "POST": "Post",
       "UPDATE": "Update",
       "DELETE": "Delete"

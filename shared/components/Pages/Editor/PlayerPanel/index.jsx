@@ -15,6 +15,7 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   playerMode: PropTypes.string.isRequired,
+  autoplay: PropTypes.bool.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired
@@ -33,6 +34,7 @@ class PlayerPanel extends Component {
       imagesData,
       dimension,
       playerMode,
+      autoplay,
       lower,
       upper
     } = this.props;
@@ -43,6 +45,7 @@ class PlayerPanel extends Component {
           imagesData={imagesData}
           dimension={dimension}
           playerMode={playerMode}
+          autoplay={autoplay}
           lower={lower}
           upper={upper}
         />

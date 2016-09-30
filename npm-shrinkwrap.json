@@ -4565,6 +4565,11 @@
         }
       }
     },
+    "rc-switch": {
+      "version": "1.4.2",
+      "from": "rc-switch@latest",
+      "resolved": "https://registry.npmjs.org/rc-switch/-/rc-switch-1.4.2.tgz"
+    },
     "rc-tooltip": {
       "version": "3.4.2",
       "from": "rc-tooltip@>=3.4.2 <4.0.0",

@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { MODE } from 'constants/editor';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import IconButton from 'components/Common/IconButton';
+import SwitchButton from 'components/Common/SwitchButton';
 import SidebarItem from '../SidebarItem';
 
 const CONTENT = EDITOR_CONTENT.EDIT_PANEL.SETTINGS;
@@ -23,6 +24,8 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  autoplay: PropTypes.bool.isRequired,
+  playerSetAutoplay: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   create: PropTypes.func.isRequired
 };
@@ -36,8 +39,19 @@ class EditItemSettings extends Component {
     super(props);
 
     // Bind "this" to memeber functions
+    this.handleChangeAutoplay = this.handleChangeAutoplay.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
     this.handleClickDelete = this.handleClickDelete.bind(this);
+  }
+
+  // Handler for changing autoplay setting
+  handleChangeAutoplay() {
+    const {
+      autoplay,
+      playerSetAutoplay
+    } = this.props;
+
+    playerSetAutoplay(!autoplay);
   }
 
   // Handler for clicking save button
@@ -73,6 +87,7 @@ class EditItemSettings extends Component {
   render() {
     const {
       mode,
+      autoplay,
       disabled
     } = this.props;
     const saveBtnProps = {
@@ -91,6 +106,17 @@ class EditItemSettings extends Component {
           icon="cog"
           title={CONTENT.TITLE}
         >
+          <div className="autoplay panel-heading overflow-h">
+            <h5 className="panel-title heading-sm pull-left">
+              {CONTENT.AUTOPLAY}
+            </h5>
+            <SwitchButton
+              className="pull-right"
+              checked={autoplay}
+              onChange={this.handleChangeAutoplay}
+            />
+          </div>
+          <div className="margin-bottom-20" />
           <IconButton {...saveBtnProps} />
           {
             mode === MODE.EDIT &&

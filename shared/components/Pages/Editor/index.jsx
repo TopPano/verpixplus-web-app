@@ -28,12 +28,14 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   playerMode: PropTypes.string.isRequired,
+  autoplay: PropTypes.bool.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   convertFile: PropTypes.func.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
+  playerSetAutoplay: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
@@ -59,6 +61,7 @@ class Editor extends Component {
       data,
       dataUrls,
       dimension,
+      autoplay,
       playerMode,
       lower,
       upper,
@@ -66,6 +69,7 @@ class Editor extends Component {
       convertFile,
       playerPlay,
       playerPause,
+      playerSetAutoplay,
       trim,
       edit,
       applyFilters,
@@ -91,6 +95,7 @@ class Editor extends Component {
             imagesData={data}
             dimension={dimension}
             playerMode={playerMode}
+            autoplay={autoplay}
             lower={lower}
             upper={upper}
             filters={filters}
@@ -123,7 +128,9 @@ class Editor extends Component {
               caption={caption}
               data={data}
               dimension={dimension}
+              autoplay={autoplay}
               filters={filters}
+              playerSetAutoplay={playerSetAutoplay}
               edit={edit}
               applyFilters={applyFilters}
               create={create}

@@ -9,6 +9,7 @@ import {
   convert,
   playerPlay,
   playerPause,
+  playerSetAutoplay,
   trim,
   edit,
   applyFilters
@@ -31,6 +32,7 @@ class EditorPageContainer extends Component {
     this.convertFile = this.convertFile.bind(this);
     this.playerPlay = this.playerPlay.bind(this);
     this.playerPause = this.playerPause.bind(this);
+    this.playerSetAutoplay = this.playerSetAutoplay.bind(this);
     this.edit = this.edit.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
@@ -54,6 +56,12 @@ class EditorPageContainer extends Component {
   // which enable the palyer pause playing
   playerPause() {
     this.props.dispatch(playerPause());
+  }
+
+  // Wrapper for dispatching playerSetAutoplay function,
+  // which enables/disables the autoplay option
+  playerSetAutoplay(autoplay) {
+    this.props.dispatch(playerSetAutoplay(autoplay));
   }
 
   // Wrapper for dispatching trim function,
@@ -95,6 +103,7 @@ class EditorPageContainer extends Component {
         convertFile={this.convertFile}
         playerPlay={this.playerPlay}
         playerPause={this.playerPause}
+        playerSetAutoplay={this.playerSetAutoplay}
         trim={this.trim}
         edit={this.edit}
         applyFilters={this.applyFilters}

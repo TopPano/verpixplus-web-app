@@ -21,6 +21,8 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  autoplay: PropTypes.bool.isRequired,
+  playerSetAutoplay: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
@@ -41,6 +43,8 @@ class EditPanel extends Component {
       caption,
       data,
       dimension,
+      autoplay,
+      playerSetAutoplay,
       edit,
       create
     } = this.props;
@@ -64,6 +68,8 @@ class EditPanel extends Component {
           caption={caption}
           data={data}
           dimension={dimension}
+          autoplay={autoplay}
+          playerSetAutoplay={playerSetAutoplay}
           disabled={disabled}
           create={create}
         />

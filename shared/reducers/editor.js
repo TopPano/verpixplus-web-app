@@ -8,6 +8,7 @@ import {
   CONVERT_FAILURE,
   PLAYER_PLAY,
   PLAYER_PAUSE,
+  PLAYER_SET_AUTOPLAY,
   TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
@@ -39,6 +40,7 @@ const DEFAULT_STATE = {
   dataUrls: [],
   dimension: { width: 0, height: 0 },
   playerMode: PLAYER_MODE.PAUSE,
+  autoplay: true,
   lower: 0,
   upper: FRAMES_LIMIT,
   filters: {
@@ -72,6 +74,10 @@ export default function editor(state = DEFAULT_STATE, action) {
     case PLAYER_PAUSE:
       return merge({}, state, {
         playerMode: PLAYER_MODE.PAUSE
+      });
+    case PLAYER_SET_AUTOPLAY:
+      return merge({}, state, {
+        autoplay: action.autoplay
       });
     case TRIM:
       return merge({}, state, {
