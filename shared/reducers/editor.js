@@ -6,6 +6,8 @@ import {
   CONVERT_PROGRESS,
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
+  PLAYER_PLAY,
+  PLAYER_PAUSE,
   TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
@@ -19,7 +21,11 @@ import {
   CREATE_MEDIA_SUCCESS,
   CREATE_MEDIA_FAILURE
 } from 'actions/media';
-import { MODE, FRAMES_LIMIT } from 'constants/editor';
+import {
+  MODE,
+  PLAYER_MODE,
+  FRAMES_LIMIT
+} from 'constants/editor';
 
 const DEFAULT_STATE = {
   mediaId: '',
@@ -32,6 +38,7 @@ const DEFAULT_STATE = {
   data: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
+  playerMode: PLAYER_MODE.PAUSE,
   lower: 0,
   upper: FRAMES_LIMIT,
   filters: {
@@ -57,6 +64,14 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
+      });
+    case PLAYER_PLAY:
+      return merge({}, state, {
+        playerMode: PLAYER_MODE.PLAY
+      });
+    case PLAYER_PAUSE:
+      return merge({}, state, {
+        playerMode: PLAYER_MODE.PAUSE
       });
     case TRIM:
       return merge({}, state, {
@@ -96,6 +111,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         data: action.result.data,
         dataUrls: action.result.dataUrls,
         dimension: action.result.dimension,
+        playerMode: PLAYER_MODE.PLAY,
         lower: 0,
         upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });

@@ -7,6 +7,8 @@ import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
   convert,
+  playerPlay,
+  playerPause,
   trim,
   edit,
   applyFilters
@@ -27,6 +29,8 @@ class EditorPageContainer extends Component {
 
     // Bind "this" to member function
     this.convertFile = this.convertFile.bind(this);
+    this.playerPlay = this.playerPlay.bind(this);
+    this.playerPause = this.playerPause.bind(this);
     this.edit = this.edit.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
@@ -38,6 +42,18 @@ class EditorPageContainer extends Component {
   // or convet an image to panophoto
   convertFile({ mediaType, source }) {
     this.props.dispatch(convert({ mediaType, source }));
+  }
+
+  // Wrapper for dispatching playerPlay function,
+  // which enable the palyer starts playing
+  playerPlay() {
+    this.props.dispatch(playerPlay());
+  }
+
+  // Wrapper for dispatching playerPause function,
+  // which enable the palyer pause playing
+  playerPause() {
+    this.props.dispatch(playerPause());
   }
 
   // Wrapper for dispatching trim function,
@@ -77,6 +93,8 @@ class EditorPageContainer extends Component {
       <Editor
         {...editor}
         convertFile={this.convertFile}
+        playerPlay={this.playerPlay}
+        playerPause={this.playerPause}
         trim={this.trim}
         edit={this.edit}
         applyFilters={this.applyFilters}

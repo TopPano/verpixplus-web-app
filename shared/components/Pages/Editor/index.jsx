@@ -27,10 +27,13 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  playerMode: PropTypes.string.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   convertFile: PropTypes.func.isRequired,
+  playerPlay: PropTypes.func.isRequired,
+  playerPause: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
@@ -56,10 +59,13 @@ class Editor extends Component {
       data,
       dataUrls,
       dimension,
+      playerMode,
       lower,
       upper,
       filters,
       convertFile,
+      playerPlay,
+      playerPause,
       trim,
       edit,
       applyFilters,
@@ -83,6 +89,10 @@ class Editor extends Component {
         <div className="main-wrapper fill">
           <PlayerPanel
             imagesData={data}
+            dimension={dimension}
+            playerMode={playerMode}
+            lower={lower}
+            upper={upper}
             filters={filters}
           />
           <FramePanel
@@ -90,6 +100,8 @@ class Editor extends Component {
             dimension={dimension}
             lower={lower}
             upper={upper}
+            playerPlay={playerPlay}
+            playerPause={playerPause}
             trim={trim}
           />
         </div>

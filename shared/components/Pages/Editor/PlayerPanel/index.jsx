@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import Livephoto from 'components/Common/Livephoto';
+import LivephotoPlayer from './LivephotoPlayer';
 
 if (process.env.BROWSER) {
   require('./PlayerPanel.css');
@@ -10,6 +10,13 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
+  playerMode: PropTypes.string.isRequired,
+  lower: PropTypes.number.isRequired,
+  upper: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired
 };
 
@@ -24,14 +31,20 @@ class PlayerPanel extends Component {
   render() {
     const {
       imagesData,
-      filters
+      dimension,
+      playerMode,
+      lower,
+      upper
     } = this.props;
 
     return (
       <div className="player-panel-component bg-color-light container-center-col">
-        <Livephoto
-          photos={imagesData}
-          filters={filters}
+        <LivephotoPlayer
+          imagesData={imagesData}
+          dimension={dimension}
+          playerMode={playerMode}
+          lower={lower}
+          upper={upper}
         />
       </div>
     );

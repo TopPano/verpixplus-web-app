@@ -15,6 +15,8 @@ const propTypes = {
   height: PropTypes.number.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
+  playerPlay: PropTypes.func.isRequired,
+  playerPause: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired
 };
 
@@ -55,6 +57,8 @@ class FrameCarouselWindow extends Component {
     this.setState({
       isDragged: true
     });
+
+    this.props.playerPause();
   }
 
   // Handler for stop dragging
@@ -62,6 +66,8 @@ class FrameCarouselWindow extends Component {
     this.setState({
       isDragged: false
     });
+
+    this.props.playerPlay();
   }
 
   // Handler for dragging

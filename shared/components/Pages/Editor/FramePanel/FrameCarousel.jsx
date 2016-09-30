@@ -24,6 +24,8 @@ const propTypes = {
   }).isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
+  playerPlay: PropTypes.func.isRequired,
+  playerPause: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired
 };
 
@@ -84,6 +86,8 @@ class FrameCarousel extends Component {
       dimension,
       lower,
       upper,
+      playerPlay,
+      playerPause,
       trim
     } = this.props;
     const carouselProps = {
@@ -109,6 +113,8 @@ class FrameCarousel extends Component {
       height: resizedDimension.height,
       lower,
       upper,
+      playerPlay,
+      playerPause,
       trim
     };
 

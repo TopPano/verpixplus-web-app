@@ -16,6 +16,8 @@ const propTypes = {
   }).isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
+  playerPlay: PropTypes.func.isRequired,
+  playerPause: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired
 };
 
@@ -33,15 +35,17 @@ class FramePanel extends Component {
       dimension,
       lower,
       upper,
+      playerPlay,
+      playerPause,
       trim
     } = this.props;
-    const totalFrames = images.length;
-    const trimmedFrames = upper - lower;
     const carouselProps = {
       images,
       dimension,
       lower,
       upper,
+      playerPlay,
+      playerPause,
       trim
     };
 

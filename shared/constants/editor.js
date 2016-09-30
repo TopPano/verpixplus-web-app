@@ -20,3 +20,8 @@ export const EMBED = {
 };
 
 export const FRAMES_LIMIT = 120;
+
+export const PLAYER_MODE = {
+  PLAY: 'PLAY',
+  PAUSE: 'PAUSE'
+};

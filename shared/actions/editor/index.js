@@ -109,6 +109,25 @@ export function convert({ mediaType, source }) {
   };
 }
 
+export const PLAYER_PLAY = 'PLAYER_PLAY';
+export const PLAYER_PAUSE = 'PLAYER_PAUSE';
+
+export function playerPlay() {
+  return (dispatch) => {
+    dispatch({
+      type: PLAYER_PLAY
+    });
+  };
+}
+
+export function playerPause() {
+  return (dispatch) => {
+    dispatch({
+      type: PLAYER_PAUSE
+    });
+  };
+}
+
 export const TRIM = 'TRIM';
 
 export function trim({ lower, upper }) {
