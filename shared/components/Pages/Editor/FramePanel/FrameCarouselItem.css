@@ -13,6 +13,12 @@ $mark-large: 10px;
   }
   background-color: $color-black;
 
+  .img-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
   .dividers-wrapper {
     display: flex;
     flex-direction: row;
@@ -58,10 +64,5 @@ $mark-large: 10px;
         }
       }
     }
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
   }
 }

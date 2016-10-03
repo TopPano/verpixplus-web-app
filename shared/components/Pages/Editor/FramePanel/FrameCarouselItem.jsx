@@ -95,7 +95,13 @@ class FrameCarouselItem extends Component {
         className="frame-carousel-item-component swiper-slide"
         style={componentStyle}
       >
-        <img src={image} />
+        <div className="img-wrapper">
+          <img
+            src={image}
+            width={dimension.width}
+            height={dimension.height}
+          />
+        </div>
         <div className="dividers-wrapper">
           {dividers}
         </div>
