@@ -40,7 +40,7 @@ class PlayerPanel extends Component {
     } = this.props;
 
     return (
-      <div className="player-panel-component bg-color-light container-center-col">
+      <div className="player-panel-component bg-color-light">
         <LivephotoPlayer
           imagesData={imagesData}
           dimension={dimension}

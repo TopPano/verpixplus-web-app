@@ -168,9 +168,12 @@ class LivephotoPlayer extends Component {
   render() {
     const { isLoading } = this.state;
     const { dimension } = this.props;
+    const dimensionRatio = Math.round((dimension.height / dimension.width) * 100);
     const componentStyle = {
-      width: `${dimension.width}px`,
-      height: `${dimension.height}px`
+      width: `${dimension.width}px`
+    };
+    const wrapperStyle = {
+      paddingBottom: `${dimensionRatio}%`
     };
 
     return (
@@ -178,16 +181,25 @@ class LivephotoPlayer extends Component {
         className="livephoto-player-component"
         style={componentStyle}
       >
-        <canvas ref="canvas" />
-        {
-          isLoading &&
-          <div className="loading-overlay container-center-row">
-            <img
-              src="/static/images/loading-ring.svg"
-              alt="loading-ring"
-            />
-          </div>
-        }
+        <div
+          className="livephoto-player-wrapper"
+          style={wrapperStyle}
+        >
+          <canvas
+            ref="canvas"
+            width={dimension.width}
+            height={dimension.height}
+          />
+          {
+            isLoading &&
+            <div className="loading-overlay container-center-row">
+              <img
+                src="/static/images/loading-ring.svg"
+                alt="loading-ring"
+              />
+            </div>
+          }
+        </div>
       </div>
     );
   }
