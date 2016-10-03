@@ -130,14 +130,6 @@ export function playerPause() {
   };
 }
 
-export function playerPause() {
-  return (dispatch) => {
-    dispatch({
-      type: PLAYER_PAUSE
-    });
-  };
-}
-
 export function playerSetAutoplay(autoplay) {
   return (dispatch) => {
     if (isBoolean(autoplay)) {
