@@ -14,20 +14,27 @@
       "TITLE": "Caption",
       "PLACE_HOLDER": "Write description here"
     },
-    "FILTER": {
-      "TITLE": "Filter"
-    },
-    "ADJUST": {
-      "TITLE": "Adjustment",
-      "BRIGHTNESS": "Brightness",
-      "CONTRAST": "Contrast",
-      "SATURATION": "Saturation"
-    },
     "SETTINGS": {
       "TITLE": "Settings",
       "POST": "Post",
       "UPDATE": "Update",
       "DELETE": "Delete"
+    }
+  },
+  "FILTERS_PANEL": {
+    "FILTERS": {
+      "TITLE": "Filters"
+    },
+    "ADJUSTS": {
+      "TITLE": "Adjustments",
+      "BRIGHTNESS": "Brightness",
+      "CONTRAST": "Contrast",
+      "SATURATE": "Saturate",
+      "SEPIA": "Sepia",
+      "GRAYSCALE": "Grayscale",
+      "INVERT": "Invert",
+      "HUE_ROTATE": "Hue Rotate",
+      "BLUR": "Blur"
     }
   },
   "SHARE_PANEL": {

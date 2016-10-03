@@ -27,8 +27,10 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  filters: PropTypes.object.isRequired,
   convertFile: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
+  applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -52,7 +54,9 @@ class Editor extends Component {
       dataUrls,
       dimension,
       convertFile,
+      filters,
       edit,
+      applyFilters,
       create
     } = this.props;
     let mainComponent;
@@ -71,7 +75,10 @@ class Editor extends Component {
       // EDIT mode: edit an old media
       mainComponent =
         <div className="main-wrapper fill">
-          <PlayerPanel />
+          <PlayerPanel
+            imagesData={data}
+            filters={filters}
+          />
           <FramePanel
             images={dataUrls}
             dimension={dimension}
@@ -95,7 +102,9 @@ class Editor extends Component {
               caption={caption}
               data={data}
               dimension={dimension}
+              filters={filters}
               edit={edit}
+              applyFilters={applyFilters}
               create={create}
             />
           </Col>

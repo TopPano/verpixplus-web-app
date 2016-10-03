@@ -136,3 +136,14 @@ export function edit({ title, caption }) {
     }
   }
 }
+
+export const APPLY_FILTERS = 'APPLY_FILTERS';
+
+export function applyFilters(filters) {
+  return (dispatch) => {
+    dispatch({
+      type: APPLY_FILTERS,
+      filters
+    });
+  }
+}

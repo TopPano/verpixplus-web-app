@@ -1,0 +1,14 @@
+.adjust-component {
+  * {
+    color: #AAA;
+  }
+
+  h5 {
+    margin-bottom: 5px;
+  }
+
+  .adjust-value {
+    background-color: #3B3B3B;
+    padding: 0 5px;
+  }
+}

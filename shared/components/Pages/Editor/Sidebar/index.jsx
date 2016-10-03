@@ -6,6 +6,7 @@ import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
+import FiltersPanel from '../FiltersPanel';
 import SharePanel from '../SharePanel';
 
 if (process.env.BROWSER) {
@@ -22,7 +23,9 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  filters: PropTypes.object.isRequired,
   edit: PropTypes.func.isRequired,
+  applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
 
@@ -68,11 +71,16 @@ class Sidebar extends Component {
       caption,
       data,
       dimension,
+      filters,
       edit,
+      applyFilters,
       create
     } = this.props;
     const editMenuItemProp = {
       icon: 'pencil-square'
+    };
+    const filtersMenuItemProp = {
+      icon: 'picture-o'
     };
     const shareMenuItemProp = {
       icon: 'share-alt-square'
@@ -89,6 +97,12 @@ class Sidebar extends Component {
         edit={edit}
         create={create}
       />
+    const filtersPanel =
+      <FiltersPanel
+        key="filters-panel"
+        filters={filters}
+        applyFilters={applyFilters}
+      />
     const sharePanel =
       <SharePanel key="share-panel" />
     let menuItemsProps = [];
@@ -96,8 +110,8 @@ class Sidebar extends Component {
     let panels = [];
 
     if (mode === MODE.WAIT_FILE || mode === MODE.CREATE) {
-      menuItemsProps = [editMenuItemProp];
-      panels = [editPanel];
+      menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
+      panels = [editPanel, filtersPanel];
     } else if (mode === MODE.EDIT) {
       menuItemsProps = [editMenuItemProp, shareMenuItemProp];
       panels = [editPanel, sharePanel];
