@@ -2,7 +2,7 @@
   &.active {
     border: solid 1px #E8AA25;
   }
-  &:hover, &.dragged {
+  &:hover, &.changing {
     border-width: 3px;
   }
 }
