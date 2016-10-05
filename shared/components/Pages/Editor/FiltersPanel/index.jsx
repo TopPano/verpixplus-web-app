@@ -10,7 +10,13 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired,
   filters: PropTypes.object.isRequired,
+  adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired
 };
 
@@ -24,7 +30,10 @@ class FiltersPanel extends Component {
 
   render() {
     const {
+      data,
+      dimension,
       filters,
+      adjustFilters,
       applyFilters
     } = this.props;
 
@@ -32,7 +41,11 @@ class FiltersPanel extends Component {
       <div className="filters-panel-component">
         <FiltersItemFilters />
         <FiltersItemAdjusts
+          adjustFilters={adjustFilters}
+          data={data}
+          dimension={dimension}
           filters={filters}
+          adjustFilters={adjustFilters}
           applyFilters={applyFilters}
         />
       </div>

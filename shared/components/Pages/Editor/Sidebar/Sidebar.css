@@ -4,8 +4,15 @@
     padding: 0 15px;
   }
 
-  .panel-wrapper {
+  .sidebar-panels-container {
     padding: 10px 25px;
+
+    .sidebar-panel {
+      display: none;
+      &.active {
+        display: block;
+      }
+    }
   }
 
   input, textarea {

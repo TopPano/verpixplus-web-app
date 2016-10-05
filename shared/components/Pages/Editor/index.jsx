@@ -22,6 +22,7 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
@@ -38,6 +39,7 @@ const propTypes = {
   playerSetAutoplay: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
+  adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
@@ -59,6 +61,7 @@ class Editor extends Component {
       title,
       caption,
       data,
+      appliedData,
       dataUrls,
       dimension,
       autoplay,
@@ -72,6 +75,7 @@ class Editor extends Component {
       playerSetAutoplay,
       trim,
       edit,
+      adjustFilters,
       applyFilters,
       create
     } = this.props;
@@ -93,6 +97,7 @@ class Editor extends Component {
         <div className="main-wrapper fill">
           <PlayerPanel
             imagesData={data}
+            appliedImagesData={appliedData}
             dimension={dimension}
             playerMode={playerMode}
             autoplay={autoplay}
@@ -127,11 +132,15 @@ class Editor extends Component {
               title={title}
               caption={caption}
               data={data}
+              appliedData={appliedData}
               dimension={dimension}
               autoplay={autoplay}
               filters={filters}
+              playerPlay={playerPlay}
+              playerPause={playerPause}
               playerSetAutoplay={playerSetAutoplay}
               edit={edit}
+              adjustFilters={adjustFilters}
               applyFilters={applyFilters}
               create={create}
             />

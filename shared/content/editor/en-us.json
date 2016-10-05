@@ -28,13 +28,18 @@
     },
     "ADJUSTS": {
       "TITLE": "Adjustments",
+      "APPLY": "APPLY",
       "BRIGHTNESS": "Brightness",
       "CONTRAST": "Contrast",
-      "SATURATE": "Saturate",
-      "SEPIA": "sepia",
-      "GRAYSCALE": "Grayscale",
-      "INVERT": "invert",
-      "HUE_ROTATE": "Hue Rotate",
+      "SATURATION": "Saturation",
+      "VIBRANCE": "Vibrance",
+      "EXPOSURE": "Exposure",
+      "HUE": "Hue",
+      "SEPIA": "Sepia",
+      "GAMMA": "Gamma",
+      "NOISE": "Noise",
+      "CLIP": "Clip",
+      "SHARPEN": "Sharpen",
       "BLUR": "Blur"
     }
   },

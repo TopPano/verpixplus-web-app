@@ -11,15 +11,15 @@ if (process.env.BROWSER) {
 const propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
+  initialValue: PropTypes.number.isRequired,
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
-  unit: PropTypes.string,
-  applyFilters: PropTypes.func.isRequired
+  step: PropTypes.number,
+  adjustFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  unit: '%'
+  step: 1
 };
 
 class Adjust extends Component {
@@ -28,40 +28,65 @@ class Adjust extends Component {
 
     // Bind "this" to member functions
     this.handleChange = this.handleChange.bind(this);
+    this.handleAfterChange = this.handleAfterChange.bind(this);
+
+    // Initialize state
+    this.state = {
+      value: props.initialValue,
+      shownValue: props.initialValue
+    };
   }
 
-  // Handler for change adjustment value
+  // Handler for changin adjustment value
   handleChange(value) {
+    this.setState({
+      value
+    });
+  }
+
+  // Handler for ater changing adjustment value
+  handleAfterChange(value) {
     const {
       type,
-      applyFilters
+      adjustFilters
     } = this.props;
 
-    applyFilters({
-      [type]: value
+    this.setState({
+      shownValue: value
+    });
+
+    adjustFilters({
+      adjusts: {
+        [type]: value
+      }
     });
   }
 
   render() {
     const {
-      title,
       value,
+      shownValue
+    } = this.state;
+    const {
+      title,
       min,
       max,
-      unit
+      step
     } = this.props;
 
     return (
       <div className="adjust-component margin-bottom-5">
         <div className="panel-heading overflow-h">
           <h5 className="panel-tile heading-sm pull-left">{title}</h5>
-          <h5 className="adjust-value rounded pull-right">{`${value} ${unit}`}</h5>
+          <h5 className="adjust-value rounded pull-right">{shownValue}</h5>
         </div>
         <Slider
           min={min}
           max={max}
+          step={step}
           value={value}
           onChange={this.handleChange}
+          onAfterChange={this.handleAfterChange}
         />
       </div>
     );
