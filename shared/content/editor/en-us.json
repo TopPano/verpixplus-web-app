@@ -23,8 +23,27 @@
     }
   },
   "FILTERS_PANEL": {
-    "FILTERS": {
-      "TITLE": "Filters"
+    "PRESETS": {
+      "TITLE": "Filters",
+      "NORMAL": "Normal",
+      "VINTAGE": "Vintage",
+      "LOMO": "Lomo",
+      "CLARITY": "Clarity",
+      "SIN_CITY": "Sin City",
+      "SUNRISE": "Sunrise",
+      "CROSS_PROCESS": "Cross Process",
+      "ORANGE_PEEL": "Orange Peel",
+      "LOVE": "Love",
+      "GRUNGY": "Grungy",
+      "JARQUES": "Jarques",
+      "PINHOLE": "Pinhole",
+      "OLD_BOOT": "Old Boot",
+      "GLOWING_SUN": "Glowing Sun",
+      "HAZY_DAYS": "Hazy Days",
+      "HER_MAJESTY": "Her Majesty",
+      "NOSTALGIA": "Nostalgia",
+      "HEMINGWAY": "Hemingway",
+      "CONCENTRATE": "Concentrate"
     },
     "ADJUSTS": {
       "TITLE": "Adjustments",

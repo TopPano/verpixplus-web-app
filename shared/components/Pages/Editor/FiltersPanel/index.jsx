@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import FiltersItemFilters from './FiltersItemFilters';
+import FiltersItemPresets from './FiltersItemPresets';
 import FiltersItemAdjusts from './FiltersItemAdjusts';
 
 if (process.env.BROWSER) {
@@ -39,7 +39,10 @@ class FiltersPanel extends Component {
 
     return (
       <div className="filters-panel-component">
-        <FiltersItemFilters />
+        <FiltersItemPresets
+          adjustFilters={adjustFilters}
+          filters={filters}
+        />
         <FiltersItemAdjusts
           adjustFilters={adjustFilters}
           data={data}

@@ -48,6 +48,7 @@ const DEFAULT_STATE = {
   lower: 0,
   upper: FRAMES_LIMIT,
   filters: {
+    preset: 'normal',
     adjusts: {},
     isDirty: false
   },
@@ -93,6 +94,7 @@ export default function editor(state = DEFAULT_STATE, action) {
     case ADJUST_FILTERS:
       return merge({}, state, {
         filters: {
+          preset: action.filters.preset,
           adjusts: action.filters.adjusts,
           isDirty: true
         }
