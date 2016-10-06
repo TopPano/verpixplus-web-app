@@ -3,8 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import NewsFeedPageContainer from './NewsFeed';
 import LandingPageContainer from './Landing';
+import WorkSpacePageContainer from './WorkSpace';
 
 class HomePageContainer extends Component {
   static propTyes = {
@@ -17,7 +17,7 @@ class HomePageContainer extends Component {
     return (
       <div style={{height: '100%'}}>
         {isAuthenticated &&
-          <NewsFeedPageContainer />
+          <WorkSpacePageContainer />
         }
         {!isAuthenticated &&
           <LandingPageContainer />

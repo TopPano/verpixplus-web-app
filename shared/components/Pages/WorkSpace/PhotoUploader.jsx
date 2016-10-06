@@ -6,24 +6,27 @@ if (process.env.BROWSER) {
   require('./PhotoUploader.css');
 }
 
-export default class PhotoUploader extends Component {
+const propTypes = {
+};
+
+const defaultProps = {
+};
+
+class PhotoUploader extends Component {
   constructor(props) {
     super(props);
   }
   render() {
     return (
       <img className='photo-uploader-component'
-        src='/static/images/personal/personal-profile-upload.png'
+        src='/static/images/workspace/workspace-profile-upload.png'
         alt='upload'
       />
     );
   }
 }
 
-PhotoUploader.displayName = 'PhotoUploader';
+PhotoUploader.propTypes = propTypes;
+PhotoUploader.defaultProps = defaultProps;
 
-PhotoUploader.propTypes = {
-};
-PhotoUploader.defaultProps = {
-};
-
+export default PhotoUploader;

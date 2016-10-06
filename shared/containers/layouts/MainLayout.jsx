@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import MainLayout from '../../components/Layouts/MainLayout';
+import MainLayout from 'components/Layouts/MainLayout';
 
 class MainLayoutContainer extends Component {
   static propTypes = {
