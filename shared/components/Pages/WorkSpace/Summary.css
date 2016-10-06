@@ -1,0 +1,70 @@
+@import '../../Common/Styles/Mixins.css';
+@import '../../Common/Styles/Variables.css';
+@import '../../Common/Styles/RWD.css';
+
+.workspace-summary-component {
+  position: relative;
+  height: $sm-workspace-summary-height;
+  width: 100%;
+  @media (width >= $summary-boundary) {
+    height: $workspace-summary-height;
+  }
+
+  .workspace-summary-main {
+    position: relative;
+    margin-top: $sm-workspace-summarymain-margin;
+    @media (width >= $summary-boundary) {
+      margin-top: $workspace-summarymain-margin;
+    }
+    .workspace-summary-profilebg {
+      max-width: 100%;
+      width: $sm-workspace-profilebg-width;
+      height: $sm-workspace-profilebg-height;
+      margin: $sm-workspace-profilebg-margin auto;
+      @media (width >= $summary-boundary) {
+        width: $workspace-profilebg-width;
+        height: $workspace-profilebg-height;
+        margin: $workspace-profilebg-margin auto;
+      }
+      @mixin fullbg '/static/images/workspace/workspace-profile-bg.png';
+    }
+    .workspace-summary-profile {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      .workspace-summary-profile-left {
+      }
+      .workspace-summary-profile-right {
+        .button-component {
+          float: right;
+        }
+        .photo-uploader-component {
+          float: right;
+        }
+      }
+    }
+    .workspace-summary-name {
+      font-weight: bold;
+      text-align: center;
+      padding-top: $workspace-profilename-padding;
+    }
+  }
+  .workspace-summary-fg {
+    position: absolute;
+    left: 0;
+    top: $sm-workspace-fg-top;
+    height: $sm-workspace-fg-height;
+    width: 100%;
+    @media (width >= $summary-boundary) {
+      top: $workspace-fg-top;
+      height: $workspace-fg-height;
+    }
+    @mixin fullbg '/static/images/workspace/workspace-fg.png';
+  }
+}
+
