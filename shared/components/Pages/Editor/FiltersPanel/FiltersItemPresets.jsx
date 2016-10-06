@@ -68,14 +68,13 @@ class FiltersItemPresets extends Component {
   render() {
     const images = PRESETS.map((preset) => {
       return {
-        src: 'http://placekitten.com/g/400/200',
+        src: `/static/images/editor/filters/${preset.name}.jpg`,
         text: preset.text
       };
     });
     const imgCarouselProps = {
       images,
       carouselClass: 'filter-carousel',
-      imageClass: 'filter-image',
       rounded: true,
       isVertical: true,
       onClick: this.handleClick
