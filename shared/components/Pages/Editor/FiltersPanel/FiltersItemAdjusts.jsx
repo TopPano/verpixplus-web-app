@@ -156,8 +156,9 @@ class FiltersItemAdjusts extends Component {
           icon="adjust"
           title={CONTENT.TITLE}
         >
-          <IconButton {...applyBtnProps} />
           {adjustList}
+          <div className="margin-bottom-25" />
+          <IconButton {...applyBtnProps} />
         </SidebarItem>
       </div>
     );

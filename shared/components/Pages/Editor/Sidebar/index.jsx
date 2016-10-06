@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import ScrollArea from 'react-scrollbar';
 
 import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
@@ -186,9 +187,12 @@ class Sidebar extends Component {
         <div className="menu bg-color-light-grey">
           {menuItems}
         </div>
-        <div className="sidebar-panels-container">
+        <ScrollArea
+          className="sidebar-panels-container"
+          horizontal={false}
+        >
           {sidebarPanels}
-        </div>
+        </ScrollArea>
       </div>
     );
   }
