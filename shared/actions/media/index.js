@@ -2,6 +2,7 @@ import api from 'lib/api';
 import isFunction from 'lodash/isFunction';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
+import { push } from 'react-router-redux';
 
 import { MEDIA_TYPE } from 'constants/common';
 import concatImages from './concatImages';
@@ -75,6 +76,52 @@ export function getMedia({ mediaId, filter }) {
   }
 }
 
+
+export const LOAD_USER_MEDIA_REQUEST = 'LOAD_USER_MEDIA_REQUEST';
+export const LOAD_USER_MEDIA_SUCCESS = 'LOAD_USER_MEDIA_SUCCESS';
+export const LOAD_USER_MEDIA_FAILURE = 'LOAD_USER_MEDIA_FAILURE';
+
+export function loadUserMedia({ id, lastMediaId, params = {}, userSession = {} }) {
+  return (dispatch) => {
+    let queryId;
+    if (id) {
+      queryId = id;
+    } else if (params.id) {
+      queryId = params.id;
+    } else if (userSession.userId) {
+      queryId = userSession.userId;
+    }
+
+    if (!queryId) {
+      return dispatch({
+        type: LOAD_USER_MEDIA_FAILURE,
+        error: 'No user id specified'
+      });
+    }
+
+    dispatch({
+      type: LOAD_USER_MEDIA_REQUEST
+    });
+
+    return api.media.getUserMedia(queryId, lastMediaId, userSession.accessToken).then((response) => {
+      response.result.firstQuery = lastMediaId ? false : true;
+      dispatch({
+        type: LOAD_USER_MEDIA_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: LOAD_USER_MEDIA_FAILURE,
+        error
+      });
+      if (error.status === 401) {
+        dispatch(push('/'));
+      }
+    });
+  };
+}
+
+
 export const CREATE_MEDIA_REQUEST = 'CREATE_MEDIA_REQUEST';
 export const CREATE_MEDIA_SUCCESS = 'CREATE_MEDIA_SUCCESS';
 export const CREATE_MEDIA_FAILURE = 'CREATE_MEDIA_FAILURE';
@@ -99,7 +146,7 @@ function createMediaFailure(err) {
   };
 }
 
-export function createMedia({ mediaType, title, caption, data, dimension }) {
+export function createMedia({ mediaType, title, caption, data, dimension, userSession = {} }) {
   return (dispatch) => {
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       dispatch(createMediaRequest());
@@ -119,7 +166,7 @@ export function createMedia({ mediaType, title, caption, data, dimension }) {
         formData.append('thumbnail', concatImgs.thumbnail);
         formData.append('image', concatImgs.zip);
 
-        return api.media.postMedia(mediaType, formData);
+        return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
         dispatch(createMediaSuccess(res));
       }).catch((err) => {
@@ -132,5 +179,31 @@ export function createMedia({ mediaType, title, caption, data, dimension }) {
         message: `Meida type: ${mediaType} is not supported`
       }));
     }
+  };
+}
+
+
+export const DELETE_MEDIA_REQUEST = 'DELETE_MEDIA_REQUEST';
+export const DELETE_MEDIA_SUCCESS = 'DELETE_MEDIA_SUCCESS';
+export const DELETE_MEDIA_FAILURE = 'DELETE_MEDIA_FAILURE';
+
+export function deleteMedia({ mediaId, userSession = {} }) {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_MEDIA_REQUEST
+    });
+
+    return api.media.deleteMedia(mediaId, userSession.accessToken).then((response) => {
+      response.mediaId = mediaId;
+      dispatch({
+        type: DELETE_MEDIA_SUCCESS,
+        response
+      });
+    }).catch((error) => {
+      dispatch({
+        type: DELETE_MEDIA_FAILURE,
+        error
+      });
+    });
   };
 }

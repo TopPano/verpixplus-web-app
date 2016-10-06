@@ -1,4 +1,5 @@
 import Base from './Base';
+import { Schema, arrayOf } from 'normalizr';
 
 import { MEDIA_TYPE } from 'constants/common';
 
@@ -9,11 +10,29 @@ export default class MediaAPI extends Base {
     });
   }
 
+  getUserMedia(userId, lastMediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    const payload = lastMediaId ? {
+      where: {
+        sid: {
+          lt: lastMediaId
+        }
+      }
+    } : {};
+    return this.apiClient.post({
+      url: `users/${userId}/profile/query`,
+      payload,
+      authenticated: true,
+      schema: { result: { feed: arrayOf(new Schema('media', { idAttribute: 'sid' })) } }
+    });
+  }
+
   postMedia(mediaType, media, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
     }
-
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       return this.apiClient.post({
         url: 'media/livephoto',
@@ -27,5 +46,15 @@ export default class MediaAPI extends Base {
       // TODO: Error handling for other cases
       return null;
     }
+  }
+
+  deleteMedia(mediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    return this.apiClient.delete({
+      url: `media/${mediaId}`,
+      authenticated: true
+    });
   }
 }
