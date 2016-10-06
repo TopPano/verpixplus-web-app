@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 
 import { MODE } from 'constants/editor';
 import FilePanel from './FilePanel';
@@ -121,31 +119,29 @@ class Editor extends Component {
 
     return (
       <div className="editor-component container-full">
-        <Row className="fill">
-          <Col md={9} sm={8} className="editor-main">
-            {mainComponent}
-          </Col>
-          <Col md={3} sm={4} className="editor-sidebar">
-            <Sidebar
-              mode={mode}
-              mediaType={mediaType}
-              title={title}
-              caption={caption}
-              data={data}
-              appliedData={appliedData}
-              dimension={dimension}
-              autoplay={autoplay}
-              filters={filters}
-              playerPlay={playerPlay}
-              playerPause={playerPause}
-              playerSetAutoplay={playerSetAutoplay}
-              edit={edit}
-              adjustFilters={adjustFilters}
-              applyFilters={applyFilters}
-              create={create}
-            />
-          </Col>
-        </Row>
+        <div className="editor-main">
+          {mainComponent}
+        </div>
+        <div className="editor-sidebar">
+          <Sidebar
+            mode={mode}
+            mediaType={mediaType}
+            title={title}
+            caption={caption}
+            data={data}
+            appliedData={appliedData}
+            dimension={dimension}
+            autoplay={autoplay}
+            filters={filters}
+            playerPlay={playerPlay}
+            playerPause={playerPause}
+            playerSetAutoplay={playerSetAutoplay}
+            edit={edit}
+            adjustFilters={adjustFilters}
+            applyFilters={applyFilters}
+            create={create}
+          />
+        </div>
       </div>
     );
   }
