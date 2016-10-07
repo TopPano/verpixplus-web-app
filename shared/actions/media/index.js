@@ -7,6 +7,17 @@ import { push } from 'react-router-redux';
 import { MEDIA_TYPE } from 'constants/common';
 import concatImages from './concatImages';
 
+
+function handleError(dispatch, type, err) {
+  dispatch({
+    type,
+    err
+  });
+  if (err.status === 401) {
+    dispatch(push('/'));
+  }
+}
+
 export const GET_MEDIA_REQUEST = 'GET_MEDIA_REQUEST';
 export const GET_MEDIA_SUCCESS = 'GET_MEDIA_SUCCESS';
 export const GET_MEDIA_FAILURE = 'GET_MEDIA_FAILURE';
@@ -21,13 +32,6 @@ function getMediaSuccess(response) {
   return {
     type: GET_MEDIA_SUCCESS,
     response
-  }
-}
-
-function getMediaFailure(err) {
-  return {
-    type: GET_MEDIA_FAILURE,
-    err
   }
 }
 
@@ -71,7 +75,7 @@ export function getMedia({ mediaId, filter }) {
     }).then((res) => {
       dispatch(getMediaSuccess(res));
     }).catch((err) => {
-      dispatch(getMediaFailure(err));
+      handleError(dispatch, GET_MEDIA_FAILURE, err);
     });
   }
 }
@@ -109,14 +113,8 @@ export function loadUserMedia({ id, lastMediaId, params = {}, userSession = {} }
         type: LOAD_USER_MEDIA_SUCCESS,
         response
       });
-    }).catch((error) => {
-      dispatch({
-        type: LOAD_USER_MEDIA_FAILURE,
-        error
-      });
-      if (error.status === 401) {
-        dispatch(push('/'));
-      }
+    }).catch((err) => {
+      handleError(dispatch, LOAD_USER_MEDIA_FAILURE, err);
     });
   };
 }
@@ -136,13 +134,6 @@ function createMediaSuccess(response) {
   return {
     type: CREATE_MEDIA_SUCCESS,
     response
-  };
-}
-
-function createMediaFailure(err) {
-  return {
-    type: CREATE_MEDIA_FAILURE,
-    err
   };
 }
 
@@ -170,14 +161,14 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
       }).then((res) => {
         dispatch(createMediaSuccess(res));
       }).catch((err) => {
-        dispatch(createMediaFailure(err));
+        handleError(dispatch, CREATE_MEDIA_FAILURE, err);
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
       // TODO: Handle panophoto
     } else {
-      dispatch(createMediaFailure({
-        message: `Meida type: ${mediaType} is not supported`
-      }));
+      const err = new Error(`Meida type: ${mediaType} is not supported`);
+      err.status = 400;
+      handleError(dispatch, CREATE_MEDIA_FAILURE, err);
     }
   };
 }
@@ -199,11 +190,8 @@ export function deleteMedia({ mediaId, userSession = {} }) {
         type: DELETE_MEDIA_SUCCESS,
         response
       });
-    }).catch((error) => {
-      dispatch({
-        type: DELETE_MEDIA_FAILURE,
-        error
-      });
+    }).catch((err) => {
+      handleError(dispatch, DELETE_MEDIA_FAILURE, err);
     });
   };
 }

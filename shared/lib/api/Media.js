@@ -1,5 +1,6 @@
 import Base from './Base';
 import { Schema, arrayOf } from 'normalizr';
+import Promise from 'lib/utils/promise';
 
 import { MEDIA_TYPE } from 'constants/common';
 
@@ -24,7 +25,7 @@ export default class MediaAPI extends Base {
     return this.apiClient.post({
       url: `users/${userId}/profile/query`,
       payload,
-      authenticated: true,
+      requireAuth: true,
       schema: { result: { feed: arrayOf(new Schema('media', { idAttribute: 'sid' })) } }
     });
   }
@@ -37,7 +38,7 @@ export default class MediaAPI extends Base {
       return this.apiClient.post({
         url: 'media/livephoto',
         payload: media,
-        authenticated: true,
+        requireAuth: true,
         contentType: 'multipart/form-data'
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
@@ -54,7 +55,7 @@ export default class MediaAPI extends Base {
     }
     return this.apiClient.delete({
       url: `media/${mediaId}`,
-      authenticated: true
+      requireAuth: true
     });
   }
 }
