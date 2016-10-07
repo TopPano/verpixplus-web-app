@@ -52,7 +52,7 @@ export default function workspace(state=DEFAULT_STATE, action) {
     }
     case LOAD_USER_MEDIA_SUCCESS:
     {
-      const { entities: { media }, result: { result: { page, feed }, firstQuery } } = action.response;
+      let { entities: { media }, result: { result: { page, feed }, firstQuery } } = action.response;
       const hasNext = page.hasNextPage;
       const lastMediaId = page.end;
 
