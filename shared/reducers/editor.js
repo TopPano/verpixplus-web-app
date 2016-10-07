@@ -6,6 +6,10 @@ import {
   CONVERT_PROGRESS,
   CONVERT_SUCCESS,
   CONVERT_FAILURE,
+  PLAYER_PLAY,
+  PLAYER_PAUSE,
+  PLAYER_SET_AUTOPLAY,
+  TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
   APPLY_FILTERS
@@ -18,7 +22,11 @@ import {
   CREATE_MEDIA_SUCCESS,
   CREATE_MEDIA_FAILURE
 } from 'actions/media';
-import { MODE } from 'constants/editor';
+import {
+  MODE,
+  PLAYER_MODE,
+  FRAMES_LIMIT
+} from 'constants/editor';
 
 const DEFAULT_STATE = {
   mediaId: '',
@@ -31,6 +39,10 @@ const DEFAULT_STATE = {
   data: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
+  playerMode: PLAYER_MODE.PAUSE,
+  autoplay: true,
+  lower: 0,
+  upper: FRAMES_LIMIT,
   filters: {
     contrast: 100,
     brightness: 100,
@@ -54,6 +66,23 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
+      });
+    case PLAYER_PLAY:
+      return merge({}, state, {
+        playerMode: PLAYER_MODE.PLAY
+      });
+    case PLAYER_PAUSE:
+      return merge({}, state, {
+        playerMode: PLAYER_MODE.PAUSE
+      });
+    case PLAYER_SET_AUTOPLAY:
+      return merge({}, state, {
+        autoplay: action.autoplay
+      });
+    case TRIM:
+      return merge({}, state, {
+        lower: action.lower,
+        upper: action.upper
       });
     case EDIT_TITLE:
       return merge({}, state, {
@@ -79,13 +108,18 @@ export default function editor(state = DEFAULT_STATE, action) {
         progress: action.progress
       });
     case CONVERT_SUCCESS:
+      const dataLength = action.result.dataUrls.length;
+
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
         mediaType: action.mediaType,
         data: action.result.data,
         dataUrls: action.result.dataUrls,
-        dimension: action.result.dimension
+        dimension: action.result.dimension,
+        playerMode: PLAYER_MODE.PLAY,
+        lower: 0,
+        upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });
     case GET_MEDIA_SUCCESS:
       // TODO: fill title

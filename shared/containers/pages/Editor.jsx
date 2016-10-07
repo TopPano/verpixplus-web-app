@@ -7,6 +7,10 @@ import { connectDataFetchers } from 'lib/utils';
 import {
   initEditor,
   convert,
+  playerPlay,
+  playerPause,
+  playerSetAutoplay,
+  trim,
   edit,
   applyFilters
 } from 'actions/editor';
@@ -26,9 +30,13 @@ class EditorPageContainer extends Component {
 
     // Bind "this" to member function
     this.convertFile = this.convertFile.bind(this);
+    this.playerPlay = this.playerPlay.bind(this);
+    this.playerPause = this.playerPause.bind(this);
+    this.playerSetAutoplay = this.playerSetAutoplay.bind(this);
     this.edit = this.edit.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
+    this.trim = this.trim.bind(this);
   }
 
   // Wrapper for dispatching convert function,
@@ -36,6 +44,33 @@ class EditorPageContainer extends Component {
   // or convet an image to panophoto
   convertFile({ mediaType, source }) {
     this.props.dispatch(convert({ mediaType, source }));
+  }
+
+  // Wrapper for dispatching playerPlay function,
+  // which enable the palyer starts playing
+  playerPlay() {
+    this.props.dispatch(playerPlay());
+  }
+
+  // Wrapper for dispatching playerPause function,
+  // which enable the palyer pause playing
+  playerPause() {
+    this.props.dispatch(playerPause());
+  }
+
+  // Wrapper for dispatching playerSetAutoplay function,
+  // which enables/disables the autoplay option
+  playerSetAutoplay(autoplay) {
+    this.props.dispatch(playerSetAutoplay(autoplay));
+  }
+
+  // Wrapper for dispatching trim function,
+  // which trims the range of frames
+  trim({ lower, upper }) {
+    this.props.dispatch(trim({
+      lower,
+      upper
+    }));
   }
 
   // Wrapper for dispatching edit function,
@@ -66,6 +101,10 @@ class EditorPageContainer extends Component {
       <Editor
         {...editor}
         convertFile={this.convertFile}
+        playerPlay={this.playerPlay}
+        playerPause={this.playerPause}
+        playerSetAutoplay={this.playerSetAutoplay}
+        trim={this.trim}
         edit={this.edit}
         applyFilters={this.applyFilters}
         create={this.create}

@@ -1,2 +1,17 @@
+@import 'Variables.css';
+
 .edit-item-settings-component {
+  .autoplay {
+    .panel-title {
+      color: #AAA;
+      cursor: default;
+    }
+
+    .rc-switch {
+      border: none;
+      &.rc-switch-checked {
+        background-color: $color-green;
+      }
+    }
+  }
 }

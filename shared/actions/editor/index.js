@@ -1,5 +1,7 @@
 import { push } from 'react-router-redux';
 import isString from 'lodash/isString';
+import isNumber from 'lodash/isNumber';
+import isBoolean from 'lodash/isBoolean';
 import startsWith from 'lodash/startsWith';
 import merge from 'lodash/merge';
 
@@ -104,6 +106,51 @@ export function convert({ mediaType, source }) {
       dispatch(convertFailure({
         message: `Meida type: ${mediaType} is not supported`
       }));
+    }
+  };
+}
+
+export const PLAYER_PLAY = 'PLAYER_PLAY';
+export const PLAYER_PAUSE = 'PLAYER_PAUSE';
+export const PLAYER_SET_AUTOPLAY = 'PLAYER_SET_AUTOPLAY';
+
+export function playerPlay() {
+  return (dispatch) => {
+    dispatch({
+      type: PLAYER_PLAY
+    });
+  };
+}
+
+export function playerPause() {
+  return (dispatch) => {
+    dispatch({
+      type: PLAYER_PAUSE
+    });
+  };
+}
+
+export function playerSetAutoplay(autoplay) {
+  return (dispatch) => {
+    if (isBoolean(autoplay)) {
+      dispatch({
+        type: PLAYER_SET_AUTOPLAY,
+        autoplay
+      });
+    }
+  };
+}
+
+export const TRIM = 'TRIM';
+
+export function trim({ lower, upper }) {
+  return (dispatch) => {
+    if (isNumber(lower) && isNumber(upper) && lower <= upper) {
+      dispatch({
+        type: TRIM,
+        lower,
+        upper
+      });
     }
   };
 }
