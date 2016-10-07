@@ -3,7 +3,7 @@ import { push } from 'react-router-redux';
 
 import api from 'lib/api';
 import config from 'etc/client';
-import { Promise, execute } from 'lib/utils';
+import { Promise } from 'lib/utils';
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -21,7 +21,7 @@ function registerError(message) {
   }
 }
 
-export function registerUser(creds, successRedirectUrl='/') {
+export function registerUser(creds, successRedirectUrl = '/') {
   return (dispatch) => {
     if (!creds.username || !creds.email || !creds.password) {
       const message = 'Missing Registration Information';
@@ -86,7 +86,7 @@ function loginError(message) {
   }
 }
 
-export function loginUser(creds, successRedirectUrl='/') {
+export function loginUser(creds, successRedirectUrl = '/') {
   return (dispatch) => {
     if (!creds.email || !creds.password) {
       const message = 'Missing Login Information';
@@ -127,7 +127,7 @@ export function loginUser(creds, successRedirectUrl='/') {
 
 export const FACEBOOK_TOKEN_LOGIN_SUCCESS = 'FACEBOOK_TOKEN_LOGIN_SUCCESS';
 
-export function facebookTokenLogin(token, successRedirectUrl='/') {
+export function facebookTokenLogin(token, successRedirectUrl = '/') {
   return (dispatch) => {
     if (!token) {
       return dispatch(loginError('Missing Facebook Authentication Token'));
@@ -198,13 +198,15 @@ export const LOAD_USER_SUMMARY_REQUEST = 'LOAD_USER_SUMMARY_REQUEST';
 export const LOAD_USER_SUMMARY_SUCCESS = 'LOAD_USER_SUMMARY_SUCCESS';
 export const LOAD_USER_SUMMARY_FAILURE = 'LOAD_USER_SUMMARY_FAILURE';
 
-export function loadUserSummary({id, params={}, authToken}) {
+export function loadUserSummary({ id, params = {}, userSession = {} }) {
   return (dispatch) => {
     let queryId;
     if (id) {
       queryId = id;
     } else if (params.id) {
       queryId = params.id;
+    } else if (userSession.userId) {
+      queryId = userSession.userId;
     }
 
     if (!queryId) {
@@ -218,7 +220,7 @@ export function loadUserSummary({id, params={}, authToken}) {
       type: LOAD_USER_SUMMARY_REQUEST
     });
 
-    return api.users.getProfile(queryId, authToken).then((response) => {
+    return api.users.getProfile(queryId, userSession.accessToken).then((response) => {
       dispatch({
         type: LOAD_USER_SUMMARY_SUCCESS,
         response
@@ -233,100 +235,4 @@ export function loadUserSummary({id, params={}, authToken}) {
       }
     });
   };
-}
-
-export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
-export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
-export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
-
-export function followUser(followerId, followeeId, callback) {
-  return (dispatch) => {
-    dispatch({
-      type: FOLLOW_USER_REQUEST
-    });
-    return api.users.follow(followerId, followeeId).then(() => {
-      dispatch({
-        type: FOLLOW_USER_SUCCESS,
-        followerId,
-        followeeId
-      });
-      execute(callback);
-    }).catch((error) => {
-      dispatch({
-        type: FOLLOW_USER_FAILURE,
-        error
-      });
-    });
-  }
-}
-
-export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST';
-export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS';
-export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
-
-export function unfollowUser(followerId, followeeId) {
-  return (dispatch) => {
-    dispatch({
-      type: UNFOLLOW_USER_REQUEST
-    });
-    return api.users.unfollow(followerId, followeeId).then(() => {
-      dispatch({
-        type: UNFOLLOW_USER_SUCCESS,
-        followeeId
-      });
-    }).catch((error) => {
-      dispatch({
-        type: UNFOLLOW_USER_FAILURE,
-        error
-      });
-    });
-  }
-}
-
-export const LIST_FOLLOWERS_REQUEST = 'LIST_FOLLOWERS_REQUEST';
-export const LIST_FOLLOWERS_SUCCESS = 'LIST_FOLLOWERS_SUCCESS';
-export const LIST_FOLLOWERS_FAILURE = 'LIST_FOLLOWERS_FAILURE';
-
-export function listFollowers({id, params={}}) {
-  const queryId = id ? id : params.id;
-  return (dispatch) => {
-    dispatch({
-      type: LIST_FOLLOWERS_REQUEST
-    });
-    return api.users.listFollowers(queryId).then((response) => {
-      dispatch({
-        type: LIST_FOLLOWERS_SUCCESS,
-        response
-      });
-    }).catch((error) => {
-      dispatch({
-        type: LIST_FOLLOWERS_FAILURE,
-        error
-      });
-    });
-  }
-}
-
-export const LIST_FOLLOWING_REQUEST = 'LIST_FOLLOWING_REQUEST';
-export const LIST_FOLLOWING_SUCCESS = 'LIST_FOLLOWING_SUCCESS';
-export const LIST_FOLLOWING_FAILURE = 'LIST_FOLLOWING_FAILURE';
-
-export function listFollowing({id, params={}}) {
-  const queryId = id ? id : params.id;
-  return (dispatch) => {
-    dispatch({
-      type: LIST_FOLLOWING_REQUEST
-    });
-    return api.users.listFollowing(queryId).then((response) => {
-      dispatch({
-        type: LIST_FOLLOWING_SUCCESS,
-        response
-      });
-    }).catch((error) => {
-      dispatch({
-        type: LIST_FOLLOWING_FAILURE,
-        error
-      });
-    });
-  }
 }

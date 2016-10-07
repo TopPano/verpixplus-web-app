@@ -57,7 +57,7 @@ describe('component: Gallery', () => {
       const { postIds, posts } = component.instance().props;
       postIds.forEach((id) => {
         const post = posts[id];
-        const expectedOrientation = 
+        const expectedOrientation =
           post.mediaType === MEDIA_TYPE.LIVE_PHOTO && post.dimension.orientation === ORIENTATION.PORTRAIT ?
           ORIENTATION.PORTRAIT :
           ORIENTATION.LANDSCAPE;
@@ -71,7 +71,7 @@ describe('component: Gallery', () => {
       const { postIds, posts } = component.instance().props;
       postIds.forEach((id) => {
         const post = posts[id];
-        const expectedIsPortrait = 
+        const expectedIsPortrait =
           post.mediaType === MEDIA_TYPE.LIVE_PHOTO && post.dimension.orientation === ORIENTATION.PORTRAIT ?
           true :
           false;
@@ -143,22 +143,6 @@ describe('component: Gallery', () => {
   });
 
   describe('#render()', () => {
-    it('should contains PeopleList as a sub-component', () => {
-      const peopleList = component.find('PeopleList');
-      const shouldHavePropsList = [
-        'userId',
-        'followUser',
-        'unfollowUser'
-      ];
-      const expectedList = genLikelist(component.instance().props.like.list);
-      
-      expect(peopleList).to.have.length(1);
-      shouldHavePropsList.forEach((propName) => {
-        expect(peopleList.prop(propName)).to.equal(component.instance().props[propName]);
-      });
-      expect(peopleList.props().list).to.deep.equal(expectedList);
-    });
-
     it('should contains a button for loading more posts when the prop "hasNext" is true', () => {
       const hasNexts = [true, false, undefined];
       hasNexts.forEach((hasNext) => {

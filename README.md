@@ -34,3 +34,8 @@ $ npm test
 $ npm run test:watch
 ```
 Please read `package.json` to see more usages.
+
+## Contributing
+### Coding Style Guildline
+- Javscript: [Aribnb Javscript Style Guildine](https://github.com/airbnb/javascript)
+- React: [Aribnb React/JSX Style Guildine](https://github.com/airbnb/javascript/tree/master/react)
