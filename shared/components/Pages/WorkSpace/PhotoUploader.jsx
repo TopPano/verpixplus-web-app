@@ -16,6 +16,7 @@ class PhotoUploader extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <img className='photo-uploader-component'

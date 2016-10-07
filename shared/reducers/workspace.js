@@ -52,12 +52,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
     }
     case LOAD_USER_MEDIA_SUCCESS:
     {
-      let { entities: { media }, result: { result: { page, feed }, firstQuery } } = action.response;
-      let hasNext = page.hasNextPage;
-      let lastMediaId = page.end;
+      const { entities: { media }, result: { result: { page, feed }, firstQuery } } = action.response;
+      const hasNext = page.hasNextPage;
+      const lastMediaId = page.end;
 
       let genNextState = undefined;
-      if(firstQuery) {
+      if (firstQuery) {
         genNextState = assign; /* overwrite the previous state */
       } else {
         genNextState = merge;
@@ -76,11 +76,16 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case DELETE_MEDIA_SUCCESS:
     {
       const { mediaId } = action.response;
-      let newState = merge({}, state, { isFetching: false, numOfMedia: state.numOfMedia - 1 });
+      let newState = merge({}, state, {
+        isFetching: false,
+        numOfMedia: state.numOfMedia > 0 ? state.numOfMedia - 1 : 0
+      });
       delete newState.media.objs[mediaId];
       newState.media.ids = newState.media.ids.filter((id) => { return id !== mediaId; });
       if (newState.media.lastMediaId === mediaId) {
-        newState.media.lastMediaId = newState.media.ids[newState.media.ids.length - 1];
+        newState.media.lastMediaId = newState.media.ids.length > 0 ?
+                                     newState.media.ids[newState.media.ids.length - 1] :
+                                     '';
       }
       return newState;
     }
