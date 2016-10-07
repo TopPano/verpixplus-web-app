@@ -24,21 +24,13 @@ class GalleryRow extends Component {
 
   // Render list of gallery items
   renderItemsList(mediaList, deleteMedia) {
-    return renderList(mediaList.slice(0, 4), (mediaObj, idx) => {
+    return renderList(mediaList.slice(0, 4), (mediaObj) => {
       const { id } = mediaObj;
-      const {
-        cdnUrl,
-        shardingKey
-      } = mediaObj.content;
-      const imgUrl = `${cdnUrl}/${shardingKey}/media/${id}/live/thumb.jpg`;
 
       return (
         <GalleryItem
           key={id}
-          id={id}
-          title={mediaObj.title}
-          caption={idx === 0 ? 'yoyo' : mediaObj.caption}
-          image={imgUrl}
+          mediaObj={mediaObj}
           deleteMedia={deleteMedia}
         />
       );

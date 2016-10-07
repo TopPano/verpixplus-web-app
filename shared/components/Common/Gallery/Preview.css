@@ -1,2 +1,83 @@
+@import 'Variables.css';
+
 .preview-component {
+  width: 100%;
+  padding-bottom: 50%;
+  position: relative;
+  &:hover {
+    .preview-overlay {
+      opacity: 1;
+    }
+  }
+
+  .preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: $color-transparent-black;
+    transition: opacity .5s ease;
+
+    .fa {
+      font-size: 30px;
+      color: $color-white;
+    }
+  }
+
+  .preview-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .img-item {
+      padding: 1px;
+
+      .img-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: 2px solid #CCC;
+
+        img {
+          position: absolute;
+          vertical-align: baseline;
+          &.img-portrait {
+            top: 0;
+            left: 0;
+            transform: translateY(-10%);
+          }
+          &.img-landscape {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+    }
+
+    > * {
+      width: 50%;
+      height: 100%;
+      float: left;
+    }
+
+    .preview-primary {
+      .img-item {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .preview-secondary {
+      .img-item {
+        width: 50%;
+        height: 50%;
+        float: left;
+      }
+    }
+  }
 }
