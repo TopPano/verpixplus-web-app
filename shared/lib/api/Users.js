@@ -6,28 +6,28 @@ export default class UsersAPI extends Base {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.get({
       url: `users/${id}/profile`,
-      authenticated: true
+      requireAuth: true
     });
   }
 
   follow(followerId, followeeId) {
     return this.apiClient.post({
       url: `users/${followerId}/follow/${followeeId}`,
-      authenticated: true
+      requireAuth: true
     });
   }
 
   unfollow(followerId, followeeId) {
     return this.apiClient.post({
       url: `users/${followerId}/unfollow/${followeeId}`,
-      authenticated: true
+      requireAuth: true
     });
   }
 
   listFollowers(id) {
     return this.apiClient.get({
       url: `users/${id}/followers`,
-      authenticated: true,
+      requireAuth: true,
       schema: { result: arrayOf(new Schema('followerList', { idAttribute: 'followerId' })) }
     });
   }
@@ -35,7 +35,7 @@ export default class UsersAPI extends Base {
   listFollowing(id) {
     return this.apiClient.get({
       url: `users/${id}/following`,
-      authenticated: true,
+      requireAuth: true,
       schema: { result: arrayOf(new Schema('followingList', { idAttribute: 'followeeId' })) }
     });
   }
