@@ -21,8 +21,9 @@ const defaultProps = {
 class WorkSpace extends Component {
   render() {
     const { workspace, deleteMedia, loadMore } = this.props;
+
     return (
-      <div className="workspace-component">
+      <div className="workspace-component container-fullpage">
         <Summary
           username={workspace.username}
           profilePhotoUrl={workspace.profilePhotoUrl}

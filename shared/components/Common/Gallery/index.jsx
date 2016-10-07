@@ -1,6 +1,10 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import merge from 'lodash/merge';
+import range from 'lodash/range';
+
+import GalleryRow from './GalleryRow';
 
 if (process.env.BROWSER) {
   require('./Gallery.css');
@@ -22,11 +26,36 @@ class Gallery extends Component {
     super(props);
   }
 
+  // Render list of gallery rows
+  renderRows(media, mediaIds, deleteMedia) {
+    const numOfRows = Math.ceil(mediaIds.length / 4);
+
+    return range(0, numOfRows).map((idx) => {
+      const subMediaList = mediaIds.slice(idx * 4, (idx + 1) * 4).map((id) => merge({}, media[id], { id }));
+
+      return (
+        <GalleryRow
+          key={idx}
+          mediaList={subMediaList}
+          deleteMedia={deleteMedia}
+        />
+      );
+    });
+  }
+
   render() {
-    const { media, mediaIds, hasNext } = this.props;
+    const {
+      media,
+      mediaIds,
+      hasNext,
+      deleteMedia
+    } = this.props;
+    const rows = this.renderRows(media, mediaIds, deleteMedia);
+
     return(
-      <div className="gallery-component container-fluid">
-        <div className="gallery-wrapper">
+      <div className="gallery-component container content">
+        <div className="row marrgin-bottom-30">
+          {rows}
         </div>
         {hasNext &&
           <div className="gallery-more-btn" onClick={this.handleClickMoreBtn}>{'more'}</div>

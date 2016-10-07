@@ -1,28 +1,8 @@
-@import 'Variables.css';
-@import 'RWD.css';
-
 .gallery-component {
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .gallery-wrapper {
-    width: 100%;
-    max-width: 1000px;
-    .gallery-sub {
-      float: left;
-      width: 100%;
-      @media(width >= $gallery-boundary) {
-        width: 50%;
-      }
-    }
-  }
-
   .gallery-more-btn {
     width: 80px;
     position: fixed;
-    bottom: $footer-height;
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
