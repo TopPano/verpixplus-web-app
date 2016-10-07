@@ -70,15 +70,15 @@ app.use((req, res) => {
     } else if (!renderProps) {
       res.send(404, 'Not found')
     } else {
-      fetchComponentsData(
-        store.dispatch,
-        renderProps.components,
-        renderProps.params,
-        renderProps.location,
-        accessToken
-      )
+      fetchComponentsData({
+        dispatch    : store.dispatch,
+        components  : renderProps.components,
+        params      : renderProps.params,
+        location    : renderProps.location,
+        userSession : initState.user
+      })
       .then(() => {
-        // Grab the inital state from the store
+        // Grab the initial state from the store
         const initialState = store.getState();
         const html = renderToString(
           <Provider store={store}>

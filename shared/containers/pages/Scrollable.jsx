@@ -2,10 +2,6 @@
 
 import React, { Component } from 'react';
 
-import { followUser, unfollowUser } from '../../actions/user';
-import { likePost, unlikePost } from '../../actions/post';
-import { showLikeList } from '../../actions/post';
-
 const REMAINED_SCROLL_OFFSET = 100;
 
 export default class ScrollablePageContainer extends Component {
@@ -45,35 +41,6 @@ export default class ScrollablePageContainer extends Component {
         this.requestMoreContent();
       }
     }
-  }
-
-  follow = (followeeId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(followUser(userId, followeeId));
-  }
-
-  unfollow = (followeeId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(unfollowUser(userId, followeeId));
-  }
-
-  like = (postId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(likePost(userId, postId));
-  }
-
-  unlike = (postId) => {
-    const { dispatch } = this.props;
-    const { userId } = this.props;
-    dispatch(unlikePost(userId, postId));
-  }
-
-  getLikelist = (postId) => {
-    const { dispatch } = this.props;
-    dispatch(showLikeList(postId));
   }
 
   render() {

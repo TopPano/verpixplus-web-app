@@ -1,4 +1,6 @@
 import Base from './Base';
+import { Schema, arrayOf } from 'normalizr';
+import Promise from 'lib/utils/promise';
 
 import { MEDIA_TYPE } from 'constants/common';
 
@@ -9,16 +11,34 @@ export default class MediaAPI extends Base {
     });
   }
 
+  getUserMedia(userId, lastMediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    const payload = lastMediaId ? {
+      where: {
+        sid: {
+          lt: lastMediaId
+        }
+      }
+    } : {};
+    return this.apiClient.post({
+      url: `users/${userId}/profile/query`,
+      payload,
+      requireAuth: true,
+      schema: { result: { feed: arrayOf(new Schema('media', { idAttribute: 'sid' })) } }
+    });
+  }
+
   postMedia(mediaType, media, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
     }
-
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       return this.apiClient.post({
         url: 'media/livephoto',
         payload: media,
-        authenticated: true,
+        requireAuth: true,
         contentType: 'multipart/form-data'
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
@@ -27,5 +47,15 @@ export default class MediaAPI extends Base {
       // TODO: Error handling for other cases
       return null;
     }
+  }
+
+  deleteMedia(mediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    return this.apiClient.delete({
+      url: `media/${mediaId}`,
+      requireAuth: true
+    });
   }
 }

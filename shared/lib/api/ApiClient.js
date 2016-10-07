@@ -16,47 +16,47 @@ export default class ApiClient {
     }
   }
 
-  get({url, params={}, authenticated=false, schema}) {
+  get({url, params = {}, requireAuth, schema}) {
     return this.request({
       url,
       method: 'get',
       params,
-      authenticated,
+      requireAuth,
       schema
     });
   }
 
-  post({ url, payload = {}, authenticated = false, schema, contentType = 'application/json' }) {
+  post({ url, payload = {}, requireAuth, schema, contentType = 'application/json' }) {
     return this.request({
       url,
       method: 'post',
       body: payload,
-      authenticated,
+      requireAuth,
       schema,
       contentType
     });
   }
 
-  put({ url, payload = {}, authenticated = false, schema, contentType = 'application/json' }) {
+  put({ url, payload = {}, requireAuth, schema, contentType = 'application/json' }) {
     return this.request({
       url,
       method: 'put',
       body: payload,
-      authenticated,
+      requireAuth,
       schema,
       contentType
     });
   }
 
-  delete({url, authenticated=false}) {
+  delete({ url, requireAuth }) {
     return this.request({
       url,
       method: 'delete',
-      authenticated
+      requireAuth
     });
   }
 
-  request({ url, method, params = {}, body = {}, authenticated, schema, contentType = 'application/json' }) {
+  request({ url, method, params = {}, body = {}, requireAuth = false, schema, contentType = 'application/json' }) {
     const urlWithQuery = isEmpty(params) ? `${url}` : `${url}?${queryString.stringify(params)}`;
     const init = {
       method,
@@ -65,17 +65,11 @@ export default class ApiClient {
       }
     };
 
-    if (authenticated) {
-      let token = null;
-      if (process.env.BROWSER) {
-        token = cookie.parse(document.cookie).accessToken;
+    if (requireAuth) {
+      if (this.token) {
+        init.headers['Authorization'] = `${this.token}`;
       } else {
-        token = this.token;
-      }
-      if (token) {
-        init.headers['Authorization'] = `${token}`;
-      } else {
-        let error = new Error('No access token saved!');
+        let error = new Error('Unauthorized');
         error.status = 401;
         return Promise.reject(error);
       }
