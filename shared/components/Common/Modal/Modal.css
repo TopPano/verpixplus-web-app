@@ -1,0 +1,36 @@
+@import 'Variables.css';
+
+.modal-backdrop.in {
+  opacity: 0.5;
+}
+
+.modal {
+  text-align: center;
+  &:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: ' ';
+    height: 100%;
+  }
+
+  .modal-processing {
+    width: 20px;
+    height: 20px;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 90%;
+    max-width: 600px;
+
+    .modal-content {
+      background-color: $color-white;
+      border: none;
+      box-shadow: none;
+      padding: 10px;
+    }
+  }
+}
+

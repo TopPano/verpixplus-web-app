@@ -5,6 +5,8 @@ import { Link } from 'react-router';
 import range from 'lodash/range';
 
 import { DEFAULT_TITLE } from 'constants/common';
+import CONTENT from 'content/workspace/en-us.json';
+import Modal from 'components/Common/Modal';
 import Preview from './Preview';
 
 if (process.env.BROWSER) {
@@ -13,6 +15,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaObj: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired
 };
 
@@ -22,6 +25,25 @@ const defaultProps = {
 class GalleryItem extends Component {
   constructor(props) {
     super(props);
+
+    // Bind "this" to member functions
+    this.openModalDelete = this.openModalDelete.bind(this);
+    this.handleClickModalDeleteBtn = this.handleClickModalDeleteBtn.bind(this);
+  }
+
+  // Open the modal for deletion
+  openModalDelete() {
+    this.refs.modalDelete.open();
+  }
+
+  // Handler for clicking delete button
+  handleClickModalDeleteBtn() {
+    const { id } = this.props.mediaObj;
+    const { deleteMedia } = this.props;
+
+    deleteMedia({
+      mediaId: id
+    });
   }
 
   // Select images for feeding to Preview component
@@ -45,7 +67,10 @@ class GalleryItem extends Component {
   }
 
   render() {
-    const { mediaObj } = this.props;
+    const {
+      mediaObj,
+      isFetching
+    } = this.props;
     const {
       id,
       title,
@@ -54,6 +79,20 @@ class GalleryItem extends Component {
     } = mediaObj;
     const link = `/edit/@${id}`;
     const selectedPreviewImages = this.selectPreviewImages(mediaObj);
+    const modalDeleteProps = {
+      ref: 'modalDelete',
+      title: CONTENT.DELETE.TITLE,
+      closeBtn: {
+        text: CONTENT.DELETE.CLOSE_BTN
+      },
+      confirmBtn: {
+        icon: 'trash',
+        className: 'btn btn-u btn-u-red pull-right rounded',
+        text: CONTENT.DELETE.CONFIRM_BTN,
+        onClick: this.handleClickModalDeleteBtn
+      },
+      isProcessing: isFetching
+    };
 
     return(
       <div className="gallery-item-component col-md-3 col-sm-6 col-xs-12">
@@ -83,9 +122,15 @@ class GalleryItem extends Component {
           </Link>
           <div className="thumbnail-tools">
             <i className="fa fa-share-square-o clickable" />
-            <i className="fa fa-trash-o clickable" />
+            <i
+              className="fa fa-trash-o clickable"
+              onClick={this.openModalDelete}
+            />
           </div>
         </div>
+        <Modal {...modalDeleteProps}>
+          <div>{CONTENT.DELETE.DESC}</div>
+        </Modal>
       </div>
     );
   }

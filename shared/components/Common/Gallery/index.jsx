@@ -15,6 +15,7 @@ const propTypes = {
   mediaIds: PropTypes.array.isRequired,
   hasNext: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   loadMore: PropTypes.func.isRequired
 };
 
@@ -27,7 +28,7 @@ class Gallery extends Component {
   }
 
   // Render list of gallery rows
-  renderRows(media, mediaIds, deleteMedia) {
+  renderRows(media, mediaIds, isFetching, deleteMedia) {
     const numOfRows = Math.ceil(mediaIds.length / 4);
 
     return range(0, numOfRows).map((idx) => {
@@ -37,6 +38,7 @@ class Gallery extends Component {
         <GalleryRow
           key={idx}
           mediaList={subMediaList}
+          isFetching={isFetching}
           deleteMedia={deleteMedia}
         />
       );
@@ -48,9 +50,10 @@ class Gallery extends Component {
       media,
       mediaIds,
       hasNext,
+      isFetching,
       deleteMedia
     } = this.props;
-    const rows = this.renderRows(media, mediaIds, deleteMedia);
+    const rows = this.renderRows(media, mediaIds, isFetching, deleteMedia);
 
     return(
       <div className="gallery-component container content">

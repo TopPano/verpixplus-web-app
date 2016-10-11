@@ -35,6 +35,7 @@ class WorkSpace extends Component {
           mediaIds={workspace.media.ids}
           hasNext={workspace.media.hasNext}
           userId={workspace.userId}
+          isFetching={workspace.isFetching}
           deleteMedia={deleteMedia}
           loadMore={loadMore}
         />

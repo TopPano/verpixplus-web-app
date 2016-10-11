@@ -11,6 +11,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaList: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  isFetching: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired
 };
 
@@ -23,7 +24,7 @@ class GalleryRow extends Component {
   }
 
   // Render list of gallery items
-  renderItemsList(mediaList, deleteMedia) {
+  renderItemsList(mediaList, isFetching, deleteMedia) {
     return renderList(mediaList.slice(0, 4), (mediaObj) => {
       const { id } = mediaObj;
 
@@ -31,6 +32,7 @@ class GalleryRow extends Component {
         <GalleryItem
           key={id}
           mediaObj={mediaObj}
+          isFetching={isFetching}
           deleteMedia={deleteMedia}
         />
       );
@@ -40,9 +42,10 @@ class GalleryRow extends Component {
   render() {
     const {
       mediaList,
+      isFetching,
       deleteMedia
     } = this.props;
-    const itemsList = this.renderItemsList(mediaList, deleteMedia);
+    const itemsList = this.renderItemsList(mediaList, isFetching, deleteMedia);
 
     return(
       <div className="gallery-row-component row">
