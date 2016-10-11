@@ -103,6 +103,7 @@
     "react-dom": "15.1.0",
     "react-dropzone": "3.6.0",
     "react-facebook-login": "2.1.4",
+    "react-notification-system": "0.2.10",
     "react-proptype-conditional-require": "1.0.2",
     "react-rnd": "4.1.0",
     "react-router": "2.4.1",

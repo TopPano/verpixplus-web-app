@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 
 import Summary from './Summary';
 import Gallery from 'components/Common/Gallery';
+import Notifications from 'containers/common/Notifications';
 
 if (process.env.BROWSER) {
   require('./WorkSpace.css');
@@ -39,6 +40,7 @@ class WorkSpace extends Component {
           deleteMedia={deleteMedia}
           loadMore={loadMore}
         />
+        <Notifications />
       </div>
     );
   }

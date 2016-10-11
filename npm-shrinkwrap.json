@@ -4684,6 +4684,11 @@
         }
       }
     },
+    "react-notification-system": {
+      "version": "0.2.10",
+      "from": "react-notification-system@0.2.10",
+      "resolved": "https://registry.npmjs.org/react-notification-system/-/react-notification-system-0.2.10.tgz"
+    },
     "react-overlays": {
       "version": "0.6.3",
       "from": "react-overlays@>=0.6.3 <0.7.0",

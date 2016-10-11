@@ -5,8 +5,9 @@ import range from 'lodash/range';
 import { push } from 'react-router-redux';
 
 import { MEDIA_TYPE } from 'constants/common';
+import { NOTIFICATIONS } from 'constants/notifications';
 import concatImages from './concatImages';
-
+import { pushNotification } from '../notifications';
 
 function handleError(dispatch, type, err) {
   dispatch({
@@ -190,6 +191,8 @@ export function deleteMedia({ mediaId, userSession = {} }) {
         type: DELETE_MEDIA_SUCCESS,
         response
       });
+
+      dispatch(pushNotification(NOTIFICATIONS.DELETE_MEDIA_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, DELETE_MEDIA_FAILURE, err);
     });
