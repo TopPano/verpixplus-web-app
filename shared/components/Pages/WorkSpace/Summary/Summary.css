@@ -1,0 +1,21 @@
+@import 'Variables.css';
+
+.summary-component {
+  background-color: $color-white;
+  box-shadow: 0 4px 2px -2px #DDD;
+
+  .summary-wrapper {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    .profile-info-wrapper {
+      @media (width < 768px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+  }
+}
+

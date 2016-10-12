@@ -5,5 +5,12 @@
     "CLOSE_BTN": "Cancel",
     "CONFIRM_BTN": "Delete"
   },
-  "MORE": "more"
+  "MORE": "more",
+  "OVERALL": {
+    "MEDIA": "Media"
+  },
+  "EDIT_PROFILE": {
+    "TITLE": "Edit Profile",
+    "CONFIRM_BTN": "Update"
+  }
 }

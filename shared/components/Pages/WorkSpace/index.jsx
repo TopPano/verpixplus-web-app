@@ -11,6 +11,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  user: PropTypes.object.isRequired,
   workspace: PropTypes.object.isRequired,
   deleteMedia: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired
@@ -21,12 +22,18 @@ const defaultProps = {
 
 class WorkSpace extends Component {
   render() {
-    const { workspace, deleteMedia, loadMore } = this.props;
+    const {
+      user,
+      workspace,
+      deleteMedia,
+      loadMore
+    } = this.props;
 
     return (
       <div className="workspace-component container-fullpage">
         <Summary
           username={workspace.username}
+          email={user.email}
           profilePhotoUrl={workspace.profilePhotoUrl}
           autobiography={workspace.autobiography}
           numOfMedia={workspace.numOfMedia}

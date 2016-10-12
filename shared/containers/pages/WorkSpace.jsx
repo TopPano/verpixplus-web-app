@@ -57,7 +57,7 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
       media: {
         lastMediaId
       }
-    } = this.props.workspace;
+    } = workspace;
 
     dispatch(loadUserMedia({
       id: userId,
@@ -83,10 +83,14 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
   }
 
   render() {
-    const { workspace } = this.props;
+    const {
+      user,
+      workspace
+    } = this.props;
 
     return (
       <WorkSpace
+        user={user}
         workspace={workspace}
         deleteMedia={this.deleteMedia}
         loadMore={this.loadMore}
