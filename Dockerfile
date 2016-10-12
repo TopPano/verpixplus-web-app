@@ -23,8 +23,6 @@ USER verpix
 WORKDIR /home/verpix/verpixplus-web-app
 ARG API_ROOT
 ARG STATIC_URL
-# ENV API_ROOT="http://verpix-dev-laputa-api:3000"
-# ENV STATIC_URL="http://verpix-dev-laputa-api:8000"
 
 RUN npm install
 RUN npm run build
