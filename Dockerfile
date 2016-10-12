@@ -3,7 +3,7 @@ FROM toppano/laputa-base:latest
 MAINTAINER uniray7 uniray7@gmail.com
 
 # install nodejs
-ENV NODE_VERSION 5.11.1
+ENV NODE_VERSION 6.3.0
 ENV NVM_DIR /home/.nvm
 
 RUN . $NVM_DIR/nvm.sh && nvm install v$NODE_VERSION && nvm alias default v$NODE_VERSION
@@ -12,16 +12,21 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 #install pm2
 RUN npm install -g pm2
 
+RUN apt-get update
+RUN apt-get install -y libfontconfig
+
 # setup project
-ADD . /home/verpix/verpix-web-app
-RUN chown -R verpix:verpix /home/verpix/verpix-web-app
+ADD . /home/verpix/verpixplus-web-app
+RUN chown -R verpix:verpix /home/verpix/verpixplus-web-app
 
 USER verpix
-WORKDIR /home/verpix/verpix-web-app
+WORKDIR /home/verpix/verpixplus-web-app
+ARG API_ROOT
+ARG STATIC_URL
+
 RUN npm install
+RUN npm run build
 
-EXPOSE 3000
+EXPOSE 8000
 
-ENV API_ROOT="http://verpix-dev-laputa-api:3000"
-ENV STATIC_URL="http://verpix-dev-laputa-api:8001"
-CMD npm run dev
+CMD npm run docker-start
