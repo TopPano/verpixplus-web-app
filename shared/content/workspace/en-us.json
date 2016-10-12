@@ -11,6 +11,15 @@
   },
   "EDIT_PROFILE": {
     "TITLE": "Edit Profile",
-    "CONFIRM_BTN": "Update"
+    "CONTENT": {
+      "PROFILE": "Profile",
+      "PASSWORD": "Password"
+    },
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "PWD": "Password",
+    "CONFIRM_PWD": "Confirm Password",
+    "AUTOBIOGRAPHY": "Autobiography",
+    "CONFIRM_BTN": "Save"
   }
 }

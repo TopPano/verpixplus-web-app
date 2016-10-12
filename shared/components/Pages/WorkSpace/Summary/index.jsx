@@ -60,6 +60,8 @@ class Summary extends Component {
               sm={2}
             >
               <ProfileEditor
+                username={username}
+                email={email}
               />
             </Col>
           </Row>
