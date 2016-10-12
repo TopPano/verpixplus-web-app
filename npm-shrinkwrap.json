@@ -5028,6 +5028,11 @@
       "from": "screenfull@3.0.0",
       "resolved": "https://registry.npmjs.org/screenfull/-/screenfull-3.0.0.tgz"
     },
+    "scrollmonitor": {
+      "version": "1.0.13",
+      "from": "scrollmonitor@latest",
+      "resolved": "https://registry.npmjs.org/scrollmonitor/-/scrollmonitor-1.0.13.tgz"
+    },
     "semver": {
       "version": "4.3.6",
       "from": "semver@>=4.3.3 <4.4.0",

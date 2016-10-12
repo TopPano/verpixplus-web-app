@@ -25,7 +25,7 @@ const DEFAULT_STATE = {
   media: {
     objs: {},
     ids: [],
-    hasNext: true,
+    hasNext: false,
     lastMediaId: ''
   }
 };
@@ -61,7 +61,7 @@ export default function workspace(state=DEFAULT_STATE, action) {
         genNextState = assign; /* overwrite the previous state */
       } else {
         genNextState = merge;
-        feed = state.posts.feedIds.concat(feed);
+        feed = state.media.ids.concat(feed);
       }
       return genNextState({}, state, {
         isFetching: false,

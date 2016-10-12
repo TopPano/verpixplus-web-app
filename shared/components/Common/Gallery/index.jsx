@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
 
+import IconButton from 'components/Common/IconButton';
 import GalleryRow from './GalleryRow';
 
 if (process.env.BROWSER) {
@@ -51,17 +52,26 @@ class Gallery extends Component {
       mediaIds,
       hasNext,
       isFetching,
-      deleteMedia
+      deleteMedia,
+      loadMore
     } = this.props;
     const rows = this.renderRows(media, mediaIds, isFetching, deleteMedia);
 
-    return(
+    return (
       <div className="gallery-component container content">
         <div className="row marrgin-bottom-30">
           {rows}
         </div>
-        {hasNext &&
-          <div className="gallery-more-btn" onClick={this.handleClickMoreBtn}>{'more'}</div>
+        {
+          hasNext &&
+          <div className="text-center">
+            <IconButton
+              icon="arrow-down"
+              className="btn btn-u btn-u-light-green"
+              text="more"
+              handleClick={loadMore}
+            />
+          </div>
         }
       </div>
     );
