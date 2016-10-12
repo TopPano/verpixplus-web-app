@@ -12,7 +12,7 @@ const propTypes = {
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
-  }).isRequired
+  })
 };
 
 const defaultProps = {
@@ -67,13 +67,13 @@ class Preview extends Component {
       dimension
     } = this.props;
 
-    const itemsList = this.renderItemsList(images, dimension);
+    const itemsList = images.length === 0 ? [] : this.renderItemsList(images, dimension);
 
     return (
       <div className="preview-component overflow-hidden">
         <div className="preview-wrapper">
           <div className="preview-primary">
-            {itemsList[0]}
+            {itemsList.length === 0 ? null : itemsList[0]}
           </div>
           <div className="preview-secondary">
             {itemsList.slice(1, 5)}

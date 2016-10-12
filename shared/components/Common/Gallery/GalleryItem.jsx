@@ -14,12 +14,15 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  id: PropTypes.string.isRequired,
   mediaObj: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  isCreator: PropTypes.bool,
   deleteMedia: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  isCreator: false
 };
 
 class GalleryItem extends Component {
@@ -40,8 +43,10 @@ class GalleryItem extends Component {
 
   // Handler for clicking delete button
   handleClickModalDeleteBtn() {
-    const { id } = this.props.mediaObj;
-    const { deleteMedia } = this.props;
+    const {
+      id,
+      deleteMedia
+    } = this.props;
 
     deleteMedia({
       mediaId: id
@@ -49,8 +54,7 @@ class GalleryItem extends Component {
   }
 
   // Select images for feeding to Preview component
-  selectPreviewImages(mediaObj) {
-    const { id } = mediaObj;
+  selectPreviewImages(mediaObj, id) {
     const {
       count,
       cdnUrl,
@@ -70,17 +74,18 @@ class GalleryItem extends Component {
 
   render() {
     const {
+      id,
       mediaObj,
+      isCreator,
       isFetching
     } = this.props;
     const {
-      id,
       title,
       caption,
       dimension
     } = mediaObj;
     const link = `/edit/@${id}`;
-    const selectedPreviewImages = this.selectPreviewImages(mediaObj);
+    const selectedPreviewImages = isCreator ? [] : this.selectPreviewImages(mediaObj, id);
     const modalDeleteProps = {
       ref: 'modalDelete',
       title: CONTENT.DELETE.TITLE,
@@ -129,6 +134,16 @@ class GalleryItem extends Component {
               onClick={this.openModalDelete}
             />
           </div>
+          {
+            isCreator &&
+            <Link
+              to="/upload"
+              className="creator container-center-row fill clickable rounded"
+            >
+              <i className="fa fa-plus-circle" />
+              <h5><strong>New</strong></h5>
+            </Link>
+          }
         </div>
         <Modal {...modalDeleteProps}>
           <div>{CONTENT.DELETE.DESC}</div>

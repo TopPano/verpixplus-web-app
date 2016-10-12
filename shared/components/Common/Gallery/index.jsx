@@ -1,13 +1,11 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import merge from 'lodash/merge';
-import range from 'lodash/range';
 
 import CONTENT from 'content/workspace/en-us.json';
 import IconButton from 'components/Common/IconButton';
 import Loading from 'components/Common/Loading';
-import GalleryRow from './GalleryRow';
+import GalleryItem from './GalleryItem';
 
 if (process.env.BROWSER) {
   require('./Gallery.css');
@@ -30,22 +28,29 @@ class Gallery extends Component {
     super(props);
   }
 
-  // Render list of gallery rows
-  renderRows(media, mediaIds, isFetching, deleteMedia) {
-    const numOfRows = Math.ceil(mediaIds.length / 4);
+  // Render list of gallery items
+  renderItems(media, mediaIds, isFetching, deleteMedia) {
+    const items = mediaIds.map((id) => (
+      <GalleryItem
+        key={id}
+        id={id}
+        mediaObj={media[id]}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    ));
+    items.unshift(
+      <GalleryItem
+        key="item-create"
+        id=""
+        mediaObj={{}}
+        isFetching={isFetching}
+        isCreator={true}
+        deleteMedia={deleteMedia}
+      />
+    );
 
-    return range(0, numOfRows).map((idx) => {
-      const subMediaList = mediaIds.slice(idx * 4, (idx + 1) * 4).map((id) => merge({}, media[id], { id }));
-
-      return (
-        <GalleryRow
-          key={idx}
-          mediaList={subMediaList}
-          isFetching={isFetching}
-          deleteMedia={deleteMedia}
-        />
-      );
-    });
+    return items;
   }
 
   render() {
@@ -57,12 +62,17 @@ class Gallery extends Component {
       deleteMedia,
       loadMore
     } = this.props;
-    const rows = this.renderRows(media, mediaIds, isFetching, deleteMedia);
+    const remainder = (mediaIds.length + 1) % 4;
+    const renderAll = !hasNext || (remainder === 0);
+    const items =
+      renderAll ?
+      this.renderItems(media, mediaIds, isFetching, deleteMedia) :
+      this.renderItems(media, mediaIds.slice(0, mediaIds.length - remainder), isFetching, deleteMedia);
 
     return (
       <div className="gallery-component container content">
         <div className="row marrgin-bottom-30">
-          {rows}
+          {items}
         </div>
         {
           hasNext &&

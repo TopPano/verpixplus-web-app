@@ -5,6 +5,7 @@
   padding-right: 10px;
 
   .thumbnails {
+    position: relative;
     background-color: $color-white;
     box-shadow: 0 0 8px #DDD;
     padding: 10px 15px;
@@ -31,5 +32,19 @@
         }
       }
     }
+
+    .creator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: $color-white;
+      text-decoration: none;
+
+      i {
+        font-size: 30px;
+        color: $color-green;
+      }
+    }
   }
+
 }
