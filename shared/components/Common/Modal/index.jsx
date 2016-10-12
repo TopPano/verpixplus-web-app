@@ -6,6 +6,7 @@ import merge from 'lodash/merge';
 
 import CONTENT from 'content/site/en-us.json';
 import IconButton from 'components/Common/IconButton';
+import Loading from 'components/Common/Loading';
 
 if (process.env.BROWSER) {
   require('./Modal.css');
@@ -100,11 +101,7 @@ class Modal extends Component {
               {`${title}  `}
               {
                 isProcessing &&
-                <img
-                  className="modal-processing"
-                  src="/static/images/loading-default-black.svg"
-                  alt="loading-ring"
-                />
+                <Loading size={20} />
               }
             </ReactModal.Title>
           </ReactModal.Header>

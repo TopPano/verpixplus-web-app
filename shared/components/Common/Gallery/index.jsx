@@ -4,7 +4,9 @@ import React, { Component, PropTypes } from 'react';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
 
+import CONTENT from 'content/workspace/en-us.json';
 import IconButton from 'components/Common/IconButton';
+import Loading from 'components/Common/Loading';
 import GalleryRow from './GalleryRow';
 
 if (process.env.BROWSER) {
@@ -65,12 +67,16 @@ class Gallery extends Component {
         {
           hasNext &&
           <div className="text-center">
-            <IconButton
-              icon="arrow-down"
-              className="btn btn-u btn-u-light-green"
-              text="more"
-              handleClick={loadMore}
-            />
+            {
+              isFetching ?
+              <Loading size={30} /> :
+              <IconButton
+                icon="arrow-down"
+                className="btn btn-u btn-u-light-green"
+                text={CONTENT.MORE}
+                handleClick={loadMore}
+              />
+            }
           </div>
         }
       </div>

@@ -33,7 +33,9 @@ class GalleryItem extends Component {
 
   // Open the modal for deletion
   openModalDelete() {
-    this.refs.modalDelete.open();
+    if (!this.props.isFetching) {
+      this.refs.modalDelete.open();
+    }
   }
 
   // Handler for clicking delete button
