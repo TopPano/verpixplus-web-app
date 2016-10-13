@@ -1,0 +1,17 @@
+{
+  "SHARE": {
+    "TITLE": "Share Your Media",
+    "TABS": {
+      "SOCIAL": "Social Media",
+      "EMBED": "Embed"
+    },
+    "SOCIAL": {
+      "SHARE_TO": "Share to"
+    },
+    "EMBED": {
+      "INSTALL": "SDK Installation",
+      "USAGE": "Usage",
+      "COPIED": "copied"
+    }
+  }
+}

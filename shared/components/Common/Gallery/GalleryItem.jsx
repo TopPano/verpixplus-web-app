@@ -7,6 +7,7 @@ import range from 'lodash/range';
 import { DEFAULT_TITLE } from 'constants/common';
 import CONTENT from 'content/workspace/en-us.json';
 import Modal from 'components/Common/Modal';
+import Share from 'components/Common/Share';
 import Preview from './Preview';
 
 if (process.env.BROWSER) {
@@ -31,6 +32,7 @@ class GalleryItem extends Component {
 
     // Bind "this" to member functions
     this.openModalDelete = this.openModalDelete.bind(this);
+    this.openModalShare = this.openModalShare.bind(this);
     this.handleClickModalDeleteBtn = this.handleClickModalDeleteBtn.bind(this);
   }
 
@@ -38,6 +40,13 @@ class GalleryItem extends Component {
   openModalDelete() {
     if (!this.props.isFetching) {
       this.refs.modalDelete.open();
+    }
+  }
+
+  // Open the modal for sharing
+  openModalShare() {
+    if (!this.props.isFetching) {
+      this.refs.modalShare.open();
     }
   }
 
@@ -128,7 +137,10 @@ class GalleryItem extends Component {
             />
           </Link>
           <div className="thumbnail-tools">
-            <i className="fa fa-share-square-o clickable" />
+            <i
+              className="fa fa-share-square-o clickable"
+              onClick={this.openModalShare}
+            />
             <i
               className="fa fa-trash-o clickable"
               onClick={this.openModalDelete}
@@ -145,6 +157,11 @@ class GalleryItem extends Component {
             </Link>
           }
         </div>
+        <Share
+          ref="modalShare"
+          mediaId={id}
+          isProcessing={isFetching}
+        />
         <Modal {...modalDeleteProps}>
           <div>{CONTENT.DELETE.DESC}</div>
         </Modal>

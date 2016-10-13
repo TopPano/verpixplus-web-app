@@ -18,12 +18,14 @@ const propTypes = {
     icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
+    show: PropTypes.bool,
     onClick: PropTypes.func
   }),
   confirmBtn: PropTypes.shape({
     icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
+    show: PropTypes.bool,
     onClick: PropTypes.func
   }),
   rootClose: PropTypes.bool,
@@ -35,12 +37,14 @@ const defaultProps = {
   closeBtn: {
     icon: 'times',
     className: 'btn btn-u btn-u-default pull-left rounded',
-    text: CONTENT.MODAL.DEFAULT_CLOSE_BTN
+    text: CONTENT.MODAL.DEFAULT_CLOSE_BTN,
+    show: true
   },
   confirmBtn: {
     icon: 'check',
     className: 'btn btn-u pull-right rounded',
-    text: CONTENT.MODAL.DEFAULT_CONFIRM_BTN
+    text: CONTENT.MODAL.DEFAULT_CONFIRM_BTN,
+    show: true
   },
   rootClose: false,
   isProcessing: false
@@ -110,16 +114,22 @@ class Modal extends Component {
           {children}
         </ReactModal.Body>
         <ReactModal.Footer>
-          <IconButton
-            {...closeBtnProps}
-            disabled={isProcessing}
-            handleClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
-          />
-          <IconButton
-            {...confirmBtnProps}
-            disabled={isProcessing}
-            handleClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
-          />
+          {
+            closeBtnProps.show &&
+            <IconButton
+              {...closeBtnProps}
+              disabled={isProcessing}
+              handleClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
+            />
+          }
+          {
+            confirmBtnProps.show &&
+            <IconButton
+              {...confirmBtnProps}
+              disabled={isProcessing}
+              handleClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
+            />
+          }
         </ReactModal.Footer>
       </ReactModal>
     );

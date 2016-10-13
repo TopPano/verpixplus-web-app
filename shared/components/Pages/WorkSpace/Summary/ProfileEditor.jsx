@@ -1,11 +1,10 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import classNames from 'classnames';
 
 import CONTENT from 'content/workspace/en-us.json';
-import { renderList } from 'lib/utils';
 import IconButton from 'components/Common/IconButton';
+import MultiTabsContent from 'components/Common/MultiTabsContent';
 import Modal from 'components/Common/Modal';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 
@@ -27,11 +26,6 @@ class ProfileEditor extends Component {
 
     // Bind "this" to member functions
     this.openModal = this.openModal.bind(this);
-
-    // Initialize state
-    this.state = {
-      activeIdx: 0
-    };
   }
 
   // handle for clicking button
@@ -39,37 +33,10 @@ class ProfileEditor extends Component {
     this.refs.modal.open();
   }
 
-  // handle for clicking tab
-  selectTab(idx) {
-    this.setState({
-      activeIdx: idx
-    });
-  }
-
-  // Render list of tabs
-  renderTabs(propsList, activeIdx) {
-    return renderList(propsList, (props, idx) => {
-      const tabClass = classNames({
-        'active': idx === activeIdx,
-        'clickable': true
-      });
-
-      return (
-        <li
-          key={idx}
-          className={tabClass}
-          onClick={() => { this.selectTab(idx) }}
-        >
-          <a>{props.text}</a>
-        </li>
-      );
-    });
-  }
-
   // Render content for editting profile
   renderProfileContent(username, email) {
     return (
-      <dl className="dl-horizontal">
+      <dl className="profile-content dl-horizontal">
         <dt><strong>{CONTENT.EDIT_PROFILE.USERNAME}</strong></dt>
         <dd>{username}</dd>
         <hr />
@@ -105,27 +72,7 @@ class ProfileEditor extends Component {
     );
   }
 
-  // Render all content
-  renderAllContent(contentList, activeIdx) {
-    return renderList(contentList, (content, idx) => {
-      const contentClass = classNames({
-        'active': idx === activeIdx,
-        'in': idx === activeIdx,
-        'profile-edit': true,
-        'tab-pane': true,
-        'fade': true
-      });
-
-      return (
-        <div className={contentClass}>
-          {content}
-        </div>
-      );
-    });
-  }
-
   render() {
-    const { activeIdx } = this.state;
     const {
       username,
       email
@@ -139,15 +86,15 @@ class ProfileEditor extends Component {
         text: CONTENT.EDIT_PROFILE.CONFIRM_BTN
       }
     };
-    const tabsProps = [{
-      text: CONTENT.EDIT_PROFILE.CONTENT.PROFILE
-    }, {
-      text: CONTENT.EDIT_PROFILE.CONTENT.PASSWORD
-    }];
-    const tabs = this.renderTabs(tabsProps, activeIdx);
     const profileContent = this.renderProfileContent(username, email);
     const passwordContent = this.renderPasswordContent();
-    const allContent = this.renderAllContent([profileContent, passwordContent], activeIdx);
+    const tabsContent = [{
+      tab: CONTENT.EDIT_PROFILE.CONTENT.PROFILE,
+      content: profileContent
+    }, {
+      tab: CONTENT.EDIT_PROFILE.CONTENT.PASSWORD,
+      content: passwordContent
+    }];
 
     return (
       <div className="profile-editor-component">
@@ -158,16 +105,7 @@ class ProfileEditor extends Component {
           handleClick={this.openModal}
         />
         <Modal {...modalProps}>
-          <div className="profile-body">
-            <div className="tab-v1">
-              <ul className="nav nav-justified nav-tabs">
-                {tabs}
-              </ul>
-            </div>
-            <div className="tab-content margin-top-20">
-              {allContent}
-            </div>
-          </div>
+          <MultiTabsContent tabsContent={tabsContent} />
         </Modal>
       </div>
     );
