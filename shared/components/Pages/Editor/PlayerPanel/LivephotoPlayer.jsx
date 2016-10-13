@@ -11,6 +11,10 @@ if (process.env.BROWSER) {
   require('./LivephotoPlayer.css');
 }
 
+// Max height for portrait livephoto
+const PORTRAIT_MAX_HEIGHT = 600;
+// Max width for landscape livephoto
+const LANDSCAPE_MAX_WIDTH = 600;
 const PLAY_DIRECTION = {
   // From small to large index
   INCREASE: 'INCREASE',
@@ -199,48 +203,62 @@ class LivephotoPlayer extends Component {
     this.refs.canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, dimension.width, dimension.height);
   }
 
+  // Get component sytle by calculating resized width and heigth
+  getComponentStyle(dimension) {
+    const {
+      width,
+      height
+    } = dimension;
+    let newWidth;
+    let newHeight;
+
+    if (width > height) {
+      // Landscape
+      newWidth = width > LANDSCAPE_MAX_WIDTH ? LANDSCAPE_MAX_WIDTH : width;
+      newHeight = parseInt(height * (newWidth / width), 10);
+    } else {
+      // Portrait
+      newHeight = height > PORTRAIT_MAX_HEIGHT ? PORTRAIT_MAX_HEIGHT : height;
+      newWidth = parseInt(width * (newHeight / height), 10);
+    }
+
+    return {
+      width: `${newWidth}px`,
+      height: `${newHeight}px`
+    };
+  }
+
   render() {
     const { isLoading } = this.state;
     const { dimension } = this.props;
-    const dimensionRatio = Math.round((dimension.height / dimension.width) * 100);
-    const componentStyle = {
-      width: `${dimension.width}px`
-    };
-    const wrapperStyle = {
-      paddingBottom: `${dimensionRatio}%`
-    };
+    const componentStyle = this.getComponentStyle(dimension);
 
     return (
       <div
         className="livephoto-player-component"
         style={componentStyle}
       >
-        <div
-          className="livephoto-player-wrapper"
-          style={wrapperStyle}
-        >
-          <canvas
-            ref="canvas"
-            width={dimension.width}
-            height={dimension.height}
-          />
-          <canvas
-            ref="filtersCanvas"
-            id={FILTERS_CANVAS_ID}
-            width={dimension.width}
-            height={dimension.height}
-            style={{ display: 'none' }}
-          />
-          {
-            isLoading &&
-            <div className="loading-overlay container-center-row">
-              <img
-                src="/static/images/loading-ring.svg"
-                alt="loading-ring"
-              />
-            </div>
-          }
-        </div>
+        <canvas
+          ref="canvas"
+          width={dimension.width}
+          height={dimension.height}
+        />
+        <canvas
+          ref="filtersCanvas"
+          id={FILTERS_CANVAS_ID}
+          width={dimension.width}
+          height={dimension.height}
+          style={{ display: 'none' }}
+        />
+        {
+          isLoading &&
+          <div className="loading-overlay container-center-row">
+            <img
+              src="/static/images/loading-ring.svg"
+              alt="loading-ring"
+            />
+          </div>
+        }
       </div>
     );
   }
