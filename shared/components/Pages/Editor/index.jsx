@@ -89,9 +89,8 @@ class Editor extends Component {
       };
       mainComponent =
         <FilePanel {...filePanelProps} />;
-    } else if (mode === MODE.CREATE || mode === MODE.EDIT) {
+    } else if (mode === MODE.CREATE) {
       // CREATE mode: after choosing file, creates a new media
-      // EDIT mode: edit an old media
       mainComponent =
         <div className="main-wrapper fill">
           <PlayerPanel
@@ -112,6 +111,21 @@ class Editor extends Component {
             playerPlay={playerPlay}
             playerPause={playerPause}
             trim={trim}
+          />
+        </div>
+    } else if (mode === MODE.EDIT) {
+      // EDIT mode: edit an old media
+      mainComponent =
+        <div className="main-wrapper fill">
+          <PlayerPanel
+            imagesData={data}
+            appliedImagesData={appliedData}
+            dimension={dimension}
+            playerMode={playerMode}
+            autoplay={autoplay}
+            lower={lower}
+            upper={upper}
+            filters={filters}
           />
         </div>
     } else  {
@@ -143,7 +157,10 @@ class Editor extends Component {
             create={create}
           />
         </div>
-        <ProcessModal isProcessing={isProcessing} />
+        {
+          (mode !== MODE.WAIT_FILE) &&
+          <ProcessModal isProcessing={isProcessing} />
+        }
       </div>
     );
   }

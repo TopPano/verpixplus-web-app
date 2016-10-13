@@ -43,14 +43,17 @@ export function getMedia({ mediaId, filter }) {
     return api.media.getMedia(mediaId).then((res) => {
       // 1. Reconsture urls for livephoto
       // 2. Update dimension for the selected quality
-      if (res.result.type === MEDIA_TYPE.LIVE_PHOTO) {
-        const { count, quality, shardingKey } = res.result.content;
-        // TODO: Get cdnUrl from res
-        const cdnUrl = 'http://52.198.24.135:6559';
+      if (res.result && (res.result.type === MEDIA_TYPE.LIVE_PHOTO)) {
+        const {
+          cdnUrl,
+          count,
+          quality,
+          shardingKey
+        } = res.result.content;
         // TODO: Dynamically choose quality
         const selectedQuality = quality[0];
         const imgUrls =
-          range(0, count).map((idx) => `${cdnUrl}/${shardingKey}/media/${mediaId}/live/${selectedQuality}/${idx}.jpg`);
+          range(0, count).map((idx) => `${cdnUrl}${shardingKey}/media/${mediaId}/live/${selectedQuality}/${idx}.jpg`);
         const width = parseInt(selectedQuality.split('X')[0], 10);
         const height = parseInt(selectedQuality.split('X')[1], 10);
 

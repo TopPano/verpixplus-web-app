@@ -42,11 +42,11 @@ const DEFAULT_STATE = {
   data: [],
   appliedData: [],
   dataUrls: [],
-  dimension: { width: 0, height: 0 },
-  playerMode: PLAYER_MODE.PAUSE,
+  dimension: { width: 100, height: 100 },
+  playerMode: PLAYER_MODE.PLAY,
   autoplay: true,
   lower: 0,
-  upper: FRAMES_LIMIT,
+  upper: 0,
   filters: {
     preset: 'normal',
     adjusts: {},
@@ -58,11 +58,11 @@ const DEFAULT_STATE = {
 export default function editor(state = DEFAULT_STATE, action) {
   switch (action.type) {
     case INIT_UPLOAD:
-      return merge({}, state, {
+      return merge({}, DEFAULT_STATE, {
         mode: MODE.WAIT_FILE
       });
     case INIT_EDIT:
-      return merge({}, state, {
+      return merge({}, DEFAULT_STATE, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
       });
@@ -112,6 +112,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         progress: action.progress
       });
     case CONVERT_SUCCESS:
+    {
       const dataLength = action.result.dataUrls.length;
 
       return merge({}, state, {
@@ -126,11 +127,11 @@ export default function editor(state = DEFAULT_STATE, action) {
         lower: 0,
         upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });
+    }
     case GET_MEDIA_SUCCESS:
-      // TODO: fill title
       const {
         mediaType,
-        // title,
+        title,
         caption,
         imgsData,
         imgUrls,
@@ -140,12 +141,14 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: false,
         mediaType,
-        // title,
+        title,
         caption,
         data: imgsData,
         appliedData: imgsData,
         dataUrls: imgUrls,
-        dimension
+        dimension,
+        lower: 0,
+        upper: imgUrls.length
       });
     case CREATE_MEDIA_SUCCESS:
       return merge({}, state, {
