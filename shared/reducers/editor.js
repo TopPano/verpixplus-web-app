@@ -12,7 +12,10 @@ import {
   TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
-  APPLY_FILTERS
+  ADJUST_FILTERS,
+  APPLY_FILTERS_REQUEST,
+  APPLY_FILTERS_SUCCESS,
+  APPLY_FILTERS_FAILURE
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
@@ -37,6 +40,7 @@ const DEFAULT_STATE = {
   caption: '',
   progress: 0,
   data: [],
+  appliedData: [],
   dataUrls: [],
   dimension: { width: 0, height: 0 },
   playerMode: PLAYER_MODE.PAUSE,
@@ -44,14 +48,9 @@ const DEFAULT_STATE = {
   lower: 0,
   upper: FRAMES_LIMIT,
   filters: {
-    contrast: 100,
-    brightness: 100,
-    saturate: 100,
-    sepia: 0,
-    grayscale: 0,
-    invert: 0,
-    'hue-rotate': 0,
-    blur: 0
+    preset: 'normal',
+    adjusts: {},
+    isDirty: false
   },
   err: { message: '' }
 };
@@ -92,13 +91,18 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         caption: action.caption
       });
-    case APPLY_FILTERS:
+    case ADJUST_FILTERS:
       return merge({}, state, {
-        filters: action.filters
+        filters: {
+          preset: action.filters.preset,
+          adjusts: action.filters.adjusts,
+          isDirty: true
+        }
       });
     case CONVERT_REQUEST:
     case GET_MEDIA_REQUEST:
     case CREATE_MEDIA_REQUEST:
+    case APPLY_FILTERS_REQUEST:
       return merge({}, state, {
         isProcessing: true,
         progress: 0
@@ -115,6 +119,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         isProcessing: false,
         mediaType: action.mediaType,
         data: action.result.data,
+        appliedData: action.result.data,
         dataUrls: action.result.dataUrls,
         dimension: action.result.dimension,
         playerMode: PLAYER_MODE.PLAY,
@@ -138,6 +143,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         // title,
         caption,
         data: imgsData,
+        appliedData: imgsData,
         dataUrls: imgUrls,
         dimension
       });
@@ -147,9 +153,19 @@ export default function editor(state = DEFAULT_STATE, action) {
         mode: MODE.EDIT,
         isProcessing: false
       });
+    case APPLY_FILTERS_SUCCESS:
+      return merge({}, state, {
+        isProcessing: false,
+        appliedData: action.result.appliedData,
+        dataUrls: action.result.dataUrls,
+        filters: {
+          isDirty: false
+        }
+      });
     case CONVERT_FAILURE:
     case GET_MEDIA_FAILURE:
     case CREATE_MEDIA_FAILURE:
+    case APPLY_FILTERS_FAILURE:
       return merge({}, state, {
         isProcessing: false,
         err: action.err

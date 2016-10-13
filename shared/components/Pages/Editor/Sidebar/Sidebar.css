@@ -1,11 +1,22 @@
 .sidebar-component {
   .menu {
     width: 100%;
+    height: 54px;
     padding: 0 15px;
   }
 
-  .panel-wrapper {
+  .sidebar-panels-container {
+    width: 100%;
+    height: calc(100% - 54px);
     padding: 10px 25px;
+
+    .sidebar-panel {
+      display: none;
+      margin-bottom: 15px;
+      &.active {
+        display: block;
+      }
+    }
   }
 
   input, textarea {

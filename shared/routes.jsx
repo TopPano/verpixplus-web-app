@@ -39,13 +39,13 @@ export default function routes(accessToken) {
 
   return (
     <Route component={App}>
+      <Route component={EditorPageContainer} path='/edit/@:mediaId' onEnter={_redirectIfNotAuth} />
+      <Route component={EditorPageContainer} path='/upload' onEnter={_redirectIfNotAuth} />
       <Route path="/" component={MainLayout}>
         <IndexRoute component={HomePageContainer} />
         <Route path="faq" component={FAQPageComponent} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
         <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
-        <Route component={EditorPageContainer} path='/edit/@:mediaId' onEnter={_redirectIfNotAuth} />
-        <Route component={EditorPageContainer} path='/upload' onEnter={_redirectIfNotAuth} />
         <Redirect from="*" to="/" />
       </Route>
     </Route>

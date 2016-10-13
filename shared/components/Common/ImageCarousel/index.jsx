@@ -5,7 +5,10 @@ import merge from 'lodash/merge';
 
 import Carousel from 'components/Common/Carousel';
 import ImageCarouselItem from './ImageCarouselItem';
-import { renderList } from 'lib/utils';
+import {
+  renderList,
+  execute
+} from 'lib/utils';
 
 if (process.env.BROWSER) {
   require('./ImageCarousel.css');
@@ -25,7 +28,8 @@ const propTypes = {
   spaceBetween: PropTypes.number,
   rounded: PropTypes.bool,
   isVertical: PropTypes.bool,
-  options: PropTypes.object
+  options: PropTypes.object,
+  onClick: PropTypes.func
 };
 
 const defaultProps = {
@@ -38,7 +42,8 @@ const defaultProps = {
   spaceBetween: 5,
   rounded: false,
   isVertical: false,
-  options: {}
+  options: {},
+  onClick: () => {}
 };
 
 class ImageCarousel extends Component{
@@ -54,7 +59,12 @@ class ImageCarousel extends Component{
     };
   }
 
+  // Handler for click an item
   handleClick(selectedIdx) {
+    const { onClick } = this.props;
+
+    execute(onClick, selectedIdx);
+
     this.setState({
       selectedIdx
     });
@@ -104,7 +114,6 @@ class ImageCarousel extends Component{
     return (
       <div className="image-carousel-component">
         <Carousel
-          ref="carousel"
           {...carouselProps}
         >
           {items}

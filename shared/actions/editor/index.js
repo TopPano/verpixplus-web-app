@@ -8,6 +8,7 @@ import merge from 'lodash/merge';
 import { MEDIA_TYPE } from 'constants/common';
 import { getMedia } from '../media';
 import imageUrlsToData from './imageUrlsToData';
+import applyImagesFilters from './applyImagesFilters';
 import FrameConverter from './FrameConverter';
 
 export const INIT_UPLOAD = 'INIT_UPLOAD';
@@ -184,13 +185,55 @@ export function edit({ title, caption }) {
   }
 }
 
-export const APPLY_FILTERS = 'APPLY_FILTERS';
+export const ADJUST_FILTERS = 'ADJUST_FILTERS';
+export const APPLY_FILTERS_REQUEST = 'APPLY_FILTERS_REQUEST';
+export const APPLY_FILTERS_SUCCESS = 'APPLY_FILTERS_SUCCESS';
+export const APPLY_FILTERS_FAILURE = 'APPLY_FILTERS_FAILURE';
 
-export function applyFilters(filters) {
+export function adjustFilters(filters) {
   return (dispatch) => {
     dispatch({
-      type: APPLY_FILTERS,
+      type: ADJUST_FILTERS,
       filters
+    });
+  }
+}
+
+function applyFiltersRequest() {
+  return {
+    type: APPLY_FILTERS_REQUEST
+  };
+}
+
+function applyFiltersSuccess(result) {
+  return {
+    type: APPLY_FILTERS_SUCCESS,
+    result
+  };
+}
+
+function applyFiltersFailure(err) {
+  return {
+    type: APPLY_FILTERS_FAILURE,
+    err
+  };
+}
+
+function applyFiltersRequest() {
+  return {
+    type: APPLY_FILTERS_REQUEST
+  };
+}
+
+export function applyFilters({ data, dimension, filters }) {
+  return (dispatch) => {
+    dispatch(applyFiltersRequest());
+
+    applyImagesFilters(data, dimension, filters).then((result) => {
+      dispatch(applyFiltersSuccess(result));
+      return null;
+    }).catch((err) => {
+      dispatch(applyFiltersFailure(err));
     });
   }
 }

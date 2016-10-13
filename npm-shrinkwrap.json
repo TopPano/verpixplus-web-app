@@ -1472,6 +1472,11 @@
       "from": "component-inherit@0.0.3",
       "resolved": "https://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz"
     },
+    "computed-style": {
+      "version": "0.1.4",
+      "from": "computed-style@>=0.1.3 <0.2.0",
+      "resolved": "https://registry.npmjs.org/computed-style/-/computed-style-0.1.4.tgz"
+    },
     "concat-map": {
       "version": "0.0.1",
       "from": "concat-map@0.0.1",
@@ -3269,6 +3274,11 @@
         }
       }
     },
+    "line-height": {
+      "version": "0.1.1",
+      "from": "line-height@>=0.1.1 <0.2.0",
+      "resolved": "https://registry.npmjs.org/line-height/-/line-height-0.1.1.tgz"
+    },
     "load-json-file": {
       "version": "1.1.0",
       "from": "load-json-file@>=1.0.0 <2.0.0",
@@ -3994,6 +4004,11 @@
       "from": "pend@>=1.2.0 <1.3.0",
       "resolved": "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz"
     },
+    "performance-now": {
+      "version": "0.2.0",
+      "from": "performance-now@>=0.2.0 <0.3.0",
+      "resolved": "https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz"
+    },
     "pify": {
       "version": "2.3.0",
       "from": "pify@>=2.0.0 <3.0.0",
@@ -4513,6 +4528,11 @@
       "from": "querystring-es3@>=0.2.0 <0.3.0",
       "resolved": "https://registry.npmjs.org/querystring-es3/-/querystring-es3-0.2.1.tgz"
     },
+    "raf": {
+      "version": "3.3.0",
+      "from": "raf@>=3.1.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/raf/-/raf-3.3.0.tgz"
+    },
     "randomatic": {
       "version": "1.1.5",
       "from": "randomatic@>=1.1.3 <2.0.0",
@@ -4654,6 +4674,11 @@
         }
       }
     },
+    "react-motion": {
+      "version": "0.4.5",
+      "from": "react-motion@>=0.4.3 <0.5.0",
+      "resolved": "https://registry.npmjs.org/react-motion/-/react-motion-0.4.5.tgz"
+    },
     "react-overlays": {
       "version": "0.6.3",
       "from": "react-overlays@>=0.6.3 <0.7.0",
@@ -4705,6 +4730,11 @@
       "version": "4.0.4",
       "from": "react-router-redux@4.0.4",
       "resolved": "https://registry.npmjs.org/react-router-redux/-/react-router-redux-4.0.4.tgz"
+    },
+    "react-scrollbar": {
+      "version": "0.4.2",
+      "from": "react-scrollbar@latest",
+      "resolved": "https://registry.npmjs.org/react-scrollbar/-/react-scrollbar-0.4.2.tgz"
     },
     "read-cache": {
       "version": "1.0.0",
