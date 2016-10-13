@@ -1,4 +1,5 @@
 {
-  "DELETE_MEDIA_SUCCESS": "Delete media successfully",
-  "APPLY_FILTERS_SUCCESS": "Apply filters successfully"
+  "POST_MEDIA_SUCCESS": "A new media is posted",
+  "DELETE_MEDIA_SUCCESS": "Media is deleted",
+  "APPLY_FILTERS_SUCCESS": "Filters is applied"
 }

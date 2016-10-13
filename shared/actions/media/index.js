@@ -161,6 +161,8 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
         return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
         dispatch(createMediaSuccess(res));
+        dispatch(push('/'));
+        dispatch(pushNotification(NOTIFICATIONS.POST_MEDIA_SUCCESS));
       }).catch((err) => {
         handleError(dispatch, CREATE_MEDIA_FAILURE, err);
       });

@@ -150,7 +150,6 @@ export default function editor(state = DEFAULT_STATE, action) {
     case CREATE_MEDIA_SUCCESS:
       return merge({}, state, {
         mediaId: action.response.result.mediaId,
-        mode: MODE.EDIT,
         isProcessing: false
       });
     case APPLY_FILTERS_SUCCESS:
