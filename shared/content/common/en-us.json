@@ -13,5 +13,11 @@
       "USAGE": "Usage",
       "COPIED": "copied"
     }
+  },
+  "DELETE_MODAL": {
+    "TITLE": "Delete Media",
+    "DESC": "This media will be deleted and you won't be able to find it anymore.",
+    "CLOSE_BTN": "Cancel",
+    "CONFIRM_BTN": "Delete"
   }
 }

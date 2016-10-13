@@ -1,10 +1,4 @@
 {
-  "DELETE": {
-    "TITLE": "Delete Media",
-    "DESC": "This media will be deleted and you won't be able to find it anymore.",
-    "CLOSE_BTN": "Cancel",
-    "CONFIRM_BTN": "Delete"
-  },
   "MORE": "more",
   "OVERALL": {
     "MEDIA": "Media"

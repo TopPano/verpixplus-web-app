@@ -5,9 +5,8 @@ import { Link } from 'react-router';
 import range from 'lodash/range';
 
 import { DEFAULT_TITLE } from 'constants/common';
-import CONTENT from 'content/workspace/en-us.json';
-import Modal from 'components/Common/Modal';
 import Share from 'components/Common/Share';
+import DeleteModal from 'containers/common/DeleteModal';
 import Preview from './Preview';
 
 if (process.env.BROWSER) {
@@ -31,35 +30,14 @@ class GalleryItem extends Component {
     super(props);
 
     // Bind "this" to member functions
-    this.openModalDelete = this.openModalDelete.bind(this);
     this.openModalShare = this.openModalShare.bind(this);
-    this.handleClickModalDeleteBtn = this.handleClickModalDeleteBtn.bind(this);
-  }
-
-  // Open the modal for deletion
-  openModalDelete() {
-    if (!this.props.isFetching) {
-      this.refs.modalDelete.open();
-    }
   }
 
   // Open the modal for sharing
   openModalShare() {
     if (!this.props.isFetching) {
-      this.refs.modalShare.open();
+      this.refs.shareModal.open();
     }
-  }
-
-  // Handler for clicking delete button
-  handleClickModalDeleteBtn() {
-    const {
-      id,
-      deleteMedia
-    } = this.props;
-
-    deleteMedia({
-      mediaId: id
-    });
   }
 
   // Select images for feeding to Preview component
@@ -95,20 +73,6 @@ class GalleryItem extends Component {
     } = mediaObj;
     const link = `/edit/@${id}`;
     const selectedPreviewImages = isCreator ? [] : this.selectPreviewImages(mediaObj, id);
-    const modalDeleteProps = {
-      ref: 'modalDelete',
-      title: CONTENT.DELETE.TITLE,
-      closeBtn: {
-        text: CONTENT.DELETE.CLOSE_BTN
-      },
-      confirmBtn: {
-        icon: 'trash',
-        className: 'btn btn-u btn-u-red pull-right rounded',
-        text: CONTENT.DELETE.CONFIRM_BTN,
-        onClick: this.handleClickModalDeleteBtn
-      },
-      isProcessing: isFetching
-    };
 
     return(
       <div className="gallery-item-component col-md-3 col-sm-6 col-xs-12">
@@ -141,10 +105,13 @@ class GalleryItem extends Component {
               className="fa fa-share-square-o clickable"
               onClick={this.openModalShare}
             />
-            <i
-              className="fa fa-trash-o clickable"
-              onClick={this.openModalDelete}
-            />
+            <DeleteModal
+              ref="deleteModal"
+              mediaId={id}
+              isProcessing={isFetching}
+            >
+              <i className="fa fa-trash-o clickable" />
+            </DeleteModal>
           </div>
           {
             isCreator &&
@@ -158,13 +125,10 @@ class GalleryItem extends Component {
           }
         </div>
         <Share
-          ref="modalShare"
+          ref="shareModal"
           mediaId={id}
           isProcessing={isFetching}
         />
-        <Modal {...modalDeleteProps}>
-          <div>{CONTENT.DELETE.DESC}</div>
-        </Modal>
       </div>
     );
   }
