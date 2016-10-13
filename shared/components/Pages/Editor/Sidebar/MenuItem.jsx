@@ -11,10 +11,11 @@ if (process.env.BROWSER) {
 const propTypes = {
   icon: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
-  handleClick: PropTypes.func.isRequired
+  handleClick: PropTypes.func
 };
 
 const defaultProps = {
+  handleClick: () => {}
 };
 
 class MenuItem extends Component {

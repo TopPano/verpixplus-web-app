@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import classNames from 'classnames';
 import Scrollbar from 'react-custom-scrollbars';
 
@@ -186,6 +187,15 @@ class Sidebar extends Component {
       <div className="sidebar-component fill bg-color-dark">
         <div className="menu bg-color-light-grey">
           {menuItems}
+          <Link
+            className="pull-right"
+            to="/"
+          >
+            <MenuItem
+              icon="times"
+              active={false}
+            />
+          </Link>
         </div>
         <Scrollbar
           universal
