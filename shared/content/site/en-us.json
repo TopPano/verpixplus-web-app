@@ -5,6 +5,12 @@
     "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
   },
   "HEADER": {
+    "LANG": {
+      "TEXT": "LANGUAGES",
+      "LIST": [
+        "English"
+      ]
+    },
     "FAQ": "FAQ",
     "SIGN_IN": "sigin in"
   },

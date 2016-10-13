@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Brand from './Brand';
 import Topbar from './Topbar'
 import List from './List';
@@ -10,9 +10,23 @@ if (process.env.BROWSER) {
   require('./Header.css');
 }
 
-export default class Header extends Component {
+const propTypes = {
+};
+
+const defaultProps = {
+};
+
+class Header extends Component {
   constructor(props) {
     super(props);
+
+    // Bind "this" to memeber functions
+    this.handleClickBtn = this.handleClickBtn.bind(this);
+  }
+
+  // Handler for click list-button
+  handleClickBtn() {
+    this.refs.list.toggle();
   }
 
   render() {
@@ -21,21 +35,15 @@ export default class Header extends Component {
         <div className='container'>
           <Brand />
           <Topbar />
-          <ListBtn />
+          <ListBtn handleClick={this.handleClickBtn} />
         </div>
-        <List />
+        <List ref="list" />
       </div>
     );
   }
 }
 
-Header.displayName = 'LayoutHeaderHeaderComponent';
+Header.propTypes = propTypes;
+Header.defaultProps = defaultProps;
 
-Header.propTypes = {
-  username: PropTypes.string,
-  profilePhotoUrl: PropTypes.string,
-  userId: PropTypes.string,
-  logoutUser: PropTypes.func
-};
-Header.defaultProps = {
-};
+export default Header;
