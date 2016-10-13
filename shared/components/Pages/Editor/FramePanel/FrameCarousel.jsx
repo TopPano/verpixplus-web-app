@@ -11,10 +11,9 @@ if (process.env.BROWSER) {
   require('./FrameCarousel.css');
 }
 
-const KEY_FRAME_WIDTH = 100;
-const FRAME_STEP = 5;
-const KEY_FRAME_LENGTH =
-  parseInt(KEY_FRAME_WIDTH / FRAME_STEP, 10);
+const LANDSCAPE_WIDTH = 100;
+const PORTRAIT_HEIGHT = 100;
+const FRAME_STEP = 10;
 
 const propTypes = {
   images: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -38,14 +37,28 @@ class FrameCarousel extends Component {
   }
 
   // Resize the image dimension,
-  // width is resized to ${KEY_FRAME_WIDTH},
-  // height is proportionally resized.
   resizeDimension(dimension) {
-    const { width, height } = dimension;
+    const {
+      width,
+      height
+    } = dimension;
+    let newWidth;
+    let newHeight;
+
+    if (width >= height) {
+      // Landscape
+      newWidth = LANDSCAPE_WIDTH;
+      newHeight = parseInt(height * (newWidth / width), 10);
+    } else {
+      // Portrait
+      newHeight = PORTRAIT_HEIGHT;
+      newWidth = parseInt(width * (newHeight / height), 10);
+      newWidth = newWidth - (newWidth % FRAME_STEP);
+    }
 
     return {
-      width: KEY_FRAME_WIDTH,
-      height: parseInt(height * (KEY_FRAME_WIDTH / width), 10)
+      width: newWidth,
+      height: newHeight
     };
   }
 
@@ -106,7 +119,8 @@ class FrameCarousel extends Component {
       carouselClass: 'frame-carousel rounded'
     };
     const resizedDimension = this.resizeDimension(dimension);
-    const items = this.renderItemList(images, resizedDimension, KEY_FRAME_LENGTH, lower, upper, FRAME_STEP);
+    const keyFrameLength = parseInt(resizedDimension.width / FRAME_STEP, 10);
+    const items = this.renderItemList(images, resizedDimension, keyFrameLength, lower, upper, FRAME_STEP);
     const windowProps = {
       framesNum: images.length,
       unitWidth: FRAME_STEP,
