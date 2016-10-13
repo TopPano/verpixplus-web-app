@@ -188,11 +188,20 @@ class LivephotoPlayer extends Component {
   applyFilters(imgsData, idx, dimension, filters) {
     if (!this.caman.isBusy && inRange(idx, 0, imgsData.length)) {
       this.caman.isBusy = true;
+      this.setState({
+        isLoading: true
+      });
 
       applyImageFilters(this.caman.instance, imgsData[idx], dimension, filters).then((appliedImgData) => {
         this.renderImage(appliedImgData, dimension);
+        this.setState({
+          isLoading: false
+        });
         this.caman.isBusy = false;
       }).catch(() => {
+        this.setState({
+          isLoading: false
+        });
         this.caman.isBusy = false;
       });
     }
