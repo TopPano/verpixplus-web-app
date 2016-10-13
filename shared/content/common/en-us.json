@@ -11,7 +11,8 @@
     "EMBED": {
       "INSTALL": "SDK Installation",
       "USAGE": "Usage",
-      "COPIED": "copied"
+      "COPIED": "copied",
+      "PREVIEW": "Preview"
     }
   },
   "DELETE_MODAL": {

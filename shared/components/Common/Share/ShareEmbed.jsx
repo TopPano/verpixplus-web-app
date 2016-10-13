@@ -1,11 +1,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import isInteger from 'lodash/isInteger';
 import toNumber from 'lodash/toNumber';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
 import { EMBED } from 'constants/editor';
+import IconButton from 'components/Common/IconButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 
 const CONTENT = COMMON_CONTENT.SHARE.EMBED;
@@ -90,6 +92,18 @@ class ShareEmbed extends Component {
             value={embedHeight}
             onChange={this.handleSizeChange}
           />
+        </div>
+        <div className="preview-btn-wrapper text-center">
+          <Link
+            to={`http://developer.verpixplus.me/embed/index.html?mediaId=${mediaId}&width=${embedWidth}&height=${embedHeight}`}
+            target="_blank"
+          >
+            <IconButton
+              className="btn-u btn-brd btn-brd-hover rounded btn-u-sea"
+              icon="fa fa-eye"
+              text={CONTENT.PREVIEW}
+            />
+          </Link>
         </div>
       </div>
     );

@@ -11,4 +11,8 @@
       max-width: 40%;
     }
   }
+
+  .preview-btn-wrapper {
+    margin-top: 15px;
+  }
 }
