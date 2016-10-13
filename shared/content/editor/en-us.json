@@ -72,5 +72,9 @@
       "USAGE": "Usage",
       "COPIED": "Copied"
     }
+  },
+  "PROCESS_MODAL": {
+    "TITLE": "Processing",
+    "DESC": "Please wait, tasks will be completed soon"
   }
 }

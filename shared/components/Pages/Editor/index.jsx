@@ -7,6 +7,7 @@ import FilePanel from './FilePanel';
 import PlayerPanel from './PlayerPanel';
 import FramePanel from './FramePanel';
 import Sidebar from './Sidebar';
+import ProcessModal from './ProcessModal';
 
 if (process.env.BROWSER) {
   require('./Editor.css');
@@ -142,6 +143,7 @@ class Editor extends Component {
             create={create}
           />
         </div>
+        <ProcessModal isProcessing={isProcessing} />
       </div>
     );
   }
