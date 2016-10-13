@@ -12,7 +12,7 @@
 
     .sidebar-panel {
       display: none;
-      margin-bottom: 15px;
+      padding-bottom: 60px;
       &.active {
         display: block;
       }
