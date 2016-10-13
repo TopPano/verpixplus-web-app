@@ -54,7 +54,6 @@ export default function applyImagesFilters(imgs, dimension, filters) {
         if(err) {
           reject(err);
         } else {
-          console.log(idx);
           appliedData[idx] = result.appliedImgData;
           dataUrls[idx] = result.dataUrl;
         }

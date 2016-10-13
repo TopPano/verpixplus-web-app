@@ -1,3 +1,4 @@
 {
-  "DELETE_MEDIA_SUCCESS": "Delete media successfully"
+  "DELETE_MEDIA_SUCCESS": "Delete media successfully",
+  "APPLY_FILTERS_SUCCESS": "Apply filters successfully"
 }

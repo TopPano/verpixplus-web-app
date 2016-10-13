@@ -6,6 +6,8 @@ import startsWith from 'lodash/startsWith';
 import merge from 'lodash/merge';
 
 import { MEDIA_TYPE } from 'constants/common';
+import { NOTIFICATIONS } from 'constants/notifications';
+import { pushNotification } from '../notifications';
 import { getMedia } from '../media';
 import imageUrlsToData from './imageUrlsToData';
 import applyImagesFilters from './applyImagesFilters';
@@ -231,6 +233,7 @@ export function applyFilters({ data, dimension, filters }) {
 
     applyImagesFilters(data, dimension, filters).then((result) => {
       dispatch(applyFiltersSuccess(result));
+      dispatch(pushNotification(NOTIFICATIONS.APPLY_FILTERS_SUCCESS));
       return null;
     }).catch((err) => {
       dispatch(applyFiltersFailure(err));
