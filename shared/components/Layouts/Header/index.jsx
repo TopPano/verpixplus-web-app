@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Brand from './Brand';
 import Topbar from './Topbar'
 import List from './List';
@@ -11,6 +11,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -30,11 +32,19 @@ class Header extends Component {
   }
 
   render() {
+    const {
+      isAuthenticated,
+      logout
+    } = this.props;
+
     return (
       <div className='header-component header'>
         <div className='container'>
           <Brand />
-          <Topbar />
+          <Topbar
+            isAuthenticated={isAuthenticated}
+            logout={logout}
+          />
           <ListBtn handleClick={this.handleClickBtn} />
         </div>
         <List ref="list" />

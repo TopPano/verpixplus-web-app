@@ -1,7 +1,6 @@
-
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 
@@ -12,6 +11,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -50,6 +51,10 @@ class Topbar extends Component {
   }
 
   render() {
+    const {
+      isAuthenticated,
+      logout
+    } = this.props;
     const langList = this.renderLangList(SITE_CONTENT.HEADER.LANG.LIST);
 
     return (
@@ -63,7 +68,16 @@ class Topbar extends Component {
           <li className="topbar-devider"></li>
           <li><Link to={"/faq"}>{SITE_CONTENT.HEADER.FAQ}</Link></li>
           <li className="topbar-devider"></li>
-          <li><Link to={"/signin"}>{SITE_CONTENT.HEADER.SIGN_IN}</Link></li>
+          {
+            isAuthenticated ?
+            <li
+              className="clickable"
+              onClick={logout}
+            >
+              <a>{SITE_CONTENT.HEADER.SIGN_OUT}</a>
+            </li> :
+            <li><Link to={"/signin"}>{SITE_CONTENT.HEADER.SIGN_IN}</Link></li>
+          }
         </ul>
       </div>
     );

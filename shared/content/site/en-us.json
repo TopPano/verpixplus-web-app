@@ -12,7 +12,8 @@
       ]
     },
     "FAQ": "FAQ",
-    "SIGN_IN": "sigin in"
+    "SIGN_IN": "sigin in",
+    "SIGN_OUT": "sign out"
   },
   "FOOTER": {
     "TERMS_OF_USE": "Terms of Use",
