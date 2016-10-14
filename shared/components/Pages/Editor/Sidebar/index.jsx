@@ -18,24 +18,19 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
-  mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
-  autoplay: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
-  playerSetAutoplay: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
-  create: PropTypes.func.isRequired
+  applyFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -116,19 +111,14 @@ class Sidebar extends Component {
     const { selectedIdx } = this.state;
     const {
       mode,
-      mediaType,
       title,
       data,
-      appliedData,
       caption,
       dimension,
-      autoplay,
-      playerSetAutoplay,
       filters,
       edit,
       adjustFilters,
-      applyFilters,
-      create
+      applyFilters
     } = this.props;
     const editMenuItemProp = {
       icon: 'pencil-square'
@@ -142,16 +132,9 @@ class Sidebar extends Component {
     const editPanel =
       <EditPanel
         key="edit-panel"
-        mode={mode}
-        mediaType={mediaType}
         title={title}
         caption={caption}
-        appliedData={appliedData}
-        dimension={dimension}
-        autoplay={autoplay}
-        playerSetAutoplay={playerSetAutoplay}
         edit={edit}
-        create={create}
       />
     const filtersPanel =
       <FiltersPanel

@@ -15,7 +15,6 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
-  mediaType: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -35,12 +34,10 @@ const propTypes = {
   convertFile: PropTypes.func.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
-  playerSetAutoplay: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
-  create: PropTypes.func.isRequired
+  applyFilters: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -54,7 +51,6 @@ class Editor extends Component {
   render() {
     const {
       mode,
-      mediaType,
       isProcessing,
       progress,
       title,
@@ -71,12 +67,10 @@ class Editor extends Component {
       convertFile,
       playerPlay,
       playerPause,
-      playerSetAutoplay,
       trim,
       edit,
       adjustFilters,
-      applyFilters,
-      create
+      applyFilters
     } = this.props;
     let mainComponent;
 
@@ -140,21 +134,16 @@ class Editor extends Component {
         <div className="editor-sidebar">
           <Sidebar
             mode={mode}
-            mediaType={mediaType}
             title={title}
             caption={caption}
             data={data}
-            appliedData={appliedData}
             dimension={dimension}
-            autoplay={autoplay}
             filters={filters}
             playerPlay={playerPlay}
             playerPause={playerPause}
-            playerSetAutoplay={playerSetAutoplay}
             edit={edit}
             adjustFilters={adjustFilters}
             applyFilters={applyFilters}
-            create={create}
           />
         </div>
         {

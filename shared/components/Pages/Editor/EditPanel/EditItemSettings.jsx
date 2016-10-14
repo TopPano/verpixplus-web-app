@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { MODE } from 'constants/editor';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
+import DeleteModal from 'containers/common/DeleteModal';
 import IconButton from 'components/Common/IconButton';
 import SwitchButton from 'components/Common/SwitchButton';
 import SidebarItem from '../SidebarItem';
@@ -16,6 +17,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
+  mediaId: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
@@ -25,13 +27,12 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   autoplay: PropTypes.bool.isRequired,
+  isProcessing: PropTypes.bool.isRequired,
   playerSetAutoplay: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
   create: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  disabled: false
 };
 
 class EditItemSettings extends Component {
@@ -41,7 +42,6 @@ class EditItemSettings extends Component {
     // Bind "this" to memeber functions
     this.handleChangeAutoplay = this.handleChangeAutoplay.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
-    this.handleClickDelete = this.handleClickDelete.bind(this);
   }
 
   // Handler for changing autoplay setting
@@ -79,16 +79,12 @@ class EditItemSettings extends Component {
     }
   }
 
-  // Handler for clicking delete button
-  handleClickDelete() {
-    // TODO: Implement this function
-  }
-
   render() {
     const {
       mode,
+      mediaId,
       autoplay,
-      disabled
+      isProcessing
     } = this.props;
     const saveBtnProps = {
       className: 'btn btn-u text-uppercase rounded margin-right-10',
@@ -96,7 +92,7 @@ class EditItemSettings extends Component {
       text: mode === MODE.WAIT_FILE || mode === MODE.CREATE ? CONTENT.POST :
             mode === MODE.EDIT ? CONTENT.UPDATE :
             '',
-      disabled,
+      disabled: mode !== MODE.CREATE && mode !== MODE.EDIT,
       handleClick: this.handleClickSave
     }
 
@@ -117,16 +113,22 @@ class EditItemSettings extends Component {
             />
           </div>
           <div className="margin-bottom-20" />
-          <IconButton {...saveBtnProps} />
-          {
-            mode === MODE.EDIT &&
-            <IconButton
-              className="btn btn-u btn-u-red text-uppercase rounded"
-              icon="trash-o"
-              text={CONTENT.DELETE}
-              handleClick={this.handleClickDelete}
-            />
-          }
+          <div className="btns-wrapper">
+            <IconButton {...saveBtnProps} />
+            {
+              mode === MODE.EDIT &&
+              <DeleteModal
+                mediaId={mediaId}
+                isProcessing={isProcessing}
+              >
+                <IconButton
+                  className="btn btn-u btn-u-red text-uppercase rounded"
+                  icon="trash-o"
+                  text={CONTENT.DELETE}
+                />
+              </DeleteModal>
+            }
+          </div>
         </SidebarItem>
       </div>
     );

@@ -196,7 +196,7 @@ export function deleteMedia({ mediaId, userSession = {} }) {
         type: DELETE_MEDIA_SUCCESS,
         response
       });
-
+      dispatch(push('/'));
       dispatch(pushNotification(NOTIFICATIONS.DELETE_MEDIA_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, DELETE_MEDIA_FAILURE, err);
