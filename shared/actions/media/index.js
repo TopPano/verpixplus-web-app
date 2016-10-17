@@ -84,7 +84,6 @@ export function getMedia({ mediaId, filter }) {
   }
 }
 
-
 export const LOAD_USER_MEDIA_REQUEST = 'LOAD_USER_MEDIA_REQUEST';
 export const LOAD_USER_MEDIA_SUCCESS = 'LOAD_USER_MEDIA_SUCCESS';
 export const LOAD_USER_MEDIA_FAILURE = 'LOAD_USER_MEDIA_FAILURE';
@@ -179,6 +178,70 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
   };
 }
 
+export const CREATE_VIDEO_REQUEST = 'CREATE_VIDEO_REQUEST';
+export const CREATE_VIDEO_SUCCESS = 'CREATE_VIDEO_SUCCESS';
+export const CREATE_VIDEO_FAILURE = 'CREATE_VIDEO_FAILURE';
+
+function createVideoRequest() {
+  return {
+    type: CREATE_VIDEO_REQUEST
+  };
+}
+
+function createVideoSuccess(response) {
+  return {
+    type: CREATE_VIDEO_SUCCESS,
+    response
+  };
+}
+
+// Interval for asking video creation status
+const RETRY_INTERVAL = 1000;
+// maximun times for asking video creation status
+const RETRY_MAX_TIMES = 60;
+
+function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
+  api.media.getVideo(mediaId).then((res) => {
+    const { videoStatus } = res.result;
+
+    switch (videoStatus) {
+      case 'completed':
+      {
+        dispatch(createVideoSuccess({ mediaId }));
+        return;
+      }
+      case 'pending':
+        if (retryTimes < RETRY_MAX_TIMES) {
+          setTimeout(() => {
+            pollingAskVideoStatus(dispatch, mediaId, retryTimes + 1);
+          }, RETRY_INTERVAL);
+        } else {
+          handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Timeout'));
+        }
+        return;
+      case 'failed':
+        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Create video failed'));
+        return;
+      default:
+        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error(`Unknown video status: ${videoStatus}`));
+        return;
+    }
+  }).catch((err) => {
+    handleError(dispatch, CREATE_VIDEO_FAILURE, err);
+  });
+}
+
+export function createVideo({ mediaId, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(createVideoRequest());
+
+    api.media.postVideo(mediaId, userSession.accessToken).then(() => {
+      pollingAskVideoStatus(dispatch, mediaId, 0);
+    }).catch((err) => {
+      handleError(dispatch, CREATE_VIDEO_FAILURE, err);
+    });
+  };
+}
 
 export const DELETE_MEDIA_REQUEST = 'DELETE_MEDIA_REQUEST';
 export const DELETE_MEDIA_SUCCESS = 'DELETE_MEDIA_SUCCESS';

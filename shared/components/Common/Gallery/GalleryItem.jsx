@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import range from 'lodash/range';
 
 import { DEFAULT_TITLE } from 'constants/common';
-import Share from 'components/Common/Share';
+import ShareModal from 'containers/common/ShareModal';
 import DeleteModal from 'containers/common/DeleteModal';
 import Preview from './Preview';
 
@@ -28,16 +28,6 @@ const defaultProps = {
 class GalleryItem extends Component {
   constructor(props) {
     super(props);
-
-    // Bind "this" to member functions
-    this.openModalShare = this.openModalShare.bind(this);
-  }
-
-  // Open the modal for sharing
-  openModalShare() {
-    if (!this.props.isFetching) {
-      this.refs.shareModal.open();
-    }
   }
 
   // Select images for feeding to Preview component
@@ -69,7 +59,8 @@ class GalleryItem extends Component {
     const {
       title,
       caption,
-      dimension
+      dimension,
+      isVideoCreated
     } = mediaObj;
     const link = `/edit/@${id}`;
     const selectedPreviewImages = isCreator ? [] : this.selectPreviewImages(mediaObj, id);
@@ -101,12 +92,14 @@ class GalleryItem extends Component {
             />
           </Link>
           <div className="thumbnail-tools">
-            <i
-              className="fa fa-share-square-o clickable"
-              onClick={this.openModalShare}
-            />
+            <ShareModal
+              mediaId={id}
+              isVideoCreated={Boolean(isVideoCreated)}
+              isProcessing={isFetching}
+            >
+              <i className="fa fa-share-square-o clickable" />
+            </ShareModal>
             <DeleteModal
-              ref="deleteModal"
               mediaId={id}
               isProcessing={isFetching}
             >
@@ -124,11 +117,6 @@ class GalleryItem extends Component {
             </Link>
           }
         </div>
-        <Share
-          ref="shareModal"
-          mediaId={id}
-          isProcessing={isFetching}
-        />
       </div>
     );
   }

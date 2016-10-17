@@ -10,7 +10,7 @@ import { EMBED } from 'constants/editor';
 import IconButton from 'components/Common/IconButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 
-const CONTENT = COMMON_CONTENT.SHARE.EMBED;
+const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
 
 if (process.env.BROWSER) {
   require('./ShareEmbed.css');

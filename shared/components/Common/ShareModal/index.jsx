@@ -9,21 +9,24 @@ import ShareSocial from './ShareSocial';
 import ShareEmbed from './ShareEmbed';
 
 if (process.env.BROWSER) {
-  require('./Share.css');
+  require('./ShareModal.css');
 }
 
-const CONTENT = COMMON_CONTENT.SHARE;
+const CONTENT = COMMON_CONTENT.SHARE_MODAL;
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
-  isProcessing: PropTypes.bool
+  isVideoCreated: PropTypes.bool.isRequired,
+  isProcessing: PropTypes.bool,
+  children: PropTypes.node.isRequired,
+  createVideo: PropTypes.func.isRequired
 };
 
 const defaultProps = {
   isProcessing: false
 };
 
-class Share extends Component {
+class ShareModal extends Component {
   constructor(props) {
     super(props);
 
@@ -47,7 +50,10 @@ class Share extends Component {
   render() {
     const {
       mediaId,
-      isProcessing
+      isVideoCreated,
+      isProcessing,
+      children,
+      createVideo
     } = this.props;
     const modalProps = {
       ref: 'modal',
@@ -59,21 +65,33 @@ class Share extends Component {
     };
     const tabsContent = [{
       tab: CONTENT.TABS.SOCIAL,
-      content: <ShareSocial />
+      content:
+        <ShareSocial
+          mediaId={mediaId}
+          isVideoCreated={isVideoCreated}
+          createVideo={createVideo}
+          isProcessing={isProcessing}
+        />
     }, {
       tab: CONTENT.TABS.EMBED,
       content: <ShareEmbed mediaId={mediaId} />
     }];
 
     return (
-      <Modal {...modalProps} >
-        <MultiTabsContent tabsContent={tabsContent} />
-      </Modal>
+      <div
+        className="share-modal-component"
+        onClick={this.open}
+      >
+        {children}
+        <Modal {...modalProps} >
+          <MultiTabsContent tabsContent={tabsContent} />
+        </Modal>
+      </div>
     );
   }
 }
 
-Share.propTypes = propTypes;
-Share.defaultProps = defaultProps;
+ShareModal.propTypes = propTypes;
+ShareModal.defaultProps = defaultProps;
 
-export default Share;
+export default ShareModal;

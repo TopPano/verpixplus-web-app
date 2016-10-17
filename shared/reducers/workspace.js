@@ -9,6 +9,9 @@ import {
   LOAD_USER_MEDIA_REQUEST,
   LOAD_USER_MEDIA_SUCCESS,
   LOAD_USER_MEDIA_FAILURE,
+  CREATE_VIDEO_REQUEST,
+  CREATE_VIDEO_SUCCESS,
+  CREATE_VIDEO_FAILURE,
   DELETE_MEDIA_REQUEST,
   DELETE_MEDIA_SUCCESS,
   DELETE_MEDIA_FAILURE
@@ -35,6 +38,7 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_MEDIA_REQUEST:
     case DELETE_MEDIA_REQUEST:
+    case CREATE_VIDEO_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -73,6 +77,20 @@ export default function workspace(state=DEFAULT_STATE, action) {
         }
       });
     }
+    case CREATE_VIDEO_SUCCESS:
+    {
+      const { mediaId } = action.response;
+      return merge({}, state, {
+        isFetching: false,
+        media: {
+          objs: {
+            [mediaId]: {
+              isVideoCreated: true
+            }
+          }
+        }
+      });
+    }
     case DELETE_MEDIA_SUCCESS:
     {
       const { mediaId } = action.response;
@@ -92,6 +110,7 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_MEDIA_FAILURE:
     case DELETE_MEDIA_FAILURE:
+    case CREATE_VIDEO_FAILURE:
       return merge({}, state, {
         isFetching: false
       });

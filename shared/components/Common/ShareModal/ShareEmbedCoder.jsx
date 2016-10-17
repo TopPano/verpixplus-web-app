@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
 
-const CONTENT = COMMON_CONTENT.SHARE.EMBED;
+const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
 
 if (process.env.BROWSER) {
   require('./ShareEmbedCoder.css');
