@@ -19,7 +19,10 @@ const propTypes = {
   unitWidth: PropTypes.number.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
-  isRemainder: PropTypes.bool.isRequired
+  isRemainder: PropTypes.bool.isRequired,
+  isDividerHighlighted: PropTypes.bool.isRequired,
+  hoverActiveDivider: PropTypes.func.isRequired,
+  handleChangeStart: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -28,21 +31,43 @@ const defaultProps = {
 class FrameCarouselItem extends Component {
   constructor(props) {
     super(props);
+
+    // Bind "this" to member functions
+    this.handleDividerMouseOver = this.handleDividerMouseOver.bind(this);
+    this.handleDividerMouseLeave = this.handleDividerMouseLeave.bind(this);
+    this.handleDividerMouseDown = this.handleDividerMouseDown.bind(this);
+  }
+
+  handleDividerMouseOver(isActiveDivider) {
+    this.props.hoverActiveDivider(isActiveDivider);
+  }
+
+  handleDividerMouseLeave() {
+    this.props.hoverActiveDivider(false);
+  }
+
+  handleDividerMouseDown(e, type) {
+    this.props.handleChangeStart(type, e.clientX);
   }
 
   // Render marks of ruler
-  renderDividers(dividersRange, unitWidth, lower, upper) {
+  renderDividers(dividersRange, unitWidth, lower, upper, isDividerHighlighted) {
     return range(dividersRange.from, dividersRange.to).map((dividerIdx) => {
       let counter = dividerIdx + 1;
       const isLarge = counter % 10 === 0;
       const active = inRange(dividerIdx, lower, upper);
+      const isFirst = dividerIdx === lower;
+      const isLast = dividerIdx === upper - 1;
       const markClass = classNames({
         'marker': true,
         'large': isLarge
       });
       const overlayClass = classNames({
         'overlay': true,
-        'active': active
+        'active': active,
+        'highlighted': isDividerHighlighted,
+        'active-first': isFirst,
+        'active-last': isLast
       });
       const dividerStyle = {
         width: `${unitWidth}px`
@@ -53,6 +78,13 @@ class FrameCarouselItem extends Component {
           key={counter}
           className="divider"
           style={dividerStyle}
+          onMouseOver={ () => { this.handleDividerMouseOver(active); } }
+          onMouseLeave={this.handleDividerMouseLeave}
+          onMouseOut={this.handleDividerMouseLeave}
+          onMouseDown={ (e) => {
+            const type = isFirst ? 'resize-left' : isLast ? 'resize-right' : active ? 'move' : 'none';
+            this.handleDividerMouseDown(e, type);
+          }}
         >
           <div className={markClass}>
             {
@@ -76,9 +108,10 @@ class FrameCarouselItem extends Component {
       framesRange,
       lower,
       upper,
-      isRemainder
+      isRemainder,
+      isDividerHighlighted
     } = this.props;
-    const dividers = this.renderDividers(framesRange, unitWidth, lower, upper);
+    const dividers = this.renderDividers(framesRange, unitWidth, lower, upper, isDividerHighlighted);
     let componentStyle = {
       height: `${dimension.height}px`
     };

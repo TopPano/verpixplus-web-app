@@ -1,5 +1,9 @@
 @import 'Variables.css';
 
+$border-color: #E8AA25;
+$border-width-thin: 1px;
+$border-width-thick: 3px;
+$divider-border: solid $border-width-thin $border-color;
 $mark-color: #999;
 $mark-small: 3px;
 $mark-large: 10px;
@@ -61,6 +65,20 @@ $mark-large: 10px;
         background-color: rgba(0, 0, 0, 0.5);
         &.active {
           background-color: transparent;
+          border-top: $divider-border;
+          border-bottom: $divider-border;
+          cursor: move;
+          &.active-first {
+            border-left: $divider-border;
+            cursor: col-resize;
+          }
+          &.active-last {
+            border-right: $divider-border;
+            cursor: col-resize;
+          }
+          &.highlighted {
+            border-width: $border-width-thick;
+          }
         }
       }
     }
