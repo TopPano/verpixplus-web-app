@@ -19,7 +19,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  step: 1
+  step: 0.01
 };
 
 class Adjust extends Component {

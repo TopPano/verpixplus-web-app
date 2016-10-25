@@ -14,7 +14,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  convertFile: PropTypes.func.isRequired
+  storageId: PropTypes.string.isRequired,
+  convert: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -42,13 +43,17 @@ class FileLoader extends Component {
     if (isArray(files) && files[0]) {
       // We limit user only can choose one file
       const file = files[0];
-      const { convertFile } = this.props
+      const {
+        storageId,
+        convert
+      } = this.props
 
       if (startsWith(file.type, 'image')) {
         // TODO: Handle image (panophoto)
       } else {
         // Handle video (livephoto)
-        convertFile({
+        convert({
+          storageId,
           mediaType: MEDIA_TYPE.LIVE_PHOTO,
           source: file.preview
         });

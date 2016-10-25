@@ -17,7 +17,7 @@ const PORTRAIT_HEIGHT = 100;
 const FRAME_STEP = 10;
 
 const propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  images: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired

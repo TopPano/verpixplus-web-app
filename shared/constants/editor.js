@@ -19,6 +19,7 @@ export const EMBED = {
   DEFAULT_HEIGHT: 640
 };
 
+export const FPS = 20;
 export const FRAMES_LIMIT = 120;
 
 export const PLAYER_MODE = {

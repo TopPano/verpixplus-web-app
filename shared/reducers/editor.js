@@ -1,4 +1,5 @@
 import merge from 'lodash/merge';
+
 import {
   INIT_UPLOAD,
   INIT_EDIT,
@@ -14,6 +15,7 @@ import {
   EDIT_CAPTION,
   ADJUST_FILTERS,
   APPLY_FILTERS_REQUEST,
+  APPLY_FILTERS_PROGRESS,
   APPLY_FILTERS_SUCCESS,
   APPLY_FILTERS_FAILURE
 } from 'actions/editor';
@@ -30,18 +32,18 @@ import {
   PLAYER_MODE,
   FRAMES_LIMIT
 } from 'constants/editor';
+import { genUUID } from 'lib/utils';
 
 const DEFAULT_STATE = {
   mediaId: '',
+  storageId: '',
   mode: '',
   mediaType: '',
   isProcessing: false,
   title: '',
   caption: '',
   progress: 0,
-  data: [],
   appliedData: [],
-  dataUrls: [],
   dimension: { width: 100, height: 100 },
   playerMode: PLAYER_MODE.PLAY,
   autoplay: true,
@@ -58,9 +60,14 @@ const DEFAULT_STATE = {
 export default function editor(state = DEFAULT_STATE, action) {
   switch (action.type) {
     case INIT_UPLOAD:
+    {
+      const storageId = genUUID();
+
       return merge({}, DEFAULT_STATE, {
+        storageId,
         mode: MODE.WAIT_FILE
       });
+    }
     case INIT_EDIT:
       return merge({}, DEFAULT_STATE, {
         mediaId: action.mediaId,
@@ -111,17 +118,21 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         progress: action.progress
       });
+    case APPLY_FILTERS_PROGRESS:
+    {
+      delete state.appliedData[action.idx];
+      state.appliedData[action.idx] = action.appliedImage;
+      return state;
+    }
     case CONVERT_SUCCESS:
     {
-      const dataLength = action.result.dataUrls.length;
+      const dataLength = action.result.data.length;
 
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
         mediaType: action.mediaType,
-        data: action.result.data,
         appliedData: action.result.data,
-        dataUrls: action.result.dataUrls,
         dimension: action.result.dimension,
         playerMode: PLAYER_MODE.PLAY,
         lower: 0,
@@ -143,9 +154,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         mediaType,
         title,
         caption,
-        data: imgsData,
         appliedData: imgsData,
-        dataUrls: imgUrls,
         dimension,
         lower: 0,
         upper: imgUrls.length
@@ -158,8 +167,6 @@ export default function editor(state = DEFAULT_STATE, action) {
     case APPLY_FILTERS_SUCCESS:
       return merge({}, state, {
         isProcessing: false,
-        appliedData: action.result.appliedData,
-        dataUrls: action.result.dataUrls,
         filters: {
           isDirty: false
         }

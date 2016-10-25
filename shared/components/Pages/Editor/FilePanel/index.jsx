@@ -10,9 +10,10 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  storageId: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
-  convertFile: PropTypes.func.isRequired
+  convert: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -25,9 +26,10 @@ class FilePanel extends Component {
 
   render() {
     const {
+      storageId,
       isProcessing,
       progress,
-      convertFile
+      convert
     } = this.props;
 
     return (
@@ -37,7 +39,10 @@ class FilePanel extends Component {
           <FileProgress
             progress={progress}
           /> :
-          <FileLoader convertFile={convertFile} />
+          <FileLoader
+            storageId={storageId}
+            convert={convert}
+          />
         }
       </div>
     );

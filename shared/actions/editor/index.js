@@ -19,9 +19,9 @@ export const INIT_EDIT = 'INIT_EDIT';
 // Filter function for getMedia.
 // Used to construct images RGBA data from image URLs.
 function constructImagesData(res) {
-  const { imgUrls, dimension } = res.result;
+  const { imgUrls } = res.result;
 
-  return imageUrlsToData(imgUrls, dimension).then((imgsData) => {
+  return imageUrlsToData(imgUrls).then((imgsData) => {
     return merge({}, res, {
       result: {
         imgsData
@@ -91,12 +91,12 @@ function convertFailure(err) {
   };
 }
 
-export function convert({ mediaType, source }) {
+export function convert({ storageId, mediaType, source }) {
   return (dispatch) => {
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       dispatch(convertRequest(mediaType));
 
-      new FrameConverter().convert(source, (progress) => {
+      new FrameConverter().convert(storageId, source, (progress) => {
         dispatch(convertProgress(progress));
       }).then((result) => {
         dispatch(convertSuccess(mediaType, result));
@@ -189,6 +189,7 @@ export function edit({ title, caption }) {
 
 export const ADJUST_FILTERS = 'ADJUST_FILTERS';
 export const APPLY_FILTERS_REQUEST = 'APPLY_FILTERS_REQUEST';
+export const APPLY_FILTERS_PROGRESS = 'APPLY_FILTERS_PROGRESS';
 export const APPLY_FILTERS_SUCCESS = 'APPLY_FILTERS_SUCCESS';
 export const APPLY_FILTERS_FAILURE = 'APPLY_FILTERS_FAILURE';
 
@@ -204,6 +205,14 @@ export function adjustFilters(filters) {
 function applyFiltersRequest() {
   return {
     type: APPLY_FILTERS_REQUEST
+  };
+}
+
+function applyFiltersProgress(idx, appliedImage) {
+  return {
+    type: APPLY_FILTERS_PROGRESS,
+    idx,
+    appliedImage
   };
 }
 
@@ -227,11 +236,13 @@ function applyFiltersRequest() {
   };
 }
 
-export function applyFilters({ data, dimension, filters }) {
+export function applyFilters({ storageId, from, to, filters }) {
   return (dispatch) => {
     dispatch(applyFiltersRequest());
 
-    applyImagesFilters(data, dimension, filters).then((result) => {
+    applyImagesFilters(storageId, from, to, filters, (idx, appliedImage) => {
+      dispatch(applyFiltersProgress(idx, appliedImage));
+    }).then((result) => {
       dispatch(applyFiltersSuccess(result));
       dispatch(pushNotification(NOTIFICATIONS.APPLY_FILTERS_SUCCESS));
       return null;

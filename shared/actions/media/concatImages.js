@@ -1,9 +1,11 @@
 import zlib from 'zlib';
 import blobUtil from 'blob-util';
-import jpeg from 'jpeg-js';
 import randomstring from 'randomstring';
+import base64 from 'base64-js';
 
 import { Promise } from 'lib/utils';
+
+const PREFIX = 'data:image/jpeg;base64,';
 
 // Convert string to Uint8Array
 function stringToUint8Array(str) {
@@ -32,14 +34,13 @@ export default function concatImages(imgs, thumbnailIdx = 0) {
   return new Promise((resolve, reject) => {
     // Separator is the boundary of each image in image
     const separator = randomstring.generate(10);
-    // Bytes array version of separator, used to concatnate images
+    // bytes array version of separator, used to concatnate images
     const separatorBytes = stringToUint8Array(separator);
-    // Chosen humbnail of images
     let thumbnail;
     // Concatnate images and store in the variable
     const concatImgs = new Buffer(
       imgs.reduce((pre, cur, idx) => {
-        const jpegImg = jpeg.encode(cur).data;
+        const jpegImg = base64.toByteArray(cur.src.slice(PREFIX.length));
         const jpegImgBytes =
           idx === imgs.length -1 ?
           jpegImg :

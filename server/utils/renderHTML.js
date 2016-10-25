@@ -65,13 +65,13 @@ export default function renderHTML(html, initialState, config, shareContent, env
            fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'facebook-jssdk'));
       </script>
-      <script type="text/javascript" src="/static/plugins/caman/caman.full.min.js"></script>
     </head>
     <body>
       <div id="app" class="wrapper page-option-v1">${html}</div>
 
       <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
       <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
+      <script type="text/javascript" src="/static/plugins/glfx/glfx.js"></script>
       ${vendorScript}
       <script type="text/javascript" src="/static/build/app.js"></script>
     </body>

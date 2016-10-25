@@ -9,7 +9,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -31,7 +31,7 @@ class FramePanel extends Component {
 
   render() {
     const {
-      images,
+      appliedData,
       dimension,
       lower,
       upper,
@@ -40,7 +40,7 @@ class FramePanel extends Component {
       trim
     } = this.props;
     const carouselProps = {
-      images,
+      images: appliedData,
       dimension,
       lower,
       upper,

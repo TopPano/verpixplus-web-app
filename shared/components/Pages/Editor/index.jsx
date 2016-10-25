@@ -3,9 +3,9 @@
 import React, { Component, PropTypes } from 'react';
 
 import { MODE } from 'constants/editor';
-import FilePanel from './FilePanel';
-import PlayerPanel from './PlayerPanel';
-import FramePanel from './FramePanel';
+import FilePanel from 'containers/pages/Editor/FilePanel';
+import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
+import FramePanel from 'containers/pages/Editor/FramePanel';
 import Sidebar from './Sidebar';
 import ProcessModal from './ProcessModal';
 
@@ -16,28 +16,11 @@ if (process.env.BROWSER) {
 const propTypes = {
   mode: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired,
-  progress: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
-  playerMode: PropTypes.string.isRequired,
-  autoplay: PropTypes.bool.isRequired,
-  lower: PropTypes.number.isRequired,
-  upper: PropTypes.number.isRequired,
-  filters: PropTypes.object.isRequired,
-  convertFile: PropTypes.func.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
-  trim: PropTypes.func.isRequired,
-  edit: PropTypes.func.isRequired,
-  adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired
+  edit: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -52,75 +35,30 @@ class Editor extends Component {
     const {
       mode,
       isProcessing,
-      progress,
       title,
       caption,
-      data,
-      appliedData,
-      dataUrls,
-      dimension,
-      autoplay,
-      playerMode,
-      lower,
-      upper,
-      filters,
-      convertFile,
       playerPlay,
       playerPause,
-      trim,
-      edit,
-      adjustFilters,
-      applyFilters
+      edit
     } = this.props;
     let mainComponent;
 
     if (mode === MODE.WAIT_FILE) {
       // Wait for user to choose file
-      const filePanelProps = {
-        isProcessing,
-        progress,
-        convertFile
-      };
       mainComponent =
-        <FilePanel {...filePanelProps} />;
+        <FilePanel />;
     } else if (mode === MODE.CREATE) {
       // CREATE mode: after choosing file, creates a new media
       mainComponent =
         <div className="main-wrapper fill">
-          <PlayerPanel
-            imagesData={data}
-            appliedImagesData={appliedData}
-            dimension={dimension}
-            playerMode={playerMode}
-            autoplay={autoplay}
-            lower={lower}
-            upper={upper}
-            filters={filters}
-          />
-          <FramePanel
-            images={dataUrls}
-            dimension={dimension}
-            lower={lower}
-            upper={upper}
-            playerPlay={playerPlay}
-            playerPause={playerPause}
-            trim={trim}
-          />
+          <PlayerPanel />
+          <FramePanel />
         </div>
     } else if (mode === MODE.EDIT) {
       // EDIT mode: edit an old media
       mainComponent =
         <div className="main-wrapper fill">
-          <PlayerPanel
-            imagesData={data}
-            appliedImagesData={appliedData}
-            dimension={dimension}
-            playerMode={playerMode}
-            autoplay={autoplay}
-            lower={lower}
-            upper={upper}
-            filters={filters}
-          />
+          <PlayerPanel />
         </div>
     } else  {
       // TODO: any other case ?
@@ -136,14 +74,9 @@ class Editor extends Component {
             mode={mode}
             title={title}
             caption={caption}
-            data={data}
-            dimension={dimension}
-            filters={filters}
             playerPlay={playerPlay}
             playerPause={playerPause}
             edit={edit}
-            adjustFilters={adjustFilters}
-            applyFilters={applyFilters}
           />
         </div>
         {

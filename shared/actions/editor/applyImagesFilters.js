@@ -1,5 +1,5 @@
 import async from 'async';
-import randomstring from 'randomstring';
+import range from 'lodash/range';
 
 import {
   applyImageFilters,
@@ -8,53 +8,39 @@ import {
 
 const NUM_CONCURRENT_TASKS = 3;
 
-function applyImageFiltersAsync(img, dimension, filters, callback) {
-  const canvas = document.createElement('CANVAS');
-  const id = randomstring.generate({
-    length: 20,
-    charset: 'alphabetic'
-  });
-
-  canvas.setAttribute('id', id);
-  canvas.width = dimension.width;
-  canvas.height = dimension.height;
-  canvas.style.display = 'none';
-  canvas.style.visibility = 'hidden';
-  document.body.appendChild(canvas);
-
-  Caman(`#${id}`, function () {
-    applyImageFilters(this, img, dimension, filters).then((appliedImgData) => {
-      const dataUrl = canvas.toDataURL('image/jpeg');
-      document.body.removeChild(canvas);
-      callback(null, {
-        appliedImgData,
-        dataUrl
-      })
-    });
+function applyImageFiltersAsync(storageId, idx, filters, callback) {
+  applyImageFilters(storageId, idx, filters, 'image').then((result) => {
+    callback(null, {
+      appliedImgData: result,
+      dataUrl: result
+    })
   });
 }
 
-export default function applyImagesFilters(imgs, dimension, filters) {
+export default function applyImagesFilters(storageId, from, to, filters, onProgress) {
   return new Promise((resolve, reject) => {
-    const appliedData = new Array(imgs.length);
-    const dataUrls = new Array(imgs.length);
+    if (from >= to) {
+      reject(new Error(`from ${from} is larger than to ${to}`));
+    }
+
+    const length = to - from;
+    const dataUrls = new Array(length);
     const queue = async.queue((task, callback) => {
-      applyImageFiltersAsync(task.img, dimension, filters, callback);
+      applyImageFiltersAsync(task.storageId, task.idx, filters, callback);
     }, NUM_CONCURRENT_TASKS);
 
     queue.drain = () => {
       resolve({
-        appliedData,
         dataUrls
       });
     }
 
-    imgs.forEach((img, idx) => {
-      queue.push({ img }, (err, result) => {
+    range(from, to).forEach((idx) => {
+      queue.push({ storageId, idx }, (err, result) => {
         if(err) {
           reject(err);
         } else {
-          appliedData[idx] = result.appliedImgData;
+          onProgress(idx, result.appliedImgData)
           dataUrls[idx] = result.dataUrl;
         }
       });

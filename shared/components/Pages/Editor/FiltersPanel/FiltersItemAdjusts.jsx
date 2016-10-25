@@ -15,11 +15,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
+  storageId: PropTypes.string.isRequired,
+  imagesNum: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired
@@ -39,15 +36,16 @@ class FiltersItemAdjusts extends Component {
   // Handler for clicking apply button
   handleClickApply() {
     const {
-      data,
-      dimension,
+      storageId,
+      imagesNum,
       filters,
       applyFilters
     } = this.props;
 
     applyFilters({
-      data,
-      dimension,
+      storageId,
+      from: 0,
+      to: imagesNum,
       filters
     });
   }
@@ -71,75 +69,44 @@ class FiltersItemAdjusts extends Component {
       type: 'brightness',
       title: CONTENT.BRIGHTNESS,
       initialValue: 0,
-      min: -100,
-      max: 100
+      min: -1,
+      max: 1
     }, {
       type: 'contrast',
       title: CONTENT.CONTRAST,
       initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'saturation',
-      title: CONTENT.SATURATION,
-      initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'vibrance',
-      title: CONTENT.VIBRANCE,
-      initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'exposure',
-      title: CONTENT.EXPOSURE,
-      initialValue: 0,
-      min: -100,
-      max: 100
+      min: -1,
+      max: 1
     }, {
       type: 'hue',
       title: CONTENT.HUE,
       initialValue: 0,
-      min: 0,
-      max: 100
+      min: -1,
+      max: 1
+    }, {
+      type: 'saturation',
+      title: CONTENT.SATURATION,
+      initialValue: 0,
+      min: -1,
+      max: 1
+    }, {
+      type: 'vibrance',
+      title: CONTENT.VIBRANCE,
+      initialValue: 0,
+      min: -1,
+      max: 1
     }, {
       type: 'sepia',
       title: CONTENT.SEPIA,
       initialValue: 0,
       min: 0,
-      max: 100
+      max: 1
     }, {
-      type: 'gamma',
-      title: CONTENT.GAMMA,
+      type: 'vignette',
+      title: CONTENT.VIGNETTE,
       initialValue: 0,
       min: 0,
-      max: 10,
-      step: 0.1
-    }, {
-      type: 'noise',
-      title: CONTENT.NOISE,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'clip',
-      title: CONTENT.CLIP,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'sharpen',
-      title: CONTENT.SHARPEN,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'stackBlur',
-      title: CONTENT.BLUR,
-      initialValue: 0,
-      min: 0,
-      max: 20
+      max: 1
     }];
     const adjustList = this.renderAdjustList(adjustListProps);
     const applyBtnProps = {

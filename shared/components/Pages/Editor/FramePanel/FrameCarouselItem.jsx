@@ -10,7 +10,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  image: PropTypes.string.isRequired,
+  image: PropTypes.object.isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -130,7 +130,7 @@ class FrameCarouselItem extends Component {
       >
         <div className="img-wrapper">
           <img
-            src={image}
+            src={image.src}
             width={dimension.width}
             height={dimension.height}
           />

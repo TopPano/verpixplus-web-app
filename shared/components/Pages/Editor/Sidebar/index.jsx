@@ -9,7 +9,7 @@ import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
-import FiltersPanel from '../FiltersPanel';
+import FiltersPanel from 'containers/pages/Editor/FiltersPanel';
 import SharePanel from '../SharePanel';
 
 if (process.env.BROWSER) {
@@ -20,17 +20,9 @@ const propTypes = {
   mode: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
-  filters: PropTypes.object.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
-  edit: PropTypes.func.isRequired,
-  adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired
+  edit: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -112,13 +104,8 @@ class Sidebar extends Component {
     const {
       mode,
       title,
-      data,
       caption,
-      dimension,
-      filters,
-      edit,
-      adjustFilters,
-      applyFilters
+      edit
     } = this.props;
     const editMenuItemProp = {
       icon: 'pencil-square'
@@ -139,11 +126,6 @@ class Sidebar extends Component {
     const filtersPanel =
       <FiltersPanel
         key="filters-panel"
-        data={data}
-        dimension={dimension}
-        filters={filters}
-        adjustFilters={adjustFilters}
-        applyFilters={applyFilters}
       />
     const sharePanel =
       <SharePanel key="share-panel" />

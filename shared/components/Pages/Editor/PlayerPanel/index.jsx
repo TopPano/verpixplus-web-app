@@ -9,8 +9,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  appliedImagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  storageId: PropTypes.string.isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -31,29 +31,9 @@ class PlayerPanel extends Component {
   }
 
   render() {
-    const {
-      imagesData,
-      appliedImagesData,
-      dimension,
-      playerMode,
-      autoplay,
-      lower,
-      upper,
-      filters
-    } = this.props;
-
     return (
       <div className="player-panel-component bg-color-light">
-        <LivephotoPlayer
-          imagesData={imagesData}
-          appliedImagesData={appliedImagesData}
-          dimension={dimension}
-          playerMode={playerMode}
-          autoplay={autoplay}
-          lower={lower}
-          upper={upper}
-          filters={filters}
-        />
+        <LivephotoPlayer {...this.props} />
       </div>
     );
   }
