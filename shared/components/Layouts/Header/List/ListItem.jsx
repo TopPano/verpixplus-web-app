@@ -17,7 +17,7 @@ const defaultProps = {
   text: ''
 };
 
-export default class ListItem extends Component {
+class ListItem extends Component {
   constructor(props) {
     super(props);
   }

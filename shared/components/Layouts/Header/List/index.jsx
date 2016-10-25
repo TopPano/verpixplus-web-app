@@ -16,7 +16,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-export default class List extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
 

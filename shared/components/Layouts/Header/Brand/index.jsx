@@ -13,7 +13,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-export default class Brand extends Component {
+class Brand extends Component {
   render() {
     return (
       <Link

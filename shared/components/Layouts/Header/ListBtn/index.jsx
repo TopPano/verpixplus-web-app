@@ -13,7 +13,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-export default class ListBtn extends Component {
+class ListBtn extends Component {
   render() {
     const { handleClick } = this.props;
 
