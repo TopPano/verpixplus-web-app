@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { EDIT_TARGET } from 'constants/editor';
 import FrameCarousel from './FrameCarousel';
 
 if (process.env.BROWSER) {
@@ -14,6 +15,7 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  editTarget: PropTypes.string.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
   playerPlay: PropTypes.func.isRequired,
@@ -33,6 +35,7 @@ class FramePanel extends Component {
     const {
       appliedData,
       dimension,
+      editTarget,
       lower,
       upper,
       playerPlay,
@@ -44,6 +47,7 @@ class FramePanel extends Component {
       dimension,
       lower,
       upper,
+      disabled: editTarget !== EDIT_TARGET.FRAMES,
       playerPlay,
       playerPause,
       trim

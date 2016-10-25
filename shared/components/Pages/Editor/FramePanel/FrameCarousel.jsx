@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 import range from 'lodash/range';
 
 import Carousel from 'components/Common/Carousel';
@@ -24,6 +25,7 @@ const propTypes = {
   }).isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
+  disabled: PropTypes.bool.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired
@@ -299,8 +301,14 @@ class FrameCarousel extends Component {
     } = this.state;
     const {
       images,
-      dimension
+      dimension,
+      disabled
     } = this.props;
+    const componentClass = classNames({
+      'frame-carousel-component': true,
+      'rounded': true,
+      'disabled': disabled
+    });
     const carouselProps = {
       options: {
         freeMode: true,
@@ -322,7 +330,7 @@ class FrameCarousel extends Component {
     const items = this.renderItemList(images, resizedDimension, keyFrameLength, range.lower, range.upper, FRAME_STEP, isDividerHighlighted);
 
     return (
-      <div className="frame-carousel-component rounded">
+      <div className={componentClass}>
         <Carousel {...carouselProps}>
           {items}
         </Carousel>

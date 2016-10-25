@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Scrollbar from 'react-custom-scrollbars';
 
 import { MODE } from 'constants/editor';
+import { EDIT_TARGET } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
@@ -22,6 +23,7 @@ const propTypes = {
   caption: PropTypes.string.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
+  changeEditTarget: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired
 };
 
@@ -46,7 +48,8 @@ class Sidebar extends Component {
     const {
       mode,
       playerPlay,
-      playerPause
+      playerPause,
+      changeEditTarget
     } = this.props;
 
     if (selectedIdx !== idx) {
@@ -54,9 +57,11 @@ class Sidebar extends Component {
         if (selectedIdx === 0 && idx === 1) {
           // Chnage from edit to filters panel
           playerPause();
+          changeEditTarget(EDIT_TARGET.FILTERS);
         } else if (selectedIdx === 1 && idx === 0) {
           // Chnage from filters to edit panel
           playerPlay();
+          changeEditTarget(EDIT_TARGET.FRAMES);
         }
       }
 

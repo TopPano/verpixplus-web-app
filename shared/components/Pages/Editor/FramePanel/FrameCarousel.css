@@ -1,4 +1,9 @@
 .frame-carousel-component {
+  transition: opacity .3s ease;
+  &.disabled {
+    opacity: 0
+  }
+
   .frame-carousel {
     position: relative;
     width: 100%;

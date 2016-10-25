@@ -26,3 +26,8 @@ export const PLAYER_MODE = {
   PLAY: 'PLAY',
   PAUSE: 'PAUSE'
 };
+
+export const EDIT_TARGET = {
+  FRAMES: 'FRAMES',
+  FILTERS: 'FILTERS'
+};

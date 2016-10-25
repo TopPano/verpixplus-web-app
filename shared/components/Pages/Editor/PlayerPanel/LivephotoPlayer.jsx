@@ -88,7 +88,7 @@ class LivephotoPlayer extends Component {
 
     if (prevState.currentIdx !== currentIdx) {
       this.renderImageByIndex(appliedData, currentIdx);
-    } else if ((!autoplay || playerMode === PLAYER_MODE.PAUSE) && !isEqual(prevProps.filters, filters)) {
+    } else if ((!autoplay || playerMode === PLAYER_MODE.PAUSE) && (filters.isDirty || !isEqual(prevProps.filters, filters))) {
       this.applyFilters(storageId, appliedData.length, currentIdx, filters);
     }
 

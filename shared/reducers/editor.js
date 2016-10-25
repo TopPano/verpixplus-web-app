@@ -10,6 +10,7 @@ import {
   PLAYER_PLAY,
   PLAYER_PAUSE,
   PLAYER_SET_AUTOPLAY,
+  CHANGE_EDIT_TARGET,
   TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
@@ -30,6 +31,7 @@ import {
 import {
   MODE,
   PLAYER_MODE,
+  EDIT_TARGET,
   FRAMES_LIMIT
 } from 'constants/editor';
 import { genUUID } from 'lib/utils';
@@ -47,6 +49,7 @@ const DEFAULT_STATE = {
   dimension: { width: 100, height: 100 },
   playerMode: PLAYER_MODE.PLAY,
   autoplay: true,
+  editTarget: '',
   lower: 0,
   upper: 0,
   filters: {
@@ -85,6 +88,10 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         autoplay: action.autoplay
       });
+    case CHANGE_EDIT_TARGET:
+      return merge({}, state, {
+        editTarget: action.editTarget
+      })
     case TRIM:
       return merge({}, state, {
         lower: action.lower,
@@ -135,6 +142,7 @@ export default function editor(state = DEFAULT_STATE, action) {
         appliedData: action.result.data,
         dimension: action.result.dimension,
         playerMode: PLAYER_MODE.PLAY,
+        editTarget: EDIT_TARGET.FRAMES,
         lower: 0,
         upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });

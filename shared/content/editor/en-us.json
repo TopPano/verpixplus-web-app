@@ -19,7 +19,12 @@
       "AUTOPLAY": "Autoplay",
       "POST": "Post",
       "UPDATE": "Update",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "CANCEL": "Cancel",
+      "WARN_MODAL": {
+        "TITLE": "New filters is not applied",
+        "DESC": "Filters is modified but not applied. Still post?"
+      }
     }
   },
   "FILTERS_PANEL": {

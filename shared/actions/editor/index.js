@@ -144,6 +144,17 @@ export function playerSetAutoplay(autoplay) {
   };
 }
 
+export const CHANGE_EDIT_TARGET = 'CHANGE_EDIT_TARGETE';
+
+export function changeEditTarget(editTarget) {
+  return (dispatch) => {
+      dispatch({
+        type: CHANGE_EDIT_TARGET,
+        editTarget
+      });
+  }
+}
+
 export const TRIM = 'TRIM';
 
 export function trim({ lower, upper }) {

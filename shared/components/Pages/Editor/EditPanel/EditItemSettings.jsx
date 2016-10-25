@@ -1,9 +1,11 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 
 import { MODE } from 'constants/editor';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
+import Modal from 'components/Common/Modal';
 import DeleteModal from 'containers/common/DeleteModal';
 import IconButton from 'components/Common/IconButton';
 import SwitchButton from 'components/Common/SwitchButton';
@@ -27,6 +29,7 @@ const propTypes = {
     height: PropTypes.number.isRequired
   }).isRequired,
   autoplay: PropTypes.bool.isRequired,
+  filters: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   playerSetAutoplay: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
@@ -40,8 +43,29 @@ class EditItemSettings extends Component {
     super(props);
 
     // Bind "this" to memeber functions
+    this.createMedia = this.createMedia.bind(this);
     this.handleChangeAutoplay = this.handleChangeAutoplay.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
+  }
+
+  // Wrapper for creating media
+  createMedia() {
+    const {
+      mediaType,
+      title,
+      caption,
+      appliedData,
+      dimension,
+      create
+    } = this.props;
+
+    create({
+      mediaType,
+      title,
+      caption,
+      data: appliedData,
+      dimension
+    });
   }
 
   // Handler for changing autoplay setting
@@ -58,22 +82,15 @@ class EditItemSettings extends Component {
   handleClickSave() {
     const {
       mode,
-      mediaType,
-      title,
-      caption,
-      appliedData,
-      dimension,
-      create
+      filters
     } = this.props;
 
     if (mode === MODE.CREATE) {
-      create({
-        mediaType,
-        title,
-        caption,
-        data: appliedData,
-        dimension
-      });
+      if (filters.isDirty) {
+        this.refs.warnModal.open();
+      } else {
+        this.createMedia();
+      }
     } else if (mode === MODE.EDIT) {
       // TODO: handle EDIT mode
     }
@@ -84,10 +101,14 @@ class EditItemSettings extends Component {
       mode,
       mediaId,
       autoplay,
+      filters,
       isProcessing
     } = this.props;
     const saveBtnProps = {
-      className: 'btn btn-u text-uppercase rounded margin-right-10',
+      className: classNames({
+        'btn btn-u text-uppercase rounded margin-right-10': true,
+        'btn-u-orange': filters.isDirty
+      }),
       icon: 'floppy-o',
       text: mode === MODE.WAIT_FILE || mode === MODE.CREATE ? CONTENT.POST :
             mode === MODE.EDIT ? CONTENT.UPDATE :
@@ -95,6 +116,23 @@ class EditItemSettings extends Component {
       disabled: mode !== MODE.CREATE && mode !== MODE.EDIT,
       handleClick: this.handleClickSave
     }
+    const warnModalProps = {
+      ref: 'warnModal',
+      title: CONTENT.WARN_MODAL.TITLE,
+      confirmBtn: {
+        icon: 'floppy-o',
+        className: 'btn btn-u text-uppercase pull-right rounded',
+        text: CONTENT.POST,
+        onClick: () => {
+          this.refs.warnModal.close();
+          this.createMedia();
+        }
+      },
+      closeBtn: {
+        className: 'btn btn-u btn-u-default text-uppercase pull-left rounded',
+        text: CONTENT.CANCEL
+      }
+    };
 
     return (
       <div className="edit-item-settings-component">
@@ -130,6 +168,9 @@ class EditItemSettings extends Component {
             }
           </div>
         </SidebarItem>
+        <Modal {...warnModalProps}>
+          <div>{CONTENT.WARN_MODAL.DESC}</div>
+        </Modal>
       </div>
     );
   }

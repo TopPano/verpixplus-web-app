@@ -6,7 +6,7 @@ import { MODE } from 'constants/editor';
 import FilePanel from 'containers/pages/Editor/FilePanel';
 import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
 import FramePanel from 'containers/pages/Editor/FramePanel';
-import Sidebar from './Sidebar';
+import Sidebar from 'containers/pages/Editor/Sidebar';
 import ProcessModal from './ProcessModal';
 
 if (process.env.BROWSER) {
@@ -15,12 +15,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
-  isProcessing: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  caption: PropTypes.string.isRequired,
-  playerPlay: PropTypes.func.isRequired,
-  playerPause: PropTypes.func.isRequired,
-  edit: PropTypes.func.isRequired
+  isProcessing: PropTypes.bool.isRequired
 };
 
 const defaultProps = {
@@ -34,12 +29,7 @@ class Editor extends Component {
   render() {
     const {
       mode,
-      isProcessing,
-      title,
-      caption,
-      playerPlay,
-      playerPause,
-      edit
+      isProcessing
     } = this.props;
     let mainComponent;
 
@@ -70,14 +60,7 @@ class Editor extends Component {
           {mainComponent}
         </div>
         <div className="editor-sidebar">
-          <Sidebar
-            mode={mode}
-            title={title}
-            caption={caption}
-            playerPlay={playerPlay}
-            playerPause={playerPause}
-            edit={edit}
-          />
+          <Sidebar />
         </div>
         {
           (mode !== MODE.WAIT_FILE) &&
