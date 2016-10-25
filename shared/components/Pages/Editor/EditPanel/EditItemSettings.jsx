@@ -32,7 +32,8 @@ const propTypes = {
   filters: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   playerSetAutoplay: PropTypes.func.isRequired,
-  create: PropTypes.func.isRequired
+  create: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -44,6 +45,7 @@ class EditItemSettings extends Component {
 
     // Bind "this" to memeber functions
     this.createMedia = this.createMedia.bind(this);
+    this.updateMedia = this.updateMedia.bind(this);
     this.handleChangeAutoplay = this.handleChangeAutoplay.bind(this);
     this.handleClickSave = this.handleClickSave.bind(this);
   }
@@ -66,6 +68,22 @@ class EditItemSettings extends Component {
       data: appliedData,
       dimension
     });
+  }
+
+  // Wrapper for updating media
+  updateMedia() {
+    const {
+      mediaId,
+      title,
+      caption,
+      update
+    } = this.props;
+
+    update({
+      mediaId,
+      title,
+      caption
+    })
   }
 
   // Handler for changing autoplay setting
@@ -92,7 +110,7 @@ class EditItemSettings extends Component {
         this.createMedia();
       }
     } else if (mode === MODE.EDIT) {
-      // TODO: handle EDIT mode
+      this.updateMedia();
     }
   }
 

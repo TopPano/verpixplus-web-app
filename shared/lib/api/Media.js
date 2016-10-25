@@ -64,6 +64,19 @@ export default class MediaAPI extends Base {
     });
   }
 
+  putMedia(mediaId, media, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.put({
+      url: `media/${mediaId}`,
+      payload: media,
+      requireAuth: true,
+      contentType: 'multipart/form-data'
+    });
+  }
+
   deleteMedia(mediaId, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);

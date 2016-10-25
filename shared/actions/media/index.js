@@ -243,6 +243,43 @@ export function createVideo({ mediaId, userSession = {} }) {
   };
 }
 
+export const UPDATE_MEDIA_REQUEST = 'UPDATE_MEDIA_REQUEST';
+export const UPDATE_MEDIA_SUCCESS = 'UPDATE_MEDIA_SUCCESS';
+export const UPDATE_MEDIA_FAILURE = 'UPDATE_MEDIA_FAILURE';
+
+function updateMediaRequest() {
+  return {
+    type: UPDATE_MEDIA_REQUEST
+  };
+}
+
+function updateMediaSuccess(response) {
+  return {
+    type: UPDATE_MEDIA_SUCCESS,
+    response
+  };
+}
+
+export function updateMedia({ mediaId, title, caption, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(updateMediaRequest());
+
+    const formData = new FormData();
+
+    formData.append('title', title);
+    formData.append('caption', caption);
+
+    api.media.putMedia(mediaId, formData, userSession.accessToken).then((res) => {
+      console.log(res);
+      dispatch(updateMediaSuccess(res));
+      dispatch(push('/'));
+      dispatch(pushNotification(NOTIFICATIONS.UPDATE_MEDIA_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, UPDATE_MEDIA_FAILURE, err);
+    });
+  };
+}
+
 export const DELETE_MEDIA_REQUEST = 'DELETE_MEDIA_REQUEST';
 export const DELETE_MEDIA_SUCCESS = 'DELETE_MEDIA_SUCCESS';
 export const DELETE_MEDIA_FAILURE = 'DELETE_MEDIA_FAILURE';
