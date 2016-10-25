@@ -1,6 +1,26 @@
 # verpixplus-web-app
 Web application for Verpix Plus.
 
+## As a service
+
+* Build image
+
+    ```sh 
+    $ docker build --build-arg API_ROOT=http://$Domain_name/api STATIC_URL=http://$Domain_name ./
+    ```
+
+* Create container
+
+    ```sh
+    $ docker create -p 8000:8000 $imageId
+    ```
+
+* Start container
+
+    ```sh
+    $ docker start $containerId
+    ```
+
 ## Getting Started
 
 ### Prerequisites
@@ -15,6 +35,7 @@ Install dependent libraries for running tests.
 ```
 $ sudo apt-get install libfontconfig
 ```
+
 
 ### Usages
 ```bash
