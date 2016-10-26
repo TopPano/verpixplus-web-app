@@ -7,6 +7,7 @@ import renderList from './renderList';
 import applyImageFilters from './applyImageFilters';
 import genUUID from './genUUID';
 import imagesStorage from './imagesStorage';
+import imageBlobToDataUrl from './imageBlobToDataUrl.js';
 import Promise from './promise';
 
 
@@ -21,5 +22,6 @@ export {
   applyImageFilters,
   genUUID,
   imagesStorage,
+  imageBlobToDataUrl,
   Promise
 };

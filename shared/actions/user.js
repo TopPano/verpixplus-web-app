@@ -1,9 +1,26 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
+import merge from 'lodash/merge';
 
 import api from 'lib/api';
 import config from 'etc/client';
-import { Promise } from 'lib/utils';
+import {
+  imageBlobToDataUrl,
+  Promise
+} from 'lib/utils';
+import { pushNotification } from './notifications';
+import { PROFILE_PICTURE_SIZE } from 'constants/common';
+import { NOTIFICATIONS } from 'constants/notifications';
+
+function handleError(dispatch, type, err) {
+  dispatch({
+    type,
+    err
+  });
+  if (err.status === 401) {
+    dispatch(push('/'));
+  }
+}
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -233,6 +250,47 @@ export function loadUserSummary({ id, params = {}, userSession = {} }) {
       if (error.status === 401) {
         dispatch(push('/'));
       }
+    });
+  };
+}
+
+export const UPDATE_PROFILE_PICTURE_REQUEST = 'UPDATE_PROFILE_PICTURE_REQUEST';
+export const UPDATE_PROFILE_PICTURE_SUCCESS = 'UPDATE_PROFILE_PICTURE_SUCCESS';
+export const UPDATE_PROFILE_PICTURE_FAILURE = 'UPDATE_PROFILE_PICTURE_FAILURE';
+
+const DATA_URL_PREFIX = 'data:image/jpeg;base64,';
+
+function updateProfileRequest() {
+  return {
+    type: UPDATE_PROFILE_PICTURE_REQUEST
+  };
+}
+
+function updateProfileSuccess(response) {
+  return {
+    type: UPDATE_PROFILE_PICTURE_SUCCESS,
+    response
+  };
+}
+
+export function updateProfilePicture({ userId, profilePicture, userSession = {} }) {
+  return (dispatch) => {
+    let profilePhotoUrl;
+
+    dispatch(updateProfileRequest());
+
+    imageBlobToDataUrl(profilePicture, PROFILE_PICTURE_SIZE, true).then((imgDataUrl) => {
+      const payload = {
+        image: imgDataUrl.slice(DATA_URL_PREFIX.length)
+      };
+      profilePhotoUrl = imgDataUrl;
+
+      return api.users.postProfilePicture(userId, payload, userSession.accessToken);
+    }).then((res) => {
+      dispatch(updateProfileSuccess(merge({}, res, { profilePhotoUrl })));
+      dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_PICTURE_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, UPDATE_PROFILE_PICTURE_FAILURE, err);
     });
   };
 }

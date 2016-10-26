@@ -3,7 +3,10 @@ import assign from 'lodash/assign';
 import {
   LOAD_USER_SUMMARY_REQUEST,
   LOAD_USER_SUMMARY_SUCCESS,
-  LOAD_USER_SUMMARY_FAILURE
+  LOAD_USER_SUMMARY_FAILURE,
+  UPDATE_PROFILE_PICTURE_REQUEST,
+  UPDATE_PROFILE_PICTURE_SUCCESS,
+  UPDATE_PROFILE_PICTURE_FAILURE
 } from 'actions/user';
 import {
   LOAD_USER_MEDIA_REQUEST,
@@ -20,6 +23,10 @@ import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 
 const DEFAULT_STATE = {
   isFetching: false,
+  // TODO: Add more targets for isProcessing
+  isProcessing: {
+    updateProfilePicture: false
+  },
   userId: undefined,
   username: undefined,
   profilePhotoUrl: undefined,
@@ -41,6 +48,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case CREATE_VIDEO_REQUEST:
       return merge({}, state, {
         isFetching: true
+      });
+    case UPDATE_PROFILE_PICTURE_REQUEST:
+      return merge({}, state, {
+        isProcessing: {
+          updateProfilePicture: true
+        }
       });
     case LOAD_USER_SUMMARY_SUCCESS:
     {
@@ -91,6 +104,15 @@ export default function workspace(state=DEFAULT_STATE, action) {
         }
       });
     }
+    case UPDATE_PROFILE_PICTURE_SUCCESS:
+    {
+      return merge({}, state, {
+        profilePhotoUrl: action.response.profilePhotoUrl,
+        isProcessing: {
+          updateProfilePicture: false
+        }
+      });
+    }
     case DELETE_MEDIA_SUCCESS:
     {
       const { mediaId } = action.response;
@@ -113,6 +135,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case CREATE_VIDEO_FAILURE:
       return merge({}, state, {
         isFetching: false
+      });
+    case UPDATE_PROFILE_PICTURE_FAILURE:
+      return merge({}, state, {
+        isProcessing: {
+          updateProfilePicture: false
+        }
       });
     default:
       return state;

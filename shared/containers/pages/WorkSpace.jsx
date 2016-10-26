@@ -4,7 +4,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { connectDataFetchers } from 'lib/utils';
-import { loadUserSummary } from 'actions/user';
+import {
+  loadUserSummary,
+  updateProfilePicture
+} from 'actions/user';
 import { loadUserMedia, deleteMedia } from 'actions/media';
 import ScrollablePageContainer from './Scrollable';
 import WorkSpace from 'components/Pages/WorkSpace';
@@ -29,6 +32,7 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     // Bind "this" to member function
     this.deleteMedia = this.deleteMedia.bind(this);
     this.loadMore = this.loadMore.bind(this);
+    this.updateProfilePicture = this.updateProfilePicture.bind(this);
   }
 
   // Overide parent member function
@@ -82,6 +86,12 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.props.dispatch(deleteMedia(params));
   }
 
+  // Wrapper function for dispatching updateProfilePicture,
+  // which updates the profile picture of user
+  updateProfilePicture(params) {
+    this.props.dispatch(updateProfilePicture(params));
+  }
+
   render() {
     const {
       user,
@@ -94,6 +104,7 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
         workspace={workspace}
         deleteMedia={this.deleteMedia}
         loadMore={this.loadMore}
+        updateProfilePicture={this.updateProfilePicture}
       />
     );
   }

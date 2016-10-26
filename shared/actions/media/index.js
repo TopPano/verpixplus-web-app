@@ -270,7 +270,6 @@ export function updateMedia({ mediaId, title, caption, userSession = {} }) {
     formData.append('caption', caption);
 
     api.media.putMedia(mediaId, formData, userSession.accessToken).then((res) => {
-      console.log(res);
       dispatch(updateMediaSuccess(res));
       dispatch(push('/'));
       dispatch(pushNotification(NOTIFICATIONS.UPDATE_MEDIA_SUCCESS));

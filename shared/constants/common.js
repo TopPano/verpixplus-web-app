@@ -38,3 +38,5 @@ export const SHARE_IMAGE_SIZE = {
     HEIGHT: 315
   }
 }
+
+export const PROFILE_PICTURE_SIZE =  150;

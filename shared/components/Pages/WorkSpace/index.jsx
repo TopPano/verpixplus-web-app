@@ -13,7 +13,8 @@ const propTypes = {
   user: PropTypes.object.isRequired,
   workspace: PropTypes.object.isRequired,
   deleteMedia: PropTypes.func.isRequired,
-  loadMore: PropTypes.func.isRequired
+  loadMore: PropTypes.func.isRequired,
+  updateProfilePicture: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -25,17 +26,21 @@ class WorkSpace extends Component {
       user,
       workspace,
       deleteMedia,
-      loadMore
+      loadMore,
+      updateProfilePicture
     } = this.props;
 
     return (
       <div className="workspace-component container-fullpage">
         <Summary
           username={workspace.username}
+          userId={user.userId}
           email={user.email}
           profilePhotoUrl={workspace.profilePhotoUrl}
           autobiography={workspace.autobiography}
+          isProcessing={workspace.isProcessing}
           numOfMedia={workspace.numOfMedia}
+          updateProfilePicture={updateProfilePicture}
         />
         <Gallery
           media={workspace.media.objs}

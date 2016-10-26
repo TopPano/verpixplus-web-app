@@ -13,10 +13,13 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  userId: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
-  numOfMedia: PropTypes.number.isRequired
+  numOfMedia: PropTypes.number.isRequired,
+  isProcessing: PropTypes.object.isRequired,
+  updateProfilePicture: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -29,10 +32,13 @@ class Summary extends Component {
 
   render() {
     const {
+      userId,
       username,
       email,
       profilePhotoUrl,
-      numOfMedia
+      numOfMedia,
+      isProcessing,
+      updateProfilePicture
     } = this.props;
 
     return (
@@ -43,7 +49,12 @@ class Summary extends Component {
               className="container-center-row"
               sm={4}
             >
-              <ProfilePhoto profilePhotoUrl={profilePhotoUrl} />
+              <ProfilePhoto
+                userId={userId}
+                profilePhotoUrl={profilePhotoUrl}
+                isProcessing={isProcessing}
+                updateProfilePicture={updateProfilePicture}
+              />
             </Col>
             <Col
               className="profile-info-wrapper"

@@ -3,6 +3,9 @@
   "OVERALL": {
     "MEDIA": "Media"
   },
+  "PROFILE_PICTURE": {
+    "TITLE": "Click to upload a profile picture"
+  },
   "EDIT_PROFILE": {
     "TITLE": "Edit Profile",
     "CONTENT": {
