@@ -33,7 +33,9 @@ class ProfilePhoto extends Component {
 
   // Handler for clicking profile picture
   handleClick() {
-    this.refs.dropzone.open();
+    if (!this.props.isProcessing.updateProfilePicture) {
+      this.refs.dropzone.open();
+    }
   }
 
   // Handler for the file is dropped to zone
@@ -59,22 +61,22 @@ class ProfilePhoto extends Component {
       profilePhotoUrl,
       isProcessing
     } = this.props;
-    const componentClass = classNames({
-      'profile-photo-component': true,
+    const imgClass = classNames({
+      'profile-photo': true,
       'clickable': !isProcessing.updateProfilePicture
     });
 
     return (
       <Dropzone
         ref="dropzone"
-        className={componentClass}
+        className="profile-photo-component"
         multiple={false}
         accept="image/jpeg,image/png"
+        disableClick={isProcessing.updateProfilePicture}
         onDrop={this.handleDropFile}
-        onClick={this.handleClick}
       >
         <img
-          className="profile-photo"
+          className={imgClass}
           title={CONTENT.PROFILE_PICTURE.TITLE}
           src={profilePhotoUrl}
           alt="profile picture"

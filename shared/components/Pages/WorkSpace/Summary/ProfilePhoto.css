@@ -2,6 +2,7 @@
 
 .profile-photo-component {
   position: relative;
+  border-radius: 50%;
   width: 150px;
   height: 150px;
 
@@ -16,6 +17,7 @@
   }
 
   .profile-photo-overlay {
+    border-radius: 50%;
     position: absolute;
     top: 0;
     height: 0;
