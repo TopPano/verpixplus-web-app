@@ -38,6 +38,9 @@ export default function renderHTML(html, initialState, config, shareContent, env
       <link rel="stylesheet" href="/static/plugins/line-icons/line-icons.min.css">
       <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
       <link rel="stylesheet" href="/static/build/app.css">
+    </head>
+    <body>
+      <div id="app" class="wrapper page-option-v1">${html}</div>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -47,28 +50,6 @@ export default function renderHTML(html, initialState, config, shareContent, env
       <script>
         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
       </script>
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            appId: '${externalApiConfig.facebook.id}',
-            xfbml: true,
-            version:'v${externalApiConfig.facebook.version}'
-          });
-          FB.AppEvents.logPageView();
-        };
-
-        (function(d, s, id){
-           var js, fjs = d.getElementsByTagName(s)[0];
-           if (d.getElementById(id)) {return;}
-           js = d.createElement(s); js.id = id;
-           js.src = "//connect.facebook.net/en_US/sdk.js";
-           fjs.parentNode.insertBefore(js, fjs);
-         }(document, 'script', 'facebook-jssdk'));
-      </script>
-    </head>
-    <body>
-      <div id="app" class="wrapper page-option-v1">${html}</div>
-
       <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
       <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
       <script type="text/javascript" src="/static/plugins/glfx/glfx.js"></script>

@@ -19,7 +19,8 @@ const propTypes = {
   isVideoCreated: PropTypes.bool.isRequired,
   isProcessing: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  createVideo: PropTypes.func.isRequired
+  createVideo: PropTypes.func.isRequired,
+  notifyShareSuccess: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -53,7 +54,8 @@ class ShareModal extends Component {
       isVideoCreated,
       isProcessing,
       children,
-      createVideo
+      createVideo,
+      notifyShareSuccess
     } = this.props;
     const modalProps = {
       ref: 'modal',
@@ -69,8 +71,9 @@ class ShareModal extends Component {
         <ShareSocial
           mediaId={mediaId}
           isVideoCreated={isVideoCreated}
-          createVideo={createVideo}
           isProcessing={isProcessing}
+          createVideo={createVideo}
+          notifyShareSuccess={notifyShareSuccess}
         />
     }, {
       tab: CONTENT.TABS.EMBED,
