@@ -3,5 +3,6 @@
   "UPDATE_MEDIA_SUCCESS": "Media is updated",
   "DELETE_MEDIA_SUCCESS": "Media is deleted",
   "UPDATE_PROFILE_PICTURE_SUCCESS": "Profile picture is updated",
-  "APPLY_FILTERS_SUCCESS": "Filters is applied"
+  "APPLY_FILTERS_SUCCESS": "Filters is applied",
+  "SHARE_SUCCESS": "Your media is shared successfully"
 }

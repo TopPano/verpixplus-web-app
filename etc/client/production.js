@@ -2,5 +2,6 @@
 
 module.exports = {
   apiRoot: 'https://www.verpix.me/api',
-  staticUrl: 'https://www.verpix.me'
+  staticUrl: 'https://www.verpix.me',
+  sdkUrl: 'http://developer.verpixplus.me'
 }

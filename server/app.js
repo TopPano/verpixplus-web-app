@@ -19,6 +19,7 @@ import {
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
 import Promise from 'lib/utils/promise';
+import api from 'lib/api';
 
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
@@ -40,12 +41,27 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
+// Use ejs for template
+app.set('view engine', 'ejs');
+
+// Embed page request
+app.get('/embed/@:mediaId', (req, res) => {
+  const { mediaId } = req.params;
+
+  api.media.getMedia(mediaId).then((response) => {
+    const shareContent = genShareContent(req, true, response.result);
+
+    res.render('embed', shareContent);
+  }).catch((err) => {
+    console.log(err.stack);
+    res.end(err.message);
+  });
+});
+
 // This is fired every time the server side receives a request
 app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
-  const matchViewer = req.url.match(/(\/viewer\/@)+/);
-  const isViewerPage = matchViewer && matchViewer.index === 0;
 
   if (accessToken) {
     // restore the client state
@@ -87,7 +103,7 @@ app.use((req, res) => {
             </div>
           </Provider>
         );
-        const shareContent = genShareContent(req, isViewerPage, initialState.post);
+        const shareContent = genShareContent(req, false);
 
         return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
       })
