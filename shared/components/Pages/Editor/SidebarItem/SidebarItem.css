@@ -1,5 +1,8 @@
 .sidebar-item-component {
   padding-bottom: 15px;
+  &:last-child {
+    padding-bottom: 60px;
+  }
 
   .panel-heading {
     padding-left: 0;

@@ -16,7 +16,7 @@ const propTypes = {
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -41,7 +41,7 @@ class EditPanel extends Component {
       mediaType,
       title,
       caption,
-      data,
+      appliedData,
       dimension,
       autoplay,
       playerSetAutoplay,
@@ -66,7 +66,7 @@ class EditPanel extends Component {
           mediaType={mediaType}
           title={title}
           caption={caption}
-          data={data}
+          appliedData={appliedData}
           dimension={dimension}
           autoplay={autoplay}
           playerSetAutoplay={playerSetAutoplay}

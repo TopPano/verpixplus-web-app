@@ -1,37 +1,26 @@
-@import 'Variables.css';
-
 .editor-component {
-  background-color: black;
+  display: flex;
+  flex-direction: row;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
-  z-index: 999999;
 
-  .row {
-    margin: 0;
+  > * {
+    height: 100%;
+  }
 
-    > * {
-      padding: 0;
-      height: 100%;
+  .editor-main {
+    flex-grow: 1;
+
+    .main-wrapper {
+      display: flex;
+      flex-direction: column;
     }
+  }
 
-    .editor-main {
-      .main-wrapper {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-    .editor-sidebar {
-      @media (width < 768px) {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100vw;
-        height: auto;
-      }
-    }
+  .editor-sidebar {
+    width: 300px;
   }
 }

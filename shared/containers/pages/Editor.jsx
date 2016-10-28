@@ -12,6 +12,7 @@ import {
   playerSetAutoplay,
   trim,
   edit,
+  adjustFilters,
   applyFilters
 } from 'actions/editor';
 import { createMedia } from 'actions/media';
@@ -34,6 +35,7 @@ class EditorPageContainer extends Component {
     this.playerPause = this.playerPause.bind(this);
     this.playerSetAutoplay = this.playerSetAutoplay.bind(this);
     this.edit = this.edit.bind(this);
+    this.adjustFilters = this.adjustFilters.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.create = this.create.bind(this);
     this.trim = this.trim.bind(this);
@@ -82,10 +84,20 @@ class EditorPageContainer extends Component {
     }));
   }
 
+  // Wrapper for dispatching adjustFilters function,
+  // which updates the filter values of this media
+  adjustFilters(filters) {
+    this.props.dispatch(adjustFilters(filters));
+  }
+
   // Wrapper for dispatching applyFilters function,
-  // which update the filters of this media
-  applyFilters(filters) {
-    this.props.dispatch(applyFilters(filters));
+  // which updates the filter values to original data
+  applyFilters({ data, dimension,filters}) {
+    this.props.dispatch(applyFilters({
+      data,
+      dimension,
+      filters
+    }));
   }
 
   // Wrapper for dispatching createMedia function,
@@ -106,6 +118,7 @@ class EditorPageContainer extends Component {
         playerSetAutoplay={this.playerSetAutoplay}
         trim={this.trim}
         edit={this.edit}
+        adjustFilters={this.adjustFilters}
         applyFilters={this.applyFilters}
         create={this.create}
       >

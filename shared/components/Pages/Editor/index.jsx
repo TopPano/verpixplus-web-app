@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 
 import { MODE } from 'constants/editor';
 import FilePanel from './FilePanel';
@@ -22,6 +20,7 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
@@ -38,6 +37,7 @@ const propTypes = {
   playerSetAutoplay: PropTypes.func.isRequired,
   trim: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
+  adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
@@ -59,6 +59,7 @@ class Editor extends Component {
       title,
       caption,
       data,
+      appliedData,
       dataUrls,
       dimension,
       autoplay,
@@ -72,6 +73,7 @@ class Editor extends Component {
       playerSetAutoplay,
       trim,
       edit,
+      adjustFilters,
       applyFilters,
       create
     } = this.props;
@@ -93,6 +95,7 @@ class Editor extends Component {
         <div className="main-wrapper fill">
           <PlayerPanel
             imagesData={data}
+            appliedImagesData={appliedData}
             dimension={dimension}
             playerMode={playerMode}
             autoplay={autoplay}
@@ -116,27 +119,29 @@ class Editor extends Component {
 
     return (
       <div className="editor-component container-full">
-        <Row className="fill">
-          <Col md={9} sm={8} className="editor-main">
-            {mainComponent}
-          </Col>
-          <Col md={3} sm={4} className="editor-sidebar">
-            <Sidebar
-              mode={mode}
-              mediaType={mediaType}
-              title={title}
-              caption={caption}
-              data={data}
-              dimension={dimension}
-              autoplay={autoplay}
-              filters={filters}
-              playerSetAutoplay={playerSetAutoplay}
-              edit={edit}
-              applyFilters={applyFilters}
-              create={create}
-            />
-          </Col>
-        </Row>
+        <div className="editor-main">
+          {mainComponent}
+        </div>
+        <div className="editor-sidebar">
+          <Sidebar
+            mode={mode}
+            mediaType={mediaType}
+            title={title}
+            caption={caption}
+            data={data}
+            appliedData={appliedData}
+            dimension={dimension}
+            autoplay={autoplay}
+            filters={filters}
+            playerPlay={playerPlay}
+            playerPause={playerPause}
+            playerSetAutoplay={playerSetAutoplay}
+            edit={edit}
+            adjustFilters={adjustFilters}
+            applyFilters={applyFilters}
+            create={create}
+          />
+        </div>
       </div>
     );
   }

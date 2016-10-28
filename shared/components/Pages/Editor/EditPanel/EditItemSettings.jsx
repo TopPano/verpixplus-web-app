@@ -19,7 +19,7 @@ const propTypes = {
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -61,7 +61,7 @@ class EditItemSettings extends Component {
       mediaType,
       title,
       caption,
-      data,
+      appliedData,
       dimension,
       create
     } = this.props;
@@ -71,7 +71,7 @@ class EditItemSettings extends Component {
         mediaType,
         title,
         caption,
-        data,
+        data: appliedData,
         dimension
       });
     } else if (mode === MODE.EDIT) {

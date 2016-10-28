@@ -23,18 +23,42 @@
     }
   },
   "FILTERS_PANEL": {
-    "FILTERS": {
-      "TITLE": "Filters"
+    "PRESETS": {
+      "TITLE": "Filters",
+      "NORMAL": "Normal",
+      "VINTAGE": "Vintage",
+      "LOMO": "Lomo",
+      "CLARITY": "Clarity",
+      "SIN_CITY": "Sin City",
+      "SUNRISE": "Sunrise",
+      "CROSS_PROCESS": "Cross Process",
+      "ORANGE_PEEL": "Orange Peel",
+      "LOVE": "Love",
+      "GRUNGY": "Grungy",
+      "JARQUES": "Jarques",
+      "PINHOLE": "Pinhole",
+      "OLD_BOOT": "Old Boot",
+      "GLOWING_SUN": "Glowing Sun",
+      "HAZY_DAYS": "Hazy Days",
+      "HER_MAJESTY": "Her Majesty",
+      "NOSTALGIA": "Nostalgia",
+      "HEMINGWAY": "Hemingway",
+      "CONCENTRATE": "Concentrate"
     },
     "ADJUSTS": {
       "TITLE": "Adjustments",
+      "APPLY": "APPLY",
       "BRIGHTNESS": "Brightness",
       "CONTRAST": "Contrast",
-      "SATURATE": "Saturate",
+      "SATURATION": "Saturation",
+      "VIBRANCE": "Vibrance",
+      "EXPOSURE": "Exposure",
+      "HUE": "Hue",
       "SEPIA": "Sepia",
-      "GRAYSCALE": "Grayscale",
-      "INVERT": "Invert",
-      "HUE_ROTATE": "Hue Rotate",
+      "GAMMA": "Gamma",
+      "NOISE": "Noise",
+      "CLIP": "Clip",
+      "SHARPEN": "Sharpen",
       "BLUR": "Blur"
     }
   },

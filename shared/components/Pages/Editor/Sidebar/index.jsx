@@ -1,6 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
+import Scrollbar from 'react-custom-scrollbars';
 
 import { MODE } from 'constants/editor';
 import { renderList } from 'lib/utils';
@@ -19,14 +21,18 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
   autoplay: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
+  playerPlay: PropTypes.func.isRequired,
+  playerPause: PropTypes.func.isRequired,
   playerSetAutoplay: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
+  adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired
 };
@@ -42,24 +48,65 @@ class Sidebar extends Component {
     this.state = {
       selectedIdx: 0
     };
+
+    this.curFilters = {};
   }
 
-  select(idx) {
-    this.setState({
-      selectedIdx: idx
-    });
+  // Handler for clicking menu item
+  handleClickMenuItem(idx) {
+    const { selectedIdx } = this.state;
+    const {
+      mode,
+      playerPlay,
+      playerPause
+    } = this.props;
+
+    if (selectedIdx !== idx) {
+      if (mode === MODE.CREATE) {
+        if (selectedIdx === 0 && idx === 1) {
+          // Chnage from edit to filters panel
+          playerPause();
+        } else if (selectedIdx === 1 && idx === 0) {
+          // Chnage from filters to edit panel
+          playerPlay();
+        }
+      }
+
+      this.setState({
+        selectedIdx: idx
+      });
+    }
   }
 
   // Render Menu Items
-  renderMenuItems(propsList) {
+  renderMenuItems(propsList, activeIdx) {
     return renderList(propsList, (cur, idx) => {
       return (
         <MenuItem
           key={idx}
           icon={cur.icon}
-          active={this.state.selectedIdx === idx}
-          handleClick={this.select.bind(this, idx)}
+          active={activeIdx === idx}
+          handleClick={this.handleClickMenuItem.bind(this, idx)}
         />
+      );
+    });
+  }
+
+  // Render sidebar panels
+  renderSidebarPanels(panels, activeIdx) {
+    return renderList(panels, (panel, idx) => {
+      const panelClass = classNames({
+        'sidebar-panel': true,
+        'active': activeIdx === idx
+      });
+
+      return (
+        <div
+          className={panelClass}
+          key={panel.key}
+        >
+          {panel}
+        </div>
       );
     });
   }
@@ -70,13 +117,15 @@ class Sidebar extends Component {
       mode,
       mediaType,
       title,
-      caption,
       data,
+      appliedData,
+      caption,
       dimension,
       autoplay,
-      filters,
       playerSetAutoplay,
+      filters,
       edit,
+      adjustFilters,
       applyFilters,
       create
     } = this.props;
@@ -96,7 +145,7 @@ class Sidebar extends Component {
         mediaType={mediaType}
         title={title}
         caption={caption}
-        data={data}
+        appliedData={appliedData}
         dimension={dimension}
         autoplay={autoplay}
         playerSetAutoplay={playerSetAutoplay}
@@ -106,7 +155,10 @@ class Sidebar extends Component {
     const filtersPanel =
       <FiltersPanel
         key="filters-panel"
+        data={data}
+        dimension={dimension}
         filters={filters}
+        adjustFilters={adjustFilters}
         applyFilters={applyFilters}
       />
     const sharePanel =
@@ -114,8 +166,12 @@ class Sidebar extends Component {
     let menuItemsProps = [];
     let menuItems;
     let panels = [];
+    let sidebarPanels;
 
-    if (mode === MODE.WAIT_FILE || mode === MODE.CREATE) {
+    if (mode === MODE.WAIT_FILE) {
+      menuItemsProps = [editMenuItemProp];
+      panels = [editPanel];
+    } else if (mode === MODE.CREATE) {
       menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
       panels = [editPanel, filtersPanel];
     } else if (mode === MODE.EDIT) {
@@ -123,16 +179,21 @@ class Sidebar extends Component {
       panels = [editPanel, sharePanel];
     }
 
-    menuItems = this.renderMenuItems(menuItemsProps);
+    menuItems = this.renderMenuItems(menuItemsProps, selectedIdx);
+    sidebarPanels = this.renderSidebarPanels(panels, selectedIdx);
 
     return (
       <div className="sidebar-component fill bg-color-dark">
         <div className="menu bg-color-light-grey">
           {menuItems}
         </div>
-        <div className="panel-wrapper">
-          {panels[selectedIdx]}
-        </div>
+        <Scrollbar
+          universal
+        >
+          <div className="sidebar-panels-container">
+            {sidebarPanels}
+          </div>
+        </Scrollbar>
       </div>
     );
   }
