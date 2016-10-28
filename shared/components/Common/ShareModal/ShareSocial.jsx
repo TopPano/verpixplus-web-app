@@ -18,6 +18,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   isVideoCreated: PropTypes.bool.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   createVideo: PropTypes.func.isRequired,
@@ -38,6 +39,7 @@ class ShareSocial extends Component {
 
     // Bind "this" to member functions
     this.handleClickFacebookBtn = this.handleClickFacebookBtn.bind(this);
+    this.handleClickTwitterBtn = this.handleClickTwitterBtn.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -81,6 +83,21 @@ class ShareSocial extends Component {
     }
   }
 
+  // Share to Twitter
+  shareTwitter() {
+    const {
+      title,
+      mediaId
+    } = this.props;
+    const shareUrl = this.genShareUrl(mediaId);
+    const positionLeft = (screen.width / 2) - 400;
+    const positionTop = (screen.height / 2) - 200;
+    const spec =`height=400,width=800,top=${positionTop},left=${positionLeft}`;
+    const url = `https://twitter.com/share?text=${title}&url=${encodeURIComponent(shareUrl)}`;
+
+    window.open(url, 'name', spec);
+  }
+
   // Handler for clicking facebook sharing button
   handleClickFacebookBtn() {
     const { isWaitingFbShare } = this.state;
@@ -104,13 +121,17 @@ class ShareSocial extends Component {
     }
   }
 
+  // Handler for clicking Twitter sharing button
+  handleClickTwitterBtn() {
+    this.shareTwitter();
+  }
+
   // Render list of social buutons
   renderBtnsList(propsList) {
     return renderList(propsList, (props, idx) => {
       return (
         <IconButton
           key={idx}
-          className="share-social-btn btn-u btn-brd rounded btn-u-sea"
           {...props}
         />
       );
@@ -119,16 +140,17 @@ class ShareSocial extends Component {
 
   render() {
     const { isProcessing } = this.props;
-    const btnsListProps = [{
-      icon: 'twitter',
-      text: 'Twitter',
-      disabled: isProcessing
-    }];
-    const btnsList = this.renderBtnsList(btnsListProps);
-    const fbBtnClass = classNames({
+    const btnClass = classNames({
       'share-social-btn btn-u btn-brd rounded btn-u-sea': true,
       'disabled': isProcessing
     });
+    const btnsListProps = [{
+      icon: 'twitter',
+      text: 'Twitter',
+      className: btnClass,
+      handleClick: this.handleClickTwitterBtn
+    }];
+    const btnsList = this.renderBtnsList(btnsListProps);
 
     return (
       <div className="share-social-component">
@@ -138,7 +160,7 @@ class ShareSocial extends Component {
             appId={externalApiConfig.facebook.id}
             version={externalApiConfig.facebook.version}
             callback={this.handleClickFacebookBtn}
-            cssClass={fbBtnClass}
+            cssClass={btnClass}
             icon="fa-facebook"
             textButton="Facebook"
           />

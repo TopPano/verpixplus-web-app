@@ -10,6 +10,7 @@ import ShareModal from 'components/Common/ShareModal';
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   isVideoCreated: PropTypes.bool.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired
@@ -40,23 +41,9 @@ class ShareModalContainer extends Component {
   }
 
   render() {
-    const {
-      mediaId,
-      isVideoCreated,
-      isProcessing,
-      children
-    } = this.props;
-
     return (
-      <ShareModal
-        ref="modal"
-        mediaId={mediaId}
-        isVideoCreated={isVideoCreated}
-        isProcessing={isProcessing}
-        createVideo={this.createVideo}
-        notifyShareSuccess={this.notifyShareSuccess}
-      >
-        {children}
+      <ShareModal {...this.props}>
+        {this.props.children}
       </ShareModal>
     );
   }
