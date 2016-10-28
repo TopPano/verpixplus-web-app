@@ -17,13 +17,13 @@ export default function genShareContent(req, isEmbedPage, media) {
     image: `${clientConfig.staticUrl}${SITE_SHARE_IMAGE}`,
     imageWidth: SHARE_IMAGE_SIZE.LANDSCAPE.WIDTH,
     imageHeight: SHARE_IMAGE_SIZE.LANDSCAPE.HEIGHT,
-    title: SITE_CONTENT.SHARE.DEFAULT_CAPTION,
+    title: SITE_CONTENT.SHARE.DEFAULT_TITLE,
     description: SITE_CONTENT.SHARE.DEFAULT_DESCRIPTION,
     url: `${req.protocol}://${req.get('Host')}${req.url}`,
     robots: process.NODE_ENV === 'production' ? 'index,follow' : 'noindex,nofollow',
+    siteName: SITE_CONTENT.SITE_NAME,
     facebook: {
       id: externalApiConfig.facebook.id,
-      siteName: SITE_CONTENT.SITENAME
     }
   }
 
@@ -40,7 +40,7 @@ export default function genShareContent(req, isEmbedPage, media) {
     const defaultEmbedContent =
       isLivephoto ?
       EMBED_CONTENT.SHARE.LIVE_PHOTO :
-      EMBED_CONTENT.SHARE.PANORAMA;
+      EMBED_CONTENT.SHARE.PANO_PHOTO;
     const imageSize =
       isLivephoto && dimension.orientation === ORIENTATION.PORTRAIT ?
       SHARE_IMAGE_SIZE.PORTRAIT :
@@ -56,7 +56,7 @@ export default function genShareContent(req, isEmbedPage, media) {
       image: newImage ? newImage : shareContent.image,
       imageWidth: imageSize.WIDTH,
       imageHeight: imageSize.HEIGHT,
-      title: newTitle ? newTitle : defaultEmbedContent.DEFAULT_CAPTION,
+      title: newTitle ? newTitle : defaultEmbedContent.DEFAULT_TITLE,
       description: newDescription ? newDescription : defaultEmbedContent.DEFAULT_DESCRIPTION,
       video,
       sdk

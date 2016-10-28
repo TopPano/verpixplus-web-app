@@ -94,6 +94,7 @@ class GalleryItem extends Component {
           <div className="thumbnail-tools">
             <ShareModal
               mediaId={id}
+              title={title}
               isVideoCreated={Boolean(isVideoCreated)}
               isProcessing={isFetching}
             >

@@ -16,6 +16,7 @@ const CONTENT = COMMON_CONTENT.SHARE_MODAL;
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   isVideoCreated: PropTypes.bool.isRequired,
   isProcessing: PropTypes.bool,
   children: PropTypes.node.isRequired,
@@ -51,6 +52,7 @@ class ShareModal extends Component {
   render() {
     const {
       mediaId,
+      title,
       isVideoCreated,
       isProcessing,
       children,
@@ -70,6 +72,7 @@ class ShareModal extends Component {
       content:
         <ShareSocial
           mediaId={mediaId}
+          title={title}
           isVideoCreated={isVideoCreated}
           isProcessing={isProcessing}
           createVideo={createVideo}
