@@ -33,17 +33,25 @@
       }
     }
 
-    .creator {
+    .gallery-item-create, .gallery-item-progress {
       position: absolute;
       top: 0;
       left: 0;
       background-color: $color-white;
+    }
+
+    .gallery-item-create {
       text-decoration: none;
 
       i {
         font-size: 30px;
         color: $color-green;
       }
+    }
+
+    .gallery-item-progress {
+      padding-left: 15px;
+      padding-right: 15px;
     }
   }
 

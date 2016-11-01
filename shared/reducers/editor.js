@@ -25,10 +25,7 @@ import {
   GET_MEDIA_SUCCESS,
   GET_MEDIA_FAILURE,
   UPDATE_MEDIA_REQUEST,
-  UPDATE_MEDIA_FAILURE,
-  CREATE_MEDIA_REQUEST,
-  CREATE_MEDIA_SUCCESS,
-  CREATE_MEDIA_FAILURE
+  UPDATE_MEDIA_FAILURE
 } from 'actions/media';
 import {
   MODE,
@@ -117,7 +114,6 @@ export default function editor(state = DEFAULT_STATE, action) {
       });
     case CONVERT_REQUEST:
     case GET_MEDIA_REQUEST:
-    case CREATE_MEDIA_REQUEST:
     case UPDATE_MEDIA_REQUEST:
     case APPLY_FILTERS_REQUEST:
       return merge({}, state, {
@@ -170,11 +166,6 @@ export default function editor(state = DEFAULT_STATE, action) {
         lower: 0,
         upper: imgUrls.length
       });
-    case CREATE_MEDIA_SUCCESS:
-      return merge({}, state, {
-        mediaId: action.response.result.mediaId,
-        isProcessing: false
-      });
     case APPLY_FILTERS_SUCCESS:
       return merge({}, state, {
         isProcessing: false,
@@ -184,7 +175,6 @@ export default function editor(state = DEFAULT_STATE, action) {
       });
     case CONVERT_FAILURE:
     case GET_MEDIA_FAILURE:
-    case CREATE_MEDIA_FAILURE:
     case UPDATE_MEDIA_FAILURE:
     case APPLY_FILTERS_FAILURE:
       return merge({}, state, {

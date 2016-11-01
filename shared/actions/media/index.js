@@ -8,6 +8,10 @@ import { MEDIA_TYPE } from 'constants/common';
 import { NOTIFICATIONS } from 'constants/notifications';
 import concatImages from './concatImages';
 import { pushNotification } from '../notifications';
+import {
+  genRandomNum,
+  genUUID
+} from 'lib/utils';
 
 function handleError(dispatch, type, err) {
   dispatch({
@@ -124,12 +128,22 @@ export function loadUserMedia({ id, lastMediaId, params = {}, userSession = {} }
 
 
 export const CREATE_MEDIA_REQUEST = 'CREATE_MEDIA_REQUEST';
+export const CREATE_MEDIA_PROGRESS = 'CREATE_MEDIA_PROGRESS';
 export const CREATE_MEDIA_SUCCESS = 'CREATE_MEDIA_SUCCESS';
 export const CREATE_MEDIA_FAILURE = 'CREATE_MEDIA_FAILURE';
 
-function createMediaRequest() {
+function createMediaRequest(media) {
   return {
-    type: CREATE_MEDIA_REQUEST
+    type: CREATE_MEDIA_REQUEST,
+    media
+  };
+}
+
+function createMediaProgress(progressMediaId, progress) {
+  return {
+    type: CREATE_MEDIA_PROGRESS,
+    progressMediaId,
+    progress
   };
 }
 
@@ -140,13 +154,68 @@ function createMediaSuccess(response) {
   };
 }
 
+// Interval for asking creation status
+const MEDIA_POLLING_INTERVAL = 300;
+// maximun times for asking media creation status
+const MEDIA_RETRY_MAX_TIMES = 500;
+
+function pollingAskMediaStatus(dispatch, progressMediaId, mediaId, progress, retryTimes) {
+  api.media.getMedia(mediaId).then((res) => {
+    const { status } = res.result;
+
+    switch (status) {
+      case 'completed':
+      {
+        dispatch(createMediaProgress(progressMediaId, 1));
+        setTimeout(() => {
+          dispatch(createMediaSuccess(merge({}, res, { progressMediaId })));
+          dispatch(pushNotification(NOTIFICATIONS.POST_MEDIA_SUCCESS));
+        }, 500);
+        return;
+      }
+      case 'pending':
+        if (retryTimes < MEDIA_RETRY_MAX_TIMES) {
+          const addedProgress = genRandomNum(0.005, 0.02);
+          const newProgress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, newProgress));
+          setTimeout(() => {
+            pollingAskMediaStatus(dispatch, progressMediaId, mediaId, newProgress, retryTimes + 1);
+          }, MEDIA_POLLING_INTERVAL);
+        } else {
+          handleError(dispatch, CREATE_MEDIA_FAILURE, new Error('Timeout'));
+        }
+        return;
+      case 'failed':
+        handleError(dispatch, CREATE_MEDIA_FAILURE, new Error('Create media failed'));
+        return;
+      default:
+        handleError(dispatch, CREATE_MEDIA_FAILURE, new Error(`Unknown media status: ${status}`));
+        return;
+    }
+  }).catch((err) => {
+    handleError(dispatch, CREATE_MEDIA_FAILURE, err);
+  });
+}
+
 export function createMedia({ mediaType, title, caption, data, dimension, userSession = {} }) {
   return (dispatch) => {
+    dispatch(push('/'));
+
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
-      dispatch(createMediaRequest());
+      const progressMediaId = genUUID();
+      const concatMaxProgress = genRandomNum(0.4, 0.5);
+      let progress = 0;
+
+      dispatch(createMediaRequest({
+        progressMediaId
+      }));
 
       // TODO: dynamically choose thumbnail index
-      concatImages(data).then((concatImgs) => {
+      concatImages(data, (percent) => {
+        progress = percent * concatMaxProgress;
+        dispatch(createMediaProgress(progressMediaId, progress));
+      }).then((concatImgs) => {
         const formData = new FormData();
 
         // TODO: dynamically value for action and orientation
@@ -162,9 +231,9 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
 
         return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
-        dispatch(createMediaSuccess(res));
-        dispatch(push('/'));
-        dispatch(pushNotification(NOTIFICATIONS.POST_MEDIA_SUCCESS));
+        progress = progress + genRandomNum(0.03, 0.05);
+        dispatch(createMediaProgress(progressMediaId, progress));
+        pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
       }).catch((err) => {
         handleError(dispatch, CREATE_MEDIA_FAILURE, err);
       });
@@ -196,9 +265,9 @@ function createVideoSuccess(response) {
 }
 
 // Interval for asking video creation status
-const RETRY_INTERVAL = 1000;
+const VIDEO_POLLING_INTERVAL = 500;
 // maximun times for asking video creation status
-const RETRY_MAX_TIMES = 60;
+const VIDEO_RETRY_MAX_TIMES = 60;
 
 function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
   api.media.getVideo(mediaId).then((res) => {
@@ -211,10 +280,10 @@ function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
         return;
       }
       case 'pending':
-        if (retryTimes < RETRY_MAX_TIMES) {
+        if (retryTimes < VIDEO_RETRY_MAX_TIMES) {
           setTimeout(() => {
             pollingAskVideoStatus(dispatch, mediaId, retryTimes + 1);
-          }, RETRY_INTERVAL);
+          }, VIDEO_POLLING_INTERVAL);
         } else {
           handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Timeout'));
         }

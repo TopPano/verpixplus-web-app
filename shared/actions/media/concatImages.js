@@ -3,7 +3,10 @@ import blobUtil from 'blob-util';
 import randomstring from 'randomstring';
 import base64 from 'base64-js';
 
-import { Promise } from 'lib/utils';
+import {
+  execute,
+  Promise
+} from 'lib/utils';
 
 const PREFIX = 'data:image/jpeg;base64,';
 
@@ -30,7 +33,7 @@ function concatUint8Array(a, b) {
 
 // Concatnate a list of images to an image sequence,
 // each image is separated by a random string.
-export default function concatImages(imgs, thumbnailIdx = 0) {
+export default function concatImages(imgs, handleProgress, thumbnailIdx = 0) {
   return new Promise((resolve, reject) => {
     // Separator is the boundary of each image in image
     const separator = randomstring.generate(10);
@@ -50,6 +53,8 @@ export default function concatImages(imgs, thumbnailIdx = 0) {
           thumbnail = jpegImg;
         }
 
+        execute(handleProgress, idx / (imgs.length + 20));
+
         return concatUint8Array(pre, jpegImgBytes);
       }, new Uint8Array(0))
     );
@@ -61,13 +66,18 @@ export default function concatImages(imgs, thumbnailIdx = 0) {
         reject(err);
       }
 
+      execute(handleProgress, (imgs.length + 5) / (imgs.length + 10));
+
       // Convert zip file from array buffer to blob, which can be used by multipart
       blobUtil.arrayBufferToBlob(new Uint8Array(imgZipBuf).buffer, 'application/zip').then((imgZipBlob) => {
         zip = imgZipBlob;
 
+        execute(handleProgress, (imgs.length + 10) / (imgs.length + 10));
+
         // Convert thumbnail from array buffer to blob.
         return blobUtil.arrayBufferToBlob(thumbnail.buffer, 'image/jpeg');
       }).then((thumbnailBlob) => {
+        execute(handleProgress, 1);
         resolve({
           thumbnail: thumbnailBlob,
           zip,

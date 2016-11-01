@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 import assign from 'lodash/assign';
+import union from 'lodash/union';
 import {
   LOAD_USER_SUMMARY_REQUEST,
   LOAD_USER_SUMMARY_SUCCESS,
@@ -12,6 +13,11 @@ import {
   LOAD_USER_MEDIA_REQUEST,
   LOAD_USER_MEDIA_SUCCESS,
   LOAD_USER_MEDIA_FAILURE,
+  CREATE_MEDIA_REQUEST,
+  CREATE_MEDIA_PROGRESS,
+  CREATE_MEDIA_SUCCESS,
+  // TODO: Handle failure for media creation
+  // CREATE_MEDIA_FAILURE,
   CREATE_VIDEO_REQUEST,
   CREATE_VIDEO_SUCCESS,
   CREATE_VIDEO_FAILURE,
@@ -32,11 +38,17 @@ const DEFAULT_STATE = {
   profilePhotoUrl: undefined,
   numOfMedia: 0,
   autobiography: undefined,
+  // List for completed media
   media: {
     objs: {},
     ids: [],
     hasNext: false,
     lastMediaId: ''
+  },
+  // List for progressing media
+  progressMedia: {
+    objs: {},
+    ids: []
   }
 };
 
@@ -49,12 +61,38 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isFetching: true
       });
+    case CREATE_MEDIA_REQUEST:
+    {
+      const { progressMediaId } = action.media;
+      const newIds = union([progressMediaId], state.progressMedia.ids);
+
+      return merge({}, state, {
+        progressMedia: {
+          objs: {
+            [progressMediaId]: {
+              progress: 0
+            }
+          },
+          ids: newIds
+        }
+      });
+    }
     case UPDATE_PROFILE_PICTURE_REQUEST:
       return merge({}, state, {
         isProcessing: {
           updateProfilePicture: true
         }
       });
+    case CREATE_MEDIA_PROGRESS:
+      return merge({}, state, {
+        progressMedia: {
+          objs: {
+            [action.progressMediaId]: {
+              progress: action.progress
+            }
+          }
+        }
+      })
     case LOAD_USER_SUMMARY_SUCCESS:
     {
       const { sid, username, profilePhotoUrl, media, autobiography } = action.response.profile;
@@ -89,6 +127,29 @@ export default function workspace(state=DEFAULT_STATE, action) {
           lastMediaId
         }
       });
+    }
+    case CREATE_MEDIA_SUCCESS:
+    {
+      const {
+        progressMediaId,
+        result
+      } = action.response;
+      const mediaId = result.sid;
+      const newState = merge({}, state, {
+        media: {
+          objs: {
+            [mediaId]: result
+          },
+          ids: union([mediaId], state.media.ids)
+        },
+        numOfMedia: state.numOfMedia +1
+      });
+
+      // Delete from progress media list
+      delete newState.progressMedia.objs[progressMediaId];
+      newState.progressMedia.ids = newState.progressMedia.ids.filter((id) => { return id !== progressMediaId; });
+
+      return newState;
     }
     case CREATE_VIDEO_SUCCESS:
     {

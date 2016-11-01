@@ -43,6 +43,8 @@ class WorkSpace extends Component {
           updateProfilePicture={updateProfilePicture}
         />
         <Gallery
+          progressMedia={workspace.progressMedia.objs}
+          progressMediaIds={workspace.progressMedia.ids}
           media={workspace.media.objs}
           mediaIds={workspace.media.ids}
           hasNext={workspace.media.hasNext}

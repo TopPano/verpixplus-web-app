@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 import CONTENT from 'content/workspace/en-us.json';
 import IconButton from 'components/Common/IconButton';
 import Loading from 'components/Common/Loading';
@@ -12,6 +13,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  progresMedia: PropTypes.object.isRequired,
+  progressMediaIds: PropTypes.array.isRequired,
   media: PropTypes.object.isRequired,
   mediaIds: PropTypes.array.isRequired,
   hasNext: PropTypes.bool.isRequired,
@@ -29,26 +32,45 @@ class Gallery extends Component {
   }
 
   // Render list of gallery items
-  renderItems(media, mediaIds, isFetching, deleteMedia) {
-    const items = mediaIds.map((id) => (
+  renderItems(progressMedia, progressMediaIds, media, mediaIds, isFetching, deleteMedia) {
+    let items = new Array();
+    // Item for creation
+    const createItem = (
+      <GalleryItem
+        key="item-create"
+        id=""
+        type={GALLERY_ITEM_TYPE.CREATE}
+        mediaObj={{}}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    );
+    // Progressing Items
+    const progressItems = progressMediaIds.map((id) => (
       <GalleryItem
         key={id}
         id={id}
+        type={GALLERY_ITEM_TYPE.PROGRESS}
+        mediaObj={progressMedia[id]}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    ));
+    // Completed items
+    const completedItems = mediaIds.map((id) => (
+      <GalleryItem
+        key={id}
+        id={id}
+        type={GALLERY_ITEM_TYPE.COMPLETED}
         mediaObj={media[id]}
         isFetching={isFetching}
         deleteMedia={deleteMedia}
       />
     ));
-    items.unshift(
-      <GalleryItem
-        key="item-create"
-        id=""
-        mediaObj={{}}
-        isFetching={isFetching}
-        isCreator={true}
-        deleteMedia={deleteMedia}
-      />
-    );
+
+    items.push(createItem);
+    items = items.concat(progressItems);
+    items = items.concat(completedItems);
 
     return items;
   }
@@ -57,17 +79,20 @@ class Gallery extends Component {
     const {
       media,
       mediaIds,
+      progressMedia,
+      progressMediaIds,
       hasNext,
       isFetching,
       deleteMedia,
       loadMore
     } = this.props;
-    const remainder = (mediaIds.length + 1) % 4;
+    const numOfItems = progressMediaIds.length + mediaIds.length + 1;
+    const remainder = numOfItems % 4;
     const renderAll = !hasNext || (remainder === 0);
+    const slicedMediaIds =
+      renderAll ? mediaIds : mediaIds.slice(0, mediaIds.length - remainder);
     const items =
-      renderAll ?
-      this.renderItems(media, mediaIds, isFetching, deleteMedia) :
-      this.renderItems(media, mediaIds.slice(0, mediaIds.length - remainder), isFetching, deleteMedia);
+      this.renderItems(progressMedia, progressMediaIds, media, slicedMediaIds, isFetching, deleteMedia);
 
     return (
       <div className="gallery-component container content">
