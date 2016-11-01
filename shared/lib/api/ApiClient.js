@@ -76,10 +76,11 @@ export default class ApiClient {
     }
 
     if (method !== 'get' && method !== 'head') {
-      if (contentType === 'multipart/form-data') {
-        init.body = body;
-      } else {
+      if (contentType === 'application/json') {
         init.body = JSON.stringify(body);
+        init.headers['Content-Type'] = contentType;
+      } else {
+        init.body = body;
       }
     }
 

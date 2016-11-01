@@ -1,0 +1,25 @@
+{
+  "DELETE": {
+    "TITLE": "Delete Media",
+    "DESC": "This media will be deleted and you won't be able to find it anymore.",
+    "CLOSE_BTN": "Cancel",
+    "CONFIRM_BTN": "Delete"
+  },
+  "MORE": "more",
+  "OVERALL": {
+    "MEDIA": "Media"
+  },
+  "EDIT_PROFILE": {
+    "TITLE": "Edit Profile",
+    "CONTENT": {
+      "PROFILE": "Profile",
+      "PASSWORD": "Password"
+    },
+    "USERNAME": "Username",
+    "EMAIL": "Email",
+    "PWD": "Password",
+    "CONFIRM_PWD": "Confirm Password",
+    "AUTOBIOGRAPHY": "Autobiography",
+    "CONFIRM_BTN": "Save"
+  }
+}

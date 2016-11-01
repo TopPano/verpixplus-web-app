@@ -1,16 +1,17 @@
 'use strict';
 
 import React, { Component } from 'react';
-
-const REMAINED_SCROLL_OFFSET = 100;
+import { findDOMNode } from 'react-dom';
+import scrollMonitor from 'scrollmonitor';
 
 export default class ScrollablePageContainer extends Component {
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    this.watcher = scrollMonitor.create(findDOMNode(this));
+    this.watcher.partiallyExitViewport(this.handlePartiallyExitViewport);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    this.watcher.destroy();
   }
 
   hasMoreContent() {
@@ -21,23 +22,24 @@ export default class ScrollablePageContainer extends Component {
     return true;
   }
 
+  isLoadMoreEnabled() {
+    return true;
+  }
+
   requestMoreContent() {
   }
 
   loadMoreContent = () => {
-    if(this.hasMoreContent() && !this.isFetchingContent()) {
+    if(this.hasMoreContent() && !this.isFetchingContent() && this.isLoadMoreEnabled()) {
       this.requestMoreContent();
     }
   }
 
-  handleScroll = () => {
+  handlePartiallyExitViewport = () => {
     // Determine: need to read more content or not.
-    if(this.hasMoreContent() && !this.isFetchingContent()) {
-      var offset = window.scrollY + window.innerHeight;
-      var height = document.documentElement.offsetHeight - REMAINED_SCROLL_OFFSET;
-
-      // Scroll to the bottom?
-      if(offset >= height) {
+    if(this.hasMoreContent() && !this.isFetchingContent() && this.isLoadMoreEnabled()) {
+      // Scroll to bottom ?
+      if(this.watcher.isAboveViewport) {
         this.requestMoreContent();
       }
     }

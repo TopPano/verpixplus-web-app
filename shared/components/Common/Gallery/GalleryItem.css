@@ -1,0 +1,50 @@
+@import 'Variables';
+
+.gallery-item-component {
+  padding-left: 10px;
+  padding-right: 10px;
+
+  .thumbnails {
+    position: relative;
+    background-color: $color-white;
+    box-shadow: 0 0 8px #DDD;
+    padding: 10px 15px;
+    &:hover {
+      box-shadow: 0 0 8px #AAA;
+    }
+
+    .caption {
+      h3 {
+        margin: 0;
+      }
+    }
+
+    .thumbnail-tools {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+
+      .fa {
+        margin: 5px;
+        font-size: 20px;
+        &:hover {
+          color: $color-green;
+        }
+      }
+    }
+
+    .creator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: $color-white;
+      text-decoration: none;
+
+      i {
+        font-size: 30px;
+        color: $color-green;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,11 @@
+.multi-tabs-content-component {
+  dt {
+    strong {
+      float: left;
+    }
+  }
+
+  hr {
+    margin: 15px 0;
+  }
+}

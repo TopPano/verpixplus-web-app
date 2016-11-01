@@ -12,5 +12,9 @@
     "TERMS_OF_USE": "Terms of Use",
     "PRIVACY_POLICY": "Privacy Policy",
     "TWITTER": "Follow @Verpix"
+  },
+  "MODAL": {
+    "DEFAULT_CLOSE_BTN": "Close",
+    "DEFAULT_CONFIRM_BTN": "Confirm"
   }
 }
