@@ -42,7 +42,11 @@ class ShareModalContainer extends Component {
 
   render() {
     return (
-      <ShareModal {...this.props}>
+      <ShareModal
+        {...this.props}
+        createVideo={this.createVideo}
+        notifyShareSuccess={this.notifyShareSuccess}
+      >
         {this.props.children}
       </ShareModal>
     );
