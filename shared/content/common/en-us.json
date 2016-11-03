@@ -12,7 +12,8 @@
       "INSTALL": "SDK Installation",
       "USAGE": "Usage",
       "COPIED": "copied",
-      "PREVIEW": "Preview"
+      "PREVIEW": "Preview",
+      "CODE": "Code"
     }
   },
   "DELETE_MODAL": {

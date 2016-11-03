@@ -1,3 +1,5 @@
+@import 'Variables.css';
+
 .share-embed-component {
   .inputs-wrapper {
     * {
@@ -14,5 +16,18 @@
 
   .preview-btn-wrapper {
     margin-top: 15px;
+  }
+
+  .preview-player {
+    max-width: 100%;
+    display: none;
+    &.active {
+      display: flex;
+      border: 1px dashed $color-grey;
+    }
+
+    .livephoto-component {
+      max-width: 100%;
+    }
   }
 }
