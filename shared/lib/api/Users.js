@@ -1,10 +1,10 @@
 import Base from './Base';
 
 export default class UsersAPI extends Base {
-  getProfile(id, authToken) {
+  getProfile(userId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.get({
-      url: `users/${id}/profile`,
+      url: `users/${userId}/profile`,
       requireAuth: true
     });
   }
@@ -19,5 +19,17 @@ export default class UsersAPI extends Base {
       payload,
       requireAuth: true
     })
+  }
+
+  putProfile(userId, payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.put({
+      url: `users/${userId}`,
+      payload,
+      requireAuth: true
+    });
   }
 }

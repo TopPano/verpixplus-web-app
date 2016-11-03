@@ -12,9 +12,19 @@ if (process.env.BROWSER) {
   require('./ProfileEditor.css');
 }
 
+const TAB_IDX = {
+  PROFILE: 0,
+  PASSWORD: 1
+};
+
 const propTypes = {
+  userId: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
+  autobiography: PropTypes.string.isRequired,
+  isProcessing: PropTypes.object.isRequired,
+  updateProfile: PropTypes.func.isRequired,
+  editAutobiography: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -26,6 +36,8 @@ class ProfileEditor extends Component {
 
     // Bind "this" to member functions
     this.openModal = this.openModal.bind(this);
+    this.handleChangeAutobiography = this.handleChangeAutobiography.bind(this);
+    this.handleClickConfirmBtn = this.handleClickConfirmBtn.bind(this);
   }
 
   // handle for clicking button
@@ -33,8 +45,33 @@ class ProfileEditor extends Component {
     this.refs.modal.open();
   }
 
+  // Handler for changing autobiography
+  handleChangeAutobiography(e) {
+    this.props.editAutobiography(e.target.value);
+  }
+
+  // Handler for clicking confirm button
+  handleClickConfirmBtn() {
+    const activeIdx = this.refs.content.getActiveIndex();
+
+    if (activeIdx === TAB_IDX.PROFILE) {
+      const {
+        userId,
+        autobiography,
+        updateProfile
+      } = this.props;
+
+      updateProfile({
+        userId,
+        autobiography
+      });
+    } else if (activeIdx === TAB_IDX.PASSWORD) {
+      // TODO: Handle changing password
+    }
+  }
+
   // Render content for editting profile
-  renderProfileContent(username, email) {
+  renderProfileContent(username, email, autobiography) {
     return (
       <dl className="profile-content dl-horizontal">
         <dt><strong>{CONTENT.EDIT_PROFILE.USERNAME}</strong></dt>
@@ -48,6 +85,8 @@ class ProfileEditor extends Component {
           <textarea
             className="form-control"
             rows="6"
+            value={autobiography}
+            onChange={this.handleChangeAutobiography}
           />
         </dd>
       </dl>
@@ -75,7 +114,9 @@ class ProfileEditor extends Component {
   render() {
     const {
       username,
-      email
+      email,
+      autobiography,
+      isProcessing
     } = this.props;
     const modalProps = {
       ref: 'modal',
@@ -83,10 +124,12 @@ class ProfileEditor extends Component {
       confirmBtn: {
         icon: 'floppy-o',
         className: 'btn btn-u pull-right rounded',
-        text: CONTENT.EDIT_PROFILE.CONFIRM_BTN
-      }
+        text: CONTENT.EDIT_PROFILE.CONFIRM_BTN,
+        onClick: this.handleClickConfirmBtn
+      },
+      isProcessing: isProcessing.updateProfile
     };
-    const profileContent = this.renderProfileContent(username, email);
+    const profileContent = this.renderProfileContent(username, email, autobiography);
     const passwordContent = this.renderPasswordContent();
     const tabsContent = [{
       tab: CONTENT.EDIT_PROFILE.CONTENT.PROFILE,
@@ -105,7 +148,10 @@ class ProfileEditor extends Component {
           handleClick={this.openModal}
         />
         <Modal {...modalProps}>
-          <MultiTabsContent tabsContent={tabsContent} />
+          <MultiTabsContent
+            ref="content"
+            tabsContent={tabsContent}
+          />
         </Modal>
       </div>
     );

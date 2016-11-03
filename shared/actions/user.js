@@ -260,13 +260,13 @@ export const UPDATE_PROFILE_PICTURE_FAILURE = 'UPDATE_PROFILE_PICTURE_FAILURE';
 
 const DATA_URL_PREFIX = 'data:image/jpeg;base64,';
 
-function updateProfileRequest() {
+function updateProfilePictureRequest() {
   return {
     type: UPDATE_PROFILE_PICTURE_REQUEST
   };
 }
 
-function updateProfileSuccess(response) {
+function updateProfilePictureSuccess(response) {
   return {
     type: UPDATE_PROFILE_PICTURE_SUCCESS,
     response
@@ -277,7 +277,7 @@ export function updateProfilePicture({ userId, profilePicture, userSession = {} 
   return (dispatch) => {
     let profilePhotoUrl;
 
-    dispatch(updateProfileRequest());
+    dispatch(updateProfilePictureRequest());
 
     imageBlobToDataUrl(profilePicture, PROFILE_PICTURE_SIZE, true).then((imgDataUrl) => {
       const payload = {
@@ -287,10 +287,51 @@ export function updateProfilePicture({ userId, profilePicture, userSession = {} 
 
       return api.users.postProfilePicture(userId, payload, userSession.accessToken);
     }).then((res) => {
-      dispatch(updateProfileSuccess(merge({}, res, { profilePhotoUrl })));
+      dispatch(updateProfilePictureSuccess(merge({}, res, { profilePhotoUrl })));
       dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_PICTURE_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, UPDATE_PROFILE_PICTURE_FAILURE, err);
+    });
+  };
+}
+
+export const EDIT_AUTOBIOGRAPHY = 'EDIT_AUTOBIOGRAPHY';
+
+export function editAutobiography(autobiography) {
+  return (dispatch) => {
+    dispatch({
+      type: EDIT_AUTOBIOGRAPHY,
+      autobiography
+    })
+  };
+}
+
+export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
+
+function updateProfileRequest() {
+  return {
+    type: UPDATE_PROFILE_REQUEST
+  }
+}
+
+function updateProfileSuccess(response) {
+  return {
+    type: UPDATE_PROFILE_SUCCESS,
+    response
+  };
+}
+
+export function updateProfile({ userId, autobiography, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(updateProfileRequest());
+
+    return api.users.putProfile(userId, { autobiography },userSession.accessToken).then((res) => {
+      dispatch(updateProfileSuccess(res));
+      dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, UPDATE_PROFILE_FAILURE, err);
     });
   };
 }

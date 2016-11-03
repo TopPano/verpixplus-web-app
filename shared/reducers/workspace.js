@@ -7,7 +7,11 @@ import {
   LOAD_USER_SUMMARY_FAILURE,
   UPDATE_PROFILE_PICTURE_REQUEST,
   UPDATE_PROFILE_PICTURE_SUCCESS,
-  UPDATE_PROFILE_PICTURE_FAILURE
+  UPDATE_PROFILE_PICTURE_FAILURE,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_SUCCESS,
+  UPDATE_PROFILE_FAILURE,
+  EDIT_AUTOBIOGRAPHY
 } from 'actions/user';
 import {
   LOAD_USER_MEDIA_REQUEST,
@@ -31,7 +35,8 @@ const DEFAULT_STATE = {
   isFetching: false,
   // TODO: Add more targets for isProcessing
   isProcessing: {
-    updateProfilePicture: false
+    updateProfilePicture: false,
+    updateProfile: false
   },
   userId: undefined,
   username: undefined,
@@ -81,6 +86,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: {
           updateProfilePicture: true
+        }
+      });
+    case UPDATE_PROFILE_REQUEST:
+      return merge({}, state, {
+        isProcessing: {
+          updateProfile: true
         }
       });
     case CREATE_MEDIA_PROGRESS:
@@ -174,6 +185,13 @@ export default function workspace(state=DEFAULT_STATE, action) {
         }
       });
     }
+    case UPDATE_PROFILE_SUCCESS:
+      return merge({}, state, {
+        autobiography: action.response.autobiography,
+        isProcessing: {
+          updateProfile: false
+        }
+      });
     case DELETE_MEDIA_SUCCESS:
     {
       const { mediaId } = action.response;
@@ -190,12 +208,22 @@ export default function workspace(state=DEFAULT_STATE, action) {
       }
       return newState;
     }
+    case EDIT_AUTOBIOGRAPHY:
+      return merge({}, state, {
+        autobiography: action.autobiography
+      })
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_MEDIA_FAILURE:
     case DELETE_MEDIA_FAILURE:
     case CREATE_VIDEO_FAILURE:
       return merge({}, state, {
         isFetching: false
+      });
+    case UPDATE_PROFILE_FAILURE:
+      return merge({}, state, {
+        isProcessing: {
+          updateProfile: false
+        }
       });
     case UPDATE_PROFILE_PICTURE_FAILURE:
       return merge({}, state, {
