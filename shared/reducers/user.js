@@ -9,6 +9,9 @@ import {
   LOGIN_USER_FAILURE,
   FACEBOOK_TOKEN_LOGIN_SUCCESS,
   CLEAR_USER_ERR_MSG,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS
 } from '../actions/user';
@@ -64,6 +67,7 @@ export default function user(state=DEFAULT_STATE, action) {
     case REGISTER_USER_REQUEST:
     case LOGIN_USER_REQUEST:
     case LOGOUT_USER_REQUEST:
+    case RESET_PASSWORD_REQUEST:
       return merge({}, state, {
         isFetching: true,
         isAuthenticated: false
@@ -99,8 +103,13 @@ export default function user(state=DEFAULT_STATE, action) {
         created: undefined,
         errMsg: ''
       });
+    case RESET_PASSWORD_SUCCESS:
+      return merge({}, state, {
+        isFetching: false
+      });
     case REGISTER_USER_FAILURE:
     case LOGIN_USER_FAILURE:
+    case RESET_PASSWORD_FAILURE:
       return merge({}, state, {
         isFetching: false,
         isAuthenticated: false,

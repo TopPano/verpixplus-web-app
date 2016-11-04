@@ -17,9 +17,6 @@ function handleError(dispatch, type, err) {
     type,
     err
   });
-  if (err.status === 401) {
-    dispatch(push('/'));
-  }
 }
 
 function clearMsg(type) {
@@ -373,6 +370,35 @@ export function changePassword({ userId, oldPassword, newPassword, userSession =
       dispatch(pushNotification(NOTIFICATIONS.CHANGE_PASSWORD_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, CHANGE_PASSWORD_FAILURE, err);
+    });
+  };
+}
+
+export const RESET_PASSWORD_REQUEST = 'RESET_PASSWORD_REQUEST';
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
+export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE';
+
+function resetPasswordRequest() {
+  return {
+    type: RESET_PASSWORD_REQUEST
+  }
+}
+
+function resetPasswordSuccess() {
+  return {
+    type: RESET_PASSWORD_SUCCESS
+  };
+}
+
+export function resetPassword({ email, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(resetPasswordRequest());
+
+    return api.users.resetPassword({ email }, userSession.accessToken).then(() => {
+      dispatch(resetPasswordSuccess());
+      dispatch(push('/pwd/reset/sent'));
+    }).catch((err) => {
+      handleError(dispatch, RESET_PASSWORD_FAILURE, err);
     });
   };
 }

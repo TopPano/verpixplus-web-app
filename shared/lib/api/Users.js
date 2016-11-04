@@ -33,6 +33,18 @@ export default class UsersAPI extends Base {
     })
   }
 
+  resetPassword(payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.post({
+      url: 'users/requestResetPassword',
+      payload,
+      requireAuth: true
+    });
+  }
+
   putProfile(userId, payload, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
