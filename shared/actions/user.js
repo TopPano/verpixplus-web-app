@@ -22,6 +22,18 @@ function handleError(dispatch, type, err) {
   }
 }
 
+function clearMsg(type) {
+  return (dispatch) => {
+    dispatch({
+      type
+    });
+  }
+}
+
+export const CLEAR_ERR_MSG_CHANGE_PASSWORD = 'CLEAR_ERR_MSG_CHANGE_PASSWORD';
+
+export const clearErrMsgChangePassword = clearMsg.bind(this, CLEAR_ERR_MSG_CHANGE_PASSWORD);
+
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
 
@@ -327,11 +339,40 @@ export function updateProfile({ userId, autobiography, userSession = {} }) {
   return (dispatch) => {
     dispatch(updateProfileRequest());
 
-    return api.users.putProfile(userId, { autobiography },userSession.accessToken).then((res) => {
+    return api.users.putProfile(userId, { autobiography }, userSession.accessToken).then((res) => {
       dispatch(updateProfileSuccess(res));
       dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, UPDATE_PROFILE_FAILURE, err);
+    });
+  };
+}
+
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST';
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
+
+function changePasswordRequest() {
+  return {
+    type: CHANGE_PASSWORD_REQUEST
+  }
+}
+
+function changePasswordSuccess() {
+  return {
+    type: CHANGE_PASSWORD_SUCCESS
+  };
+}
+
+export function changePassword({ userId, oldPassword, newPassword, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(changePasswordRequest());
+
+    return api.users.postPassword(userId, { oldPassword, newPassword }, userSession.accessToken).then(() => {
+      dispatch(changePasswordSuccess());
+      dispatch(pushNotification(NOTIFICATIONS.CHANGE_PASSWORD_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, CHANGE_PASSWORD_FAILURE, err);
     });
   };
 }

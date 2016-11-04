@@ -16,7 +16,9 @@ const propTypes = {
   loadMore: PropTypes.func.isRequired,
   updateProfilePicture: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
-  editAutobiography: PropTypes.func.isRequired
+  editAutobiography: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
+  clearErrMsgChangePassword: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -31,7 +33,9 @@ class WorkSpace extends Component {
       loadMore,
       updateProfilePicture,
       updateProfile,
-      editAutobiography
+      editAutobiography,
+      changePassword,
+      clearErrMsgChangePassword
     } = this.props;
 
     return (
@@ -44,9 +48,12 @@ class WorkSpace extends Component {
           autobiography={workspace.autobiography}
           isProcessing={workspace.isProcessing}
           numOfMedia={workspace.numOfMedia}
+          errMsgs={workspace.errMsgs}
           updateProfilePicture={updateProfilePicture}
           updateProfile={updateProfile}
           editAutobiography={editAutobiography}
+          changePassword={changePassword}
+          clearErrMsgChangePassword={clearErrMsgChangePassword}
         />
         <Gallery
           progressMedia={workspace.progressMedia.objs}

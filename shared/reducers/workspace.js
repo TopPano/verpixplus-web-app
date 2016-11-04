@@ -11,7 +11,11 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
-  EDIT_AUTOBIOGRAPHY
+  CHANGE_PASSWORD_REQUEST,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAILURE,
+  EDIT_AUTOBIOGRAPHY,
+  CLEAR_ERR_MSG_CHANGE_PASSWORD
 } from 'actions/user';
 import {
   LOAD_USER_MEDIA_REQUEST,
@@ -36,7 +40,8 @@ const DEFAULT_STATE = {
   // TODO: Add more targets for isProcessing
   isProcessing: {
     updateProfilePicture: false,
-    updateProfile: false
+    updateProfile: false,
+    changePassword: false
   },
   userId: undefined,
   username: undefined,
@@ -54,6 +59,10 @@ const DEFAULT_STATE = {
   progressMedia: {
     objs: {},
     ids: []
+  },
+  // Error messages
+  errMsgs: {
+    changePassword: ''
   }
 };
 
@@ -92,6 +101,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: {
           updateProfile: true
+        }
+      });
+    case CHANGE_PASSWORD_REQUEST:
+      return merge({}, state, {
+        isProcessing: {
+          changePassword: true
         }
       });
     case CREATE_MEDIA_PROGRESS:
@@ -208,6 +223,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
       }
       return newState;
     }
+    case CHANGE_PASSWORD_SUCCESS:
+      return merge({}, state, {
+        isProcessing: {
+          changePassword: false
+        }
+      });
     case EDIT_AUTOBIOGRAPHY:
       return merge({}, state, {
         autobiography: action.autobiography
@@ -219,16 +240,31 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isFetching: false
       });
+    case UPDATE_PROFILE_PICTURE_FAILURE:
+      return merge({}, state, {
+        isProcessing: {
+          updateProfilePicture: false
+        }
+      });
     case UPDATE_PROFILE_FAILURE:
       return merge({}, state, {
         isProcessing: {
           updateProfile: false
         }
       });
-    case UPDATE_PROFILE_PICTURE_FAILURE:
+    case CHANGE_PASSWORD_FAILURE:
       return merge({}, state, {
+        errMsgs: {
+          changePassword: action.err.message
+        },
         isProcessing: {
-          updateProfilePicture: false
+          changePassword: false
+        }
+      });
+    case CLEAR_ERR_MSG_CHANGE_PASSWORD:
+      return merge({}, state, {
+        errMsgs: {
+          changePassword: ''
         }
       });
     default:

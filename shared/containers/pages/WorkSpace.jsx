@@ -8,7 +8,9 @@ import {
   loadUserSummary,
   updateProfilePicture,
   updateProfile,
-  editAutobiography
+  editAutobiography,
+  changePassword,
+  clearErrMsgChangePassword
 } from 'actions/user';
 import { loadUserMedia, deleteMedia } from 'actions/media';
 import ScrollablePageContainer from './Scrollable';
@@ -37,6 +39,8 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.updateProfilePicture = this.updateProfilePicture.bind(this);
     this.updateProfile = this.updateProfile.bind(this);
     this.editAutobiography = this.editAutobiography.bind(this);
+    this.changePassword = this.changePassword.bind(this);
+    this.clearErrMsgChangePassword = this.clearErrMsgChangePassword.bind(this);
   }
 
   // Overide parent member function
@@ -108,6 +112,18 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.props.dispatch(editAutobiography(autobiography));
   }
 
+  // Wrapper function for dispatching changePassword,
+  // which changes the password of user
+  changePassword(params) {
+    this.props.dispatch(changePassword(params));
+  }
+
+  // Wrapper function for dispatching clearErrMsgChangePassword,
+  // which clears the error message when user changes password.
+  clearErrMsgChangePassword() {
+    this.props.dispatch(clearErrMsgChangePassword());
+  }
+
   render() {
     const {
       user,
@@ -123,6 +139,8 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
         updateProfile={this.updateProfile}
         updateProfilePicture={this.updateProfilePicture}
         editAutobiography={this.editAutobiography}
+        changePassword={this.changePassword}
+        clearErrMsgChangePassword={this.clearErrMsgChangePassword}
       />
     );
   }

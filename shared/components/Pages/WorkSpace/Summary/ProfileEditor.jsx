@@ -1,12 +1,19 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import isEmpty from 'is-empty';
 
 import CONTENT from 'content/workspace/en-us.json';
 import IconButton from 'components/Common/IconButton';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import Modal from 'components/Common/Modal';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
+import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
+
+const {
+  EDIT_PROFILE,
+  ERR_MSG
+} = CONTENT;
 
 if (process.env.BROWSER) {
   require('./ProfileEditor.css');
@@ -23,8 +30,11 @@ const propTypes = {
   email: PropTypes.string.isRequired,
   autobiography: PropTypes.string.isRequired,
   isProcessing: PropTypes.object.isRequired,
+  errMsgs: PropTypes.object.isRequired,
   updateProfile: PropTypes.func.isRequired,
-  editAutobiography: PropTypes.func.isRequired
+  editAutobiography: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
+  clearErrMsgChangePassword: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -38,6 +48,63 @@ class ProfileEditor extends Component {
     this.openModal = this.openModal.bind(this);
     this.handleChangeAutobiography = this.handleChangeAutobiography.bind(this);
     this.handleClickConfirmBtn = this.handleClickConfirmBtn.bind(this);
+  }
+
+  // Update user profile
+  updateProfile() {
+    const {
+      userId,
+      autobiography,
+      updateProfile
+    } = this.props;
+
+    updateProfile({
+      userId,
+      autobiography
+    });
+  }
+
+  // Change user password
+  changePassword() {
+    this.refs.pwdErr.clear();
+
+    const {
+      userId,
+      changePassword
+    } = this.props;
+    const oldPwd = this.refs.oldPwd;
+    const newPwd = this.refs.newPwd;
+    const confirmNewPwd = this.refs.confirmNewPwd;
+    const oldPwdVal = oldPwd.getValue();
+    const newPwdVal = newPwd.getValue();
+    const confirmNewPwdVal = confirmNewPwd.getValue();
+
+    // Check old password is empty or not
+    if (isEmpty(oldPwdVal)) {
+      oldPwd.err(ERR_MSG.OLD_PWD.EMPTY);
+      return;
+    }
+    // Check new password is empty or not
+    if (isEmpty(newPwdVal)) {
+      newPwd.err(ERR_MSG.NEW_PWD.EMPTY);
+      return;
+    }
+    // Check confirmed new password is empty or not
+    if (isEmpty(confirmNewPwdVal)) {
+      confirmNewPwd.err(ERR_MSG.CONFIRM_NEW_PWD.EMPTY);
+      return;
+    }
+    // Check equality of new password and confirmed new password
+    if (newPwdVal !== confirmNewPwdVal) {
+      newPwd.err(ERR_MSG.NEW_PWD.NOT_MATCHED);
+      return;
+    }
+
+    changePassword({
+      userId,
+      oldPassword: oldPwdVal,
+      newPassword: newPwdVal
+    })
   }
 
   // handle for clicking button
@@ -55,18 +122,9 @@ class ProfileEditor extends Component {
     const activeIdx = this.refs.content.getActiveIndex();
 
     if (activeIdx === TAB_IDX.PROFILE) {
-      const {
-        userId,
-        autobiography,
-        updateProfile
-      } = this.props;
-
-      updateProfile({
-        userId,
-        autobiography
-      });
+      this.updateProfile();
     } else if (activeIdx === TAB_IDX.PASSWORD) {
-      // TODO: Handle changing password
+      this.changePassword();
     }
   }
 
@@ -74,13 +132,13 @@ class ProfileEditor extends Component {
   renderProfileContent(username, email, autobiography) {
     return (
       <dl className="profile-content dl-horizontal">
-        <dt><strong>{CONTENT.EDIT_PROFILE.USERNAME}</strong></dt>
+        <dt><strong>{EDIT_PROFILE.USERNAME}</strong></dt>
         <dd>{username}</dd>
         <hr />
-        <dt><strong>{CONTENT.EDIT_PROFILE.EMAIL}</strong></dt>
+        <dt><strong>{EDIT_PROFILE.EMAIL}</strong></dt>
         <dd>{email}</dd>
         <hr />
-        <dt><strong>{CONTENT.EDIT_PROFILE.AUTOBIOGRAPHY}</strong></dt>
+        <dt><strong>{EDIT_PROFILE.AUTOBIOGRAPHY}</strong></dt>
         <dd>
           <textarea
             className="form-control"
@@ -94,18 +152,32 @@ class ProfileEditor extends Component {
   }
 
   // Render content for changing password
-  renderPasswordContent() {
+  renderPasswordContent(errMsg, clearErrMsg) {
     return (
       <dl className="password-content dl-horizontal">
-        <RegBlockInput
-          icon="lock"
-          type="password"
-          placeHolder={CONTENT.EDIT_PROFILE.PWD}
+        <RegBlockErr
+          ref="pwdErr"
+          errMsg={errMsg}
+          convertedErrMsgs={CONTENT.ERR_MSG}
+          clearErrMsg={clearErrMsg}
         />
         <RegBlockInput
+          ref="oldPwd"
+          icon="unlock-alt"
+          type="password"
+          placeHolder={EDIT_PROFILE.OLD_PWD}
+        />
+        <RegBlockInput
+          ref="newPwd"
+          icon="lock"
+          type="password"
+          placeHolder={EDIT_PROFILE.NEW_PWD}
+        />
+        <RegBlockInput
+          ref="confirmNewPwd"
           icon="key"
           type="password"
-          placeHolder={CONTENT.EDIT_PROFILE.CONFIRM_PWD}
+          placeHolder={EDIT_PROFILE.CONFIRM_NEW_PWD}
         />
       </dl>
     );
@@ -116,26 +188,28 @@ class ProfileEditor extends Component {
       username,
       email,
       autobiography,
-      isProcessing
+      isProcessing,
+      errMsgs,
+      clearErrMsgChangePassword
     } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: CONTENT.EDIT_PROFILE.TITLE,
+      title: EDIT_PROFILE.TITLE,
       confirmBtn: {
         icon: 'floppy-o',
         className: 'btn btn-u pull-right rounded',
-        text: CONTENT.EDIT_PROFILE.CONFIRM_BTN,
+        text: EDIT_PROFILE.CONFIRM_BTN,
         onClick: this.handleClickConfirmBtn
       },
-      isProcessing: isProcessing.updateProfile
+      isProcessing: isProcessing.updateProfile || isProcessing.changePassword
     };
     const profileContent = this.renderProfileContent(username, email, autobiography);
-    const passwordContent = this.renderPasswordContent();
+    const passwordContent = this.renderPasswordContent(errMsgs.changePassword, clearErrMsgChangePassword);
     const tabsContent = [{
-      tab: CONTENT.EDIT_PROFILE.CONTENT.PROFILE,
+      tab: EDIT_PROFILE.CONTENT.PROFILE,
       content: profileContent
     }, {
-      tab: CONTENT.EDIT_PROFILE.CONTENT.PASSWORD,
+      tab: EDIT_PROFILE.CONTENT.PASSWORD,
       content: passwordContent
     }];
 
@@ -144,7 +218,7 @@ class ProfileEditor extends Component {
         <IconButton
           className="profile-editor-component btn btn-u rounded"
           icon="pencil"
-          text={CONTENT.EDIT_PROFILE.TITLE}
+          text={EDIT_PROFILE.TITLE}
           handleClick={this.openModal}
         />
         <Modal {...modalProps}>

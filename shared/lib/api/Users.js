@@ -21,6 +21,18 @@ export default class UsersAPI extends Base {
     })
   }
 
+  postPassword(userId, payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.post({
+      url: `users/${userId}/changePassword`,
+      payload,
+      requireAuth: true
+    })
+  }
+
   putProfile(userId, payload, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);

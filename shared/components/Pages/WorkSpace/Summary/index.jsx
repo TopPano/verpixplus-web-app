@@ -20,9 +20,12 @@ const propTypes = {
   autobiography: PropTypes.string.isRequired,
   numOfMedia: PropTypes.number.isRequired,
   isProcessing: PropTypes.object.isRequired,
+  errMsgs: PropTypes.object.isRequired,
   updateProfilePicture: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
-  editAutobiography: PropTypes.func.isRequired
+  editAutobiography: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
+  clearErrMsgChangePassword: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -42,9 +45,12 @@ class Summary extends Component {
       autobiography,
       numOfMedia,
       isProcessing,
+      errMsgs,
       updateProfilePicture,
       updateProfile,
-      editAutobiography
+      editAutobiography,
+      changePassword,
+      clearErrMsgChangePassword
     } = this.props;
 
     return (
@@ -82,8 +88,11 @@ class Summary extends Component {
                 email={email}
                 autobiography={autobiography}
                 isProcessing={isProcessing}
+                errMsgs={errMsgs}
                 editAutobiography={editAutobiography}
                 updateProfile={updateProfile}
+                changePassword={changePassword}
+                clearErrMsgChangePassword={clearErrMsgChangePassword}
               />
             </Col>
           </Row>
