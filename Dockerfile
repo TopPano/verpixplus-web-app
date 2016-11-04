@@ -21,8 +21,6 @@ RUN chown -R verpix:verpix /home/verpix/verpixplus-web-app
 
 USER verpix
 WORKDIR /home/verpix/verpixplus-web-app
-ARG API_ROOT
-ARG STATIC_URL
 
 RUN npm install
 RUN npm run build
