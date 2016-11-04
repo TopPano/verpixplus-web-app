@@ -4,12 +4,15 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import isInteger from 'lodash/isInteger';
 import toNumber from 'lodash/toNumber';
+import fileSaver from 'file-saver';
+import JSZip from 'jszip';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
-import { EMBED } from 'constants/editor';
+import { EMBED } from 'constants/common';
 import Livephoto from 'components/Common/Livephoto';
 import IconButton from 'components/Common/IconButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
+import genAdHTML from './genAdHTML';
 
 const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
 
@@ -31,6 +34,7 @@ class ShareEmbed extends Component {
     // Bind "this" to member functions
     this.handleSizeChange = this.handleSizeChange.bind(this);
     this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
+    this.handleClickDownloadBtn = this.handleClickDownloadBtn.bind(this);
 
     // Initialize state
     this.state = {
@@ -56,6 +60,23 @@ class ShareEmbed extends Component {
     this.setState({
       showPreview: !this.state.showPreview
     });
+  }
+
+  // Handler for clicking download button
+  handleClickDownloadBtn() {
+    const { mediaId } = this.props;
+    const {
+      embedWidth,
+      embedHeight
+    } = this.state;
+    const zip = new JSZip();
+
+    zip.file('index.html', genAdHTML(mediaId, embedWidth, embedHeight, EMBED.SDK_LIVEPHOTO));
+    zip.generateAsync({
+      type: 'blob'
+    }).then((zipBlob) => {
+      fileSaver.saveAs(zipBlob, `ad-${mediaId}.zip`);
+    })
   }
 
   // Generate the usage code
@@ -96,7 +117,7 @@ class ShareEmbed extends Component {
         <div style={codersStyle}>
           <ShareEmbedCoder
             title={CONTENT.INSTALL}
-            text={EMBED.SDK}
+            text={EMBED.SDK_LIVEPHOTO}
           />
           <hr />
           <ShareEmbedCoder
@@ -124,10 +145,16 @@ class ShareEmbed extends Component {
           </div>
         <div className="preview-btn-wrapper text-center">
           <IconButton
-            className="btn-u btn-brd btn-brd-hover rounded btn-u-sea"
+            className="share-embed-btn btn-u btn-brd btn-brd-hover rounded btn-u-sea"
             icon={`fa fa-${showPreview ? 'code' : 'eye'}`}
             text={showPreview ? CONTENT.CODE : CONTENT.PREVIEW}
             handleClick={this.handleClickPreviewBtn}
+          />
+          <IconButton
+            className="share-embed-btn btn-u btn-brd btn-brd-hover rounded btn-u-sea"
+            icon="download"
+            text="Download"
+            handleClick={this.handleClickDownloadBtn}
           />
         </div>
       </div>

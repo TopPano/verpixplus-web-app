@@ -1,3 +1,5 @@
+import externalApiConfig from 'etc/external-api';
+
 export const DEFAULT_PROFILE_PHOTO_URL = '/static/images/profile-photo-default.png';
 
 export const DEFAULT_FOLLOWING_USER = 'ddc23b40-222f-11e6-b846-69babe89ef41'
@@ -40,3 +42,12 @@ export const SHARE_IMAGE_SIZE = {
 }
 
 export const PROFILE_PICTURE_SIZE =  150;
+
+export const EMBED = {
+  SDK_LIVEPHOTO:
+  '<script>' +
+  `!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",["${externalApiConfig.sdk.url}/sdk-livephoto.js"])` +
+  '</script>',
+  DEFAULT_WIDTH: 480,
+  DEFAULT_HEIGHT: 640
+};

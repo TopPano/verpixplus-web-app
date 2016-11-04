@@ -30,4 +30,8 @@
       max-width: 100%;
     }
   }
+
+  .share-embed-btn {
+    margin: 0 10px;
+  }
 }
