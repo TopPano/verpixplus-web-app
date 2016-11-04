@@ -11,7 +11,6 @@ import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
 import FiltersPanel from 'containers/pages/Editor/FiltersPanel';
-import SharePanel from '../SharePanel';
 
 if (process.env.BROWSER) {
   require('./Sidebar.css');
@@ -118,9 +117,6 @@ class Sidebar extends Component {
     const filtersMenuItemProp = {
       icon: 'picture-o'
     };
-    const shareMenuItemProp = {
-      icon: 'share-alt-square'
-    };
     const editPanel =
       <EditPanel
         key="edit-panel"
@@ -132,8 +128,6 @@ class Sidebar extends Component {
       <FiltersPanel
         key="filters-panel"
       />
-    const sharePanel =
-      <SharePanel key="share-panel" />
     let menuItemsProps = [];
     let menuItems;
     let panels = [];
@@ -146,8 +140,8 @@ class Sidebar extends Component {
       menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
       panels = [editPanel, filtersPanel];
     } else if (mode === MODE.EDIT) {
-      menuItemsProps = [editMenuItemProp, shareMenuItemProp];
-      panels = [editPanel, sharePanel];
+      menuItemsProps = [editMenuItemProp];
+      panels = [editPanel];
     }
 
     menuItems = this.renderMenuItems(menuItemsProps, selectedIdx);
