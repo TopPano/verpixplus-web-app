@@ -7,6 +7,7 @@ export default function renderHTML(html, initialState, config, shareContent, env
   const robotsMeta = isProduction ? 'index,follow' : 'noindex,nofollow';
   const gaSrcUrl = isProduction ? 'https://www.google-analytics.com/analytics.js' : 'https://www.google-analytics.com/analytics_debug.js';
   const vendorScript = isProduction ? `<script type="text/javascript" src="/static/build/vendor.bundle.js"></script>` : '';
+  const livephotoSdkUrl = `${externalApiConfig.sdk.url}/sdk-livephoto.js`;
 
   return `
     <!doctype html>
@@ -49,6 +50,9 @@ export default function renderHTML(html, initialState, config, shareContent, env
       </script>
       <script>
         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+      </script>
+      <script>
+        !function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",["${livephotoSdkUrl}"])
       </script>
       <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
       <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>

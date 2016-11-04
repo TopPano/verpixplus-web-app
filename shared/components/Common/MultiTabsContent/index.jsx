@@ -29,6 +29,11 @@ class MultiTabsContent extends Component {
     };
   }
 
+  // Get index of current active tab
+  getActiveIndex() {
+    return this.state.activeIdx;
+  }
+
   // handle for clicking tab
   selectTab(idx) {
     this.setState({

@@ -8,6 +8,7 @@ import MainLayout from './containers/layouts/MainLayout';
 import HomePageContainer from './containers/pages/Home';
 import SignInPageContainer from './containers/pages/SignIn';
 import SignUpPageContainer from './containers/pages/SignUp';
+import ResetPwdPageContainer from './containers/pages/ResetPwd';
 import EditorPageContainer from './containers/pages/Editor';
 import FAQPageComponent from './components/Pages/FAQ';
 
@@ -46,6 +47,9 @@ export default function routes(accessToken) {
         <Route path="faq" component={FAQPageComponent} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
         <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
+        <Route path="pwd/reset/request" component={ResetPwdPageContainer} onEnter={_redirectIfAuth} />
+        <Route path="pwd/reset/sent" component={ResetPwdPageContainer} onEnter={_redirectIfAuth} />
+        <Route path="pwd/reset/done" component={ResetPwdPageContainer} />
         <Redirect from="*" to="/" />
       </Route>
     </Route>

@@ -17,10 +17,19 @@ function handleError(dispatch, type, err) {
     type,
     err
   });
-  if (err.status === 401) {
-    dispatch(push('/'));
+}
+
+function clearMsg(type) {
+  return (dispatch) => {
+    dispatch({
+      type
+    });
   }
 }
+
+export const CLEAR_ERR_MSG_CHANGE_PASSWORD = 'CLEAR_ERR_MSG_CHANGE_PASSWORD';
+
+export const clearErrMsgChangePassword = clearMsg.bind(this, CLEAR_ERR_MSG_CHANGE_PASSWORD);
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
@@ -260,13 +269,13 @@ export const UPDATE_PROFILE_PICTURE_FAILURE = 'UPDATE_PROFILE_PICTURE_FAILURE';
 
 const DATA_URL_PREFIX = 'data:image/jpeg;base64,';
 
-function updateProfileRequest() {
+function updateProfilePictureRequest() {
   return {
     type: UPDATE_PROFILE_PICTURE_REQUEST
   };
 }
 
-function updateProfileSuccess(response) {
+function updateProfilePictureSuccess(response) {
   return {
     type: UPDATE_PROFILE_PICTURE_SUCCESS,
     response
@@ -277,7 +286,7 @@ export function updateProfilePicture({ userId, profilePicture, userSession = {} 
   return (dispatch) => {
     let profilePhotoUrl;
 
-    dispatch(updateProfileRequest());
+    dispatch(updateProfilePictureRequest());
 
     imageBlobToDataUrl(profilePicture, PROFILE_PICTURE_SIZE, true).then((imgDataUrl) => {
       const payload = {
@@ -287,10 +296,109 @@ export function updateProfilePicture({ userId, profilePicture, userSession = {} 
 
       return api.users.postProfilePicture(userId, payload, userSession.accessToken);
     }).then((res) => {
-      dispatch(updateProfileSuccess(merge({}, res, { profilePhotoUrl })));
+      dispatch(updateProfilePictureSuccess(merge({}, res, { profilePhotoUrl })));
       dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_PICTURE_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, UPDATE_PROFILE_PICTURE_FAILURE, err);
+    });
+  };
+}
+
+export const EDIT_AUTOBIOGRAPHY = 'EDIT_AUTOBIOGRAPHY';
+
+export function editAutobiography(autobiography) {
+  return (dispatch) => {
+    dispatch({
+      type: EDIT_AUTOBIOGRAPHY,
+      autobiography
+    })
+  };
+}
+
+export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
+
+function updateProfileRequest() {
+  return {
+    type: UPDATE_PROFILE_REQUEST
+  }
+}
+
+function updateProfileSuccess(response) {
+  return {
+    type: UPDATE_PROFILE_SUCCESS,
+    response
+  };
+}
+
+export function updateProfile({ userId, autobiography, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(updateProfileRequest());
+
+    return api.users.putProfile(userId, { autobiography }, userSession.accessToken).then((res) => {
+      dispatch(updateProfileSuccess(res));
+      dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, UPDATE_PROFILE_FAILURE, err);
+    });
+  };
+}
+
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST';
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
+
+function changePasswordRequest() {
+  return {
+    type: CHANGE_PASSWORD_REQUEST
+  }
+}
+
+function changePasswordSuccess() {
+  return {
+    type: CHANGE_PASSWORD_SUCCESS
+  };
+}
+
+export function changePassword({ userId, oldPassword, newPassword, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(changePasswordRequest());
+
+    return api.users.postPassword(userId, { oldPassword, newPassword }, userSession.accessToken).then(() => {
+      dispatch(changePasswordSuccess());
+      dispatch(pushNotification(NOTIFICATIONS.CHANGE_PASSWORD_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, CHANGE_PASSWORD_FAILURE, err);
+    });
+  };
+}
+
+export const RESET_PASSWORD_REQUEST = 'RESET_PASSWORD_REQUEST';
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
+export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE';
+
+function resetPasswordRequest() {
+  return {
+    type: RESET_PASSWORD_REQUEST
+  }
+}
+
+function resetPasswordSuccess() {
+  return {
+    type: RESET_PASSWORD_SUCCESS
+  };
+}
+
+export function resetPassword({ email, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(resetPasswordRequest());
+
+    return api.users.resetPassword({ email }, userSession.accessToken).then(() => {
+      dispatch(resetPasswordSuccess());
+      dispatch(push('/pwd/reset/sent'));
+    }).catch((err) => {
+      handleError(dispatch, RESET_PASSWORD_FAILURE, err);
     });
   };
 }

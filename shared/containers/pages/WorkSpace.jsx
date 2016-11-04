@@ -6,7 +6,11 @@ import { connect } from 'react-redux';
 import { connectDataFetchers } from 'lib/utils';
 import {
   loadUserSummary,
-  updateProfilePicture
+  updateProfilePicture,
+  updateProfile,
+  editAutobiography,
+  changePassword,
+  clearErrMsgChangePassword
 } from 'actions/user';
 import { loadUserMedia, deleteMedia } from 'actions/media';
 import ScrollablePageContainer from './Scrollable';
@@ -33,6 +37,10 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.deleteMedia = this.deleteMedia.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.updateProfilePicture = this.updateProfilePicture.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
+    this.editAutobiography = this.editAutobiography.bind(this);
+    this.changePassword = this.changePassword.bind(this);
+    this.clearErrMsgChangePassword = this.clearErrMsgChangePassword.bind(this);
   }
 
   // Overide parent member function
@@ -92,6 +100,30 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.props.dispatch(updateProfilePicture(params));
   }
 
+  // Wrapper function for dispatching updateProfile,
+  // which updates the profile content of user
+  updateProfile(params) {
+    this.props.dispatch(updateProfile(params));
+  }
+
+  // Wrapper function for dispatching editAutobiography
+  // which edits then content of autobiography
+  editAutobiography(autobiography) {
+    this.props.dispatch(editAutobiography(autobiography));
+  }
+
+  // Wrapper function for dispatching changePassword,
+  // which changes the password of user
+  changePassword(params) {
+    this.props.dispatch(changePassword(params));
+  }
+
+  // Wrapper function for dispatching clearErrMsgChangePassword,
+  // which clears the error message when user changes password.
+  clearErrMsgChangePassword() {
+    this.props.dispatch(clearErrMsgChangePassword());
+  }
+
   render() {
     const {
       user,
@@ -104,7 +136,11 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
         workspace={workspace}
         deleteMedia={this.deleteMedia}
         loadMore={this.loadMore}
+        updateProfile={this.updateProfile}
         updateProfilePicture={this.updateProfilePicture}
+        editAutobiography={this.editAutobiography}
+        changePassword={this.changePassword}
+        clearErrMsgChangePassword={this.clearErrMsgChangePassword}
       />
     );
   }

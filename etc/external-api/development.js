@@ -1,4 +1,7 @@
 module.exports = {
+  sdk: {
+    url: 'http://developer.verpixplus.me/dev'
+  },
   facebook: {
     apiRoot: 'https://graph.facebook.com',
     id: '630397387117048',

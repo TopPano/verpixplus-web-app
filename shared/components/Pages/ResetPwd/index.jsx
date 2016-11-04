@@ -1,11 +1,11 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
 import CONTENT from 'content/sign/en-us.json';
+import { RESET_PWD_MODE } from 'constants/resetPwd';
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
@@ -15,19 +15,20 @@ import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
 const { ERR_MSG } = CONTENT;
 
 if (process.env.BROWSER) {
-  require('./SignIn.css');
+  require('./ResetPwd.css');
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
   errMsg: PropTypes.string.isRequired,
-  signIn: PropTypes.func.isRequired,
+  resetPassword: PropTypes.func.isRequired,
   clearErrMsg: PropTypes.func.isRequired
 };
 
 const defaultProps = {
 };
 
-class SignIn extends Component {
+class ResetPwd extends Component {
   constructor(props) {
     super(props);
 
@@ -41,11 +42,9 @@ class SignIn extends Component {
 
     this.refs.err.clear();
 
+    const { resetPassword } = this.props;
     const email = this.refs.email;
-    const pwd = this.refs.pwd;
     const emailVal = email.getValue();
-    const pwdVal = pwd.getValue();
-    const { signIn } = this.props;
 
     // Check email is empty or not
     if (isEmpty(emailVal)) {
@@ -57,31 +56,28 @@ class SignIn extends Component {
       email.err(ERR_MSG.EMAIL.INVALID);
       return;
     }
-    // Check password is empty or not
-    if (isEmpty(pwdVal)) {
-      pwd.err(ERR_MSG.PWD.EMPTY);
-      return;
-    }
 
-    signIn(emailVal, pwdVal);
-  }
-
-  // Render RegBlockInputs
-  renderInputs(props) {
-    return props.reduce((pre, cur, idx) => [...pre, <RegBlockInput key={idx} {...cur} />], []);
+    resetPassword({
+      email: emailVal
+    });
   }
 
   render() {
-    const { errMsg, clearErrMsg } = this.props;
+    const {
+      mode,
+      errMsg,
+      clearErrMsg
+    } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
     const headerProps = {
-      title: CONTENT.HEADER.SIGN_IN.TITLE,
+      title: CONTENT.HEADER.RESET_PWD.TITLE,
       switchTo: {
-        url: '/signup',
-        name: CONTENT.HEADER.SIGN_IN.SWITCH_TO.NAME,
-        desc: CONTENT.HEADER.SIGN_IN.SWITCH_TO.DESC
+        desc:
+          mode === RESET_PWD_MODE.REQUEST ?
+          CONTENT.HEADER.RESET_PWD.SWITCH_TO.DESC :
+          ''
       }
     };
     const errProps = {
@@ -89,46 +85,46 @@ class SignIn extends Component {
       clearErrMsg,
       ref: 'err'
     };
-    const inputsProps = [{
+    const emailProps = {
       // TODO: use "email" type instead of "text"
       ref: 'email',
       icon: 'envelope',
       type: 'text',
       placeHolder: CONTENT.INPUTS.EMAIL
-    }, {
-      ref: 'pwd',
-      icon: 'lock',
-      type: 'password',
-      placeHolder: CONTENT.INPUTS.PWD
-    }];
-    const btnProps = {
-      text: CONTENT.BTN.SIGN_IN.TEXT
     };
-    const inputs = this.renderInputs(inputsProps);
+    const btnProps = {
+      text: CONTENT.BTN.RESET_PWD.TEXT
+    };
 
     return (
-      <div className="sign-in-component container-fullpage">
+      <div className="reset-pwd-component container-fullpage">
         <RegBlock {...blockProps} >
           <RegBlockHeader {...headerProps} />
           <RegBlockErr {...errProps} />
-          {inputs}
-          <p className="forgot-pwd">
-            <Link
-              className="pull-right"
-              to="/pwd/reset/request"
-            >
-              {CONTENT.OTHERS.SIGN_IN.FORGOT_PWD}
-            </Link>
-          </p>
+          {
+            mode === RESET_PWD_MODE.REQUEST &&
+            <RegBlockInput {...emailProps} />
+          }
+          {
+            mode === RESET_PWD_MODE.SENT &&
+            <p className="text-center">{CONTENT.OTHERS.RESET_PWD.SENT}</p>
+          }
+          {
+            mode === RESET_PWD_MODE.DONE &&
+            <p className="text-center">{CONTENT.OTHERS.RESET_PWD.DONE}</p>
+          }
           <hr />
-          <RegBlockBtn {...btnProps} />
+          {
+            mode === RESET_PWD_MODE.REQUEST &&
+            <RegBlockBtn {...btnProps} />
+          }
         </RegBlock>
       </div>
     );
   }
 }
 
-SignIn.propTypes = propTypes;
-SignIn.defaultProps = defaultProps;
+ResetPwd.propTypes = propTypes;
+ResetPwd.defaultProps = defaultProps;
 
-export default SignIn;
+export default ResetPwd;

@@ -3,9 +3,9 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-import CONTENT from 'content/sign/en-us.json';
+import DEFAULT_CONTENT from 'content/sign/en-us.json';
 
-const { ERR_MSG } = CONTENT;
+const DEFAULT_CONVERTED_ERR_MSGS = DEFAULT_CONTENT.ERR_MSG;
 
 if (process.env.BROWSER) {
   require('./RegBlockErr.css');
@@ -13,10 +13,12 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   errMsg: PropTypes.string.isRequired,
+  convertedErrMsgs: PropTypes.object,
   clearErrMsg: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  convertedErrMsgs: DEFAULT_CONVERTED_ERR_MSGS
 };
 
 class RegBlockErr extends Component {
@@ -29,14 +31,22 @@ class RegBlockErr extends Component {
   }
 
   // Parse error message and convert them into human readable message
-  convertErrMsg(errMsg) {
+  convertErrMsg(errMsg, convertedErrMsgs) {
     // TODO: Handle for more error message.
     if (!errMsg) {
       return '';
     } else if (errMsg === 'Unauthorized') {
-      return ERR_MSG.AJAX.UNAUTHORIZED;
+      return (
+        convertedErrMsgs.AJAX.UNAUTHORIZED ?
+        convertedErrMsgs.AJAX.UNAUTHORIZED :
+        DEFAULT_CONVERTED_ERR_MSGS.AJAX.UNAUTHORIZED
+      );
     } else {
-      return ERR_MSG.AJAX.OTHERS;
+      return (
+        convertedErrMsgs.AJAX.OTHERS ?
+        convertedErrMsgs.AJAX.OTHERS :
+        DEFAULT_CONVERTED_ERR_MSGS.AJAX.OTHERS
+      );
     }
   }
 
@@ -52,12 +62,15 @@ class RegBlockErr extends Component {
 
   // TODO: show/hide block with animation
   render() {
-    const { errMsg } = this.props;
+    const {
+      errMsg,
+      convertedErrMsgs
+    } = this.props;
     const componentClass = classNames({
       'reg-block-err-component': true,
       'hide': !Boolean(errMsg)
     });
-    const convertedErrMsg = this.convertErrMsg(errMsg);
+    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs);
 
     return (
       <div className={componentClass}>

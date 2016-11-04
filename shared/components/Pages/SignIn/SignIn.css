@@ -1,2 +1,14 @@
 .sign-in-component {
+  .forgot-pwd {
+    display: inline-block;
+    width: 100%;
+    margin: -10px 0 0 0;
+    a {
+      width: auto;
+    }
+  }
+
+  hr {
+    margin-top: 10px;
+  }
 }

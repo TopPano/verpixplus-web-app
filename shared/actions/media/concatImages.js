@@ -1,14 +1,12 @@
-import zlib from 'zlib';
+import threads from 'threads';
 import blobUtil from 'blob-util';
 import randomstring from 'randomstring';
-import base64 from 'base64-js';
 
 import {
   execute,
   Promise
 } from 'lib/utils';
 
-const PREFIX = 'data:image/jpeg;base64,';
 
 // Convert string to Uint8Array
 function stringToUint8Array(str) {
@@ -21,14 +19,101 @@ function stringToUint8Array(str) {
   return arr;
 }
 
-// Concatnate two Uint8Array to one
-function concatUint8Array(a, b) {
-  const newArr = new Uint8Array(a.length + b.length);
+// Concatnate images into one
+// XXX:
+// The code is so ugly because we can not use external variables or resoueces in WebWorker,
+// please help to make code more clear.
+function concatImagesBackground(input, done, progress) {
+  // Prefix of image data url
+  const PREFIX = 'data:image/jpeg;base64,';
+  const {
+    imgsDataUrls,
+    separatorBytes,
+    thumbnailIdx
+  } = input;
 
-  newArr.set(a);
-  newArr.set(b, a.length);
+  const base64ToByteArray = (b64) => {
+    // Code for base64
+    const CODE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    // Reversed lookup table for base64 conversion
+    const revLookup = []
+    const len = b64.length;
+    const placeHoldersCount = b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0;
+    const arr = new Uint8Array(len * 3 / 4 - placeHoldersCount);
 
-  return newArr;
+    // Fill reversed lookup table
+    for (let idx = 0; idx < CODE.length; idx++) {
+      revLookup[CODE.charCodeAt(idx)] = idx;
+    }
+    revLookup['-'.charCodeAt(0)] = 62;
+    revLookup['_'.charCodeAt(0)] = 63;
+
+    let i, j, l;
+    let L = 0;
+
+    // if there are placeHoldersCount, only get up to the last complete 4 chars
+    l = placeHoldersCount > 0 ? len - 4 : len;
+
+    for (i = 0, j = 0; i < l; i += 4, j += 3) {
+      const tmp =
+        (revLookup[b64.charCodeAt(i)] << 18) |
+        (revLookup[b64.charCodeAt(i + 1)] << 12) |
+        (revLookup[b64.charCodeAt(i + 2)] << 6) |
+        revLookup[b64.charCodeAt(i + 3)];
+      arr[L++] = (tmp >> 16) & 0xFF;
+      arr[L++] = (tmp >> 8) & 0xFF;
+      arr[L++] = tmp & 0xFF;
+    }
+
+    if (placeHoldersCount === 2) {
+      const tmp =
+        (revLookup[b64.charCodeAt(i)] << 2) |
+        (revLookup[b64.charCodeAt(i + 1)] >> 4);
+      arr[L++] = tmp & 0xFF;
+    } else if (placeHoldersCount === 1) {
+      const tmp =
+        (revLookup[b64.charCodeAt(i)] << 10) |
+        (revLookup[b64.charCodeAt(i + 1)] << 4) |
+        (revLookup[b64.charCodeAt(i + 2)] >> 2);
+      arr[L++] = (tmp >> 8) & 0xFF;
+      arr[L++] = tmp & 0xFF;
+    }
+
+    return arr;
+  }
+  const concatUint8Array = (a, b) => {
+    const newArr = new Uint8Array(a.length + b.length);
+
+    newArr.set(a);
+    newArr.set(b, a.length);
+
+    return newArr;
+  };
+
+  let thumbnailBytes;
+  const imgsBytes = imgsDataUrls.map((imgBase64) => base64ToByteArray(imgBase64.slice(PREFIX.length)));
+  const concatImgsBytes = imgsBytes.reduce((pre, imgBytes, idx) => {
+    // Append separator to each image except for last one
+    const imgBytesWithSeparator =
+      idx === imgsBytes.length -1 ?
+      imgBytes :
+      concatUint8Array(imgBytes, separatorBytes);
+
+    if (idx === thumbnailIdx) {
+      thumbnailBytes = imgBytes;
+    }
+    // Update progress per 20 images to prevent UI updating too frequentyly
+    if ((idx % 20) === 0) {
+      progress(idx);
+    }
+
+    return concatUint8Array(pre, imgBytesWithSeparator);
+  }, new Uint8Array(0));
+
+  done({
+    concatImgsBytes,
+    thumbnailBytes
+  });
 }
 
 // Concatnate a list of images to an image sequence,
@@ -39,53 +124,46 @@ export default function concatImages(imgs, handleProgress, thumbnailIdx = 0) {
     const separator = randomstring.generate(10);
     // bytes array version of separator, used to concatnate images
     const separatorBytes = stringToUint8Array(separator);
-    let thumbnail;
-    // Concatnate images and store in the variable
-    const concatImgs = new Buffer(
-      imgs.reduce((pre, cur, idx) => {
-        const jpegImg = base64.toByteArray(cur.src.slice(PREFIX.length));
-        const jpegImgBytes =
-          idx === imgs.length -1 ?
-          jpegImg :
-          concatUint8Array(jpegImg, separatorBytes);
+    // Bytes array version of images
+    // const imgsBytes = imgs.map((img) => base64.toByteArray(img.src.slice(PREFIX.length)));
+    const imgsDataUrls = imgs.map((img) => img.src);
+    // Concatenate images in background
+    const concatThread = threads.spawn(concatImagesBackground);
+    concatThread.send({
+      imgsDataUrls,
+      separatorBytes,
+      thumbnailIdx
+    }).on('progress', (progress) => {
+      execute(handleProgress, progress / (imgs.length + 20));
+    }).on('message', (res) => {
+      concatThread.kill();
 
-        if (idx === thumbnailIdx) {
-          thumbnail = jpegImg;
-        }
+      const {
+        concatImgsBytes,
+        thumbnailBytes
+      } = res;
+      let concatImgs;
 
-        execute(handleProgress, idx / (imgs.length + 20));
+      // Convert concatenated images from array buffer to blob, which can be used by multipart
+      blobUtil.arrayBufferToBlob(concatImgsBytes.buffer, 'image/jpeg').then((concatImgsBlob) => {
+        concatImgs = concatImgsBlob;
 
-        return concatUint8Array(pre, jpegImgBytes);
-      }, new Uint8Array(0))
-    );
-    let zip;
-
-    // Use deflate to compress concatImgs
-    zlib.deflate(concatImgs, (err, imgZipBuf) => {
-      if (err) {
-        reject(err);
-      }
-
-      execute(handleProgress, (imgs.length + 5) / (imgs.length + 10));
-
-      // Convert zip file from array buffer to blob, which can be used by multipart
-      blobUtil.arrayBufferToBlob(new Uint8Array(imgZipBuf).buffer, 'application/zip').then((imgZipBlob) => {
-        zip = imgZipBlob;
-
-        execute(handleProgress, (imgs.length + 10) / (imgs.length + 10));
+        execute(handleProgress, (imgs.length + 10) / (imgs.length + 15));
 
         // Convert thumbnail from array buffer to blob.
-        return blobUtil.arrayBufferToBlob(thumbnail.buffer, 'image/jpeg');
+        return blobUtil.arrayBufferToBlob(thumbnailBytes.buffer, 'image/jpeg');
       }).then((thumbnailBlob) => {
         execute(handleProgress, 1);
         resolve({
           thumbnail: thumbnailBlob,
-          zip,
+          concatImgs,
           separator
         });
       }).catch((err) => {
         reject(err);
       });
+    }).on('error', (err)=> {
+      reject(err);
     });
   });
 }

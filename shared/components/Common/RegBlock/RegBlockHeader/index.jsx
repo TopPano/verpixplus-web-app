@@ -9,7 +9,11 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   title: PropTypes.string.isRequired,
-  switchTo: PropTypes.object.isRequired
+  switchTo: PropTypes.shape({
+    desc: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    name: PropTypes.string
+  }).isRequired
 };
 
 const defaultProps = {
@@ -21,13 +25,21 @@ class RegBlockHeader extends Component {
   }
 
   render() {
-    const { title, switchTo } = this.props;
+    const {
+      title,
+      switchTo
+    } = this.props;
 
     return (
       <div className="reg-block-header-component reg-block-header">
         <h2>{title}</h2>
-        <p>{`${switchTo.desc} `}
-          <Link to={switchTo.url}>{switchTo.name}</Link>
+        <p>
+          {`${switchTo.desc} `}
+          {
+            switchTo.url &&
+            switchTo.name &&
+            <Link to={switchTo.url}>{switchTo.name}</Link>
+          }
         </p>
       </div>
     );

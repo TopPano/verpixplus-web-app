@@ -1,12 +1,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import classNames from 'classnames';
 import isInteger from 'lodash/isInteger';
 import toNumber from 'lodash/toNumber';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
 import { EMBED } from 'constants/editor';
+import Livephoto from 'components/Common/Livephoto';
 import IconButton from 'components/Common/IconButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 
@@ -29,9 +30,11 @@ class ShareEmbed extends Component {
 
     // Bind "this" to member functions
     this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
 
     // Initialize state
     this.state = {
+      showPreview: false,
       embedWidth: EMBED.DEFAULT_WIDTH,
       embedHeight: EMBED.DEFAULT_HEIGHT
     };
@@ -48,6 +51,13 @@ class ShareEmbed extends Component {
     });
   }
 
+  // Handler for clicking preview button
+  handleClickPreviewBtn() {
+    this.setState({
+      showPreview: !this.state.showPreview
+    });
+  }
+
   // Generate the usage code
   genUsageCode(id, type, width, height) {
     const dataWidth = width > 0 ? `data-width="${width}"` : '';
@@ -58,52 +68,67 @@ class ShareEmbed extends Component {
 
   render() {
     const {
+      showPreview,
       embedWidth,
       embedHeight
     } = this.state;
     const { mediaId } = this.props;
     const usageCode = this.genUsageCode(mediaId,'livephoto', embedWidth, embedHeight);
+    const playerClass = classNames({
+      'preview-player': true,
+      'active': showPreview
+    });
+    const codersStyle = {
+      display: !showPreview ? 'block' : 'none'
+    };
 
     return (
       <div className="share-embed-component">
-        <ShareEmbedCoder
-          title={CONTENT.INSTALL}
-          text={EMBED.SDK}
-        />
-        <hr />
-        <ShareEmbedCoder
-          title={CONTENT.USAGE}
-          text={usageCode}
-        />
-        <div className="margin-bottom-10" />
-        <div className="inputs-wrapper container-center-col">
-          <input
-            ref="inputWidth"
-            type="text"
-            className="form-control"
-            value={embedWidth}
-            onChange={this.handleSizeChange}
+        <div className="container-center-row">
+          <div className={playerClass}>
+            <Livephoto
+              mediaId={mediaId}
+              width={embedWidth}
+              height={embedHeight}
+            />
+          </div>
+        </div>
+        <div style={codersStyle}>
+          <ShareEmbedCoder
+            title={CONTENT.INSTALL}
+            text={EMBED.SDK}
           />
-          <i className="fa fa-times margin-left-5 margin-right-5" />
-          <input
-            ref="inputHeight"
-            type="text"
-            className="form-control"
-            value={embedHeight}
-            onChange={this.handleSizeChange}
+          <hr />
+          <ShareEmbedCoder
+            title={CONTENT.USAGE}
+            text={usageCode}
           />
         </div>
-        <div className="preview-btn-wrapper text-center">
-          <Link
-            to={`http://developer.verpixplus.me/embed/index.html?mediaId=${mediaId}&width=${embedWidth}&height=${embedHeight}`}
-            target="_blank"
-          >
-            <IconButton
-              className="btn-u btn-brd btn-brd-hover rounded btn-u-sea"
-              icon="fa fa-eye"
-              text={CONTENT.PREVIEW}
+          <div className="margin-bottom-10" />
+          <div className="inputs-wrapper container-center-col">
+            <input
+              ref="inputWidth"
+              type="text"
+              className="form-control"
+              value={embedWidth}
+              onChange={this.handleSizeChange}
             />
-          </Link>
+            <i className="fa fa-times margin-left-5 margin-right-5" />
+            <input
+              ref="inputHeight"
+              type="text"
+              className="form-control"
+              value={embedHeight}
+              onChange={this.handleSizeChange}
+            />
+          </div>
+        <div className="preview-btn-wrapper text-center">
+          <IconButton
+            className="btn-u btn-brd btn-brd-hover rounded btn-u-sea"
+            icon={`fa fa-${showPreview ? 'code' : 'eye'}`}
+            text={showPreview ? CONTENT.CODE : CONTENT.PREVIEW}
+            handleClick={this.handleClickPreviewBtn}
+          />
         </div>
       </div>
     );

@@ -49,7 +49,7 @@ export default function genShareContent(req, isEmbedPage, media) {
     const newTitle = title;
     const newDescription = caption;
     const video = `${content.cdnUrl}${content.shardingKey}/media/${sid}/live/video.mp4`;
-    const sdk = `${clientConfig.sdkUrl}/sdk-${isLivephoto ? 'livephoto' : 'panorama'}.js`;
+    const sdk = `${externalApiConfig.sdk.url}/sdk-${isLivephoto ? 'livephoto' : 'panorama'}.js`;
 
     shareContent = merge({}, shareContent, {
       mediaId: sid,

@@ -17,9 +17,15 @@ const propTypes = {
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
+  autobiography: PropTypes.string.isRequired,
   numOfMedia: PropTypes.number.isRequired,
   isProcessing: PropTypes.object.isRequired,
-  updateProfilePicture: PropTypes.func.isRequired
+  errMsgs: PropTypes.object.isRequired,
+  updateProfilePicture: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired,
+  editAutobiography: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
+  clearErrMsgChangePassword: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -36,9 +42,15 @@ class Summary extends Component {
       username,
       email,
       profilePhotoUrl,
+      autobiography,
       numOfMedia,
       isProcessing,
-      updateProfilePicture
+      errMsgs,
+      updateProfilePicture,
+      updateProfile,
+      editAutobiography,
+      changePassword,
+      clearErrMsgChangePassword
     } = this.props;
 
     return (
@@ -71,8 +83,16 @@ class Summary extends Component {
               sm={2}
             >
               <ProfileEditor
+                userId={userId}
                 username={username}
                 email={email}
+                autobiography={autobiography}
+                isProcessing={isProcessing}
+                errMsgs={errMsgs}
+                editAutobiography={editAutobiography}
+                updateProfile={updateProfile}
+                changePassword={changePassword}
+                clearErrMsgChangePassword={clearErrMsgChangePassword}
               />
             </Col>
           </Row>

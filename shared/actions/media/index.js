@@ -175,7 +175,7 @@ function pollingAskMediaStatus(dispatch, progressMediaId, mediaId, progress, ret
       }
       case 'pending':
         if (retryTimes < MEDIA_RETRY_MAX_TIMES) {
-          const addedProgress = genRandomNum(0.005, 0.02);
+          const addedProgress = genRandomNum(0.005, 0.01);
           const newProgress =
             (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
           dispatch(createMediaProgress(progressMediaId, newProgress));
@@ -205,6 +205,7 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       const progressMediaId = genUUID();
       const concatMaxProgress = genRandomNum(0.4, 0.5);
+      let postMediaTimer;
       let progress = 0;
 
       dispatch(createMediaRequest({
@@ -215,7 +216,7 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
       concatImages(data, (percent) => {
         progress = percent * concatMaxProgress;
         dispatch(createMediaProgress(progressMediaId, progress));
-      }).then((concatImgs) => {
+      }).then((result) => {
         const formData = new FormData();
 
         // TODO: dynamically value for action and orientation
@@ -225,13 +226,20 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
         formData.append('orientation', 'portrait');
         formData.append('width', dimension.width);
         formData.append('height', dimension.height);
-        formData.append('imgArrBoundary', concatImgs.separator);
-        formData.append('thumbnail', concatImgs.thumbnail);
-        formData.append('image', concatImgs.zip);
+        formData.append('imgArrBoundary', result.separator);
+        formData.append('thumbnail', result.thumbnail);
+        formData.append('image', result.concatImgs);
+
+        postMediaTimer = setInterval(() => {
+          const addedProgress = genRandomNum(0.005, 0.01);
+          progress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, progress));
+        }, 500);
 
         return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
-        progress = progress + genRandomNum(0.03, 0.05);
+        clearInterval(postMediaTimer);
         dispatch(createMediaProgress(progressMediaId, progress));
         pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
       }).catch((err) => {

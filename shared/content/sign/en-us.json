@@ -13,6 +13,12 @@
         "NAME": "Sign In",
         "DESC": "Have an account?"
       }
+    },
+    "RESET_PWD": {
+      "TITLE": "Reset Password",
+      "SWITCH_TO": {
+        "DESC": "Plese provide the email address linked to your account"
+      }
     }
   },
   "INPUTS": {
@@ -27,12 +33,22 @@
     },
     "SIGN_UP": {
       "TEXT": "Sign Up"
+    },
+    "RESET_PWD": {
+      "TEXT": "Reset Password"
     }
   },
   "OTHERS": {
+    "SIGN_IN": {
+      "FORGOT_PWD": "Forgot Password?"
+    },
     "SIGN_UP": {
       "AGREE": "By joining, you agree to our ",
       "AND": " and "
+    },
+    "RESET_PWD": {
+      "SENT": "Thanks! Please check your email box for following process.",
+      "DONE": "A new password is sent to your email. Please check your email box, thanks."
     }
   },
   "ERR_MSG": {
