@@ -1,5 +1,4 @@
 import externalApiConfig from 'etc/external-api';
-import clientConfig from 'etc/client';
 
 import SITE_CONTENT from 'content/site/en-us.json';
 
@@ -8,7 +7,7 @@ export default function renderHTML(html, initialState, config, shareContent, env
   const robotsMeta = isProduction ? 'index,follow' : 'noindex,nofollow';
   const gaSrcUrl = isProduction ? 'https://www.google-analytics.com/analytics.js' : 'https://www.google-analytics.com/analytics_debug.js';
   const vendorScript = isProduction ? `<script type="text/javascript" src="/static/build/vendor.bundle.js"></script>` : '';
-  const livephotoSdkUrl = `${clientConfig.sdkUrl}/sdk-livephoto.js`;
+  const livephotoSdkUrl = `${externalApiConfig.sdk.url}/sdk-livephoto.js`;
 
   return `
     <!doctype html>
