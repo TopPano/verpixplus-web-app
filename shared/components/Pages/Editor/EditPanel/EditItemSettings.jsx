@@ -28,6 +28,8 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  lower: PropTypes.number.isRequired,
+  upper: PropTypes.number.isRequired,
   autoplay: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
@@ -58,6 +60,8 @@ class EditItemSettings extends Component {
       caption,
       appliedData,
       dimension,
+      lower,
+      upper,
       create
     } = this.props;
 
@@ -65,7 +69,7 @@ class EditItemSettings extends Component {
       mediaType,
       title,
       caption,
-      data: appliedData,
+      data: appliedData.slice(lower, upper),
       dimension
     });
   }
