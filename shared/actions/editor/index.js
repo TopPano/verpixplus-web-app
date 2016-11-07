@@ -47,10 +47,15 @@ export function initEditor({ params = {}, location = {} }) {
         mediaId: params.mediaId
       });
 
-      dispatch(getMedia({
-        mediaId,
-        filter: constructImagesData
-      }));
+      // FIXME:
+      // Currently, constructImagesData only supports client side rendering because it uses Image,
+      // which can not render on server side.
+      if (process.env.BROWSER) {
+        dispatch(getMedia({
+          mediaId,
+          filter: constructImagesData
+        }));
+      }
     } else {
       // Other cases, redirect to home page
       dispatch(push('/'));

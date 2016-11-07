@@ -15,7 +15,6 @@ function imageUrlToDataAsync(imgUrl, callback) {
   img.onerror = (e) => {
     callback(e);
   }
-  img.crossOrigin = 'Anonymous';
   img.src = imgUrl;
 }
 
