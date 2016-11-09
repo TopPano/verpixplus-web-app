@@ -68,9 +68,10 @@ export const CONVERT_PROGRESS = 'CONVERT_PROGRESS';
 export const CONVERT_SUCCESS = 'CONVERT_SUCCESS';
 export const CONVERT_FAILURE = 'CONVERT_FAILURE';
 
-function convertRequest() {
+function convertRequest(converter) {
   return {
-    type: CONVERT_REQUEST
+    type: CONVERT_REQUEST,
+    converter
   };
 }
 
@@ -99,13 +100,16 @@ function convertFailure(err) {
 export function convert({ storageId, mediaType, source }) {
   return (dispatch) => {
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
-      dispatch(convertRequest(mediaType));
+      const converter = new FrameConverter();
+      dispatch(convertRequest(converter));
 
-      new FrameConverter().convert(storageId, source, (progress) => {
+      converter.convert(storageId, source, (progress) => {
         dispatch(convertProgress(progress));
       }).then((result) => {
+        converter.stop();
         dispatch(convertSuccess(mediaType, result));
       }).catch((message) => {
+        converter.stop();
         dispatch(convertFailure({ message }));
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {

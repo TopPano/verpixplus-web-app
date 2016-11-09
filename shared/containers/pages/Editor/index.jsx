@@ -25,10 +25,17 @@ class EditorPageContainer extends Component {
   }
 
   componentWillUnmount() {
-    const { storageId } = this.props.editor;
+    const {
+      storageId,
+      converter
+    } = this.props.editor;
 
     if (storageId) {
       imagesStorage.clear(storageId);
+    }
+
+    if (converter && converter.isConverting) {
+      converter.stop();
     }
   }
 
