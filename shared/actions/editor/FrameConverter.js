@@ -76,7 +76,7 @@ export default class FrameConverter {
       }
       img.src = curFrameDataUrl;
     }).catch((err) => {
-      this.handleFailure(err);
-    })
+      handleFailure(err);
+    });
   }
 }
