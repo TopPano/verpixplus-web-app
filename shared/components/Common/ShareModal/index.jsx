@@ -18,14 +18,20 @@ const propTypes = {
   mediaId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isVideoCreated: PropTypes.bool.isRequired,
-  isProcessing: PropTypes.bool,
+  videoUrl: PropTypes.string,
+  dimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }),
+  isProcessing: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   createVideo: PropTypes.func.isRequired,
+  shareFacebookVideo: PropTypes.func.isRequired,
   notifyShareSuccess: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  isProcessing: false
+  videoUrl: ''
 };
 
 class ShareModal extends Component {
@@ -44,7 +50,8 @@ class ShareModal extends Component {
 
   // Close the modal
   close() {
-    if (!this.props.isProcessing) {
+    const { isProcessing } = this.props;
+    if (isProcessing.createVideo || isProcessing.shareFacebookVideo) {
       this.refs.modal.close();
     }
   }
@@ -54,9 +61,12 @@ class ShareModal extends Component {
       mediaId,
       title,
       isVideoCreated,
+      videoUrl,
+      dimension,
       isProcessing,
       children,
       createVideo,
+      shareFacebookVideo,
       notifyShareSuccess
     } = this.props;
     const modalProps = {
@@ -65,7 +75,7 @@ class ShareModal extends Component {
       confirmBtn: {
         show: false
       },
-      isProcessing
+      isProcessing: isProcessing.createVideo || isProcessing.shareFacebookVideo
     };
     const tabsContent = [{
       tab: CONTENT.TABS.SOCIAL,
@@ -74,8 +84,11 @@ class ShareModal extends Component {
           mediaId={mediaId}
           title={title}
           isVideoCreated={isVideoCreated}
+          videoUrl={videoUrl}
+          dimension={dimension}
           isProcessing={isProcessing}
           createVideo={createVideo}
+          shareFacebookVideo={shareFacebookVideo}
           notifyShareSuccess={notifyShareSuccess}
         />
     }, {

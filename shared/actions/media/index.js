@@ -1,9 +1,11 @@
 import api from 'lib/api';
+import fetch from 'isomorphic-fetch';
 import isFunction from 'lodash/isFunction';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
 import { push } from 'react-router-redux';
 
+import externalApiConfig from 'etc/external-api';
 import { MEDIA_TYPE } from 'constants/common';
 import { NOTIFICATIONS } from 'constants/notifications';
 import concatImages from './concatImages';
@@ -284,7 +286,16 @@ function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
     switch (videoStatus) {
       case 'completed':
       {
-        dispatch(createVideoSuccess({ mediaId }));
+        const {
+          cdnUrl,
+          shardingKey,
+          videoType
+        } = res.result;
+        const videoUrl = `${cdnUrl}${shardingKey}/media/${mediaId}/live/video.${videoType}`;
+        dispatch(createVideoSuccess({
+          mediaId,
+          videoUrl
+        }));
         return;
       }
       case 'pending':
@@ -316,6 +327,51 @@ export function createVideo({ mediaId, userSession = {} }) {
       pollingAskVideoStatus(dispatch, mediaId, 0);
     }).catch((err) => {
       handleError(dispatch, CREATE_VIDEO_FAILURE, err);
+    });
+  };
+}
+
+export const SHARE_FACEBOOK_VIDEO_REQUEST = 'SHARE_FACEBOOK_VIDEO_REQUEST';
+export const SHARE_FACEBOOK_VIDEO_SUCCESS = 'SHARE_FACEBOOK_VIDEO_SUCCESS';
+export const SHARE_FACEBOOK_VIDEO_FAILURE = 'SHARE_FACEBOOK_VIDEO_FAILURE';
+
+function shareFacebookVideoRequest() {
+  return {
+    type: SHARE_FACEBOOK_VIDEO_REQUEST
+  };
+}
+
+function shareFacebookVideoSuccess() {
+  return {
+    type: SHARE_FACEBOOK_VIDEO_SUCCESS
+  };
+}
+
+export function shareFacebookVideo({ targetId, videoUrl, description, accessToken }) {
+  return (dispatch) => {
+    const init = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        file_url: videoUrl,
+        description
+      })
+    };
+    const {
+      apiRoot,
+      version
+    } = externalApiConfig.facebook;
+    const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${accessToken}`;
+
+    dispatch(shareFacebookVideoRequest());
+    fetch(url, init).then(() => {
+      dispatch(shareFacebookVideoSuccess());
+      dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, SHARE_FACEBOOK_VIDEO_FAILURE, err);
     });
   };
 }

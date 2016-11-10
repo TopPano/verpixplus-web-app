@@ -29,6 +29,9 @@ import {
   CREATE_VIDEO_REQUEST,
   CREATE_VIDEO_SUCCESS,
   CREATE_VIDEO_FAILURE,
+  SHARE_FACEBOOK_VIDEO_REQUEST,
+  SHARE_FACEBOOK_VIDEO_SUCCESS,
+  SHARE_FACEBOOK_VIDEO_FAILURE,
   DELETE_MEDIA_REQUEST,
   DELETE_MEDIA_SUCCESS,
   DELETE_MEDIA_FAILURE
@@ -41,7 +44,9 @@ const DEFAULT_STATE = {
   isProcessing: {
     updateProfilePicture: false,
     updateProfile: false,
-    changePassword: false
+    changePassword: false,
+    createVideo: false,
+    shareFacebookVideo: false
   },
   userId: undefined,
   username: undefined,
@@ -71,7 +76,6 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_REQUEST:
     case LOAD_USER_MEDIA_REQUEST:
     case DELETE_MEDIA_REQUEST:
-    case CREATE_VIDEO_REQUEST:
       return merge({}, state, {
         isFetching: true
       });
@@ -107,6 +111,18 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: {
           changePassword: true
+        }
+      });
+    case CREATE_VIDEO_REQUEST:
+      return merge({}, state, {
+        isProcessing: {
+          createVideo: true
+        }
+      });
+    case SHARE_FACEBOOK_VIDEO_REQUEST:
+      return merge({}, state, {
+        isProcessing: {
+          shareFacebookVideo: true
         }
       });
     case CREATE_MEDIA_PROGRESS:
@@ -179,13 +195,19 @@ export default function workspace(state=DEFAULT_STATE, action) {
     }
     case CREATE_VIDEO_SUCCESS:
     {
-      const { mediaId } = action.response;
+      const {
+        mediaId,
+        videoUrl
+      } = action.response;
       return merge({}, state, {
-        isFetching: false,
+        isProcessing: {
+          createVideo: false
+        },
         media: {
           objs: {
             [mediaId]: {
-              isVideoCreated: true
+              isVideoCreated: true,
+              videoUrl
             }
           }
         }
@@ -229,6 +251,12 @@ export default function workspace(state=DEFAULT_STATE, action) {
           changePassword: false
         }
       });
+    case SHARE_FACEBOOK_VIDEO_SUCCESS:
+      return merge({}, state, {
+        isProcessing: {
+          shareFacebookVideo: false
+        }
+      });
     case EDIT_AUTOBIOGRAPHY:
       return merge({}, state, {
         autobiography: action.autobiography
@@ -236,7 +264,6 @@ export default function workspace(state=DEFAULT_STATE, action) {
     case LOAD_USER_SUMMARY_FAILURE:
     case LOAD_USER_MEDIA_FAILURE:
     case DELETE_MEDIA_FAILURE:
-    case CREATE_VIDEO_FAILURE:
       return merge({}, state, {
         isFetching: false
       });
@@ -259,6 +286,18 @@ export default function workspace(state=DEFAULT_STATE, action) {
         },
         isProcessing: {
           changePassword: false
+        }
+      });
+    case CREATE_VIDEO_FAILURE:
+      return merge({}, state, {
+        isProcessing: {
+          createVideo: false
+        }
+      });
+    case SHARE_FACEBOOK_VIDEO_FAILURE:
+      return merge({}, state, {
+        isProcessing: {
+          shareFacebookVideo: false
         }
       });
     case CLEAR_ERR_MSG_CHANGE_PASSWORD:

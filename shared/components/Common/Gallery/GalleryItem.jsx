@@ -20,6 +20,7 @@ const propTypes = {
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   mediaObj: PropTypes.object.isRequired,
+  isProcessing: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired
 };
@@ -95,6 +96,7 @@ class GalleryItem extends Component {
       id,
       mediaObj,
       type,
+      isProcessing,
       isFetching
     } = this.props;
     const {
@@ -102,6 +104,7 @@ class GalleryItem extends Component {
       caption,
       dimension,
       isVideoCreated,
+      videoUrl,
       progress
     } = mediaObj;
     const link = `/edit/@${id}`;
@@ -149,7 +152,9 @@ class GalleryItem extends Component {
               mediaId={id}
               title={title}
               isVideoCreated={Boolean(isVideoCreated)}
-              isProcessing={isFetching}
+              videoUrl={videoUrl}
+              dimension={dimension}
+              isProcessing={isProcessing}
             >
               <i className="fa fa-share-square-o clickable" />
             </ShareModal>

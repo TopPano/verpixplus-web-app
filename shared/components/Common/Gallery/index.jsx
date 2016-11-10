@@ -19,6 +19,7 @@ const propTypes = {
   mediaIds: PropTypes.array.isRequired,
   hasNext: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired,
+  isProcessing: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   loadMore: PropTypes.func.isRequired
 };
@@ -32,7 +33,7 @@ class Gallery extends Component {
   }
 
   // Render list of gallery items
-  renderItems(progressMedia, progressMediaIds, media, mediaIds, isFetching, deleteMedia) {
+  renderItems(progressMedia, progressMediaIds, media, mediaIds, isProcessing, isFetching, deleteMedia) {
     let items = new Array();
     // Item for creation
     const createItem = (
@@ -41,6 +42,7 @@ class Gallery extends Component {
         id=""
         type={GALLERY_ITEM_TYPE.CREATE}
         mediaObj={{}}
+        isProcessing={isProcessing}
         isFetching={isFetching}
         deleteMedia={deleteMedia}
       />
@@ -52,6 +54,7 @@ class Gallery extends Component {
         id={id}
         type={GALLERY_ITEM_TYPE.PROGRESS}
         mediaObj={progressMedia[id]}
+        isProcessing={isProcessing}
         isFetching={isFetching}
         deleteMedia={deleteMedia}
       />
@@ -63,6 +66,7 @@ class Gallery extends Component {
         id={id}
         type={GALLERY_ITEM_TYPE.COMPLETED}
         mediaObj={media[id]}
+        isProcessing={isProcessing}
         isFetching={isFetching}
         deleteMedia={deleteMedia}
       />
@@ -83,6 +87,7 @@ class Gallery extends Component {
       progressMediaIds,
       hasNext,
       isFetching,
+      isProcessing,
       deleteMedia,
       loadMore
     } = this.props;
@@ -92,7 +97,7 @@ class Gallery extends Component {
     const slicedMediaIds =
       renderAll ? mediaIds : mediaIds.slice(0, mediaIds.length - remainder);
     const items =
-      this.renderItems(progressMedia, progressMediaIds, media, slicedMediaIds, isFetching, deleteMedia);
+      this.renderItems(progressMedia, progressMediaIds, media, slicedMediaIds, isProcessing, isFetching, deleteMedia);
 
     return (
       <div className="gallery-component container content">

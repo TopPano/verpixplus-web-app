@@ -6,7 +6,10 @@
       "EMBED": "Embed"
     },
     "SOCIAL": {
-      "SHARE_TO": "Share to"
+      "SHARE_TO": "Share to",
+      "SIGNATURE": "Create your imigination on Verpix",
+      "PLACE_HOLDER": "Say something...",
+      "SHARE_BTN": "share"
     },
     "EMBED": {
       "INSTALL": "SDK Installation",
