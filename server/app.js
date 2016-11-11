@@ -12,8 +12,8 @@ import { RouterContext, match } from 'react-router';
 
 import {
   fetchComponentsData,
-  genShareContent,
-  renderHTML
+  genHeadContent,
+  genDefaultContent
 } from './utils';
 
 import routes from 'shared/routes';
@@ -49,9 +49,9 @@ app.get('/embed/@:mediaId', (req, res) => {
   const { mediaId } = req.params;
 
   api.media.getMedia(mediaId).then((response) => {
-    const shareContent = genShareContent(req, true, response.result);
+    const content = genHeadContent(req, true, response.result);
 
-    res.render('embed', shareContent);
+    res.render('pages/embed', content);
   }).catch((err) => {
     console.log(err.stack);
     res.end(err.message);
@@ -103,13 +103,10 @@ app.use((req, res) => {
             </div>
           </Provider>
         );
-        const shareContent = genShareContent(req, false);
+        const headContent = genHeadContent(req, false);
+        const content = genDefaultContent(html, initialState, headContent, process.env.NODE_ENV);
 
-        return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
-      })
-      .then(html => {
-        // Send the rendered page back to the client
-        res.end(html);
+        res.render('pages/default', content);
       })
       .catch(err => {
         console.log(err.stack);

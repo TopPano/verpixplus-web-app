@@ -3,6 +3,7 @@ import merge from 'lodash/merge';
 import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api';
 
+import { EMBED } from 'constants/common';
 import SITE_CONTENT from 'content/site/en-us.json';
 import EMBED_CONTENT from 'content/embed/en-us.json';
 import {
@@ -12,7 +13,7 @@ import {
 } from 'constants/common';
 import { SITE_SHARE_IMAGE } from 'constants/site';
 
-export default function genShareContent(req, isEmbedPage, media) {
+export default function genHeadContent(req, isEmbedPage, media) {
   let shareContent = {
     image: `${clientConfig.staticUrl}${SITE_SHARE_IMAGE}`,
     imageWidth: SHARE_IMAGE_SIZE.LANDSCAPE.WIDTH,
@@ -22,6 +23,7 @@ export default function genShareContent(req, isEmbedPage, media) {
     url: `${req.protocol}://${req.get('Host')}${req.url}`,
     robots: process.NODE_ENV === 'production' ? 'index,follow' : 'noindex,nofollow',
     siteName: SITE_CONTENT.SITE_NAME,
+    livephotoSdk: EMBED.SDK_LIVEPHOTO,
     facebook: {
       id: externalApiConfig.facebook.id,
     }
@@ -49,7 +51,6 @@ export default function genShareContent(req, isEmbedPage, media) {
     const newTitle = title;
     const newDescription = caption;
     const video = `${content.cdnUrl}${content.shardingKey}/media/${sid}/live/video.mp4`;
-    const sdk = `${externalApiConfig.sdk.url}/sdk-${isLivephoto ? 'livephoto' : 'panorama'}.js`;
 
     shareContent = merge({}, shareContent, {
       mediaId: sid,
@@ -58,8 +59,7 @@ export default function genShareContent(req, isEmbedPage, media) {
       imageHeight: imageSize.HEIGHT,
       title: newTitle ? newTitle : defaultEmbedContent.DEFAULT_TITLE,
       description: newDescription ? newDescription : defaultEmbedContent.DEFAULT_DESCRIPTION,
-      video,
-      sdk
+      video
     });
   }
 
