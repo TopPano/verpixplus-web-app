@@ -3,8 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
-import CONTENT from 'content/workspace/en-us.json';
-import IconButton from 'components/Common/IconButton';
 import Loading from 'components/Common/Loading';
 import GalleryItem from './GalleryItem';
 
@@ -36,12 +34,18 @@ class Gallery extends Component {
   renderItems(progressMedia, progressMediaIds, media, mediaIds, isProcessing, isFetching, deleteMedia) {
     let items = new Array();
     // Item for creation
+    const createMediaObj = {
+      dimension: {
+        width: 260,
+        height: 180
+      }
+    };
     const createItem = (
       <GalleryItem
         key="item-create"
         id=""
         type={GALLERY_ITEM_TYPE.CREATE}
-        mediaObj={{}}
+        mediaObj={createMediaObj}
         isProcessing={isProcessing}
         isFetching={isFetching}
         deleteMedia={deleteMedia}
@@ -100,7 +104,7 @@ class Gallery extends Component {
       this.renderItems(progressMedia, progressMediaIds, media, slicedMediaIds, isProcessing, isFetching, deleteMedia);
 
     return (
-      <div className="gallery-component container content">
+      <div className="gallery-component">
         <div className="row marrgin-bottom-30">
           {items}
         </div>
@@ -110,11 +114,13 @@ class Gallery extends Component {
             {
               isFetching ?
               <Loading size={30} /> :
-              <IconButton
-                icon="arrow-down"
-                className="btn btn-u btn-u-light-green"
-                text={CONTENT.MORE}
-                handleClick={loadMore}
+              <img
+                className="clickable"
+                src="/static/images/workspace/load-more-btn.svg"
+                alt="load more"
+                width="40"
+                height="40"
+                onClick={loadMore}
               />
             }
           </div>

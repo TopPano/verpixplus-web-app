@@ -9,8 +9,8 @@ import genRandomNum from './genRandomNum';
 import genUUID from './genUUID';
 import imagesStorage from './imagesStorage';
 import imageBlobToDataUrl from './imageBlobToDataUrl.js';
+import getReadableDuration from './getReadableDuration';
 import Promise from './promise';
-
 
 export {
   connectDataFetchers,
@@ -25,5 +25,6 @@ export {
   genUUID,
   imagesStorage,
   imageBlobToDataUrl,
+  getReadableDuration,
   Promise
 };

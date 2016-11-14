@@ -1,0 +1,18 @@
+@import 'Variables.css';
+
+.info-panel-component {
+  .info-panel-btn {
+    .colelem {
+      width: 30px;
+      height: 3px;
+      background-color: #C1272D;
+      margin-top: 5px;
+      transition: background-color .3s ease;
+    }
+    &:hover {
+      .colelem {
+        background-color: $color-black;
+      }
+    }
+  }
+}

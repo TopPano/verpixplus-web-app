@@ -53,6 +53,14 @@
   border-bottom-right-radius: 4px;
 }
 
+.circle {
+  border-radius: 50%;
+}
+
+.main-bg {
+  background-color: #EBEBEB;
+}
+
 textarea {
   resize: none;
 }

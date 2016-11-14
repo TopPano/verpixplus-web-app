@@ -1,5 +1,25 @@
 @import 'Common.css';
+@import 'Variables.css';
 
 html, body {
   height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  text-align: left;
+  font-size: 14px;
+  line-height: 17px;
+  word-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
+#app {
+  background-color: $color-main-bg;
+  padding: 0 36px;
+
+  @media (width < $bp-xs-sm) {
+    padding: 0 10px;
+  }
 }

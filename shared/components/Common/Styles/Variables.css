@@ -1,7 +1,14 @@
-$color-black: black;
-$color-white: white;
+$color-black: #000000;
+$color-white: #FFFFFF;
 $color-grey: #7f8c8d;
 $color-green: #72c02c;
 $color-green-dark: #327000;
 $color-transparent-black: rgba(0, 0, 0, 0.5);
 $color-transparent-white: rgba(255, 255, 255, 0.5);
+
+$color-main-bg: #EBEBEC;
+
+/* Variables for breakpoints */
+$bp-xs-sm: 768px;
+$bp-sm-md: 992px;
+$bp-md-lg: 1200px;

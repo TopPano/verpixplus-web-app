@@ -3,11 +3,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Line } from 'rc-progress';
-import range from 'lodash/range';
 
 import CONTENT from 'content/workspace/en-us.json';
 import { DEFAULT_TITLE } from 'constants/common';
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
+import { getReadableDuration } from 'lib/utils';
 import ShareModal from 'containers/common/ShareModal';
 import DeleteModal from 'containers/common/DeleteModal';
 import Preview from './Preview';
@@ -29,10 +29,9 @@ const defaultProps = {
 };
 
 const COLOR_MAP = [
-  '#72C02C',
-  '#79D5B3',
-  '#3498DB',
-  '#9B6BCC'
+  '#C1272D',
+  '#C22D40',
+  '#DC143C'
 ];
 
 class GalleryItem extends Component {
@@ -40,35 +39,21 @@ class GalleryItem extends Component {
     super(props);
   }
 
-  // Select images for feeding to Preview component
-  selectPreviewImages(mediaObj, id) {
+  getCoverPhoto(mediaObj, id) {
     const {
-      count,
       cdnUrl,
-      shardingKey,
-      quality
+      shardingKey
     } = mediaObj.content;
-    const selectedQuality = quality[quality.length - 1];
-    const imgUrlPrefix = `${cdnUrl}${shardingKey}/media/${id}/live/${selectedQuality}`;
 
-    if (count < 5) {
-      return range(0, count).map((idx) => `${imgUrlPrefix}/${idx}.jpg`);
-    } else {
-      const step = parseInt(count / 5, 10);
-      return range(0, 5).map((idx) => `${imgUrlPrefix}/${idx * step}.jpg`);
-    }
+    return `${cdnUrl}${shardingKey}/media/${id}/live/thumb.jpg`;
   }
 
   // Render create view
-  renderCreateView() {
+  renderCreateMain() {
     return (
-      <Link
-        to="/upload"
-        className="gallery-item-create container-center-row fill clickable rounded"
-      >
-        <i className="fa fa-plus-circle" />
-        <h5><strong>New</strong></h5>
-      </Link>
+      <div className="create-main container-center-row">
+        <p className="text-center">{CONTENT.CREATE.MAIN}</p>
+      </div>
     );
   }
 
@@ -79,8 +64,8 @@ class GalleryItem extends Component {
     const color = COLOR_MAP[colorIdx];
 
     return (
-      <div className="gallery-item-progress container-center-row fill rounded">
-        <h6><strong>{`${percent}% ${CONTENT.COMPLETE}`}</strong></h6>
+      <div className="gallery-item-progress container-center-row fill">
+        <p>{`${percent}% ${CONTENT.COMPLETE}`}</p>
         <Line
           percent={percent}
           strokeColor={color}
@@ -101,20 +86,24 @@ class GalleryItem extends Component {
     } = this.props;
     const {
       title,
-      caption,
+      created,
       dimension,
       isVideoCreated,
       videoUrl,
       progress
     } = mediaObj;
-    const link = `/edit/@${id}`;
-    const selectedPreviewImages =
-      (type !== GALLERY_ITEM_TYPE.COMPLETED) ?
-      [] :
-      this.selectPreviewImages(mediaObj, id);
-    const createView =
+    const readableDuration = getReadableDuration(created);
+    const link =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? `/edit/@${id}` :
+      type === GALLERY_ITEM_TYPE.CREATE ? '/upload' :
+      '';
+    const coverPhoto =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? this.getCoverPhoto(mediaObj, id) :
+      type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.jpg' :
+      '';
+    const createMain =
       type === GALLERY_ITEM_TYPE.CREATE ?
-      this.renderCreateView(progress) :
+      this.renderCreateMain() :
       null;
     const progressView =
       type === GALLERY_ITEM_TYPE.PROGRESS ?
@@ -122,50 +111,43 @@ class GalleryItem extends Component {
       null;
 
     return(
-      <div className="gallery-item-component col-md-3 col-sm-6 col-xs-12">
-        <div className="thumbnails thumbnail-style rounded">
-          <div className="caption">
-            <h3 className="text-single-line">
-              <strong>
-                <Link
-                  className="hover-effect"
-                  to={link}
-                >
-                  {title ? title : DEFAULT_TITLE}
-                </Link>
-              </strong>
-            </h3>
-            {
-              caption ?
-              <p className="text-single-line">{caption}</p> :
-              <p className="text-single-line" ><br /></p>
-            }
-          </div>
+      <div className="gallery-item-component col-md-3 col-sm-4 col-xs-6">
+        <div className="thumbnails thumbnail-style">
           <Link to={link}>
             <Preview
-              images={selectedPreviewImages}
+              image={coverPhoto}
+              type={type}
               dimension={dimension}
             />
           </Link>
-          <div className="thumbnail-tools">
-            <ShareModal
-              mediaId={id}
-              title={title}
-              isVideoCreated={Boolean(isVideoCreated)}
-              videoUrl={videoUrl}
-              dimension={dimension}
-              isProcessing={isProcessing}
-            >
-              <i className="fa fa-share-square-o clickable" />
-            </ShareModal>
-            <DeleteModal
-              mediaId={id}
-              isProcessing={isFetching}
-            >
-              <i className="fa fa-trash-o clickable" />
-            </DeleteModal>
+          <div className="thumbnails-main">
+            <p className="title">{title ? title : DEFAULT_TITLE}</p>
+            <div className="thumbnails-toolsbar">
+              <p className="time text-center">{readableDuration}</p>
+              <div className="tools">
+                <ShareModal
+                  mediaId={id}
+                  title={title}
+                  isVideoCreated={Boolean(isVideoCreated)}
+                  videoUrl={videoUrl}
+                  dimension={dimension}
+                  isProcessing={isProcessing}
+                >
+                  <div className="tool tool-share circle clickable" />
+                </ShareModal>
+                <Link to={link}>
+                  <div className="tool tool-edit circle clickable" />
+                </Link>
+                <DeleteModal
+                  mediaId={id}
+                  isProcessing={isFetching}
+                >
+                  <div className="tool tool-delete circle clickable" />
+                </DeleteModal>
+              </div>
+            </div>
+            { createMain }
           </div>
-          { createView }
           { progressView }
         </div>
       </div>

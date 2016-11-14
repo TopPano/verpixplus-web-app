@@ -24,5 +24,9 @@
     "DESC": "This media will be deleted and you won't be able to find it anymore.",
     "CLOSE_BTN": "Cancel",
     "CONFIRM_BTN": "Delete"
+  },
+  "READABLE_DURATION": {
+    "AGO": "ago",
+    "JUST_NOW": "Just now"
   }
 }

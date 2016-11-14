@@ -18,11 +18,12 @@ class Brand extends Component {
     return (
       <Link
         to="/"
-        className="brand-component logo"
+        className="brand-component"
       >
         <img
-          src="/static/images/header/logo.png"
-          alt="Verpix Plus"
+          className="svg logo"
+          src="/static/images/header/logo.svg"
+          alt="Verpix"
         />
       </Link>
     );

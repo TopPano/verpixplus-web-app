@@ -2285,6 +2285,11 @@
       "from": "https-browserify@0.0.0",
       "resolved": "https://registry.npmjs.org/https-browserify/-/https-browserify-0.0.0.tgz"
     },
+    "humanize-duration": {
+      "version": "3.9.1",
+      "from": "humanize-duration@latest",
+      "resolved": "https://registry.npmjs.org/humanize-duration/-/humanize-duration-3.9.1.tgz"
+    },
     "iconv-lite": {
       "version": "0.4.13",
       "from": "iconv-lite@>=0.4.13 <0.5.0",
