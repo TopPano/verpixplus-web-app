@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import InfoPanel from 'components/Common/InfoPanel';
+import InfoPanel from 'containers/common/InfoPanel';
 import Brand from './Brand';
 
 if (process.env.BROWSER) {

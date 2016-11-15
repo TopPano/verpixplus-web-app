@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import isEmpty from 'is-empty';
 
 import CONTENT from 'content/workspace/en-us.json';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import Modal from 'components/Common/Modal';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
@@ -215,11 +215,10 @@ class ProfileEditor extends Component {
 
     return (
       <div className="profile-editor-component">
-        <IconButton
-          className="profile-editor-component btn btn-u rounded"
-          icon="pencil"
+        <FlatButton
+          className="profile-editor-btn"
           text={EDIT_PROFILE.TITLE}
-          handleClick={this.openModal}
+          onClick={this.openModal}
         />
         <Modal {...modalProps}>
           <MultiTabsContent

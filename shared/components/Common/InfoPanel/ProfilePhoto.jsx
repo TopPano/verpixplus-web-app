@@ -16,7 +16,7 @@ const propTypes = {
   userId: PropTypes.string.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
   isProcessing: PropTypes.object.isRequired,
-  updateProfilePicture: PropTypes.func.isRequired
+  updateProfilePhoto: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -33,7 +33,7 @@ class ProfilePhoto extends Component {
 
   // Handler for clicking profile picture
   handleClick() {
-    if (!this.props.isProcessing.updateProfilePicture) {
+    if (!this.props.isProcessing.updateProfilePhoto) {
       this.refs.dropzone.open();
     }
   }
@@ -42,13 +42,13 @@ class ProfilePhoto extends Component {
   handleDropFile(files) {
     const {
       userId,
-      updateProfilePicture,
+      updateProfilePhoto,
       isProcessing
     } = this.props;
 
-    if (!isProcessing.updateProfilePicture) {
+    if (!isProcessing.updateProfilePhoto) {
       if (isArray(files) && files[0]) {
-        updateProfilePicture({
+        updateProfilePhoto({
           userId,
           profilePicture: files[0]
         });
@@ -62,17 +62,17 @@ class ProfilePhoto extends Component {
       isProcessing
     } = this.props;
     const imgClass = classNames({
-      'profile-photo': true,
-      'clickable': !isProcessing.updateProfilePicture
+      'profile-photo circle': true,
+      'clickable': !isProcessing.updateProfilePhoto
     });
 
     return (
       <Dropzone
         ref="dropzone"
-        className="profile-photo-component"
+        className="profile-photo-component circle"
         multiple={false}
         accept="image/jpeg,image/png"
-        disableClick={isProcessing.updateProfilePicture}
+        disableClick={isProcessing.updateProfilePhoto}
         onDrop={this.handleDropFile}
       >
         <img
@@ -82,8 +82,8 @@ class ProfilePhoto extends Component {
           alt="profile picture"
         />
         {
-          isProcessing.updateProfilePicture &&
-          <div className="profile-photo-overlay container-center-row">
+          isProcessing.updateProfilePhoto &&
+          <div className="profile-photo-overlay circle container-center-row">
             <Loading size={30} />
           </div>
         }

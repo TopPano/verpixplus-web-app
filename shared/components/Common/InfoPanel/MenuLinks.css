@@ -1,0 +1,19 @@
+@import 'Variables.css';
+
+.menu-links-component {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+
+  .menu-link {
+    margin-top: 15px;
+    color: $color-white;
+    font-size: 18px;
+    line-height: 23px;
+    &.small {
+      font-size: 14px;
+      line-height: 18px;
+      margin-top: 20px;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+@import 'Variables.css';
+
+$bg-color: #C22D40;
+
+.flat-button-component {
+  background-color: $bg-color;
+  border-width: 1px;
+  border-color: $color-white;
+  border-style: solid;
+  color: $color-white;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 36px;
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

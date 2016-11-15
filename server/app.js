@@ -67,12 +67,14 @@ app.use((req, res) => {
     // restore the client state
     initState.user = {
       isFetching: false,
+      isProcessing: {},
       isAuthenticated: true,
       userId: req.cookies.userId,
       username: req.cookies.username,
       profilePhotoUrl: req.cookies.profilePhotoUrl,
       email: req.cookies.email,
-      created: req.cookies.created
+      created: req.cookies.created,
+      errMsgs: {}
     };
   }
 

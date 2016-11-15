@@ -28,5 +28,14 @@
   "READABLE_DURATION": {
     "AGO": "ago",
     "JUST_NOW": "Just now"
+  },
+  "INFO_PANEL": {
+    "MEDIA": "Media",
+    "HOME": "Home",
+    "UPLOAD": "Upload",
+    "TERMS_OF_USE": "Terms of Use",
+    "PRIVACY_POLICY": "Privacy Policy",
+    "SUPPORT": "Support",
+    "SIGNOUT": "Sign Out"
   }
 }
