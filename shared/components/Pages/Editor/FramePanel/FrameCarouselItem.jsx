@@ -76,7 +76,7 @@ class FrameCarouselItem extends Component {
       return (
         <div
           key={counter}
-          className="divider"
+          className="divider clickable"
           style={dividerStyle}
           onMouseOver={ () => { this.handleDividerMouseOver(active); } }
           onMouseLeave={this.handleDividerMouseLeave}
@@ -86,12 +86,13 @@ class FrameCarouselItem extends Component {
             this.handleDividerMouseDown(e, type);
           }}
         >
+          <div className="marker-bg" />
           <div className={markClass}>
             {
               isLarge &&
-              <div className="counter">
+              <p className="counter">
                 {counter}
-              </div>
+              </p>
             }
           </div>
           <div className={overlayClass} />

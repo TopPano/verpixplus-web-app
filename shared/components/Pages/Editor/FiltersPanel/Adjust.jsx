@@ -75,10 +75,10 @@ class Adjust extends Component {
     } = this.props;
 
     return (
-      <div className="adjust-component margin-bottom-5">
-        <div className="panel-heading overflow-h">
-          <h5 className="panel-tile heading-sm pull-left">{title}</h5>
-          <h5 className="adjust-value rounded pull-right">{shownValue}</h5>
+      <div className="adjust-component margin-bottom-15">
+        <div className="adjust-text overflow-h">
+          <p className="pull-left">{title}</p>
+          <p className="adjust-value rounded pull-right">{shownValue}</p>
         </div>
         <Slider
           min={min}

@@ -16,10 +16,15 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  links: PropTypes.arrayOf(PropTypes.shape({
+    to: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  })),
   close: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  links: []
 };
 
 class MenuLinks extends Component {
@@ -79,13 +84,18 @@ class MenuLinks extends Component {
   }
 
   render() {
-    const linksProps = [{
+    const { links } = this.props;
+    let linksProps = [{
       to: '/',
       text: INFO_PANEL.HOME
-    }, {
-      to: '/upload',
-      text: `${INFO_PANEL.UPLOAD} ${INFO_PANEL.MEDIA}`
-    }, {
+    }];
+    linksProps = linksProps.concat(
+      links.length > 0 ? links : [{
+        to: '/upload',
+        text: `${INFO_PANEL.UPLOAD} ${INFO_PANEL.MEDIA}`
+      }]
+    );
+    linksProps = linksProps.concat([{
       break: true
     }, {
       to: '/faq',
@@ -101,7 +111,7 @@ class MenuLinks extends Component {
       text: INFO_PANEL.PRIVACY_POLICY,
       blank: true,
       small: true
-    }];
+    }]);
     const menuLinks = this.renderLinks(linksProps);
 
     return (

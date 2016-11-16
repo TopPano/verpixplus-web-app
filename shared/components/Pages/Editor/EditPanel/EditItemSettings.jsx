@@ -7,7 +7,7 @@ import { MODE } from 'constants/editor';
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import Modal from 'components/Common/Modal';
 import DeleteModal from 'containers/common/DeleteModal';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import SwitchButton from 'components/Common/SwitchButton';
 import SidebarItem from '../SidebarItem';
 
@@ -128,15 +128,12 @@ class EditItemSettings extends Component {
     } = this.props;
     const saveBtnProps = {
       className: classNames({
-        'btn btn-u text-uppercase rounded margin-right-10': true,
-        'btn-u-orange': filters.isDirty
+        'sidebar-btn': true,
+        'dirty': filters.isDirty
       }),
-      icon: 'floppy-o',
-      text: mode === MODE.WAIT_FILE || mode === MODE.CREATE ? CONTENT.POST :
-            mode === MODE.EDIT ? CONTENT.UPDATE :
-            '',
+      text: CONTENT.SAVE,
       disabled: mode !== MODE.CREATE && mode !== MODE.EDIT,
-      handleClick: this.handleClickSave
+      onClick: this.handleClickSave
     }
     const warnModalProps = {
       ref: 'warnModal',
@@ -144,7 +141,7 @@ class EditItemSettings extends Component {
       confirmBtn: {
         icon: 'floppy-o',
         className: 'btn btn-u text-uppercase pull-right rounded',
-        text: CONTENT.POST,
+        text: CONTENT.SAVE,
         onClick: () => {
           this.refs.warnModal.close();
           this.createMedia();
@@ -158,32 +155,27 @@ class EditItemSettings extends Component {
 
     return (
       <div className="edit-item-settings-component">
-        <SidebarItem
-          icon="cog"
-          title={CONTENT.TITLE}
-        >
-          <div className="autoplay panel-heading overflow-h">
-            <h5 className="panel-title heading-sm pull-left">
-              {CONTENT.AUTOPLAY}
-            </h5>
+        <SidebarItem>
+          <div className="autoplay overflow-h">
             <SwitchButton
-              className="pull-right"
               checked={autoplay}
               onChange={this.handleChangeAutoplay}
             />
+            <p className="">
+              {CONTENT.AUTOPLAY}
+            </p>
           </div>
-          <div className="margin-bottom-20" />
+          <div className="margin-bottom-60" />
           <div className="btns-wrapper">
-            <IconButton {...saveBtnProps} />
+            <FlatButton {...saveBtnProps} />
             {
               mode === MODE.EDIT &&
               <DeleteModal
                 mediaId={mediaId}
                 isProcessing={isProcessing}
               >
-                <IconButton
-                  className="btn btn-u btn-u-red text-uppercase rounded"
-                  icon="trash-o"
+                <FlatButton
+                  className="sidebar-btn"
                   text={CONTENT.DELETE}
                 />
               </DeleteModal>

@@ -306,7 +306,6 @@ class FrameCarousel extends Component {
     } = this.props;
     const componentClass = classNames({
       'frame-carousel-component': true,
-      'rounded': true,
       'disabled': disabled
     });
     const carouselProps = {
@@ -322,7 +321,7 @@ class FrameCarousel extends Component {
         scrollbarDraggable: true
       },
       showScrollbar: true,
-      carouselClass: 'frame-carousel rounded'
+      carouselClass: 'frame-carousel'
     };
     const isDividerHighlighted = isHoveringActiveDivider || move.isMoving || resize.isResizing;
     const resizedDimension = this.resizeDimension(dimension);

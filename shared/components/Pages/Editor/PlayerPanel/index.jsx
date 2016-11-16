@@ -32,7 +32,7 @@ class PlayerPanel extends Component {
 
   render() {
     return (
-      <div className="player-panel-component bg-color-light">
+      <div className="player-panel-component overflow-hidden">
         <LivephotoPlayer {...this.props} />
       </div>
     );

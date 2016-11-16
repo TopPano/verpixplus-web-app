@@ -17,6 +17,12 @@ $main-color: #C1272D;
       transition: background-color .3s ease;
     }
     &:hover {
+      &.light {
+        .colelem {
+          background-color: $color-white;
+        }
+      }
+
       .colelem {
         background-color: $color-black;
       }

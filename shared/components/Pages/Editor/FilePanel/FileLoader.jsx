@@ -8,6 +8,7 @@ import isArray from 'lodash/isArray';
 import { ACCEPT_TYPES } from 'constants/editor';
 import { MEDIA_TYPE } from 'constants/common';
 import CONTENT from 'content/editor/en-us.json';
+import FlatButton from 'components/Common/FlatButton';
 
 if (process.env.BROWSER) {
   require('./FileLoader.css');
@@ -78,13 +79,11 @@ class FileLoader extends Component {
           multiple={false}
           accept={this.acceptTypes}
         >
-          <button
-            className="btn-u"
-            type="button"
+          <FlatButton
+            className="file-loader-btn"
+            text={CONTENT.FILE_PANEL.LOADER.BTN}
             onClick={this.handleClickBtn}
-          >
-            {CONTENT.FILE_PANEL.LOADER.BTN}
-          </button>
+          />
           <br />
           <p>{CONTENT.FILE_PANEL.LOADER.DESC}</p>
         </Dropzone>

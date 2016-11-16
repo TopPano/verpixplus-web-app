@@ -39,14 +39,11 @@ class EditItemCaption extends Component {
     const { caption } = this.props;
     return (
       <div className="edit-item-caption-component">
-        <SidebarItem
-          icon="comment"
-          title={CONTENT.TITLE}
-        >
+        <SidebarItem>
           <textarea
             ref="captionInput"
-            className="form-control bg-color-light-grey"
-            rows="4"
+            className="form-control"
+            rows="5"
             placeholder={CONTENT.PLACE_HOLDER}
             value={caption}
             onChange={this.handleChange}

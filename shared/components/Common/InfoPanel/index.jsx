@@ -21,6 +21,11 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   user: PropTypes.object.isRequired,
+  light: PropTypes.bool,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    to: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  })),
   updateProfilePhoto: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
   editAutobiography: PropTypes.func.isRequired,
@@ -30,6 +35,8 @@ const propTypes = {
 };
 
 const defaultProps = {
+  light: false,
+  links: []
 };
 
 class InfoPanel extends Component {
@@ -106,6 +113,8 @@ class InfoPanel extends Component {
   render() {
     const { isOpen } = this.state;
     const {
+      light,
+      links,
       updateProfilePhoto,
       updateProfile,
       editAutobiography,
@@ -122,6 +131,10 @@ class InfoPanel extends Component {
       isProcessing,
       errMsgs
     } = this.props.user;
+    const btnClass = classNames({
+      'info-panel-btn clickable': true,
+      'light': light
+    });
     const overlayClass = classNames({
       'info-panel-overlay': true,
       'open': isOpen
@@ -134,7 +147,7 @@ class InfoPanel extends Component {
     return (
       <div className="info-panel-component">
         <div
-          className="info-panel-btn clickable"
+          className={btnClass}
           onClick={this.toggle}
         >
           <div className="colelem" />
@@ -168,7 +181,10 @@ class InfoPanel extends Component {
                 isProcessing={isProcessing}
                 updateProfilePhoto={updateProfilePhoto}
               />
-              <MenuLinks close={this.close} />
+              <MenuLinks
+                links={links}
+                close={this.close}
+              />
               <div style={{ paddingTop: '100px' }} />
               <ProfileEditor
                 userId={userId}

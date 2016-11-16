@@ -40,14 +40,11 @@ class EditItemTitle extends Component {
 
     return (
       <div className="edit-item-title-component">
-        <SidebarItem
-          icon="info-circle"
-          title={CONTENT.TITLE}
-        >
+        <SidebarItem>
           <input
             type="text"
             ref="titleInput"
-            className="form-control bg-color-light-grey"
+            className="form-control"
             placeholder={CONTENT.PLACE_HOLDER}
             value={title}
             onChange={this.handleChange}

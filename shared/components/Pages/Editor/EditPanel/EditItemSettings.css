@@ -2,21 +2,43 @@
 
 .edit-item-settings-component {
   .autoplay {
-    .panel-title {
-      color: #AAA;
-      cursor: default;
-    }
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
 
     .rc-switch {
-      border: none;
+      height: 25px;
+      line-height: 23px;
+      width: 45px;
+      border-color: #2C2F2D;
+      background-color: #121212;
+      &:after {
+        height: 20px;
+        width: 20px;
+        top: 1px;
+        background-color: $color-red;
+        box-shadow: none;
+      }
+      &:focus {
+        box-shadow: none;
+      }
       &.rc-switch-checked {
-        background-color: $color-green;
+        background-color: #color-grey;
       }
     }
+
+    p {
+      margin: 0 0 0 20px;
+      color: $color-grey;
+      font-size: 15px;
+      line-height: 23px;
+    }
+
   }
 
   .btns-wrapper {
     display: flex;
-    flex-flow: row wrap;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

@@ -16,10 +16,17 @@ import {
 import InfoPanel from 'components/Common/InfoPanel';
 
 const propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  light: PropTypes.bool,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    to: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  }))
 };
 
 const defaultProps = {
+  light: false,
+  links: []
 };
 
 class InfoPanelPageContainer extends Component {
@@ -74,7 +81,7 @@ class InfoPanelPageContainer extends Component {
   render() {
     return (
       <InfoPanel
-        user={this.props.user}
+        {...this.props}
         updateProfilePhoto={this.updateProfilePhoto}
         updateProfile={this.updateProfile}
         editAutobiography={this.editAutobiography}
@@ -89,11 +96,12 @@ class InfoPanelPageContainer extends Component {
 InfoPanelPageContainer.propTypes = propTypes;
 InfoPanelPageContainer.defaultProps = defaultProps;
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const { user } = state;
 
   return {
-    user
+    user,
+    ...ownProps
   };
 }
 

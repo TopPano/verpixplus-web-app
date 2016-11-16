@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 
 import EDITOR_CONTENT from 'content/editor/en-us.json';
 import { renderList } from 'lib/utils';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import SidebarItem from '../SidebarItem';
 import Adjust from './Adjust';
 
@@ -110,11 +110,11 @@ class FiltersItemAdjusts extends Component {
     }];
     const adjustList = this.renderAdjustList(adjustListProps);
     const applyBtnProps = {
-      className: 'btn btn-u text-uppercase rounded margin-right-10',
+      className: 'sidebar-btn',
       icon: 'file-image-o',
       text: CONTENT.APPLY,
       disabled: !filters.isDirty,
-      handleClick: this.handleClickApply
+      onClick: this.handleClickApply
     }
 
     return (
@@ -125,7 +125,7 @@ class FiltersItemAdjusts extends Component {
         >
           {adjustList}
           <div className="margin-bottom-25" />
-          <IconButton {...applyBtnProps} />
+          <FlatButton {...applyBtnProps} />
         </SidebarItem>
       </div>
     );
