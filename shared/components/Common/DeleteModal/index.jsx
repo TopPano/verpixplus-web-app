@@ -67,8 +67,7 @@ class DeleteModal extends Component {
         text: CONTENT.CLOSE_BTN
       },
       confirmBtn: {
-        icon: 'trash',
-        className: 'btn btn-u btn-u-red pull-right rounded',
+        className: 'modal-btn pull-right',
         text: CONTENT.CONFIRM_BTN,
         onClick: this.handleClickDeleteBtn
       },

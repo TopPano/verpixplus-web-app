@@ -50,7 +50,6 @@ class ShareEmbedCoder extends Component {
     } = this.props;
     const copiedClass = classNames({
       'copied': true,
-      'rounded': true,
       'active': isCopied
     });
 
@@ -71,7 +70,6 @@ class ShareEmbedCoder extends Component {
               <i className="copy icon-lg fa fa-clipboard" />
             </div>
             <h5 className={copiedClass}>
-              <i className="fa fa-check-circle-o" />
               {`${CONTENT.COPIED} `}
             </h5>
           </div>

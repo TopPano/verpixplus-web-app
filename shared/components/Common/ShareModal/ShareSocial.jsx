@@ -6,8 +6,7 @@ import isEmpty from 'is-empty';
 import FacebookLogin from 'react-facebook-login';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
-import { renderList } from 'lib/utils';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api'
 
@@ -61,7 +60,6 @@ class ShareSocial extends Component {
 
     // Bind "this" to member functions
     this.handleClickFacebookBtn = this.handleClickFacebookBtn.bind(this);
-    this.handleClickTwitterBtn = this.handleClickTwitterBtn.bind(this);
     this.handleClickShareToFacebookBtn = this.handleClickShareToFacebookBtn.bind(this);
   }
 
@@ -80,25 +78,6 @@ class ShareSocial extends Component {
   // Genrate the sharing url by media ID
   genShareUrl(mediaId) {
     return `${clientConfig.staticUrl}/embed/@${mediaId}`;
-  }
-
-  // Share to Twitter
-  shareTwitter() {
-    this.setState({
-      shareTarget: SHARE_TARGET.TWITTER
-    });
-
-    const {
-      title,
-      mediaId
-    } = this.props;
-    const shareUrl = this.genShareUrl(mediaId);
-    const positionLeft = (screen.width / 2) - 400;
-    const positionTop = (screen.height / 2) - 200;
-    const spec =`height=400,width=800,top=${positionTop},left=${positionLeft}`;
-    const url = `https://twitter.com/share?text=${title}&url=${encodeURIComponent(shareUrl)}`;
-
-    window.open(url, 'name', spec);
   }
 
   // Handler for clicking facebook sharing button
@@ -136,11 +115,6 @@ class ShareSocial extends Component {
         }
       }
     }
-  }
-
-  // Handler for clicking Twitter sharing button
-  handleClickTwitterBtn() {
-    this.shareTwitter();
   }
 
   // Handler for clicking button to share video to Facebook
@@ -197,18 +171,6 @@ class ShareSocial extends Component {
     };
   }
 
-  // Render list of social buutons
-  renderBtnsList(propsList) {
-    return renderList(propsList, (props, idx) => {
-      return (
-        <IconButton
-          key={idx}
-          {...props}
-        />
-      );
-    });
-  }
-
   render() {
     const {
       videoUrl,
@@ -216,19 +178,11 @@ class ShareSocial extends Component {
       isProcessing
     } = this.props;
     const disabled = isProcessing.createVideo || isProcessing.shareFacebookVideo
-    const { shareTarget } = this.state;
-    const btnClass = classNames({
-      'share-social-btn btn-u btn-brd rounded btn-u-sea': true,
+    const fbLoginBtnClass = classNames({
+      'flat-button-component share-btn': true,
       'disabled': disabled
     });
-    const btnsListProps = [{
-      icon: 'twitter',
-      text: 'Twitter',
-      className: btnClass,
-      disabled,
-      handleClick: this.handleClickTwitterBtn
-    }];
-    const btnsList = this.renderBtnsList(btnsListProps);
+    const { shareTarget } = this.state;
     const previewVideoStyle = this.calculatePreviewVideoStyle(dimension);
 
     return (
@@ -243,11 +197,9 @@ class ShareSocial extends Component {
                 version={externalApiConfig.facebook.version}
                 scope="publish_actions"
                 callback={this.handleClickFacebookBtn}
-                cssClass={btnClass}
-                icon="fa-facebook"
+                cssClass={fbLoginBtnClass}
                 textButton="Facebook"
               />
-              {btnsList}
             </div>
           </div>
         }
@@ -272,12 +224,11 @@ class ShareSocial extends Component {
               loop
             />
             <div className="margin-bottom-15" />
-            <IconButton
-              icon="facebook"
+            <FlatButton
               text={CONTENT.SHARE_BTN}
-              className={btnClass}
+              className="share-btn"
               disabled={disabled}
-              handleClick={this.handleClickShareToFacebookBtn}
+              onClick={this.handleClickShareToFacebookBtn}
             />
           </div>
         }

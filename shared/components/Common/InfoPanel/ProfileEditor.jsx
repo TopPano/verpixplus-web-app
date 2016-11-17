@@ -196,8 +196,6 @@ class ProfileEditor extends Component {
       ref: 'modal',
       title: EDIT_PROFILE.TITLE,
       confirmBtn: {
-        icon: 'floppy-o',
-        className: 'btn btn-u pull-right rounded',
         text: EDIT_PROFILE.CONFIRM_BTN,
         onClick: this.handleClickConfirmBtn
       },

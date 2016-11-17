@@ -5,7 +5,7 @@ import ReactModal from 'react-bootstrap/lib/Modal';
 import merge from 'lodash/merge';
 
 import CONTENT from 'content/site/en-us.json';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import Loading from 'components/Common/Loading';
 
 if (process.env.BROWSER) {
@@ -15,14 +15,12 @@ if (process.env.BROWSER) {
 const propTypes = {
   title: PropTypes.string,
   closeBtn: PropTypes.shape({
-    icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
     show: PropTypes.bool,
     onClick: PropTypes.func
   }),
   confirmBtn: PropTypes.shape({
-    icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
     show: PropTypes.bool,
@@ -35,14 +33,12 @@ const propTypes = {
 const defaultProps = {
   title: '',
   closeBtn: {
-    icon: 'times',
-    className: 'btn btn-u btn-u-default pull-left rounded',
+    className: 'modal-btn close-btn pull-left',
     text: CONTENT.MODAL.DEFAULT_CLOSE_BTN,
     show: true
   },
   confirmBtn: {
-    icon: 'check',
-    className: 'btn btn-u pull-right rounded',
+    className: 'modal-btn confirm-btn pull-right',
     text: CONTENT.MODAL.DEFAULT_CONFIRM_BTN,
     show: true
   },
@@ -116,18 +112,18 @@ class Modal extends Component {
         <ReactModal.Footer>
           {
             closeBtnProps.show &&
-            <IconButton
+            <FlatButton
               {...closeBtnProps}
               disabled={isProcessing}
-              handleClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
+              onClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
             />
           }
           {
             confirmBtnProps.show &&
-            <IconButton
+            <FlatButton
               {...confirmBtnProps}
               disabled={isProcessing}
-              handleClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
+              onClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
             />
           }
         </ReactModal.Footer>

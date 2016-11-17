@@ -64,6 +64,10 @@ textarea {
   resize: none;
 }
 
+.title-v1 h1, .title-v1 h2, h1, h2, h3, h4, h5, h6 {
+  font-family: source-sans-pro, sans-serif;
+}
+
 /* Customized styles for Bootstrap and Unify */
 .btn:focus {
   color: inherit;

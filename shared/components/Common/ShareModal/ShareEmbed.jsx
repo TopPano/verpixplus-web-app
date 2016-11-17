@@ -10,7 +10,7 @@ import JSZip from 'jszip';
 import COMMON_CONTENT from 'content/common/en-us.json';
 import { EMBED } from 'constants/common';
 import Livephoto from 'components/Common/Livephoto';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 import genAdHTML from './genAdHTML';
 
@@ -144,17 +144,15 @@ class ShareEmbed extends Component {
             />
           </div>
         <div className="preview-btn-wrapper text-center">
-          <IconButton
-            className="share-embed-btn btn-u btn-brd btn-brd-hover rounded btn-u-sea"
-            icon={`fa fa-${showPreview ? 'code' : 'eye'}`}
+          <FlatButton
+            className="share-btn"
             text={showPreview ? CONTENT.CODE : CONTENT.PREVIEW}
-            handleClick={this.handleClickPreviewBtn}
+            onClick={this.handleClickPreviewBtn}
           />
-          <IconButton
-            className="share-embed-btn btn-u btn-brd btn-brd-hover rounded btn-u-sea"
-            icon="download"
-            text="Download"
-            handleClick={this.handleClickDownloadBtn}
+          <FlatButton
+            className="share-btn"
+            text={CONTENT.DOWNLOAD}
+            onClick={this.handleClickDownloadBtn}
           />
         </div>
       </div>

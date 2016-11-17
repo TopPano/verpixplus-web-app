@@ -1,9 +1,7 @@
 @import 'Variables.css';
 
-$bg-color: #C22D40;
-
 .flat-button-component {
-  background-color: $bg-color;
+  background-color: $color-red;
   border-width: 1px;
   border-color: $color-white;
   border-style: solid;
@@ -11,8 +9,16 @@ $bg-color: #C22D40;
   font-size: 18px;
   font-weight: 400;
   line-height: 36px;
+  padding: 0 10px;
+  transition: background-color .3s ease;
+  &:hover {
+    background-color: #D22D40;
+  }
   &.disabled {
     cursor: not-allowed;
     opacity: 0.5;
+    &:hover {
+      background-color: $color-red;
+    }
   }
 }
