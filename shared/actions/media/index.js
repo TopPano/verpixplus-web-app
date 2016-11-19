@@ -9,6 +9,7 @@ import externalApiConfig from 'etc/external-api';
 import { MEDIA_TYPE } from 'constants/common';
 import { NOTIFICATIONS } from 'constants/notifications';
 import concatImages from './concatImages';
+import createVideo from './createVideo';
 import { pushNotification } from '../notifications';
 import {
   genRandomNum,
@@ -257,80 +258,6 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
   };
 }
 
-export const CREATE_VIDEO_REQUEST = 'CREATE_VIDEO_REQUEST';
-export const CREATE_VIDEO_SUCCESS = 'CREATE_VIDEO_SUCCESS';
-export const CREATE_VIDEO_FAILURE = 'CREATE_VIDEO_FAILURE';
-
-function createVideoRequest() {
-  return {
-    type: CREATE_VIDEO_REQUEST
-  };
-}
-
-function createVideoSuccess(response) {
-  return {
-    type: CREATE_VIDEO_SUCCESS,
-    response
-  };
-}
-
-// Interval for asking video creation status
-const VIDEO_POLLING_INTERVAL = 500;
-// maximun times for asking video creation status
-const VIDEO_RETRY_MAX_TIMES = 60;
-
-function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
-  api.media.getVideo(mediaId).then((res) => {
-    const { videoStatus } = res.result;
-
-    switch (videoStatus) {
-      case 'completed':
-      {
-        const {
-          cdnUrl,
-          shardingKey,
-          videoType
-        } = res.result;
-        const videoUrl = `${cdnUrl}${shardingKey}/media/${mediaId}/live/video.${videoType}`;
-        dispatch(createVideoSuccess({
-          mediaId,
-          videoUrl
-        }));
-        return;
-      }
-      case 'pending':
-        if (retryTimes < VIDEO_RETRY_MAX_TIMES) {
-          setTimeout(() => {
-            pollingAskVideoStatus(dispatch, mediaId, retryTimes + 1);
-          }, VIDEO_POLLING_INTERVAL);
-        } else {
-          handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Timeout'));
-        }
-        return;
-      case 'failed':
-        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Create video failed'));
-        return;
-      default:
-        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error(`Unknown video status: ${videoStatus}`));
-        return;
-    }
-  }).catch((err) => {
-    handleError(dispatch, CREATE_VIDEO_FAILURE, err);
-  });
-}
-
-export function createVideo({ mediaId, userSession = {} }) {
-  return (dispatch) => {
-    dispatch(createVideoRequest());
-
-    api.media.postVideo(mediaId, userSession.accessToken).then(() => {
-      pollingAskVideoStatus(dispatch, mediaId, 0);
-    }).catch((err) => {
-      handleError(dispatch, CREATE_VIDEO_FAILURE, err);
-    });
-  };
-}
-
 export const SHARE_FACEBOOK_VIDEO_REQUEST = 'SHARE_FACEBOOK_VIDEO_REQUEST';
 export const SHARE_FACEBOOK_VIDEO_SUCCESS = 'SHARE_FACEBOOK_VIDEO_SUCCESS';
 export const SHARE_FACEBOOK_VIDEO_FAILURE = 'SHARE_FACEBOOK_VIDEO_FAILURE';
@@ -347,27 +274,36 @@ function shareFacebookVideoSuccess() {
   };
 }
 
-export function shareFacebookVideo({ targetId, videoUrl, description, accessToken }) {
+export function shareFacebookVideo({
+  mediaId,
+  targetId,
+  description,
+  userSession = {},
+  fbAccessToken
+}) {
   return (dispatch) => {
-    const init = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        file_url: videoUrl,
-        description
-      })
-    };
-    const {
-      apiRoot,
-      version
-    } = externalApiConfig.facebook;
-    const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${accessToken}`;
-
     dispatch(shareFacebookVideoRequest());
-    fetch(url, init).then(() => {
+
+    createVideo(mediaId, userSession.accessToken).then((videoUrl) => {
+      const init = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          file_url: videoUrl,
+          description
+        })
+      };
+      const {
+        apiRoot,
+        version
+      } = externalApiConfig.facebook;
+      const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${fbAccessToken}`;
+
+      return fetch(url, init);
+    }).then(() => {
       dispatch(shareFacebookVideoSuccess());
       dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
     }).catch((err) => {

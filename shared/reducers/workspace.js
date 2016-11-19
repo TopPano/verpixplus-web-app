@@ -26,9 +26,6 @@ import {
   CREATE_MEDIA_SUCCESS,
   // TODO: Handle failure for media creation
   // CREATE_MEDIA_FAILURE,
-  CREATE_VIDEO_REQUEST,
-  CREATE_VIDEO_SUCCESS,
-  CREATE_VIDEO_FAILURE,
   SHARE_FACEBOOK_VIDEO_REQUEST,
   SHARE_FACEBOOK_VIDEO_SUCCESS,
   SHARE_FACEBOOK_VIDEO_FAILURE,
@@ -45,7 +42,6 @@ const DEFAULT_STATE = {
     updateProfilePicture: false,
     updateProfile: false,
     changePassword: false,
-    createVideo: false,
     shareFacebookVideo: false
   },
   userId: undefined,
@@ -111,12 +107,6 @@ export default function workspace(state=DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: {
           changePassword: true
-        }
-      });
-    case CREATE_VIDEO_REQUEST:
-      return merge({}, state, {
-        isProcessing: {
-          createVideo: true
         }
       });
     case SHARE_FACEBOOK_VIDEO_REQUEST:
@@ -193,26 +183,6 @@ export default function workspace(state=DEFAULT_STATE, action) {
 
       return newState;
     }
-    case CREATE_VIDEO_SUCCESS:
-    {
-      const {
-        mediaId,
-        videoUrl
-      } = action.response;
-      return merge({}, state, {
-        isProcessing: {
-          createVideo: false
-        },
-        media: {
-          objs: {
-            [mediaId]: {
-              isVideoCreated: true,
-              videoUrl
-            }
-          }
-        }
-      });
-    }
     case UPDATE_PROFILE_PICTURE_SUCCESS:
     {
       return merge({}, state, {
@@ -286,12 +256,6 @@ export default function workspace(state=DEFAULT_STATE, action) {
         },
         isProcessing: {
           changePassword: false
-        }
-      });
-    case CREATE_VIDEO_FAILURE:
-      return merge({}, state, {
-        isProcessing: {
-          createVideo: false
         }
       });
     case SHARE_FACEBOOK_VIDEO_FAILURE:
