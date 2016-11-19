@@ -7,10 +7,17 @@ import { push } from 'react-router-redux';
 
 import externalApiConfig from 'etc/external-api';
 import { MEDIA_TYPE } from 'constants/common';
-import { NOTIFICATIONS } from 'constants/notifications';
+import {
+  NOTIFICATIONS,
+  NOTIFICATION_TYPES
+} from 'constants/notifications';
 import concatImages from './concatImages';
 import createVideo from './createVideo';
-import { pushNotification } from '../notifications';
+import {
+  pushNotification,
+  updateProgressNotification,
+  popNotification
+} from '../notifications';
 import {
   genRandomNum,
   genUUID
@@ -277,12 +284,33 @@ function shareFacebookVideoSuccess() {
 export function shareFacebookVideo({
   mediaId,
   targetId,
+  title,
   description,
   userSession = {},
   fbAccessToken
 }) {
   return (dispatch) => {
+    const id = genUUID();
+    let progress = 0;
+
     dispatch(shareFacebookVideoRequest());
+    dispatch(pushNotification({
+      type: NOTIFICATION_TYPES.PROGRESS,
+      message: NOTIFICATIONS.SHARE_PROGRESS,
+      title,
+      progress
+    }, id));
+
+    const timer = setInterval(() => {
+      if (progress < 0.99) {
+        const addedProgress = genRandomNum(0.005, 0.02);
+        progress =
+          ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
+        dispatch(updateProgressNotification(id, progress));
+      } else {
+        clearInterval(timer);
+      }
+    }, 200);
 
     createVideo(mediaId, userSession.accessToken).then((videoUrl) => {
       const init = {
@@ -304,9 +332,14 @@ export function shareFacebookVideo({
 
       return fetch(url, init);
     }).then(() => {
+      clearInterval(timer);
       dispatch(shareFacebookVideoSuccess());
+      dispatch(updateProgressNotification(id, 1));
+      dispatch(popNotification(id));
       dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
     }).catch((err) => {
+      clearInterval(timer);
+      dispatch(popNotification(id));
       handleError(dispatch, SHARE_FACEBOOK_VIDEO_FAILURE, err);
     });
   };

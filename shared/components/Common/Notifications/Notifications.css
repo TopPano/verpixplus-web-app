@@ -1,2 +1,24 @@
+@import 'Variables.css';
+
 .notifications-component {
+  .notifications-br {
+    .notification-info.notification-not-dismissible {
+      /* Styles for progress notification */
+      background-color: #EEE !important;
+      border: solid 1px #CCC !important;
+      border-radius: 6px !important;
+      box-shadow: none !important;
+      font-family: source-sans-pro, sans-serif !important;
+
+      .notification-title {
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        color: $color-grey !important;
+      }
+
+      .notification-message {
+        color: #9F9F9F;
+      }
+    }
+  }
 }

@@ -5,6 +5,7 @@ import isEmpty from 'is-empty';
 import FacebookLogin from 'react-facebook-login';
 
 import COMMON_CONTENT from 'content/common/en-us.json';
+import { DEFAULT_TITLE } from 'constants/common';
 import FlatButton from 'components/Common/FlatButton';
 import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api'
@@ -73,6 +74,7 @@ class ShareSocial extends Component {
   handleClickShareToFacebookBtn() {
     const {
       mediaId,
+      title,
       shareFacebookVideo,
       close
     } = this.props;
@@ -89,6 +91,7 @@ class ShareSocial extends Component {
     shareFacebookVideo({
       mediaId,
       targetId: fbUserId,
+      title: title ? title : DEFAULT_TITLE,
       description,
       fbAccessToken
     });

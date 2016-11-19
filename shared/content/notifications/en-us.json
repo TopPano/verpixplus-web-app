@@ -6,5 +6,9 @@
   "UPDATE_PROFILE_SUCCESS": "Your profile is updated",
   "CHANGE_PASSWORD_SUCCESS": "Your password is changed",
   "APPLY_FILTERS_SUCCESS": "Filters is applied",
-  "SHARE_SUCCESS": "Your media is shared successfully"
+  "SHARE_SUCCESS": "Your media is shared successfully",
+  "PROGRESS": {
+    "SHARING_FACEBOOK": "Sharing to Facebook...",
+    "COMPLETE": "complete"
+  }
 }

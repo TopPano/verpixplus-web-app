@@ -2,7 +2,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import NotificationSystem from 'react-notification-system';
+import indexOf from 'lodash/indexOf';
+import findIndex from 'lodash/findIndex';
 
+import { NOTIFICATION_TYPES } from 'constants/notifications';
 import CONTENT from 'content/notifications/en-us.json';
 
 if (process.env.BROWSER) {
@@ -10,7 +13,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  notifications: PropTypes.object.isRequired,
   popNotification: PropTypes.func.isRequired
 };
 
@@ -20,37 +23,96 @@ const defaultProps = {
 class Notifications extends Component {
   constructor(props) {
     super(props);
-
-    // Bind "this" to member function
-    this.handleRemoveNotification = this.handleRemoveNotification.bind(this);
   }
 
-  // Map computer-readable notification to human-readable message
-  mapNotificationToMessage(notification) {
-    return CONTENT[notification] ? CONTENT[notification] : '';
+  // Get active notifications from NotificationSystem
+  getSystemNotifications() {
+    return this.refs.notificationSystem.state.notifications || [];
   }
 
-  // Add a new notification tonotification system
-  addNotification(message, onRemove) {
-    this.refs.notificationSystem.addNotification({
-      message,
-      level: 'info',
-      position: 'bl', // Bottom left
-      onRemove
-    });
+  // Find the index of a notification from NotificationSystem
+  findIndexOfSystemNotification(id) {
+    const systemNotifications = this.getSystemNotifications();
+    return findIndex(systemNotifications, (notification) => notification.uid === id);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.notifications.length < this.props.notifications.length) {
-      // A new notifications is pushed
-      const message = this.mapNotificationToMessage(this.props.notifications[0]);
-      this.addNotification(message, this.handleRemoveNotification);
+  // Map computer-readable message to human-readable message
+  getReadableMessage(message) {
+    return CONTENT[message] ? CONTENT[message] : '';
+  }
+
+  // Get message of progress notification
+  getProgressMessage(progress) {
+    const percent = parseInt(progress * 100, 10);
+    return `${CONTENT.PROGRESS.SHARING_FACEBOOK} ${percent}% ${CONTENT.PROGRESS.COMPLETE}`;
+  }
+
+  // Add a new notification to notification system
+  addNotification(notification, id, onRemove) {
+    const { type } = notification;
+
+    if (type === NOTIFICATION_TYPES.INFO) {
+      const { message } = notification;
+      const readableMessage = this.getReadableMessage(message);
+
+      this.refs.notificationSystem.addNotification({
+        message: readableMessage,
+        level: 'info',
+        position: 'bl', // Bottom left
+        onRemove,
+        uid: id
+      });
+    } else if (type === NOTIFICATION_TYPES.PROGRESS){
+      const {
+        title,
+        progress
+      } = notification;
+
+      this.refs.notificationSystem.addNotification({
+        title,
+        message: this.getProgressMessage(progress),
+        level: 'info',
+        position: 'br', // Bottom right
+        dismissible: false,
+        autoDismiss: 0,
+        onRemove,
+        uid: id
+      });
     }
   }
 
-  // Handler for a notification is removed
-  handleRemoveNotification() {
-    this.props.popNotification();
+  componentWillReceiveProps(nextProps) {
+    const preNotifications = this.props.notifications;
+    const nextNotifications = nextProps.notifications;
+
+    if (preNotifications.ids.length < nextNotifications.ids.length) {
+      const newId = nextNotifications.ids[0];
+      const newNotification = nextNotifications.objs[newId];
+      // A new notifications is pushed
+      this.addNotification(newNotification, newId, () => {
+        this.props.popNotification(newId);
+      });
+    } else if (preNotifications.ids.length === nextNotifications.ids.length) {
+      // Check any progress is updated
+      nextNotifications.ids.forEach((id) => {
+        const nextNotification = nextNotifications.objs[id];
+        if (nextNotification.type === NOTIFICATION_TYPES.PROGRESS) {
+          const newProgress = nextNotification.progress;
+          if (newProgress !== preNotifications.objs[id].progress) {
+            const idx = this.findIndexOfSystemNotification(id);
+            this.refs.notificationSystem.state.notifications[idx].message = this.getProgressMessage(newProgress);
+            this.refs.notificationSystem.forceUpdate();
+          }
+        }
+      });
+    } else {
+      // Remove old notification(s)
+      this.getSystemNotifications().forEach((notification) => {
+        if (indexOf(nextNotifications.ids, notification.uid) < 0) {
+          this.refs.notificationSystem.removeNotification(notification.uid);
+        }
+      });
+    }
   }
 
   render() {
