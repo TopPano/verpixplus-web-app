@@ -96,7 +96,7 @@ class GalleryItem extends Component {
       '';
     const coverPhoto =
       type === GALLERY_ITEM_TYPE.COMPLETED ? this.getCoverPhoto(mediaObj, id) :
-      type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.jpg' :
+      type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.svg' :
       '';
     const createMain =
       type === GALLERY_ITEM_TYPE.CREATE ?
