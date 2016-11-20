@@ -2,7 +2,7 @@
 
 $border-color: $color-red;
 $border-color-highlighted: #D23D60;
-$divider-border: solid 2px $border-color;
+$divider-border: solid 5px $border-color;
 $counter-color: #7A7A7A;
 
 .frame-carousel-item-component {

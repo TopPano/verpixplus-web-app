@@ -37,8 +37,8 @@ class FileProgress extends Component {
           <Circle
             percent={percent}
             strokeColor={color}
-            strokeWidth={2}
-            trailWidth={2}
+            strokeWidth={4}
+            trailWidth={4}
           />
           <p className="progress-text text-center">
             {`${percent}%`}
