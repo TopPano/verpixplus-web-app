@@ -14,6 +14,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   title: PropTypes.string,
+  titleIcon: PropTypes.string,
   closeBtn: PropTypes.shape({
     className: PropTypes.string,
     text: PropTypes.string,
@@ -32,6 +33,7 @@ const propTypes = {
 
 const defaultProps = {
   title: '',
+  titleIcon: '',
   closeBtn: {
     className: 'modal-btn close-btn pull-left',
     text: CONTENT.MODAL.DEFAULT_CLOSE_BTN,
@@ -80,6 +82,7 @@ class Modal extends Component {
     const { isOpened } = this.state;
     const {
       title,
+      titleIcon,
       closeBtn,
       confirmBtn,
       rootClose,
@@ -98,6 +101,14 @@ class Modal extends Component {
           title &&
           <ReactModal.Header closeButton={rootClose}>
             <ReactModal.Title>
+              {
+                titleIcon &&
+                <img
+                  className="modal-title-icon"
+                  src={titleIcon}
+                  alt="title icon"
+                />
+              }
               {`${title}  `}
               {
                 isProcessing &&

@@ -27,6 +27,12 @@
       box-shadow: none;
       padding: 10px;
 
+      .modal-title-icon {
+        width: 20px;
+        height: 20px;
+        margin: 2px 5px 3px 0;
+      }
+
       .modal-btn {
         width: 70px;
         font-size: 14px;

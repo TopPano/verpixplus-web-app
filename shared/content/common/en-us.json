@@ -26,6 +26,9 @@
     "CLOSE_BTN": "Cancel",
     "CONFIRM_BTN": "Delete"
   },
+  "ERROR_MODAL": {
+    "TITLE": "Something Error"
+  },
   "READABLE_DURATION": {
     "AGO": "ago",
     "JUST_NOW": "Just now"

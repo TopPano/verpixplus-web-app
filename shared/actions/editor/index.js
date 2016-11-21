@@ -7,11 +7,13 @@ import merge from 'lodash/merge';
 
 import { MEDIA_TYPE } from 'constants/common';
 import { NOTIFICATIONS } from 'constants/notifications';
+import ERR from 'constants/err';
 import { pushNotification } from '../notifications';
 import { getMedia } from '../media';
 import imageUrlsToData from './imageUrlsToData';
 import applyImagesFilters from './applyImagesFilters';
 import FrameConverter from './FrameConverter';
+import { genErr } from 'lib/utils';
 
 export const INIT_UPLOAD = 'INIT_UPLOAD';
 export const INIT_EDIT = 'INIT_EDIT';
@@ -92,7 +94,7 @@ function convertSuccess(mediaType, result) {
 
 function convertFailure(err) {
   return {
-    type: CONVERT_REQUEST,
+    type: CONVERT_FAILURE,
     err
   };
 }
@@ -108,16 +110,16 @@ export function convert({ storageId, mediaType, source }) {
       }).then((result) => {
         converter.stop();
         dispatch(convertSuccess(mediaType, result));
-      }).catch((message) => {
+      }).catch((err) => {
         converter.stop();
-        dispatch(convertFailure({ message }));
+        dispatch(convertFailure(err));
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
       // TODO: Handle panophoto
     } else {
-      dispatch(convertFailure({
-        message: `Meida type: ${mediaType} is not supported`
-      }));
+      dispatch(convertFailure(genErr(ERR.MEDIA_NOT_SUPPORTED, {
+        mediaType
+      })));
     }
   };
 }
@@ -268,6 +270,16 @@ export function applyFilters({ storageId, from, to, filters }) {
       return null;
     }).catch((err) => {
       dispatch(applyFiltersFailure(err));
+    });
+  }
+}
+
+export const CLEAR_EDITOR_ERR = 'CLEAR_EDITOR_ERR';
+
+export function clearEditorErr() {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_EDITOR_ERR
     });
   }
 }

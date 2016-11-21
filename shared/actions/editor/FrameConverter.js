@@ -1,7 +1,12 @@
-import { FPS } from 'constants/editor';
+import {
+  FPS,
+  VIDEO_DURATION_LIMIT
+} from 'constants/editor';
+import ERR from 'constants/err';
 import {
   Promise,
   imagesStorage,
+  genErr,
   execute
 } from 'lib/utils';
 
@@ -25,7 +30,7 @@ export default class FrameConverter {
   }
 
   unregisterAllEventListenrs(video) {
-    if (video.eventListeners) {
+    if (video && video.eventListeners) {
       video.eventListeners.forEach((eventListener) => {
         video.removeEventListener(eventListener.event, eventListener.callback);
       });
@@ -35,16 +40,20 @@ export default class FrameConverter {
   convert(storageId, source, handleProgress) {
     return new Promise((resolve, reject) => {
       if (!source) {
-        reject('Source is not defined');
+        reject(genErr(ERR.NO_VIDEO_SPECIFIED));
       }
       if (this.isConverting) {
-        reject('FrameConverter is converting');
+        reject(genErr(ERR.VIDEO_IS_CONVERTING));
       }
       const video = document.createElement('VIDEO');
 
       video.setAttribute('src', source);
       video.setAttribute('muted', true);
+
       this.registerEventListener(video, 'loadedmetadata', () => {
+        if (video.duration > VIDEO_DURATION_LIMIT) {
+          reject(genErr(ERR.EXCEED_VIDEO_TIME_LIMIT));
+        }
         this.isConverting = true;
         this.srcVideo = video;
         this.srcVideo.currentTime = 0;
@@ -83,6 +92,10 @@ export default class FrameConverter {
 
     const curFrameDataUrl = this.hiddenCan.toDataURL('image/jpeg');
     const idx = this.frames.length;
+
+    if (curFrameDataUrl === 'data:,') {
+      handleFailure(genErr(ERR.VIDEO_FORMAT_NOT_SUPPORTED));
+    }
 
     imagesStorage.save(storageId, idx, curFrameDataUrl).then(() => {
       const img = new Image();

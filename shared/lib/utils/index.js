@@ -10,6 +10,7 @@ import genUUID from './genUUID';
 import imagesStorage from './imagesStorage';
 import imageBlobToDataUrl from './imageBlobToDataUrl.js';
 import getReadableDuration from './getReadableDuration';
+import genErr from './genErr';
 import Promise from './promise';
 
 export {
@@ -26,5 +27,6 @@ export {
   imagesStorage,
   imageBlobToDataUrl,
   getReadableDuration,
+  genErr,
   Promise
 };

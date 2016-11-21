@@ -1,3 +1,4 @@
+import assign from 'lodash/assign';
 import merge from 'lodash/merge';
 
 import {
@@ -18,7 +19,8 @@ import {
   APPLY_FILTERS_REQUEST,
   APPLY_FILTERS_PROGRESS,
   APPLY_FILTERS_SUCCESS,
-  APPLY_FILTERS_FAILURE
+  APPLY_FILTERS_FAILURE,
+  CLEAR_EDITOR_ERR
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
@@ -187,6 +189,10 @@ export default function editor(state = DEFAULT_STATE, action) {
         isProcessing: false,
         err: action.err
       });
+    case CLEAR_EDITOR_ERR:
+      return assign({}, state, {
+        err: DEFAULT_STATE.err
+      })
     default:
       return state;
   }

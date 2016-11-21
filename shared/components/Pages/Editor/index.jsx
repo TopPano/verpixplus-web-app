@@ -9,6 +9,7 @@ import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
 import FramePanel from 'containers/pages/Editor/FramePanel';
 import Sidebar from 'containers/pages/Editor/Sidebar';
 import ProcessModal from './ProcessModal';
+import ErrorModal from 'containers/pages/Editor/ErrorModal';
 
 if (process.env.BROWSER) {
   require('./Editor.css');
@@ -57,6 +58,7 @@ class Editor extends Component {
     return (
       <div className="editor-component container-full">
         <InfoPanel {...infoPanelProps} />
+        <ErrorModal />
         <div className="editor-main">
           <div className="main-header container-center-row">
             <img
