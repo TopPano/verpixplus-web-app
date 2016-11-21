@@ -10,6 +10,8 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
+import merge from 'lodash/merge';
+
 import {
   fetchComponentsData,
   genHeadContent,
@@ -51,7 +53,9 @@ app.get('/embed/@:mediaId', (req, res) => {
   api.media.getMedia(mediaId).then((response) => {
     const content = genHeadContent(req, true, response.result);
 
-    res.render('pages/embed', content);
+    res.render('pages/embed', merge({}, content, {
+      staticUrl: clientConfig.staticUrl
+    }));
   }).catch((err) => {
     console.log(err.stack);
     res.end(err.message);

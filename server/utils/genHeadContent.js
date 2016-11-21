@@ -57,7 +57,7 @@ export default function genHeadContent(req, isEmbedPage, media) {
       image: newImage ? newImage : shareContent.image,
       imageWidth: imageSize.WIDTH,
       imageHeight: imageSize.HEIGHT,
-      title: newTitle ? newTitle : defaultEmbedContent.DEFAULT_TITLE,
+      title: `${SITE_CONTENT.SHARE.DEFAULT_TITLE} - ${newTitle ? newTitle : defaultEmbedContent.DEFAULT_TITLE}`,
       description: newDescription ? newDescription : defaultEmbedContent.DEFAULT_DESCRIPTION,
       video
     });

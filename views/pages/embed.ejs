@@ -3,11 +3,57 @@
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <html>
-<head>
+<head style="height: 100%">
   <% include ../partials/head %>
+  <style>
+    .container-center {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+    .content {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      height: calc(100vh - 168px);
+      padding: 10px;
+    }
+    .footer-text {
+      color: #7F7F7F;
+      font-size: 10px;
+      font-family: source-sans-pro, sans-serif;
+      font-weight: 400;
+      text-align: center;
+      line-height: 17px;
+      margin: 0 0 10px 0;
+    }
+  </style>
+  <script>
+     document.write('\x3Cscript src="' + (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//webfonts.creativecloud.com/source-sans-pro:n4,n7:default.js" type="text/javascript">\x3C/script>');
+  </script>
 </head>
-  <div class="verpix-livephoto" data-id="<%= mediaId %>"></div>
-  <%- livephotoSdk %>
-<body>
+<body style="height: 100%; margin: 0; background-color: #EBEBEC;">
+  <div class="container-center" style="height: 98px">
+    <a href="<%= staticUrl %>">
+      <img src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
+    </a>
+  </div>
+  <div class="content container-center">
+    <div class="verpix-livephoto" data-id="<%= mediaId %>"></div>
+    <%- livephotoSdk %>
+  </div>
+  <div class="container-center" style="height: 70px">
+    <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
+  </div>
 </body>
 </html>
