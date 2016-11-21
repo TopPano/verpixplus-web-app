@@ -13,6 +13,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   userId: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
@@ -32,6 +33,7 @@ class ProfileInfo extends Component {
   render() {
     const {
       userId,
+      isAuthenticated,
       profilePhotoUrl,
       username,
       email,
@@ -44,23 +46,27 @@ class ProfileInfo extends Component {
       <div className="profile-info-component">
         <ProfilePhoto
           userId={userId}
+          isAuthenticated={isAuthenticated}
           profilePhotoUrl={profilePhotoUrl}
           isProcessing={isProcessing}
           updateProfilePhoto={updateProfilePhoto}
         />
-        <div className="profile-info">
-          <div className="profile-info-username">{username}</div>
-          <div className="profile-info-email">{email}</div>
-          <div className="profile-info-media">
-            <img
-              src="/static/images/menu/cases.svg"
-              alt="Media"
-              width="20"
-              height="19"
-            />
-            <div className="profile-info-media-count">{`${numOfMedia} ${INFO_PANEL.MEDIA}`}</div>
+        {
+          isAuthenticated &&
+          <div className="profile-info">
+            <div className="profile-info-username">{username}</div>
+            <div className="profile-info-email">{email}</div>
+            <div className="profile-info-media">
+              <img
+                src="/static/images/menu/cases.svg"
+                alt="Media"
+                width="20"
+                height="19"
+              />
+              <div className="profile-info-media-count">{`${numOfMedia} ${INFO_PANEL.MEDIA}`}</div>
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }

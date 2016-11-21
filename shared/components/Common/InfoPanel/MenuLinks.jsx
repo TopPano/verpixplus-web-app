@@ -16,6 +16,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
   links: PropTypes.arrayOf(PropTypes.shape({
     to: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired
@@ -84,17 +85,31 @@ class MenuLinks extends Component {
   }
 
   render() {
-    const { links } = this.props;
+    const {
+      isAuthenticated,
+      links
+    } = this.props;
     let linksProps = [{
       to: '/',
       text: INFO_PANEL.HOME
     }];
-    linksProps = linksProps.concat(
-      links.length > 0 ? links : [{
-        to: '/upload',
-        text: `${INFO_PANEL.UPLOAD} ${INFO_PANEL.MEDIA}`
-      }]
-    );
+    if (!isAuthenticated) {
+      linksProps = linksProps.concat([{
+          to: '/signin',
+          text: INFO_PANEL.SIGN_IN
+        }, {
+          to: '/signup',
+          text: INFO_PANEL.SIGN_UP
+        }]
+      );
+    } else {
+      linksProps = linksProps.concat(
+        links.length > 0 ? links : [{
+          to: '/upload',
+          text: `${INFO_PANEL.UPLOAD} ${INFO_PANEL.MEDIA}`
+        }]
+      );
+    }
     linksProps = linksProps.concat([{
       break: true
     }, {

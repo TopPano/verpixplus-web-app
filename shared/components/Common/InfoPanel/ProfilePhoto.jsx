@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 import Loading from 'components/Common/Loading';
 import CONTENT from 'content/workspace/en-us.json';
+import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./ProfilePhoto.css');
@@ -14,6 +15,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   userId: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   profilePhotoUrl: PropTypes.string.isRequired,
   isProcessing: PropTypes.object.isRequired,
   updateProfilePhoto: PropTypes.func.isRequired
@@ -58,36 +60,47 @@ class ProfilePhoto extends Component {
 
   render() {
     const {
+      isAuthenticated,
       profilePhotoUrl,
       isProcessing
     } = this.props;
-    const imgClass = classNames({
-      'profile-photo circle': true,
-      'clickable': !isProcessing.updateProfilePhoto
+    const editableImgClass = classNames({
+      'profile-photo editable circle': true,
+      'clickable': !isAuthenticated || !isProcessing.updateProfilePhoto
     });
 
     return (
-      <Dropzone
-        ref="dropzone"
-        className="profile-photo-component circle"
-        multiple={false}
-        accept="image/jpeg,image/png"
-        disableClick={isProcessing.updateProfilePhoto}
-        onDrop={this.handleDropFile}
-      >
-        <img
-          className={imgClass}
-          title={CONTENT.PROFILE_PICTURE.TITLE}
-          src={profilePhotoUrl}
-          alt="profile picture"
-        />
+      <div className="profile-photo-component circle">
         {
-          isProcessing.updateProfilePhoto &&
-          <div className="profile-photo-overlay circle container-center-row">
-            <Loading size={30} />
-          </div>
+          isAuthenticated ?
+          <Dropzone
+            ref="dropzone"
+            className="circle"
+            multiple={false}
+            accept="image/jpeg,image/png"
+            disableClick={isProcessing.updateProfilePhoto}
+            onDrop={this.handleDropFile}
+          >
+            <img
+              className={editableImgClass}
+              title={CONTENT.PROFILE_PICTURE.TITLE}
+              src={isAuthenticated ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL}
+              alt="profile photo"
+            />
+            {
+              isProcessing.updateProfilePhoto &&
+              <div className="profile-photo-overlay circle container-center-row">
+                <Loading size={30} />
+              </div>
+            }
+          </Dropzone> :
+          <img
+            className="profile-photo circle clickable"
+            src={isAuthenticated ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL}
+            alt="profile photo"
+          />
         }
-      </Dropzone>
+      </div>
     );
   }
 }

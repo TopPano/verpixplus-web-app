@@ -123,6 +123,7 @@ class InfoPanel extends Component {
     } = this.props;
     const {
       userId,
+      isAuthenticated,
       profilePhotoUrl,
       username,
       email,
@@ -174,6 +175,7 @@ class InfoPanel extends Component {
               />
               <ProfileInfo
                 userId={userId}
+                isAuthenticated={isAuthenticated}
                 profilePhotoUrl={profilePhotoUrl}
                 username={username}
                 email={email}
@@ -182,27 +184,34 @@ class InfoPanel extends Component {
                 updateProfilePhoto={updateProfilePhoto}
               />
               <MenuLinks
+                isAuthenticated={isAuthenticated}
                 links={links}
                 close={this.close}
               />
               <div style={{ paddingTop: '100px' }} />
-              <ProfileEditor
-                userId={userId}
-                username={username}
-                email={email}
-                autobiography={autobiography}
-                errMsgs={errMsgs}
-                updateProfile={updateProfile}
-                editAutobiography={editAutobiography}
-                changePassword={changePassword}
-                clearErrMsgChangePassword={clearErrMsgChangePassword}
-                isProcessing={isProcessing}
-              />
-              <FlatButton
-                className="menu-signout"
-                text={INFO_PANEL.SIGNOUT}
-                onClick={this.handleClickSignoutBtn}
-              />
+              {
+                isAuthenticated &&
+                <ProfileEditor
+                  userId={userId}
+                  username={username}
+                  email={email}
+                  autobiography={autobiography}
+                  errMsgs={errMsgs}
+                  updateProfile={updateProfile}
+                  editAutobiography={editAutobiography}
+                  changePassword={changePassword}
+                  clearErrMsgChangePassword={clearErrMsgChangePassword}
+                  isProcessing={isProcessing}
+                />
+              }
+              {
+                isAuthenticated &&
+                <FlatButton
+                  className="menu-signout"
+                  text={INFO_PANEL.SIGNOUT}
+                  onClick={this.handleClickSignoutBtn}
+                />
+              }
             </Scrollbar>
           </div>
         </div>

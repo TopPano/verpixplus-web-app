@@ -33,6 +33,8 @@
   "INFO_PANEL": {
     "MEDIA": "Media",
     "HOME": "Home",
+    "SIGN_IN": "Sign In",
+    "SIGN_UP": "Sign Up",
     "UPLOAD": "Upload",
     "SUPPORT": "Support",
     "SIGNOUT": "Sign Out"
