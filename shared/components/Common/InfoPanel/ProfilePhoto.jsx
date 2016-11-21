@@ -66,6 +66,7 @@ class ProfilePhoto extends Component {
     } = this.props;
     const editableImgClass = classNames({
       'profile-photo editable circle': true,
+      'solid-border': profilePhotoUrl !== DEFAULT_PROFILE_PHOTO_URL,
       'clickable': !isAuthenticated || !isProcessing.updateProfilePhoto
     });
 

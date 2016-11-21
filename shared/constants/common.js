@@ -1,6 +1,6 @@
 import externalApiConfig from 'etc/external-api';
 
-export const DEFAULT_PROFILE_PHOTO_URL = '/static/images/profile-photo-default.png';
+export const DEFAULT_PROFILE_PHOTO_URL = '/static/images/profile-photo-default.svg';
 
 export const DEFAULT_FOLLOWING_USER = 'ddc23b40-222f-11e6-b846-69babe89ef41'
 

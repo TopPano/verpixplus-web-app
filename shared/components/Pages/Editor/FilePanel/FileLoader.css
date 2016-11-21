@@ -11,10 +11,6 @@
     .file-loader-btn {
       transform: translateY(-50px);
       width: 120px;
-      transition: background-color .3s ease;
-      &:hover {
-        background-color: #D22D40;
-      }
     }
 
     p {

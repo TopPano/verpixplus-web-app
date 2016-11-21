@@ -53,7 +53,7 @@
     font-size: 15px;
     line-height: 31px;
     height: 31px;
-    transition: background-color .3s ease;
+    transition: all .3s ease;
     &:hover {
       background-color: #545454;
     }
@@ -64,7 +64,8 @@
       background-color: $color-red;
       border-color: $color-white;
       &:hover {
-        background-color: #D22D40;
+        background-color: $color-white;
+        color: $color-red;
       }
     }
   }

@@ -1,2 +1,11 @@
+@import 'Variables.css';
+
 .delete-modal-component {
+}
+
+.modal-footer {
+  .delete-modal-confirm-btn:hover {
+    background-color: #E24D60;
+    color: $color-white;
+  }
 }
