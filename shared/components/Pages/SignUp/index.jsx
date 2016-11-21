@@ -6,7 +6,7 @@ import isEmpty from 'is-empty';
 
 import { EXTERNAL_LINKS } from 'constants/common';
 import CONTENT from 'content/sign/en-us.json';
-import SITE_CONTENT from 'content/site/en-us.json';
+import COMMON_CONTENT from 'content/common/en-us.json';
 
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
@@ -162,11 +162,11 @@ class SignUp extends Component {
           <RegBlockOthers>
             {CONTENT.OTHERS.SIGN_UP.AGREE}
             <ExternalLink to={EXTERNAL_LINKS.TERMS_OF_USE}>
-             {SITE_CONTENT.FOOTER.TERMS_OF_USE}
+             {COMMON_CONTENT.TERMS_OF_USE}
             </ExternalLink>
             {CONTENT.OTHERS.SIGN_UP.AND}
             <ExternalLink to={EXTERNAL_LINKS.PRIVACY_POLICY}>
-             {SITE_CONTENT.FOOTER.PRIVACY_POLICY}
+             {COMMON_CONTENT.PRIVACY_POLICY}
             </ExternalLink>
           </RegBlockOthers>
           <RegBlockBtn {...btnProps} />

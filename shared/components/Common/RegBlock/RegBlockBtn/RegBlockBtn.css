@@ -1,2 +1,5 @@
 .reg-block-btn-component {
+  .reg-block-btn {
+    width: 100%;
+  }
 }

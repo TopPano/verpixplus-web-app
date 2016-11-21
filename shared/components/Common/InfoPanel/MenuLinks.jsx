@@ -103,12 +103,12 @@ class MenuLinks extends Component {
       small: true
     }, {
       to: EXTERNAL_LINKS.TERMS_OF_USE,
-      text: INFO_PANEL.TERMS_OF_USE,
+      text: CONTENT.TERMS_OF_USE,
       blank: true,
       small: true
     }, {
       to: EXTERNAL_LINKS.PRIVACY_POLICY,
-      text: INFO_PANEL.PRIVACY_POLICY,
+      text: CONTENT.PRIVACY_POLICY,
       blank: true,
       small: true
     }]);
