@@ -4,10 +4,13 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import range from 'lodash/range';
 
+import CONTENT from 'content/editor/en-us.json';
 import Carousel from 'components/Common/Carousel';
 import FrameCarouselItem from './FrameCarouselItem';
 
 import { FRAMES_LIMIT } from 'constants/editor';
+
+const { FRAME_PANEL } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./FrameCarousel.css');
@@ -304,9 +307,13 @@ class FrameCarousel extends Component {
       dimension,
       disabled
     } = this.props;
-    const componentClass = classNames({
-      'frame-carousel-component': true,
+    const wrapperClass = classNames({
+      'frame-carousel-wrapper': true,
       'disabled': disabled
+    });
+    const textClass = classNames({
+      'frame-carousel-text text-center': true,
+      'disabled': !disabled
     });
     const carouselProps = {
       options: {
@@ -329,10 +336,13 @@ class FrameCarousel extends Component {
     const items = this.renderItemList(images, resizedDimension, keyFrameLength, range.lower, range.upper, FRAME_STEP, isDividerHighlighted);
 
     return (
-      <div className={componentClass}>
-        <Carousel {...carouselProps}>
-          {items}
-        </Carousel>
+      <div className="frame-carousel-component">
+        <div className={wrapperClass}>
+          <Carousel {...carouselProps}>
+            {items}
+          </Carousel>
+        </div>
+        <p className={textClass}>{FRAME_PANEL.DISABLED_TEXT}</p>
       </div>
     );
   }

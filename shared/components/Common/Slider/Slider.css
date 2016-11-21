@@ -4,11 +4,11 @@
   background-color: $color-grey;
 
   .rc-slider-handle {
-    border-color: $color-grey;
-    background-color: $color-grey;
+    border-color: $color-red;
+    background-color: $color-red;
     transition: border-color .3s ease;
     &:hover, &:active {
-      border-color: #555555;
+      border-color: #A20D20;
     }
   }
 

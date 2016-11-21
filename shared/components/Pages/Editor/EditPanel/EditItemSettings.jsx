@@ -139,8 +139,6 @@ class EditItemSettings extends Component {
       ref: 'warnModal',
       title: CONTENT.WARN_MODAL.TITLE,
       confirmBtn: {
-        icon: 'floppy-o',
-        className: 'btn btn-u text-uppercase pull-right rounded',
         text: CONTENT.SAVE,
         onClick: () => {
           this.refs.warnModal.close();
@@ -148,7 +146,6 @@ class EditItemSettings extends Component {
         }
       },
       closeBtn: {
-        className: 'btn btn-u btn-u-default text-uppercase pull-left rounded',
         text: CONTENT.CANCEL
       }
     };

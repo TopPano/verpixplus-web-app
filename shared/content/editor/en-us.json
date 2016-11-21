@@ -5,6 +5,9 @@
       "DESC": "Or drag & drop your video anywhere"
     }
   },
+  "FRAME_PANEL": {
+    "DISABLED_TEXT": "Please modify the effect values and click the button to apply"
+  },
   "EDIT_PANEL": {
     "TITLE": {
       "TITLE": "Title",
