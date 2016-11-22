@@ -213,10 +213,13 @@ function receiveLogout() {
   }
 }
 
-export function logoutUser() {
+export function logoutUser(successRedirectUrl = '/') {
   return (dispatch) => {
     dispatch(requestLogout());
     dispatch(receiveLogout());
+    if (process.env.BROWSER) {
+      window.location = successRedirectUrl;
+    }
   }
 }
 
@@ -256,9 +259,6 @@ export function loadUserSummary({ id, params = {}, userSession = {} }) {
         type: LOAD_USER_SUMMARY_FAILURE,
         error
       });
-      if (error.status === 401) {
-        dispatch(push('/'));
-      }
     });
   };
 }

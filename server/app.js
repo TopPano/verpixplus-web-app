@@ -67,12 +67,18 @@ app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
 
+  if (!accessToken && req.url === '/') {
+    res.sendFile(path.join(__dirname, '/../public/static/home/index.html'));
+    return;
+  }
+
   if (accessToken) {
     // restore the client state
     initState.user = {
       isFetching: false,
       isProcessing: {},
       isAuthenticated: true,
+      accessToken,
       userId: req.cookies.userId,
       username: req.cookies.username,
       profilePhotoUrl: req.cookies.profilePhotoUrl,
