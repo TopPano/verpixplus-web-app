@@ -48,12 +48,37 @@
       <img src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
     </a>
   </div>
-  <div class="content container-center">
-    <div class="verpix-livephoto" data-id="<%= mediaId %>"></div>
-    <%- livephotoSdk %>
-  </div>
+  <div id="content" class="content container-center"></div>
   <div class="container-center" style="height: 70px">
     <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
   </div>
+  <%- livephotoSdk %>
+  <script>
+    window.addEventListener('load', function() {
+      var content = document.getElementById('content');
+      var parentWidth = content.clientWidth - 20;
+      var parentHeight = content.clientHeight - 20;
+
+      window.verpix.createLivephoto('<%= mediaId %>', {}, (err, instance) => {
+        if (err) {
+          window.location = '/';
+        } else {
+          var origDimension = instance.getOriginalDimension();
+          var origWidth = origDimension.width;
+          var origHeight = origDimension.height;
+
+          if (origHeight > parentHeight) {
+            instance.setWrapperDimension({
+              width: parseInt(origWidth * (parentHeight / origHeight) ,10),
+              height: parentHeight
+            });
+          }
+
+          content.appendChild(instance.root);
+          instance.start();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
