@@ -8,4 +8,10 @@
       opacity: .65;
     }
   }
+
+  .facebook-share-preview {
+    video {
+      max-width: 100%;
+    }
+  }
 }

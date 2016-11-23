@@ -11,10 +11,6 @@ if (process.env.BROWSER) {
   require('./LivephotoPlayer.css');
 }
 
-// Max height for portrait livephoto
-const PORTRAIT_MAX_HEIGHT = 600;
-// Max width for landscape livephoto
-const LANDSCAPE_MAX_WIDTH = 600;
 const PLAY_DIRECTION = {
   // From small to large index
   INCREASE: 'INCREASE',
@@ -49,6 +45,7 @@ class LivephotoPlayer extends Component {
 
     // Initialize state
     this.state = {
+      parentDimension: null,
       currentIdx: -1,
       playDirection: PLAY_DIRECTION.INCREASE,
       isLoading: false
@@ -56,6 +53,13 @@ class LivephotoPlayer extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      parentDimension: {
+        width: this.refs.livephoto.parentNode.clientWidth - 40,
+        height: this.refs.livephoto.parentNode.clientHeight - 15
+      }
+    });
+
     const {
       playerMode,
       autoplay,
@@ -199,22 +203,24 @@ class LivephotoPlayer extends Component {
   }
 
   // Get component sytle by calculating resized width and heigth
-  getComponentStyle(dimension) {
+  getComponentStyle(dimension, parentDimension) {
     const {
       width,
       height
     } = dimension;
-    let newWidth;
-    let newHeight;
+    let newWidth = width;
+    let newHeight = height;
 
-    if (width > height) {
-      // Landscape
-      newWidth = width > LANDSCAPE_MAX_WIDTH ? LANDSCAPE_MAX_WIDTH : width;
-      newHeight = parseInt(height * (newWidth / width), 10);
-    } else {
-      // Portrait
-      newHeight = height > PORTRAIT_MAX_HEIGHT ? PORTRAIT_MAX_HEIGHT : height;
-      newWidth = parseInt(width * (newHeight / height), 10);
+    if (parentDimension) {
+      if (width > height) {
+        // Landscape
+        newWidth = width > parentDimension.width ? parentDimension.width : width;
+        newHeight = parseInt(height * (newWidth / width), 10);
+      } else {
+        // Portrait
+        newHeight = height > parentDimension.height ? parentDimension.height : height;
+        newWidth = parseInt(width * (newHeight / height), 10);
+      }
     }
 
     return {
@@ -224,12 +230,16 @@ class LivephotoPlayer extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const {
+      isLoading,
+      parentDimension
+    } = this.state;
     const { dimension } = this.props;
-    const componentStyle = this.getComponentStyle(dimension);
+    const componentStyle = this.getComponentStyle(dimension, parentDimension);
 
     return (
       <div
+        ref="livephoto"
         className="livephoto-player-component"
         style={componentStyle}
       >

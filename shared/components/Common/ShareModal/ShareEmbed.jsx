@@ -4,14 +4,14 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import isInteger from 'lodash/isInteger';
 import toNumber from 'lodash/toNumber';
+import fileSaver from 'file-saver';
+import JSZip from 'jszip';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
-import { EMBED } from 'constants/editor';
+import { EMBED } from 'constants/common';
 import Livephoto from 'components/Common/Livephoto';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
-
-const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
+import genAdHTML from './genAdHTML';
 
 if (process.env.BROWSER) {
   require('./ShareEmbed.css');
@@ -25,12 +25,15 @@ const defaultProps = {
 };
 
 class ShareEmbed extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
     // Bind "this" to member functions
     this.handleSizeChange = this.handleSizeChange.bind(this);
     this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
+    this.handleClickDownloadBtn = this.handleClickDownloadBtn.bind(this);
 
     // Initialize state
     this.state = {
@@ -58,6 +61,23 @@ class ShareEmbed extends Component {
     });
   }
 
+  // Handler for clicking download button
+  handleClickDownloadBtn() {
+    const { mediaId } = this.props;
+    const {
+      embedWidth,
+      embedHeight
+    } = this.state;
+    const zip = new JSZip();
+
+    zip.file('index.html', genAdHTML(mediaId, embedWidth, embedHeight, EMBED.SDK_LIVEPHOTO));
+    zip.generateAsync({
+      type: 'blob'
+    }).then((zipBlob) => {
+      fileSaver.saveAs(zipBlob, `ad-${mediaId}.zip`);
+    })
+  }
+
   // Generate the usage code
   genUsageCode(id, type, width, height) {
     const dataWidth = width > 0 ? `data-width="${width}"` : '';
@@ -67,6 +87,7 @@ class ShareEmbed extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       showPreview,
       embedWidth,
@@ -95,12 +116,12 @@ class ShareEmbed extends Component {
         </div>
         <div style={codersStyle}>
           <ShareEmbedCoder
-            title={CONTENT.INSTALL}
-            text={EMBED.SDK}
+            title={l('SDK Installation')}
+            text={EMBED.SDK_LIVEPHOTO}
           />
           <hr />
           <ShareEmbedCoder
-            title={CONTENT.USAGE}
+            title={l('Usage')}
             text={usageCode}
           />
         </div>
@@ -123,11 +144,15 @@ class ShareEmbed extends Component {
             />
           </div>
         <div className="preview-btn-wrapper text-center">
-          <IconButton
-            className="btn-u btn-brd btn-brd-hover rounded btn-u-sea"
-            icon={`fa fa-${showPreview ? 'code' : 'eye'}`}
-            text={showPreview ? CONTENT.CODE : CONTENT.PREVIEW}
-            handleClick={this.handleClickPreviewBtn}
+          <FlatButton
+            className="share-btn"
+            text={showPreview ? l('Code') : l('Preview')}
+            onClick={this.handleClickPreviewBtn}
+          />
+          <FlatButton
+            className="share-btn"
+            text={l('Download')}
+            onClick={this.handleClickDownloadBtn}
           />
         </div>
       </div>

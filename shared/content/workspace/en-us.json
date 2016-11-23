@@ -1,6 +1,10 @@
 {
   "MORE": "more",
   "COMPLETE": "Complete",
+  "CREATE": {
+    "MAIN": "Create your own imigination",
+    "DESC": "Upload your video"
+  },
   "OVERALL": {
     "MEDIA": "Media"
   },

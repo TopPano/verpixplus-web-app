@@ -9,7 +9,7 @@ import {
 import Notifications from 'components/Common/Notifications';
 
 const propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
+  notifications: PropTypes.object.isRequired
 };
 
 const defaultProps = {
@@ -24,9 +24,9 @@ class NotificationsContainer extends Component {
   }
 
   // Wrapper for dispatching popNotification function,
-  // which pops the oldest notification.
-  popNotification() {
-    this.props.dispatch(popNotification());
+  // which pops a notification.
+  popNotification(id) {
+    this.props.dispatch(popNotification(id));
   }
 
   render() {

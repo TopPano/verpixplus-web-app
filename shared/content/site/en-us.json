@@ -1,7 +1,7 @@
 {
-  "SITE_NAME": "VerpixPlus",
+  "SITE_NAME": "Verpix",
   "SHARE": {
-    "DEFAULT_TITLE": "VerpixPlus",
+    "DEFAULT_TITLE": "Verpix",
     "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
   },
   "HEADER": {
@@ -16,8 +16,6 @@
     "SIGN_OUT": "sign out"
   },
   "FOOTER": {
-    "TERMS_OF_USE": "Terms of Use",
-    "PRIVACY_POLICY": "Privacy Policy",
     "TWITTER": "Follow @Verpix"
   },
   "MODAL": {

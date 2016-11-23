@@ -5,12 +5,11 @@ import cookie from 'cookie';
 import App from './containers/App';
 import MainLayout from './containers/layouts/MainLayout';
 
-import HomePageContainer from './containers/pages/Home';
+import WorkSpaceContainer from './containers/pages/WorkSpace';
 import SignInPageContainer from './containers/pages/SignIn';
 import SignUpPageContainer from './containers/pages/SignUp';
 import ResetPwdPageContainer from './containers/pages/ResetPwd';
 import EditorPageContainer from './containers/pages/Editor';
-import FAQPageComponent from './components/Pages/FAQ';
 
 function isAuthenticated(accessToken) {
   // If access token is provided by function call or in browser cookie,
@@ -43,8 +42,7 @@ export default function routes(accessToken) {
       <Route component={EditorPageContainer} path='/edit/@:mediaId' onEnter={_redirectIfNotAuth} />
       <Route component={EditorPageContainer} path='/upload' onEnter={_redirectIfNotAuth} />
       <Route path="/" component={MainLayout}>
-        <IndexRoute component={HomePageContainer} />
-        <Route path="faq" component={FAQPageComponent} />
+        <IndexRoute component={WorkSpaceContainer} onEnter={_redirectIfNotAuth} />
         <Route path="signin" component={SignInPageContainer} onEnter={_redirectIfAuth} />
         <Route path="signup" component={SignUpPageContainer} onEnter={_redirectIfAuth} />
         <Route path="pwd/reset/request" component={ResetPwdPageContainer} onEnter={_redirectIfAuth} />

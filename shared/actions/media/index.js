@@ -1,13 +1,23 @@
 import api from 'lib/api';
+import fetch from 'isomorphic-fetch';
 import isFunction from 'lodash/isFunction';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
 import { push } from 'react-router-redux';
 
+import externalApiConfig from 'etc/external-api';
 import { MEDIA_TYPE } from 'constants/common';
-import { NOTIFICATIONS } from 'constants/notifications';
+import {
+  NOTIFICATIONS,
+  NOTIFICATION_TYPES
+} from 'constants/notifications';
 import concatImages from './concatImages';
-import { pushNotification } from '../notifications';
+import createVideo from './createVideo';
+import {
+  pushNotification,
+  updateProgressNotification,
+  popNotification
+} from '../notifications';
 import {
   genRandomNum,
   genUUID
@@ -255,67 +265,81 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
   };
 }
 
-export const CREATE_VIDEO_REQUEST = 'CREATE_VIDEO_REQUEST';
-export const CREATE_VIDEO_SUCCESS = 'CREATE_VIDEO_SUCCESS';
-export const CREATE_VIDEO_FAILURE = 'CREATE_VIDEO_FAILURE';
+export const SHARE_FACEBOOK_VIDEO_REQUEST = 'SHARE_FACEBOOK_VIDEO_REQUEST';
+export const SHARE_FACEBOOK_VIDEO_SUCCESS = 'SHARE_FACEBOOK_VIDEO_SUCCESS';
+export const SHARE_FACEBOOK_VIDEO_FAILURE = 'SHARE_FACEBOOK_VIDEO_FAILURE';
 
-function createVideoRequest() {
+function shareFacebookVideoRequest() {
   return {
-    type: CREATE_VIDEO_REQUEST
+    type: SHARE_FACEBOOK_VIDEO_REQUEST
   };
 }
 
-function createVideoSuccess(response) {
+function shareFacebookVideoSuccess() {
   return {
-    type: CREATE_VIDEO_SUCCESS,
-    response
+    type: SHARE_FACEBOOK_VIDEO_SUCCESS
   };
 }
 
-// Interval for asking video creation status
-const VIDEO_POLLING_INTERVAL = 500;
-// maximun times for asking video creation status
-const VIDEO_RETRY_MAX_TIMES = 60;
-
-function pollingAskVideoStatus(dispatch, mediaId, retryTimes) {
-  api.media.getVideo(mediaId).then((res) => {
-    const { videoStatus } = res.result;
-
-    switch (videoStatus) {
-      case 'completed':
-      {
-        dispatch(createVideoSuccess({ mediaId }));
-        return;
-      }
-      case 'pending':
-        if (retryTimes < VIDEO_RETRY_MAX_TIMES) {
-          setTimeout(() => {
-            pollingAskVideoStatus(dispatch, mediaId, retryTimes + 1);
-          }, VIDEO_POLLING_INTERVAL);
-        } else {
-          handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Timeout'));
-        }
-        return;
-      case 'failed':
-        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error('Create video failed'));
-        return;
-      default:
-        handleError(dispatch, CREATE_VIDEO_FAILURE, new Error(`Unknown video status: ${videoStatus}`));
-        return;
-    }
-  }).catch((err) => {
-    handleError(dispatch, CREATE_VIDEO_FAILURE, err);
-  });
-}
-
-export function createVideo({ mediaId, userSession = {} }) {
+export function shareFacebookVideo({
+  mediaId,
+  targetId,
+  title,
+  description,
+  userSession = {},
+  fbAccessToken
+}) {
   return (dispatch) => {
-    dispatch(createVideoRequest());
+    const id = genUUID();
+    let progress = 0;
 
-    api.media.postVideo(mediaId, userSession.accessToken).then(() => {
-      pollingAskVideoStatus(dispatch, mediaId, 0);
+    dispatch(shareFacebookVideoRequest());
+    dispatch(pushNotification({
+      type: NOTIFICATION_TYPES.PROGRESS,
+      title,
+      progress
+    }, id));
+
+    const timer = setInterval(() => {
+      if (progress < 0.99) {
+        const addedProgress = genRandomNum(0.005, 0.02);
+        progress =
+          ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
+        dispatch(updateProgressNotification(id, progress));
+      } else {
+        clearInterval(timer);
+      }
+    }, 200);
+
+    createVideo(mediaId, userSession.accessToken).then((videoUrl) => {
+      const init = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          file_url: videoUrl,
+          description
+        })
+      };
+      const {
+        apiRoot,
+        version
+      } = externalApiConfig.facebook;
+      const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${fbAccessToken}`;
+
+      return fetch(url, init);
+    }).then(() => {
+      clearInterval(timer);
+      dispatch(shareFacebookVideoSuccess());
+      dispatch(updateProgressNotification(id, 1));
+      dispatch(popNotification(id));
+      dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
     }).catch((err) => {
-      handleError(dispatch, CREATE_VIDEO_FAILURE, err);
+      clearInterval(timer);
+      dispatch(popNotification(id));
+      handleError(dispatch, SHARE_FACEBOOK_VIDEO_FAILURE, err);
     });
   };
 }

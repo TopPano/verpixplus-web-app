@@ -10,19 +10,33 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
+import merge from 'lodash/merge';
+import Jed from 'jed';
+
+import enLocaleData from '../public/static/lang/en.json';
+import zhTwLocaleData from '../public/static/lang/zh-tw.json';
+
 import {
   fetchComponentsData,
-  genShareContent,
-  renderHTML
+  detectLocale,
+  genHeadContent,
+  genDefaultContent
 } from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
+import i18n from 'i18n';
 import Promise from 'lib/utils/promise';
 import api from 'lib/api';
 
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
+
+// Initialize localization
+const i18nToolsRegistry = {
+  'en': new i18n.Tools({ localeData: enLocaleData, locale: 'en' }),
+  'zh-tw': new i18n.Tools({ localeData: zhTwLocaleData, locale: 'zh-tw' })
+};
 
 const app = new Express();
 
@@ -49,13 +63,27 @@ app.get('/embed/@:mediaId', (req, res) => {
   const { mediaId } = req.params;
 
   api.media.getMedia(mediaId).then((response) => {
-    const shareContent = genShareContent(req, true, response.result);
+    const locale = detectLocale(req);
+    const i18nTools = i18nToolsRegistry[locale];
+    const content = genHeadContent(req, i18nTools, true, response.result);
 
-    res.render('embed', shareContent);
+    res.render('pages/embed', merge({}, content, {
+      staticUrl: clientConfig.staticUrl
+    }));
   }).catch((err) => {
     console.log(err.stack);
     res.end(err.message);
   });
+});
+
+// Terms of Use page request
+app.get('/terms', (req, res) => {
+  return res.sendFile(path.join(__dirname, '/../public/static/home/terms.html'));
+});
+
+// Privacy Policy page request
+app.get('/privacy', (req, res) => {
+  return res.sendFile(path.join(__dirname, '/../public/static/home/privacy.html'));
 });
 
 // This is fired every time the server side receives a request
@@ -63,20 +91,30 @@ app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
 
+  if (!accessToken && req.url === '/') {
+    return res.sendFile(path.join(__dirname, '/../public/static/home/index.html'));
+  }
+
   if (accessToken) {
     // restore the client state
     initState.user = {
       isFetching: false,
+      isProcessing: {},
       isAuthenticated: true,
+      accessToken,
       userId: req.cookies.userId,
       username: req.cookies.username,
       profilePhotoUrl: req.cookies.profilePhotoUrl,
       email: req.cookies.email,
-      created: req.cookies.created
+      created: req.cookies.created,
+      errMsgs: {}
     };
   }
 
   const store = configureStore(initState);
+
+  const locale = detectLocale(req);
+  const i18nTools = i18nToolsRegistry[locale];
 
   match({ routes: routes(accessToken), location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
@@ -91,25 +129,23 @@ app.use((req, res) => {
         components  : renderProps.components,
         params      : renderProps.params,
         location    : renderProps.location,
-        userSession : initState.user
+        userSession : initState.user,
+        locale
       })
       .then(() => {
         // Grab the initial state from the store
         const initialState = store.getState();
         const html = renderToString(
           <Provider store={store}>
-            <div>
+            <i18n.Provider i18n={i18nTools}>
               <RouterContext {...renderProps} />
-            </div>
+            </i18n.Provider>
           </Provider>
         );
-        const shareContent = genShareContent(req, false);
+        const headContent = genHeadContent(req, i18nTools, false);
+        const content = genDefaultContent(html, initialState, headContent, process.env.NODE_ENV);
 
-        return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
-      })
-      .then(html => {
-        // Send the rendered page back to the client
-        res.end(html);
+        res.render('pages/default', content);
       })
       .catch(err => {
         console.log(err.stack);

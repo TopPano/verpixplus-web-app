@@ -13,7 +13,7 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let config = Object.assign({}, baseConfig, {
   entry: {
     app: path.join(__dirname, '../client'),
-    vendor: [ 'react', 'react-dom', 'three' ]
+    vendor: [ 'react', 'react-dom' ]
   },
   cache: false,
   debug: false,

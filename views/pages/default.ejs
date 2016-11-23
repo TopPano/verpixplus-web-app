@@ -1,0 +1,26 @@
+<!doctype html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<html>
+<head>
+  <% include ../partials/head %>
+  <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/plugins/unify/css/unify.min.css">
+  <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/build/app.css">
+  <script>
+     document.write('\x3Cscript src="' + (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//webfonts.creativecloud.com/source-sans-pro:n4,n7:default.js" type="text/javascript">\x3C/script>');
+  </script>
+</head>
+<body>
+<div id="app" class="wrapper page-option-v1"><%- html %></div>
+  <script>window.__INITIAL_STATE__ = <%- JSON.stringify(initialState) %></script>
+  <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
+  <script type="text/javascript" src="/static/plugins/glfx/glfx.js"></script>
+  <%- gaSdk %>
+  <%- livephotoSdk %>
+  <%- vendorScript %>
+  <script type="text/javascript" src="/static/build/app.js"></script>
+</body>
+</html>

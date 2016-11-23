@@ -33,7 +33,7 @@ class FilePanel extends Component {
     } = this.props;
 
     return (
-      <div className="file-panel-component bg-color-light fill">
+      <div className="file-panel-component fill">
         {
           isProcessing ?
           <FileProgress

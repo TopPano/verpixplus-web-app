@@ -10,15 +10,9 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  user: PropTypes.object.isRequired,
   workspace: PropTypes.object.isRequired,
   deleteMedia: PropTypes.func.isRequired,
-  loadMore: PropTypes.func.isRequired,
-  updateProfilePicture: PropTypes.func.isRequired,
-  updateProfile: PropTypes.func.isRequired,
-  editAutobiography: PropTypes.func.isRequired,
-  changePassword: PropTypes.func.isRequired,
-  clearErrMsgChangePassword: PropTypes.func.isRequired
+  loadMore: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -27,33 +21,16 @@ const defaultProps = {
 class WorkSpace extends Component {
   render() {
     const {
-      user,
       workspace,
       deleteMedia,
-      loadMore,
-      updateProfilePicture,
-      updateProfile,
-      editAutobiography,
-      changePassword,
-      clearErrMsgChangePassword
+      loadMore
     } = this.props;
 
     return (
-      <div className="workspace-component container-fullpage">
+      <div className="workspace-component container container-fullpage">
         <Summary
           username={workspace.username}
-          userId={user.userId}
-          email={user.email}
-          profilePhotoUrl={workspace.profilePhotoUrl}
-          autobiography={workspace.autobiography}
-          isProcessing={workspace.isProcessing}
           numOfMedia={workspace.numOfMedia}
-          errMsgs={workspace.errMsgs}
-          updateProfilePicture={updateProfilePicture}
-          updateProfile={updateProfile}
-          editAutobiography={editAutobiography}
-          changePassword={changePassword}
-          clearErrMsgChangePassword={clearErrMsgChangePassword}
         />
         <Gallery
           progressMedia={workspace.progressMedia.objs}
@@ -62,6 +39,7 @@ class WorkSpace extends Component {
           mediaIds={workspace.media.ids}
           hasNext={workspace.media.hasNext}
           userId={workspace.userId}
+          isProcessing={workspace.isProcessing}
           isFetching={workspace.isFetching}
           deleteMedia={deleteMedia}
           loadMore={loadMore}

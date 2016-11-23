@@ -14,7 +14,6 @@
 .text-link {
   &:link, &:visited, &:hover, &:active {
     cursor: pointer;
-    color: $text-color-primary;
     text-decoration: none;
   }
 }
@@ -45,7 +44,7 @@
 }
 
 .container-fullpage {
-  min-height: 100vh;
+  min-height: calc(100vh - 168px);
 }
 
 .rounded-bottom {
@@ -53,8 +52,20 @@
   border-bottom-right-radius: 4px;
 }
 
+.circle {
+  border-radius: 50%;
+}
+
+.main-bg {
+  background-color: #EBEBEB;
+}
+
 textarea {
   resize: none;
+}
+
+.title-v1 h1, .title-v1 h2, h1, h2, h3, h4, h5, h6 {
+  font-family: source-sans-pro, sans-serif;
 }
 
 /* Customized styles for Bootstrap and Unify */

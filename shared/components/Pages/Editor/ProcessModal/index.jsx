@@ -2,10 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import EDITOR_CONTENT from 'content/editor/en-us.json';
 import Modal from 'components/Common/Modal';
-
-const CONTENT = EDITOR_CONTENT.PROCESS_MODAL;
 
 if (process.env.BROWSER) {
   require('./ProcessModal.css');
@@ -19,6 +16,8 @@ const defaultProps = {
 };
 
 class ProcessModal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
@@ -34,10 +33,11 @@ class ProcessModal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isProcessing } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: CONTENT.TITLE,
+      title: l('Processing'),
       closeBtn: {
         show: false
       },
@@ -49,7 +49,7 @@ class ProcessModal extends Component {
 
     return (
       <Modal {...modalProps}>
-        <div>{CONTENT.DESC}</div>
+        <div>{l('Please wait, tasks will be completed soon')}</div>
       </Modal>
     );
   }

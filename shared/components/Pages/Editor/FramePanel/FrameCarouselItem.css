@@ -1,21 +1,18 @@
 @import 'Variables.css';
 
-$border-color: #E8AA25;
-$border-width-thin: 1px;
-$border-width-thick: 3px;
-$divider-border: solid $border-width-thin $border-color;
-$mark-color: #999;
-$mark-small: 3px;
-$mark-large: 10px;
+$border-color: $color-red;
+$border-color-highlighted: #D23D60;
+$divider-border: solid 5px $border-color;
+$counter-color: #7A7A7A;
 
 .frame-carousel-item-component {
   position: relative;
-  padding: 3px;
+  padding: 2px;
   padding-left: 0;
   &:first-child {
-    padding-left: 3px;
+    padding-left: 2px;
   }
-  background-color: $color-black;
+  background-color: $color-white;
 
   .img-wrapper {
     width: 100%;
@@ -36,25 +33,35 @@ $mark-large: 10px;
       height: 100%;
       position: relative;
 
+      .marker-bg {
+        background-color: $color-white;
+        position: absolute;
+        left: 0;
+        bottom: -40px;
+        width: 100%;
+        height: 35px;
+      }
+
       .marker {
-        border-right: $mark-color solid 1px;
+        border-right: #BFBFBF solid 1px;
         background-color: transparent;
         position: absolute;
-        top: -$mark-small;
+        bottom: -10px;
         left: 0;
         width: 100%;
-        height: $mark-small;
+        height: 5px;
         &.large {
-          height: $mark-large;
-          top: -$mark-large;
+          bottom: -20px;
+          height: 15px;
+          border-right-color: $counter-color;
         }
 
         .counter {
           position: absolute;
           right: 0;
-          top: -13px;
-          font-size: 10px;
-          color: $mark-color;
+          z-index: 99999;
+          bottom: -25px;
+          color: $counter-color;
           transform: translateX(50%);
         }
       }
@@ -77,7 +84,7 @@ $mark-large: 10px;
             cursor: col-resize;
           }
           &.highlighted {
-            border-width: $border-width-thick;
+            border-color: $border-color-highlighted;
           }
         }
       }

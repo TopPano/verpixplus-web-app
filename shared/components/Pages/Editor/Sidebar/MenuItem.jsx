@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-// import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
 
 if (process.env.BROWSER) {
@@ -24,22 +23,25 @@ class MenuItem extends Component {
   }
 
   render() {
-    const { icon, active, handleClick } = this.props;
+    const {
+      icon,
+      active,
+      handleClick
+    } = this.props;
     const itemClass = classNames({
-      'menu-item-component': true,
-      'btn-u': true,
-      'bg-color-light-grey': !active,
-      'bg-color-dark': active
+      'menu-item-component clickable circle': true,
+      'active': active
     });
 
     return (
-      <button
-        type="button"
+      <img
         className={itemClass}
+        src={`/static/images/editor/${icon}.svg`}
+        alt={icon}
+        width="40"
+        height="40"
         onClick={handleClick}
-      >
-        <i className={`fa fa-${icon}`} />
-      </button>
+      />
     );
   }
 }

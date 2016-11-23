@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import SignIn from 'components/Pages/SignIn';
+import { connectDataFetchers } from 'lib/utils';
 import { loginUser, clearUserErrMsg } from 'actions/user';
 import { sendEvent } from 'lib/utils/googleAnalytics';
 
@@ -64,4 +65,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SignInPageContainer);
+export default connect(mapStateToProps)(
+  connectDataFetchers(SignInPageContainer, [])
+);

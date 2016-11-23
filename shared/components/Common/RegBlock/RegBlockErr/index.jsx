@@ -3,10 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-import DEFAULT_CONTENT from 'content/sign/en-us.json';
-
-const DEFAULT_CONVERTED_ERR_MSGS = DEFAULT_CONTENT.ERR_MSG;
-
 if (process.env.BROWSER) {
   require('./RegBlockErr.css');
 }
@@ -18,10 +14,12 @@ const propTypes = {
 };
 
 const defaultProps = {
-  convertedErrMsgs: DEFAULT_CONVERTED_ERR_MSGS
+  convertedErrMsgs: {}
 };
 
 class RegBlockErr extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -31,21 +29,21 @@ class RegBlockErr extends Component {
   }
 
   // Parse error message and convert them into human readable message
-  convertErrMsg(errMsg, convertedErrMsgs) {
+  convertErrMsg(errMsg, convertedErrMsgs, defaultConvertedErrMsgs) {
     // TODO: Handle for more error message.
     if (!errMsg) {
       return '';
     } else if (errMsg === 'Unauthorized') {
       return (
-        convertedErrMsgs.AJAX.UNAUTHORIZED ?
-        convertedErrMsgs.AJAX.UNAUTHORIZED :
-        DEFAULT_CONVERTED_ERR_MSGS.AJAX.UNAUTHORIZED
+        convertedErrMsgs[errMsg] ?
+        convertedErrMsgs[errMsg] :
+        defaultConvertedErrMsgs[errMsg]
       );
     } else {
       return (
-        convertedErrMsgs.AJAX.OTHERS ?
-        convertedErrMsgs.AJAX.OTHERS :
-        DEFAULT_CONVERTED_ERR_MSGS.AJAX.OTHERS
+        convertedErrMsgs.others ?
+        convertedErrMsgs.others :
+        defaultConvertedErrMsgs.others
       );
     }
   }
@@ -62,15 +60,21 @@ class RegBlockErr extends Component {
 
   // TODO: show/hide block with animation
   render() {
+    const { l } = this.context.i18n;
     const {
       errMsg,
       convertedErrMsgs
     } = this.props;
+    const defaultConvertedErrMsgs = {
+      'Existed': l('The email address already exists'),
+      'Unauthorized': l('The email and password don\'t match'),
+      'others': l('Something wrong with server, please try again later')
+    };
     const componentClass = classNames({
       'reg-block-err-component': true,
       'hide': !Boolean(errMsg)
     });
-    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs);
+    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs, defaultConvertedErrMsgs);
 
     return (
       <div className={componentClass}>

@@ -2,22 +2,22 @@
 
 .profile-photo-component {
   position: relative;
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
 
   .profile-photo {
-    border-radius: 50%;
     width: 100%;
     height: 100%;
     transition: opacity .3s ease;
-    &:hover {
+    &.solid-border {
+      border: solid 2px $color-white;
+    }
+    &.editable:hover {
       opacity: 0.8
     }
   }
 
   .profile-photo-overlay {
-    border-radius: 50%;
     position: absolute;
     top: 0;
     height: 0;

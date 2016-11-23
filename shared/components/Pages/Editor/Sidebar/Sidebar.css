@@ -1,8 +1,24 @@
+@import 'Variables.css';
+
 .sidebar-component {
+  background-color: $color-black;
   .menu {
     width: 100%;
-    height: 54px;
-    padding: 0 15px;
+    padding: 20px 25px;
+
+    .sidebar-back {
+      display: block;
+      width: 40px;
+      height: 40px;
+      transition: opacity .3s ease;
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+
+    .menu-items {
+      margin-top: 20px;
+    }
   }
 
   .sidebar-panels-container {
@@ -19,7 +35,39 @@
     }
   }
 
+  /* Common elements or classes under Siderbar */
   input, textarea {
     border: none;
+    background-color: #242424;
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: $color-white;
+    &::placeholder {
+      color: $color-grey;
+    }
+  }
+  .flat-button-component.sidebar-btn {
+    width: 100px;
+    background-color: $color-black;
+    border-color: #4C4C4C;
+    font-size: 15px;
+    line-height: 31px;
+    height: 31px;
+    transition: all .3s ease;
+    &:hover {
+      background-color: #545454;
+      color: $color-white;
+    }
+    &.disabled:hover {
+      background-color: $color-black;
+    }
+    &.dirty {
+      background-color: $color-red;
+      border-color: $color-white;
+      &:hover {
+        background-color: $color-white;
+        color: $color-red;
+      }
+    }
   }
 }

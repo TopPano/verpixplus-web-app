@@ -54,9 +54,8 @@ class FramePanel extends Component {
     };
 
     return (
-      <div className="frame-panel-component bg-color-light">
+      <div className="frame-panel-component">
         <FrameCarousel {...carouselProps} />
-        <div className="margin-bottom-15" />
       </div>
     );
   }

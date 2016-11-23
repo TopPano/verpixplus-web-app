@@ -1,6 +1,8 @@
 .reg-block-input-component {
-  .form-control:focus {
-    &.err {
+  input.form-control {
+    background-color: #F0F0F0;
+    z-index: 0;
+    &:focus.err {
       border-color: #D490A9;
     }
   }

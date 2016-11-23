@@ -4,8 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactModal from 'react-bootstrap/lib/Modal';
 import merge from 'lodash/merge';
 
-import CONTENT from 'content/site/en-us.json';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import Loading from 'components/Common/Loading';
 
 if (process.env.BROWSER) {
@@ -14,15 +13,14 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   title: PropTypes.string,
+  titleIcon: PropTypes.string,
   closeBtn: PropTypes.shape({
-    icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
     show: PropTypes.bool,
     onClick: PropTypes.func
   }),
   confirmBtn: PropTypes.shape({
-    icon: PropTypes.string,
     className: PropTypes.string,
     text: PropTypes.string,
     show: PropTypes.bool,
@@ -34,16 +32,13 @@ const propTypes = {
 
 const defaultProps = {
   title: '',
+  titleIcon: '',
   closeBtn: {
-    icon: 'times',
-    className: 'btn btn-u btn-u-default pull-left rounded',
-    text: CONTENT.MODAL.DEFAULT_CLOSE_BTN,
+    className: 'modal-btn close-btn pull-left',
     show: true
   },
   confirmBtn: {
-    icon: 'check',
-    className: 'btn btn-u pull-right rounded',
-    text: CONTENT.MODAL.DEFAULT_CONFIRM_BTN,
+    className: 'modal-btn confirm-btn pull-right',
     show: true
   },
   rootClose: false,
@@ -51,6 +46,8 @@ const defaultProps = {
 };
 
 class Modal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -81,17 +78,27 @@ class Modal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isOpened } = this.state;
     const {
       title,
+      titleIcon,
       closeBtn,
       confirmBtn,
       rootClose,
       isProcessing,
       children
     } = this.props;
-    const closeBtnProps = merge({}, defaultProps.closeBtn, closeBtn);
-    const confirmBtnProps = merge({}, defaultProps.confirmBtn, confirmBtn);
+    const defaultCloseBtnText = l('Close');
+    const defaultConfirmBtnText = l('Confirm');
+    const defaultCloseBtnProps = merge({}, defaultProps.closeBtn, {
+      text: defaultCloseBtnText
+    });
+    const defaultConfirmBtnProps = merge({}, defaultProps.confirmBtn, {
+      text: defaultConfirmBtnText
+    });
+    const closeBtnProps = merge({}, defaultCloseBtnProps, closeBtn);
+    const confirmBtnProps = merge({}, defaultConfirmBtnProps, confirmBtn);
 
     return(
       <ReactModal
@@ -102,6 +109,14 @@ class Modal extends Component {
           title &&
           <ReactModal.Header closeButton={rootClose}>
             <ReactModal.Title>
+              {
+                titleIcon &&
+                <img
+                  className="modal-title-icon"
+                  src={titleIcon}
+                  alt="title icon"
+                />
+              }
               {`${title}  `}
               {
                 isProcessing &&
@@ -116,18 +131,18 @@ class Modal extends Component {
         <ReactModal.Footer>
           {
             closeBtnProps.show &&
-            <IconButton
+            <FlatButton
               {...closeBtnProps}
               disabled={isProcessing}
-              handleClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
+              onClick={closeBtnProps.onClick ? closeBtnProps.onClick : this.close}
             />
           }
           {
             confirmBtnProps.show &&
-            <IconButton
+            <FlatButton
               {...confirmBtnProps}
               disabled={isProcessing}
-              handleClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
+              onClick={confirmBtnProps.onClick ? confirmBtnProps.onClick : this.close}
             />
           }
         </ReactModal.Footer>

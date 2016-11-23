@@ -1,6 +1,5 @@
 .player-panel-component {
   flex-grow: 1;
   position: relative;
-  border: solid 30px #f7f7f7;
-  overflow: hidden;
+  padding: 0 20px 15px 20px;
 }

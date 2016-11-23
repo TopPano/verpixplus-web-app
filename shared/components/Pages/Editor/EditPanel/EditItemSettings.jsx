@@ -4,14 +4,11 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { MODE } from 'constants/editor';
-import EDITOR_CONTENT from 'content/editor/en-us.json';
 import Modal from 'components/Common/Modal';
 import DeleteModal from 'containers/common/DeleteModal';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import SwitchButton from 'components/Common/SwitchButton';
 import SidebarItem from '../SidebarItem';
-
-const CONTENT = EDITOR_CONTENT.EDIT_PANEL.SETTINGS;
 
 if (process.env.BROWSER) {
   require('./EditItemSettings.css');
@@ -28,6 +25,8 @@ const propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
   }).isRequired,
+  lower: PropTypes.number.isRequired,
+  upper: PropTypes.number.isRequired,
   autoplay: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
@@ -40,6 +39,8 @@ const defaultProps = {
 };
 
 class EditItemSettings extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -58,6 +59,8 @@ class EditItemSettings extends Component {
       caption,
       appliedData,
       dimension,
+      lower,
+      upper,
       create
     } = this.props;
 
@@ -65,7 +68,7 @@ class EditItemSettings extends Component {
       mediaType,
       title,
       caption,
-      data: appliedData,
+      data: appliedData.slice(lower, upper),
       dimension
     });
   }
@@ -115,6 +118,7 @@ class EditItemSettings extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mode,
       mediaId,
@@ -124,70 +128,59 @@ class EditItemSettings extends Component {
     } = this.props;
     const saveBtnProps = {
       className: classNames({
-        'btn btn-u text-uppercase rounded margin-right-10': true,
-        'btn-u-orange': filters.isDirty
+        'sidebar-btn': true,
+        'dirty': filters.isDirty
       }),
-      icon: 'floppy-o',
-      text: mode === MODE.WAIT_FILE || mode === MODE.CREATE ? CONTENT.POST :
-            mode === MODE.EDIT ? CONTENT.UPDATE :
-            '',
+      text: l('Save'),
       disabled: mode !== MODE.CREATE && mode !== MODE.EDIT,
-      handleClick: this.handleClickSave
+      onClick: this.handleClickSave
     }
     const warnModalProps = {
       ref: 'warnModal',
-      title: CONTENT.WARN_MODAL.TITLE,
+      title: l('New effects are not applied'),
       confirmBtn: {
-        icon: 'floppy-o',
-        className: 'btn btn-u text-uppercase pull-right rounded',
-        text: CONTENT.POST,
+        text: l('Save'),
         onClick: () => {
           this.refs.warnModal.close();
           this.createMedia();
         }
       },
       closeBtn: {
-        className: 'btn btn-u btn-u-default text-uppercase pull-left rounded',
-        text: CONTENT.CANCEL
+        text: l('Cancel')
       }
     };
 
     return (
       <div className="edit-item-settings-component">
-        <SidebarItem
-          icon="cog"
-          title={CONTENT.TITLE}
-        >
-          <div className="autoplay panel-heading overflow-h">
-            <h5 className="panel-title heading-sm pull-left">
-              {CONTENT.AUTOPLAY}
-            </h5>
+        <SidebarItem>
+          <div className="autoplay overflow-h">
             <SwitchButton
-              className="pull-right"
               checked={autoplay}
               onChange={this.handleChangeAutoplay}
             />
+            <p className="">
+              {l('Autoplay')}
+            </p>
           </div>
-          <div className="margin-bottom-20" />
+          <div className="margin-bottom-60" />
           <div className="btns-wrapper">
-            <IconButton {...saveBtnProps} />
+            <FlatButton {...saveBtnProps} />
             {
               mode === MODE.EDIT &&
               <DeleteModal
                 mediaId={mediaId}
                 isProcessing={isProcessing}
               >
-                <IconButton
-                  className="btn btn-u btn-u-red text-uppercase rounded"
-                  icon="trash-o"
-                  text={CONTENT.DELETE}
+                <FlatButton
+                  className="sidebar-btn"
+                  text={l('Delete')}
                 />
               </DeleteModal>
             }
           </div>
         </SidebarItem>
         <Modal {...warnModalProps}>
-          <div>{CONTENT.WARN_MODAL.DESC}</div>
+          <div>{`${l('Effects are modified but not applied. Still save')}?`}</div>
         </Modal>
       </div>
     );

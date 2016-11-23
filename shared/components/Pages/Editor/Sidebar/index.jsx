@@ -112,10 +112,10 @@ class Sidebar extends Component {
       edit
     } = this.props;
     const editMenuItemProp = {
-      icon: 'pencil-square'
+      icon: 'edit'
     };
     const filtersMenuItemProp = {
-      icon: 'picture-o'
+      icon: 'filters'
     };
     const editPanel =
       <EditPanel
@@ -136,6 +136,7 @@ class Sidebar extends Component {
     if (mode === MODE.WAIT_FILE) {
       menuItemsProps = [editMenuItemProp];
       panels = [editPanel];
+      // panels = [filtersPanel];
     } else if (mode === MODE.CREATE) {
       menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
       panels = [editPanel, filtersPanel];
@@ -148,18 +149,22 @@ class Sidebar extends Component {
     sidebarPanels = this.renderSidebarPanels(panels, selectedIdx);
 
     return (
-      <div className="sidebar-component fill bg-color-dark">
-        <div className="menu bg-color-light-grey">
-          {menuItems}
+      <div className="sidebar-component fill">
+        <div className="menu">
           <Link
-            className="pull-right"
+            className="sidebar-back"
             to="/"
           >
-            <MenuItem
-              icon="times"
-              active={false}
+            <img
+              src="/static/images/editor/back.svg"
+              alt="go back"
+              width="40"
+              height="40"
             />
           </Link>
+          <div className="menu-items">
+            {menuItems}
+          </div>
         </div>
         <Scrollbar
           universal

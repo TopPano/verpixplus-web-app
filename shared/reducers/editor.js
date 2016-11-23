@@ -1,3 +1,4 @@
+import assign from 'lodash/assign';
 import merge from 'lodash/merge';
 
 import {
@@ -18,7 +19,8 @@ import {
   APPLY_FILTERS_REQUEST,
   APPLY_FILTERS_PROGRESS,
   APPLY_FILTERS_SUCCESS,
-  APPLY_FILTERS_FAILURE
+  APPLY_FILTERS_FAILURE,
+  CLEAR_EDITOR_ERR
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
@@ -44,6 +46,7 @@ const DEFAULT_STATE = {
   title: '',
   caption: '',
   progress: 0,
+  converter: undefined,
   appliedData: [],
   dimension: { width: 100, height: 100 },
   playerMode: PLAYER_MODE.PLAY,
@@ -112,13 +115,18 @@ export default function editor(state = DEFAULT_STATE, action) {
           isDirty: true
         }
       });
-    case CONVERT_REQUEST:
     case GET_MEDIA_REQUEST:
     case UPDATE_MEDIA_REQUEST:
     case APPLY_FILTERS_REQUEST:
       return merge({}, state, {
         isProcessing: true,
         progress: 0
+      });
+    case CONVERT_REQUEST:
+      return merge({}, state, {
+        isProcessing: true,
+        progress: 0,
+        converter: action.converter
       });
     case CONVERT_PROGRESS:
       return merge({}, state, {
@@ -181,6 +189,10 @@ export default function editor(state = DEFAULT_STATE, action) {
         isProcessing: false,
         err: action.err
       });
+    case CLEAR_EDITOR_ERR:
+      return assign({}, state, {
+        err: DEFAULT_STATE.err
+      })
     default:
       return state;
   }

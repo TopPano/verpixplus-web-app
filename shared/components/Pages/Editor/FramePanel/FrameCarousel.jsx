@@ -35,6 +35,8 @@ const defaultProps = {
 };
 
 class FrameCarousel extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -293,6 +295,7 @@ class FrameCarousel extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isHoveringActiveDivider } = this.state;
     const {
       range,
@@ -304,10 +307,13 @@ class FrameCarousel extends Component {
       dimension,
       disabled
     } = this.props;
-    const componentClass = classNames({
-      'frame-carousel-component': true,
-      'rounded': true,
+    const wrapperClass = classNames({
+      'frame-carousel-wrapper': true,
       'disabled': disabled
+    });
+    const textClass = classNames({
+      'frame-carousel-text text-center': true,
+      'disabled': !disabled
     });
     const carouselProps = {
       options: {
@@ -322,7 +328,7 @@ class FrameCarousel extends Component {
         scrollbarDraggable: true
       },
       showScrollbar: true,
-      carouselClass: 'frame-carousel rounded'
+      carouselClass: 'frame-carousel'
     };
     const isDividerHighlighted = isHoveringActiveDivider || move.isMoving || resize.isResizing;
     const resizedDimension = this.resizeDimension(dimension);
@@ -330,10 +336,13 @@ class FrameCarousel extends Component {
     const items = this.renderItemList(images, resizedDimension, keyFrameLength, range.lower, range.upper, FRAME_STEP, isDividerHighlighted);
 
     return (
-      <div className={componentClass}>
-        <Carousel {...carouselProps}>
-          {items}
-        </Carousel>
+      <div className="frame-carousel-component">
+        <div className={wrapperClass}>
+          <Carousel {...carouselProps}>
+            {items}
+          </Carousel>
+        </div>
+        <p className={textClass}>{l('Modify the effect values and click the button to apply')}</p>
       </div>
     );
   }

@@ -1,15 +1,23 @@
+@import 'Variables.css';
+
 .slider-component {
-  background-color: #e5e5e5;
+  background-color: $color-grey;
 
   .rc-slider-handle {
-    border: 2px solid #e5e5e5;
-    transition: border-color .3s;
+    border-color: $color-red;
+    background-color: $color-red;
+    transition: border-color .3s ease;
     &:hover, &:active {
-      border-color: #999;
+      border-color: #A20D20;
     }
   }
 
   .rc-slider-track {
     background-color: transparent;
   }
+}
+
+.rc-tooltip-inner {
+  background-color: $color-grey;
+  box-shadow: none;
 }

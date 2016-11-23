@@ -3,7 +3,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { connectDataFetchers } from 'lib/utils';
+import {
+  imagesStorage,
+  connectDataFetchers
+} from 'lib/utils';
 import {
   initEditor
 } from 'actions/editor';
@@ -19,6 +22,21 @@ const defaultProps = {
 class EditorPageContainer extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillUnmount() {
+    const {
+      storageId,
+      converter
+    } = this.props.editor;
+
+    if (storageId) {
+      imagesStorage.clear(storageId);
+    }
+
+    if (converter && converter.isConverting) {
+      converter.stop();
+    }
   }
 
   render() {

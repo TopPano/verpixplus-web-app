@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
 import Modal from 'components/Common/Modal';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import ShareSocial from './ShareSocial';
@@ -12,23 +11,21 @@ if (process.env.BROWSER) {
   require('./ShareModal.css');
 }
 
-const CONTENT = COMMON_CONTENT.SHARE_MODAL;
-
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isVideoCreated: PropTypes.bool.isRequired,
-  isProcessing: PropTypes.bool,
   children: PropTypes.node.isRequired,
-  createVideo: PropTypes.func.isRequired,
+  shareFacebookVideo: PropTypes.func.isRequired,
   notifyShareSuccess: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  isProcessing: false
 };
 
 class ShareModal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -44,42 +41,39 @@ class ShareModal extends Component {
 
   // Close the modal
   close() {
-    if (!this.props.isProcessing) {
-      this.refs.modal.close();
-    }
+    this.refs.modal.close();
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mediaId,
       title,
       isVideoCreated,
-      isProcessing,
       children,
-      createVideo,
+      shareFacebookVideo,
       notifyShareSuccess
     } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: CONTENT.TITLE,
+      title: l('Share Your Media'),
       confirmBtn: {
         show: false
-      },
-      isProcessing
+      }
     };
     const tabsContent = [{
-      tab: CONTENT.TABS.SOCIAL,
+      tab: l('Social Media'),
       content:
         <ShareSocial
           mediaId={mediaId}
           title={title}
           isVideoCreated={isVideoCreated}
-          isProcessing={isProcessing}
-          createVideo={createVideo}
+          shareFacebookVideo={shareFacebookVideo}
           notifyShareSuccess={notifyShareSuccess}
+          close={this.close}
         />
     }, {
-      tab: CONTENT.TABS.EMBED,
+      tab: l('Embed'),
       content: <ShareEmbed mediaId={mediaId} />
     }];
 
