@@ -17,6 +17,8 @@ const defaultProps = {
 };
 
 class Summary extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
@@ -40,6 +42,7 @@ class Summary extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       username,
       numOfMedia
@@ -53,7 +56,7 @@ class Summary extends Component {
       src: '/static/images/workspace/media.svg',
       alt: 'media',
       size: 15,
-      text: `${numOfMedia} MEDIA`
+      text: `${numOfMedia} ${l('Media').toUpperCase()}`
     }];
     const summaryInfoList = this.renderSummaryInfoList(summaryInfoPropsList);
 

@@ -5,8 +5,6 @@ import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
 import { EXTERNAL_LINKS } from 'constants/common';
-import CONTENT from 'content/sign/en-us.json';
-import COMMON_CONTENT from 'content/common/en-us.json';
 
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
@@ -15,8 +13,6 @@ import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockOthers from 'components/Common/RegBlock/RegBlockOthers';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
 import ExternalLink from 'components/Common/ExternalLink';
-
-const { ERR_MSG } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./SignUp.css');
@@ -32,6 +28,8 @@ const defaultProps = {
 };
 
 class SignUp extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -53,6 +51,7 @@ class SignUp extends Component {
 
     this.refs.err.clear();
 
+    const { l } = this.context.i18n;
     const username = this.refs.username;
     const confirmPwd = this.refs.confirmPwd;
     const email = this.refs.email;
@@ -65,37 +64,37 @@ class SignUp extends Component {
 
     // Check username is empty or not
     if (isEmpty(usernameVal)) {
-      username.err(ERR_MSG.USERNAME.EMPTY);
+      username.err(l('Please enter username'));
       return;
     }
     // Username format validation
     if (!this.isValidName(usernameVal)) {
-      username.err(ERR_MSG.USERNAME.INVALID);
+      username.err(l('Please try another username'));
       return;
     }
     // Check email is empty or not
     if (isEmpty(emailVal)) {
-      email.err(ERR_MSG.EMAIL.EMPTY);
+      email.err(l('Please enter your email'));
       return;
     }
     // Email format validation
     if (!isEmail(emailVal)) {
-      email.err(ERR_MSG.EMAIL.INVALID);
+      email.err(l('The email address is not valid'));
       return;
     }
     // Check password is empty or not
     if (isEmpty(pwdVal)) {
-      pwd.err(ERR_MSG.PWD.EMPTY);
+      pwd.err(l('Please enter your password'));
       return;
     }
     // Check confirm-password is empty or not
     if (isEmpty(confirmPwdVal)) {
-      confirmPwd.err(ERR_MSG.CONFIRM_PWD.EMPTY);
+      confirmPwd.err(l('Please enter your password again'));
       return;
     }
     // Check equality of password and confirm-password
     if (pwdVal !== confirmPwdVal) {
-      pwd.err(ERR_MSG.PWD.NOT_MATCHED);
+      pwd.err(l('These passwords don\'t match'));
       return;
     }
 
@@ -108,16 +107,17 @@ class SignUp extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { errMsg, clearErrMsg } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
     const headerProps = {
-      title: CONTENT.HEADER.SIGN_UP.TITLE,
+      title: l('Sign Up'),
       switchTo: {
         url: '/signin',
-        name: CONTENT.HEADER.SIGN_UP.SWITCH_TO.NAME,
-        desc: CONTENT.HEADER.SIGN_UP.SWITCH_TO.DESC
+        name: l('Sign In'),
+        desc: `${l('Have an account')}?`
       }
     };
     const errProps = {
@@ -129,26 +129,26 @@ class SignUp extends Component {
       ref: 'username',
       icon: 'user',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.USERNAME
+      placeHolder: l('Username')
     }, {
       // TODO: use "email" type instead of "text"
       ref: 'email',
       icon: 'envelope',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.EMAIL
+      placeHolder: l('Email')
     }, {
       ref: 'pwd',
       icon: 'lock',
       type: 'password',
-      placeHolder: CONTENT.INPUTS.PWD
+      placeHolder: l('Password')
     }, {
       ref: 'confirmPwd',
       icon: 'key',
       type: 'password',
-      placeHolder: CONTENT.INPUTS.CONFIRM_PWD
+      placeHolder: l('Confirm Password')
     }];
     const btnProps = {
-      text: CONTENT.BTN.SIGN_UP.TEXT
+      text: l('Sign Up')
     };
     const inputs = this.renderInputs(inputsProps);
 
@@ -160,13 +160,13 @@ class SignUp extends Component {
           {inputs}
           <hr />
           <RegBlockOthers>
-            {CONTENT.OTHERS.SIGN_UP.AGREE}
+            {`${l('By signing up, you agree to our')} `}
             <ExternalLink to={EXTERNAL_LINKS.TERMS_OF_USE}>
-             {COMMON_CONTENT.TERMS_OF_USE}
+              {l('Terms of Use')}
             </ExternalLink>
-            {CONTENT.OTHERS.SIGN_UP.AND}
+            {` ${l('and')} `}
             <ExternalLink to={EXTERNAL_LINKS.PRIVACY_POLICY}>
-             {COMMON_CONTENT.PRIVACY_POLICY}
+              {l('Privacy Policy')}
             </ExternalLink>
           </RegBlockOthers>
           <RegBlockBtn {...btnProps} />

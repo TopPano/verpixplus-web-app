@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
 import Modal from 'components/Common/Modal';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import ShareSocial from './ShareSocial';
@@ -11,8 +10,6 @@ import ShareEmbed from './ShareEmbed';
 if (process.env.BROWSER) {
   require('./ShareModal.css');
 }
-
-const CONTENT = COMMON_CONTENT.SHARE_MODAL;
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
@@ -27,6 +24,8 @@ const defaultProps = {
 };
 
 class ShareModal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -46,6 +45,7 @@ class ShareModal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mediaId,
       title,
@@ -56,13 +56,13 @@ class ShareModal extends Component {
     } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: CONTENT.TITLE,
+      title: l('Share Your Media'),
       confirmBtn: {
         show: false
       }
     };
     const tabsContent = [{
-      tab: CONTENT.TABS.SOCIAL,
+      tab: l('Social Media'),
       content:
         <ShareSocial
           mediaId={mediaId}
@@ -73,7 +73,7 @@ class ShareModal extends Component {
           close={this.close}
         />
     }, {
-      tab: CONTENT.TABS.EMBED,
+      tab: l('Embed'),
       content: <ShareEmbed mediaId={mediaId} />
     }];
 

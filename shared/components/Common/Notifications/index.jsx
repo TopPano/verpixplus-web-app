@@ -4,9 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import NotificationSystem from 'react-notification-system';
 import indexOf from 'lodash/indexOf';
 import findIndex from 'lodash/findIndex';
+import isString from 'lodash/isString';
+import isEmpty from 'is-empty';
 
 import { NOTIFICATION_TYPES } from 'constants/notifications';
-import CONTENT from 'content/notifications/en-us.json';
 
 if (process.env.BROWSER) {
   require('./Notifications.css');
@@ -21,6 +22,8 @@ const defaultProps = {
 };
 
 class Notifications extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
@@ -36,15 +39,23 @@ class Notifications extends Component {
     return findIndex(systemNotifications, (notification) => notification.uid === id);
   }
 
-  // Map computer-readable message to human-readable message
+  // Get human-readable message
   getReadableMessage(message) {
-    return CONTENT[message] ? CONTENT[message] : '';
+    const { l } = this.context.i18n;
+
+    if (!isString(message) || isEmpty(message)) {
+      return '';
+    }
+
+    return l(message);
   }
 
   // Get message of progress notification
   getProgressMessage(progress) {
+    const { l } = this.context.i18n;
     const percent = parseInt(progress * 100, 10);
-    return `${CONTENT.PROGRESS.SHARING_FACEBOOK} ${percent}% ${CONTENT.PROGRESS.COMPLETE}`;
+
+    return `${l('Share to')} Facebook ... ${percent}% ${l('Complete')}`;
   }
 
   // Add a new notification to notification system

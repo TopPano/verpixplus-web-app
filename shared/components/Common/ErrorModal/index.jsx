@@ -1,12 +1,13 @@
 'use strict'
 
 import React, { Component, PropTypes } from 'react';
+import isString from 'lodash/isString';
+import isEmpty from 'is-empty';
 
 import ERR from 'constants/err';
 import { VIDEO_DURATION_LIMIT } from 'constants/editor';
-import COMMON_CONTENT from 'content/common/en-us.json';
-import ERROR_CONTENT from 'content/err/en-us.json';
 import Modal from 'components/Common/Modal';
+import { sprintf } from 'lib/utils';
 
 if (process.env.BROWSER) {
   require('./ErrorModal.css');
@@ -25,6 +26,8 @@ const defaultProps = {
 };
 
 class ErrorModal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -50,21 +53,24 @@ class ErrorModal extends Component {
     onExit();
   }
 
-  // Convert err to human-readable message
+  // Get human-readable message from err
   getReadableMessage(err) {
+    const { l, nl } = this.context.i18n;
     const { message } = err;
-    const readableMessage = ERROR_CONTENT[message];
+
+    if (!isString(message) || isEmpty(message)) {
+      return l(ERR.DEFAULT);
+    }
+
+    const readableMessage = l(message);
 
     switch (message) {
       case ERR.MEDIA_NOT_SUPPORTED:
         return `${readableMessage}: ${err.mediaType}`;
       case ERR.EXCEED_VIDEO_TIME_LIMIT:
-        return `${readableMessage} (${VIDEO_DURATION_LIMIT} ${ERROR_CONTENT.SECONDS})`;
+        return `${readableMessage} (${sprintf(nl('%d second', '%d seconds', VIDEO_DURATION_LIMIT), VIDEO_DURATION_LIMIT)})`;
       default:
-        return (
-          readableMessage ? readableMessage :
-          message ? message : ERROR_CONTENT.DEFAULT
-        );
+        return readableMessage;
     }
   }
 
@@ -80,10 +86,11 @@ class ErrorModal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const readableMessage = this.getReadableMessage(this.props.err);
     const modalProps = {
       ref: 'modal',
-      title: COMMON_CONTENT.ERROR_MODAL.TITLE,
+      title: l('Error'),
       titleIcon: '/static/images/error.svg',
       closeBtn: {
         onClick: this.close

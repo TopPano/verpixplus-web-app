@@ -4,14 +4,11 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { MODE } from 'constants/editor';
-import EDITOR_CONTENT from 'content/editor/en-us.json';
 import Modal from 'components/Common/Modal';
 import DeleteModal from 'containers/common/DeleteModal';
 import FlatButton from 'components/Common/FlatButton';
 import SwitchButton from 'components/Common/SwitchButton';
 import SidebarItem from '../SidebarItem';
-
-const CONTENT = EDITOR_CONTENT.EDIT_PANEL.SETTINGS;
 
 if (process.env.BROWSER) {
   require('./EditItemSettings.css');
@@ -42,6 +39,8 @@ const defaultProps = {
 };
 
 class EditItemSettings extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -119,6 +118,7 @@ class EditItemSettings extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mode,
       mediaId,
@@ -131,22 +131,22 @@ class EditItemSettings extends Component {
         'sidebar-btn': true,
         'dirty': filters.isDirty
       }),
-      text: CONTENT.SAVE,
+      text: l('Save'),
       disabled: mode !== MODE.CREATE && mode !== MODE.EDIT,
       onClick: this.handleClickSave
     }
     const warnModalProps = {
       ref: 'warnModal',
-      title: CONTENT.WARN_MODAL.TITLE,
+      title: l('New effects are not applied'),
       confirmBtn: {
-        text: CONTENT.SAVE,
+        text: l('Save'),
         onClick: () => {
           this.refs.warnModal.close();
           this.createMedia();
         }
       },
       closeBtn: {
-        text: CONTENT.CANCEL
+        text: l('Cancel')
       }
     };
 
@@ -159,7 +159,7 @@ class EditItemSettings extends Component {
               onChange={this.handleChangeAutoplay}
             />
             <p className="">
-              {CONTENT.AUTOPLAY}
+              {l('Autoplay')}
             </p>
           </div>
           <div className="margin-bottom-60" />
@@ -173,14 +173,14 @@ class EditItemSettings extends Component {
               >
                 <FlatButton
                   className="sidebar-btn"
-                  text={CONTENT.DELETE}
+                  text={l('Delete')}
                 />
               </DeleteModal>
             }
           </div>
         </SidebarItem>
         <Modal {...warnModalProps}>
-          <div>{CONTENT.WARN_MODAL.DESC}</div>
+          <div>{`${l('Effects are modified but not applied. Still save')}?`}</div>
         </Modal>
       </div>
     );

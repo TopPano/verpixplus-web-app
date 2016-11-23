@@ -5,14 +5,11 @@ import { Link } from 'react-router';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
-import CONTENT from 'content/sign/en-us.json';
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
-
-const { ERR_MSG } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./SignIn.css');
@@ -28,6 +25,8 @@ const defaultProps = {
 };
 
 class SignIn extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -41,6 +40,7 @@ class SignIn extends Component {
 
     this.refs.err.clear();
 
+    const { l } = this.context.i18n;
     const email = this.refs.email;
     const pwd = this.refs.pwd;
     const emailVal = email.getValue();
@@ -49,17 +49,17 @@ class SignIn extends Component {
 
     // Check email is empty or not
     if (isEmpty(emailVal)) {
-      email.err(ERR_MSG.EMAIL.EMPTY);
+      email.err(l('Please enter your email'));
       return;
     }
     // Email format validation
     if (!isEmail(emailVal)) {
-      email.err(ERR_MSG.EMAIL.INVALID);
+      email.err(l('The email address is not valid'));
       return;
     }
     // Check password is empty or not
     if (isEmpty(pwdVal)) {
-      pwd.err(ERR_MSG.PWD.EMPTY);
+      pwd.err(l('Please enter your password'));
       return;
     }
 
@@ -72,16 +72,17 @@ class SignIn extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { errMsg, clearErrMsg } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
     const headerProps = {
-      title: CONTENT.HEADER.SIGN_IN.TITLE,
+      title: l('Sign In'),
       switchTo: {
         url: '/signup',
-        name: CONTENT.HEADER.SIGN_IN.SWITCH_TO.NAME,
-        desc: CONTENT.HEADER.SIGN_IN.SWITCH_TO.DESC
+        name: l('Sign Up'),
+        desc: `${l('Don\'t have an account')}?`
       }
     };
     const errProps = {
@@ -94,15 +95,15 @@ class SignIn extends Component {
       ref: 'email',
       icon: 'envelope',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.EMAIL
+      placeHolder: l('Email')
     }, {
       ref: 'pwd',
       icon: 'lock',
       type: 'password',
-      placeHolder: CONTENT.INPUTS.PWD
+      placeHolder: l('Password')
     }];
     const btnProps = {
-      text: CONTENT.BTN.SIGN_IN.TEXT
+      text: l('Sign In')
     };
     const inputs = this.renderInputs(inputsProps);
 
@@ -117,7 +118,7 @@ class SignIn extends Component {
               className="pull-right"
               to="/pwd/reset/request"
             >
-              {CONTENT.OTHERS.SIGN_IN.FORGOT_PWD}
+              {`${l('Forgot Password')}?`}
             </Link>
           </p>
           <hr />

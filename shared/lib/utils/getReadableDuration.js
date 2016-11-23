@@ -1,25 +1,21 @@
 import humanizeDuration from 'humanize-duration';
 
-import CONTENT from 'content/common/en-us.json';
+function getLanguage(locale) {
+  if (locale === 'zh-tw') {
+    return 'zh_TW';
+  }
 
-const { READABLE_DURATION } = CONTENT;
+  return locale;
+}
 
 // TODO:
-// 1. Support multiple languages
-// 2. For duration larger than 1 year, return date format instead of duration
-export default function getReadableDuration(date) {
+// For duration larger than 1 year, return date format instead of duration
+export default function getReadableDuration(date, locale) {
   if (!date) {
     return '';
   } else {
-    const duration = humanizeDuration(new Date() - new Date(date));
-    const primaryDuration = duration.split(',')[0];
-
-    if (primaryDuration.includes('seconds') && parseInt(primaryDuration, 10) < 10) {
-      // if duration is less than 10 seconds, return "just now"
-      return READABLE_DURATION.JUST_NOW;
-    } else {
-      return `${primaryDuration} ${READABLE_DURATION.AGO}`;
-    }
-
+    return humanizeDuration(new Date() - new Date(date), {
+      language: getLanguage(locale)
+    });
   }
 }

@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Line } from 'rc-progress';
 
-import CONTENT from 'content/workspace/en-us.json';
 import { DEFAULT_TITLE } from 'constants/common';
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 import { getReadableDuration } from 'lib/utils';
@@ -34,6 +33,8 @@ const COLOR_MAP = [
 ];
 
 class GalleryItem extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
@@ -47,24 +48,37 @@ class GalleryItem extends Component {
     return `${cdnUrl}${shardingKey}/media/${id}/live/thumb.jpg`;
   }
 
+  // Get approximate duration from created time to now
+  getApproximateDuration(created) {
+    const { l, getLocale } = this.context.i18n;
+
+    const readableDuration = getReadableDuration(created, getLocale());
+    const approximateDuration = readableDuration.split(',')[0];
+
+    return `${approximateDuration} ${l('ago')}`;
+  }
+
   // Render create view
   renderCreateMain() {
+    const { l } = this.context.i18n;
+
     return (
       <div className="create-main container-center-row">
-        <p className="text-center">{CONTENT.CREATE.MAIN}</p>
+        <p className="text-center">{l('Create your own imigination')}</p>
       </div>
     );
   }
 
   // Render progress view
   renderProgressView(progress) {
+    const { l } = this.context.i18n;
     const percent = parseInt(progress * 100, 10);
     const colorIdx = parseInt(progress * COLOR_MAP.length, 10);
     const color = COLOR_MAP[colorIdx];
 
     return (
       <div className="gallery-item-progress container-center-row fill">
-        <p>{`${percent}% ${CONTENT.COMPLETE}`}</p>
+        <p>{`${percent}% ${l('Complete')}`}</p>
         <Line
           percent={percent}
           strokeColor={color}
@@ -76,6 +90,7 @@ class GalleryItem extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       id,
       mediaObj,
@@ -89,7 +104,7 @@ class GalleryItem extends Component {
       isVideoCreated,
       progress
     } = mediaObj;
-    const readableDuration = getReadableDuration(created);
+    const approximateDuration = this.getApproximateDuration(created);
     const link =
       type === GALLERY_ITEM_TYPE.COMPLETED ? `/edit/@${id}` :
       type === GALLERY_ITEM_TYPE.CREATE ? '/upload' :
@@ -118,9 +133,9 @@ class GalleryItem extends Component {
             />
           </Link>
           <div className="thumbnails-main">
-            <p className="title">{title ? title : DEFAULT_TITLE}</p>
+            <p className="title">{title ? title : l(DEFAULT_TITLE)}</p>
             <div className="thumbnails-toolsbar">
-              <p className="time text-center">{readableDuration}</p>
+              <p className="time text-center">{approximateDuration}</p>
               <div className="tools">
                 <ShareModal
                   mediaId={id}

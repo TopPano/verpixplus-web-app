@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import ReactModal from 'react-bootstrap/lib/Modal';
 import merge from 'lodash/merge';
 
-import CONTENT from 'content/site/en-us.json';
 import FlatButton from 'components/Common/FlatButton';
 import Loading from 'components/Common/Loading';
 
@@ -36,12 +35,10 @@ const defaultProps = {
   titleIcon: '',
   closeBtn: {
     className: 'modal-btn close-btn pull-left',
-    text: CONTENT.MODAL.DEFAULT_CLOSE_BTN,
     show: true
   },
   confirmBtn: {
     className: 'modal-btn confirm-btn pull-right',
-    text: CONTENT.MODAL.DEFAULT_CONFIRM_BTN,
     show: true
   },
   rootClose: false,
@@ -49,6 +46,8 @@ const defaultProps = {
 };
 
 class Modal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -79,6 +78,7 @@ class Modal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isOpened } = this.state;
     const {
       title,
@@ -89,8 +89,16 @@ class Modal extends Component {
       isProcessing,
       children
     } = this.props;
-    const closeBtnProps = merge({}, defaultProps.closeBtn, closeBtn);
-    const confirmBtnProps = merge({}, defaultProps.confirmBtn, confirmBtn);
+    const defaultCloseBtnText = l('Close');
+    const defaultConfirmBtnText = l('Confirm');
+    const defaultCloseBtnProps = merge({}, defaultProps.closeBtn, {
+      text: defaultCloseBtnText
+    });
+    const defaultConfirmBtnProps = merge({}, defaultProps.confirmBtn, {
+      text: defaultConfirmBtnText
+    });
+    const closeBtnProps = merge({}, defaultCloseBtnProps, closeBtn);
+    const confirmBtnProps = merge({}, defaultConfirmBtnProps, confirmBtn);
 
     return(
       <ReactModal

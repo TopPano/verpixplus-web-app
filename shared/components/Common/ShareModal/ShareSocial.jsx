@@ -4,13 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import isEmpty from 'is-empty';
 import FacebookLogin from 'react-facebook-login';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
 import { DEFAULT_TITLE } from 'constants/common';
 import FlatButton from 'components/Common/FlatButton';
 import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api'
-
-const CONTENT = COMMON_CONTENT.SHARE_MODAL.SOCIAL;
 
 if (process.env.BROWSER) {
   require('./ShareSocial.css');
@@ -34,6 +31,8 @@ const defaultProps = {
 };
 
 class ShareSocial extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -72,6 +71,7 @@ class ShareSocial extends Component {
 
   // Handler for clicking button to share video to Facebook
   handleClickShareToFacebookBtn() {
+    const { l } = this.context.i18n;
     const {
       mediaId,
       title,
@@ -85,13 +85,13 @@ class ShareSocial extends Component {
     const userDesc = this.refs.shareFBVideoDesc.value;
     const isEmptyUserDesc = isEmpty(userDesc);
     const shareUrl = this.genShareUrl(mediaId);
-    const signature = `${CONTENT.SIGNATURE}:\n ${shareUrl}\n#Verpix #MotionGraph`;
+    const signature = `${l('Create your imigination on Verpix')}:\n ${shareUrl}\n#Verpix #MotionGraph`;
     const description = `${userDesc}${isEmptyUserDesc ? '' : '\n\n--\n'}${signature}`;
 
     shareFacebookVideo({
       mediaId,
       targetId: fbUserId,
-      title: title ? title : DEFAULT_TITLE,
+      title: title ? title : l(DEFAULT_TITLE),
       description,
       fbAccessToken
     });
@@ -99,6 +99,7 @@ class ShareSocial extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const fbLoginBtnClass = 'flat-button-component share-btn';
     const { shareTarget } = this.state;
 
@@ -107,7 +108,7 @@ class ShareSocial extends Component {
         {
           (shareTarget === SHARE_TARGET.NONE) &&
           <div>
-            <h5 className="text-center">{CONTENT.SHARE_TO}</h5>
+            <h5 className="text-center">{l('Share to')}</h5>
             <div className="container-center-col">
               <FacebookLogin
                 appId={externalApiConfig.facebook.id}
@@ -123,17 +124,17 @@ class ShareSocial extends Component {
         {
           (shareTarget === SHARE_TARGET.FACEBOOK) &&
           <div className="facebook-share-preview container-center-row">
-            <h5 className="text-center">{`${CONTENT.SHARE_TO} Facebook`}</h5>
+            <h5 className="text-center">{`${l('Share to')} Facebook`}</h5>
             <textarea
               ref="shareFBVideoDesc"
               className="form-control"
               rows="4"
-              placeholder={CONTENT.PLACE_HOLDER}
+              placeholder={`${l('Say something')}...`}
             />
             <div className="margin-bottom-15" />
             <div className="margin-bottom-15" />
             <FlatButton
-              text={CONTENT.SHARE_BTN}
+              text={l('Post')}
               className="share-btn"
               onClick={this.handleClickShareToFacebookBtn}
             />

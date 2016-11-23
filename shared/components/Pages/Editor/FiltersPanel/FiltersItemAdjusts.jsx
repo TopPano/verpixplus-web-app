@@ -2,13 +2,10 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import EDITOR_CONTENT from 'content/editor/en-us.json';
 import { renderList } from 'lib/utils';
 import FlatButton from 'components/Common/FlatButton';
 import SidebarItem from '../SidebarItem';
 import Adjust from './Adjust';
-
-const CONTENT = EDITOR_CONTENT.FILTERS_PANEL.ADJUSTS;
 
 if (process.env.BROWSER) {
   require('./FiltersItemAdjusts.css');
@@ -26,6 +23,8 @@ const defaultProps = {
 };
 
 class FiltersItemAdjusts extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -64,46 +63,47 @@ class FiltersItemAdjusts extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { filters } = this.props;
     const adjustListProps = [{
       type: 'brightness',
-      title: CONTENT.BRIGHTNESS,
+      title: l('Brightness'),
       initialValue: 0,
       min: -1,
       max: 1
     }, {
       type: 'contrast',
-      title: CONTENT.CONTRAST,
+      title: l('Contrast'),
       initialValue: 0,
       min: -1,
       max: 1
     }, {
       type: 'hue',
-      title: CONTENT.HUE,
+      title: l('Hue'),
       initialValue: 0,
       min: -1,
       max: 1
     }, {
       type: 'saturation',
-      title: CONTENT.SATURATION,
+      title: l('Saturation'),
       initialValue: 0,
       min: -1,
       max: 1
     }, {
       type: 'vibrance',
-      title: CONTENT.VIBRANCE,
+      title: l('Vibrance'),
       initialValue: 0,
       min: -1,
       max: 1
     }, {
       type: 'sepia',
-      title: CONTENT.SEPIA,
+      title: l('Sepia'),
       initialValue: 0,
       min: 0,
       max: 1
     }, {
       type: 'vignette',
-      title: CONTENT.VIGNETTE,
+      title: l('Vignette'),
       initialValue: 0,
       min: 0,
       max: 1
@@ -112,17 +112,14 @@ class FiltersItemAdjusts extends Component {
     const applyBtnProps = {
       className: 'sidebar-btn',
       icon: 'file-image-o',
-      text: CONTENT.APPLY,
+      text: l('Apply'),
       disabled: !filters.isDirty,
       onClick: this.handleClickApply
     }
 
     return (
       <div className="filters-item-adjusts-component">
-        <SidebarItem
-          icon="adjust"
-          title={CONTENT.TITLE}
-        >
+        <SidebarItem>
           {adjustList}
           <div className="margin-bottom-25" />
           <FlatButton {...applyBtnProps} />

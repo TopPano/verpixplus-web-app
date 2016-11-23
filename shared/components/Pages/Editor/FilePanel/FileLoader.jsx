@@ -7,7 +7,6 @@ import isArray from 'lodash/isArray';
 
 import { ACCEPT_TYPES } from 'constants/editor';
 import { MEDIA_TYPE } from 'constants/common';
-import CONTENT from 'content/editor/en-us.json';
 import FlatButton from 'components/Common/FlatButton';
 
 if (process.env.BROWSER) {
@@ -23,6 +22,8 @@ const defaultProps = {
 };
 
 class FileLoader extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -68,6 +69,8 @@ class FileLoader extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
+
     return (
       <div className="file-loader-component fill">
         <Dropzone
@@ -81,11 +84,11 @@ class FileLoader extends Component {
         >
           <FlatButton
             className="file-loader-btn"
-            text={CONTENT.FILE_PANEL.LOADER.BTN}
+            text={l('Choose File')}
             onClick={this.handleClickBtn}
           />
           <br />
-          <p>{CONTENT.FILE_PANEL.LOADER.DESC}</p>
+          <p>{l('Or drag & drop your video anywhere')}</p>
         </Dropzone>
       </div>
     );

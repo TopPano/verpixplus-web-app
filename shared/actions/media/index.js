@@ -296,7 +296,6 @@ export function shareFacebookVideo({
     dispatch(shareFacebookVideoRequest());
     dispatch(pushNotification({
       type: NOTIFICATION_TYPES.PROGRESS,
-      message: NOTIFICATIONS.SHARE_PROGRESS,
       title,
       progress
     }, id));

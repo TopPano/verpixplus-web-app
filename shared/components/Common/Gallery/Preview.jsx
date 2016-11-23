@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-import CONTENT from 'content/workspace/en-us.json';
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 
 if (process.env.BROWSER) {
@@ -23,11 +22,14 @@ const defaultProps = {
 };
 
 class Preview extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       image,
       type,
@@ -73,7 +75,7 @@ class Preview extends Component {
               width="25"
               height="25"
             />
-            <p className="create-description text-center">{CONTENT.CREATE.DESC}</p>
+            <p className="create-description text-center">{l('Upload your video')}</p>
           </div>
         }
       </div>

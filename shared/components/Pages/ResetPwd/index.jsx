@@ -4,15 +4,12 @@ import React, { Component, PropTypes } from 'react';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
-import CONTENT from 'content/sign/en-us.json';
 import { RESET_PWD_MODE } from 'constants/resetPwd';
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
-
-const { ERR_MSG } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./ResetPwd.css');
@@ -29,6 +26,8 @@ const defaultProps = {
 };
 
 class ResetPwd extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -42,18 +41,19 @@ class ResetPwd extends Component {
 
     this.refs.err.clear();
 
+    const { l } = this.context.i18n;
     const { resetPassword } = this.props;
     const email = this.refs.email;
     const emailVal = email.getValue();
 
     // Check email is empty or not
     if (isEmpty(emailVal)) {
-      email.err(ERR_MSG.EMAIL.EMPTY);
+      email.err(l('Please enter your email'));
       return;
     }
     // Email format validation
     if (!isEmail(emailVal)) {
-      email.err(ERR_MSG.EMAIL.INVALID);
+      email.err(l('The email address is not valid'));
       return;
     }
 
@@ -63,6 +63,7 @@ class ResetPwd extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mode,
       errMsg,
@@ -72,11 +73,11 @@ class ResetPwd extends Component {
       handleSubmit: this.handleSubmit
     }
     const headerProps = {
-      title: CONTENT.HEADER.RESET_PWD.TITLE,
+      title: l('Reset Password'),
       switchTo: {
         desc:
           mode === RESET_PWD_MODE.REQUEST ?
-          CONTENT.HEADER.RESET_PWD.SWITCH_TO.DESC :
+          l('Plese provide the email address linked to your account') :
           ''
       }
     };
@@ -90,10 +91,10 @@ class ResetPwd extends Component {
       ref: 'email',
       icon: 'envelope',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.EMAIL
+      placeHolder: l('Email')
     };
     const btnProps = {
-      text: CONTENT.BTN.RESET_PWD.TEXT
+      text: l('Reset Password')
     };
 
     return (
@@ -107,11 +108,11 @@ class ResetPwd extends Component {
           }
           {
             mode === RESET_PWD_MODE.SENT &&
-            <p className="text-center">{CONTENT.OTHERS.RESET_PWD.SENT}</p>
+            <p className="text-center">{l('Thanks! Please check your email box for following process')}</p>
           }
           {
             mode === RESET_PWD_MODE.DONE &&
-            <p className="text-center">{CONTENT.OTHERS.RESET_PWD.DONE}</p>
+            <p className="text-center">{l('A new password is sent to your email. Please check your email box, thanks')}</p>
           }
           <hr />
           {

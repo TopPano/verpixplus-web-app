@@ -3,17 +3,11 @@
 import React, { Component, PropTypes } from 'react';
 import isEmpty from 'is-empty';
 
-import CONTENT from 'content/workspace/en-us.json';
 import FlatButton from 'components/Common/FlatButton';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import Modal from 'components/Common/Modal';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
-
-const {
-  EDIT_PROFILE,
-  ERR_MSG
-} = CONTENT;
 
 if (process.env.BROWSER) {
   require('./ProfileEditor.css');
@@ -41,6 +35,8 @@ const defaultProps = {
 };
 
 class ProfileEditor extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -68,6 +64,7 @@ class ProfileEditor extends Component {
   changePassword() {
     this.refs.pwdErr.clear();
 
+    const { l } = this.context.i18n;
     const {
       userId,
       changePassword
@@ -81,22 +78,22 @@ class ProfileEditor extends Component {
 
     // Check old password is empty or not
     if (isEmpty(oldPwdVal)) {
-      oldPwd.err(ERR_MSG.OLD_PWD.EMPTY);
+      oldPwd.err(l('Please enter your old password'));
       return;
     }
     // Check new password is empty or not
     if (isEmpty(newPwdVal)) {
-      newPwd.err(ERR_MSG.NEW_PWD.EMPTY);
+      newPwd.err(l('Please enter your new password'));
       return;
     }
     // Check confirmed new password is empty or not
     if (isEmpty(confirmNewPwdVal)) {
-      confirmNewPwd.err(ERR_MSG.CONFIRM_NEW_PWD.EMPTY);
+      confirmNewPwd.err(l('Please enter your new password again'));
       return;
     }
     // Check equality of new password and confirmed new password
     if (newPwdVal !== confirmNewPwdVal) {
-      newPwd.err(ERR_MSG.NEW_PWD.NOT_MATCHED);
+      newPwd.err(l('These new passwords don\'t match'));
       return;
     }
 
@@ -130,15 +127,17 @@ class ProfileEditor extends Component {
 
   // Render content for editting profile
   renderProfileContent(username, email, autobiography) {
+    const { l } = this.context.i18n;
+
     return (
       <dl className="profile-content dl-horizontal">
-        <dt><strong>{EDIT_PROFILE.USERNAME}</strong></dt>
+        <dt><strong>{l('Username')}</strong></dt>
         <dd>{username}</dd>
         <hr />
-        <dt><strong>{EDIT_PROFILE.EMAIL}</strong></dt>
+        <dt><strong>{l('Email')}</strong></dt>
         <dd>{email}</dd>
         <hr />
-        <dt><strong>{EDIT_PROFILE.AUTOBIOGRAPHY}</strong></dt>
+        <dt><strong>{l('Autobiography')}</strong></dt>
         <dd>
           <textarea
             className="form-control"
@@ -153,37 +152,43 @@ class ProfileEditor extends Component {
 
   // Render content for changing password
   renderPasswordContent(errMsg, clearErrMsg) {
+    const { l } = this.context.i18n;
+    const convertedErrMsgs = {
+      'Unauthorized': l('Your old password is not correct')
+    };
+
     return (
       <dl className="password-content dl-horizontal">
         <RegBlockErr
           ref="pwdErr"
           errMsg={errMsg}
-          convertedErrMsgs={CONTENT.ERR_MSG}
+          convertedErrMsgs={convertedErrMsgs}
           clearErrMsg={clearErrMsg}
         />
         <RegBlockInput
           ref="oldPwd"
           icon="unlock-alt"
           type="password"
-          placeHolder={EDIT_PROFILE.OLD_PWD}
+          placeHolder={l('Old Password')}
         />
         <RegBlockInput
           ref="newPwd"
           icon="lock"
           type="password"
-          placeHolder={EDIT_PROFILE.NEW_PWD}
+          placeHolder={l('New Password')}
         />
         <RegBlockInput
           ref="confirmNewPwd"
           icon="key"
           type="password"
-          placeHolder={EDIT_PROFILE.CONFIRM_NEW_PWD}
+          placeHolder={l('Confirm New Password')}
         />
       </dl>
     );
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       username,
       email,
@@ -194,9 +199,9 @@ class ProfileEditor extends Component {
     } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: EDIT_PROFILE.TITLE,
+      title: l('Edit Profile'),
       confirmBtn: {
-        text: EDIT_PROFILE.CONFIRM_BTN,
+        text: l('Save'),
         onClick: this.handleClickConfirmBtn
       },
       isProcessing: isProcessing.updateProfile || isProcessing.changePassword
@@ -204,10 +209,10 @@ class ProfileEditor extends Component {
     const profileContent = this.renderProfileContent(username, email, autobiography);
     const passwordContent = this.renderPasswordContent(errMsgs.changePassword, clearErrMsgChangePassword);
     const tabsContent = [{
-      tab: EDIT_PROFILE.CONTENT.PROFILE,
+      tab: l('Profile'),
       content: profileContent
     }, {
-      tab: EDIT_PROFILE.CONTENT.PASSWORD,
+      tab: l('Password'),
       content: passwordContent
     }];
 
@@ -215,7 +220,7 @@ class ProfileEditor extends Component {
       <div className="profile-editor-component">
         <FlatButton
           className="profile-editor-btn"
-          text={EDIT_PROFILE.TITLE}
+          text={l('Edit Profile')}
           onClick={this.openModal}
         />
         <Modal {...modalProps}>

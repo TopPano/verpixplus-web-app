@@ -5,14 +5,12 @@ import classNames from 'classnames';
 import Scrollbar from 'react-custom-scrollbars';
 import isNumber from 'lodash/isNumber';
 
-import CONTENT from 'content/common/en-us.json';
 import FlatButton from 'components/Common/FlatButton';
 import { click } from 'lib/events';
 import MenuLinks from './MenuLinks';
 import ProfileInfo from './ProfileInfo';
 import ProfileEditor from './ProfileEditor';
 
-const { INFO_PANEL } = CONTENT;
 const SWIPE_MIN_LENGTH = 5;
 
 if (process.env.BROWSER) {
@@ -40,6 +38,8 @@ const defaultProps = {
 };
 
 class InfoPanel extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -111,6 +111,7 @@ class InfoPanel extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isOpen } = this.state;
     const {
       light,
@@ -208,7 +209,7 @@ class InfoPanel extends Component {
                 isAuthenticated &&
                 <FlatButton
                   className="menu-signout"
-                  text={INFO_PANEL.SIGNOUT}
+                  text={l('Sign Out')}
                   onClick={this.handleClickSignoutBtn}
                 />
               }

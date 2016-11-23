@@ -3,9 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import SidebarItem from '../SidebarItem';
-import EDITOR_CONTENT from 'content/editor/en-us.json';
-
-const CONTENT = EDITOR_CONTENT.EDIT_PANEL.CAPTION;
 
 if (process.env.BROWSER) {
   require('./EditItemCaption.css');
@@ -20,6 +17,8 @@ const defaultProps = {
 };
 
 class EditItemCaption extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -36,7 +35,9 @@ class EditItemCaption extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { caption } = this.props;
+
     return (
       <div className="edit-item-caption-component">
         <SidebarItem>
@@ -44,7 +45,7 @@ class EditItemCaption extends Component {
             ref="captionInput"
             className="form-control"
             rows="5"
-            placeholder={CONTENT.PLACE_HOLDER}
+            placeholder={l('Description')}
             value={caption}
             onChange={this.handleChange}
           />

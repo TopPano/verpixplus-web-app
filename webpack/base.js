@@ -44,6 +44,7 @@ module.exports = {
       etc: 'etc',
       lib: 'shared/lib',
       reducers: 'shared/reducers',
+      i18n: 'shared/i18n',
       shared: 'shared',
       store: 'shared/store'
     }

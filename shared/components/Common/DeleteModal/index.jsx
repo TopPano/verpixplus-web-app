@@ -2,14 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
 import Modal from 'components/Common/Modal';
 
 if (process.env.BROWSER) {
   require('./DeleteModal.css');
 }
-
-const CONTENT = COMMON_CONTENT.DELETE_MODAL;
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
@@ -22,6 +19,8 @@ const defaultProps = {
 };
 
 class DeleteModal extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -56,19 +55,20 @@ class DeleteModal extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       isProcessing,
       children
     } = this.props;
     const modalProps = {
       ref: 'modal',
-      title: CONTENT.TITLE,
+      title: l('Delete Media'),
       closeBtn: {
-        text: CONTENT.CLOSE_BTN
+        text: l('Cancel')
       },
       confirmBtn: {
         className: 'delete-modal-confirm-btn modal-btn pull-right',
-        text: CONTENT.CONFIRM_BTN,
+        text: l('Delete'),
         onClick: this.handleClickDeleteBtn
       },
       isProcessing
@@ -81,7 +81,7 @@ class DeleteModal extends Component {
       >
         {children}
         <Modal {...modalProps} >
-          <div>{CONTENT.DESC}</div>
+          <div>{l('This media will be deleted and you won\'t be able to find it anymore')}</div>
         </Modal>
       </div>
     );

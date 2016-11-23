@@ -2670,6 +2670,11 @@
         }
       }
     },
+    "jed": {
+      "version": "1.1.1",
+      "from": "jed@latest",
+      "resolved": "https://registry.npmjs.org/jed/-/jed-1.1.1.tgz"
+    },
     "jodid25519": {
       "version": "1.0.2",
       "from": "jodid25519@>=1.0.0 <2.0.0",

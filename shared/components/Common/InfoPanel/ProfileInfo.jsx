@@ -2,10 +2,7 @@
 
 import React, { PropTypes, Component } from 'react';
 
-import CONTENT from 'content/common/en-us.json';
 import ProfilePhoto from './ProfilePhoto';
-
-const { INFO_PANEL } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./ProfileInfo.css');
@@ -26,11 +23,14 @@ const defaultProps = {
 };
 
 class ProfileInfo extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       userId,
       isAuthenticated,
@@ -63,7 +63,7 @@ class ProfileInfo extends Component {
                 width="20"
                 height="19"
               />
-              <div className="profile-info-media-count">{`${numOfMedia} ${INFO_PANEL.MEDIA}`}</div>
+              <div className="profile-info-media-count">{`${numOfMedia} ${l('Media')}`}</div>
             </div>
           </div>
         }

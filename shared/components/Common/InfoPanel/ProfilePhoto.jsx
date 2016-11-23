@@ -6,7 +6,6 @@ import isArray from 'lodash/isArray';
 import classNames from 'classnames';
 
 import Loading from 'components/Common/Loading';
-import CONTENT from 'content/workspace/en-us.json';
 import { DEFAULT_PROFILE_PHOTO_URL } from 'constants/common';
 
 if (process.env.BROWSER) {
@@ -25,6 +24,8 @@ const defaultProps = {
 };
 
 class ProfilePhoto extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -59,6 +60,7 @@ class ProfilePhoto extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       isAuthenticated,
       profilePhotoUrl,
@@ -84,7 +86,7 @@ class ProfilePhoto extends Component {
           >
             <img
               className={editableImgClass}
-              title={CONTENT.PROFILE_PICTURE.TITLE}
+              title={l('Click to upload a profile photo')}
               src={isAuthenticated ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL}
               alt="profile photo"
             />

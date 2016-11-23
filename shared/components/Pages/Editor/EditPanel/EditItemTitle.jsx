@@ -3,9 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import SidebarItem from '../SidebarItem';
-import EDITOR_CONTENT from 'content/editor/en-us.json';
-
-const CONTENT = EDITOR_CONTENT.EDIT_PANEL.TITLE;
 
 if (process.env.BROWSER) {
   require('./EditItemTitle.css');
@@ -20,6 +17,8 @@ const defaultProps = {
 };
 
 class EditItemTitle extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -36,6 +35,7 @@ class EditItemTitle extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { title } = this.props;
 
     return (
@@ -45,7 +45,7 @@ class EditItemTitle extends Component {
             type="text"
             ref="titleInput"
             className="form-control"
-            placeholder={CONTENT.PLACE_HOLDER}
+            placeholder={l('Title')}
             value={title}
             onChange={this.handleChange}
           />

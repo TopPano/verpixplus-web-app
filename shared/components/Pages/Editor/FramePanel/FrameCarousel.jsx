@@ -4,13 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import range from 'lodash/range';
 
-import CONTENT from 'content/editor/en-us.json';
 import Carousel from 'components/Common/Carousel';
 import FrameCarouselItem from './FrameCarouselItem';
 
 import { FRAMES_LIMIT } from 'constants/editor';
-
-const { FRAME_PANEL } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./FrameCarousel.css');
@@ -38,6 +35,8 @@ const defaultProps = {
 };
 
 class FrameCarousel extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -296,6 +295,7 @@ class FrameCarousel extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isHoveringActiveDivider } = this.state;
     const {
       range,
@@ -342,7 +342,7 @@ class FrameCarousel extends Component {
             {items}
           </Carousel>
         </div>
-        <p className={textClass}>{FRAME_PANEL.DISABLED_TEXT}</p>
+        <p className={textClass}>{l('Modify the effect values and click the button to apply')}</p>
       </div>
     );
   }

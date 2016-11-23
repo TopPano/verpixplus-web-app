@@ -7,14 +7,11 @@ import toNumber from 'lodash/toNumber';
 import fileSaver from 'file-saver';
 import JSZip from 'jszip';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
 import { EMBED } from 'constants/common';
 import Livephoto from 'components/Common/Livephoto';
 import FlatButton from 'components/Common/FlatButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 import genAdHTML from './genAdHTML';
-
-const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
 
 if (process.env.BROWSER) {
   require('./ShareEmbed.css');
@@ -28,6 +25,8 @@ const defaultProps = {
 };
 
 class ShareEmbed extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -88,6 +87,7 @@ class ShareEmbed extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       showPreview,
       embedWidth,
@@ -116,12 +116,12 @@ class ShareEmbed extends Component {
         </div>
         <div style={codersStyle}>
           <ShareEmbedCoder
-            title={CONTENT.INSTALL}
+            title={l('SDK Installation')}
             text={EMBED.SDK_LIVEPHOTO}
           />
           <hr />
           <ShareEmbedCoder
-            title={CONTENT.USAGE}
+            title={l('Usage')}
             text={usageCode}
           />
         </div>
@@ -146,12 +146,12 @@ class ShareEmbed extends Component {
         <div className="preview-btn-wrapper text-center">
           <FlatButton
             className="share-btn"
-            text={showPreview ? CONTENT.CODE : CONTENT.PREVIEW}
+            text={showPreview ? l('Code') : l('Preview')}
             onClick={this.handleClickPreviewBtn}
           />
           <FlatButton
             className="share-btn"
-            text={CONTENT.DOWNLOAD}
+            text={l('Download')}
             onClick={this.handleClickDownloadBtn}
           />
         </div>

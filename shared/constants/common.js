@@ -6,6 +6,9 @@ export const DEFAULT_FOLLOWING_USER = 'ddc23b40-222f-11e6-b846-69babe89ef41'
 
 export const DEFAULT_TITLE = 'Untitled';
 
+export const SUPPORTED_LOCALES = ['en', 'zh-tw'];
+export const DEFAULT_LOCALE = 'zh-tw';
+
 export const EXTERNAL_LINKS = {
   FAQ: 'https://www.facebook.com/verpix/notes',
   TERMS_OF_USE: 'http://toppano.in/termofuse/',

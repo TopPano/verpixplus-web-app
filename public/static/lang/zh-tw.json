@@ -1,0 +1,326 @@
+{
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+        "lang": ""
+      },
+       "%d second": [
+          "%d 秒",
+          "%d 秒",
+          "%d 秒"
+       ],
+      "FAQ": [
+        "常見問題"
+      ],
+      "Terms of Use": [
+        "服務條款"
+      ],
+      "Privacy Policy": [
+        "隱私保護政策"
+      ],
+      "Sign In": [
+        "登入"
+      ],
+      "Sign Up": [
+        "註冊"
+      ],
+      "Sign Out": [
+        "登出"
+      ],
+      "Reset Password": [
+        "重設密碼"
+      ],
+      "Username": [
+        "使用者名稱"
+      ],
+      "Email": [
+        "電子郵件"
+      ],
+      "Autobiography": [
+        "自傳"
+      ],
+      "Password": [
+        "密碼"
+      ],
+      "Confirm Password": [
+        "確認密碼"
+      ],
+      "Old Password": [
+        "舊密碼"
+      ],
+      "New Password": [
+        "新密碼"
+      ],
+      "Confirm New Password": [
+        "確認新密碼"
+      ],
+      "Don't have an account": [
+        "尚未註冊帳號"
+      ],
+      "Have an account": [
+        "已經註冊帳號"
+      ],
+      "Plese provide the email address linked to your account": [
+        "請提供您帳號的電子郵件地址"
+      ],
+      "Thanks! Please check your email box for following process": [
+        "謝謝！請至您的電子信箱收信以完成下個步驟"
+      ],
+      "A new password is sent to your email. Please check your email box, thanks": [
+        "新密碼已經寄至您的電子信箱，請收信查看，謝謝。"
+      ],
+      "Forgot Password": [
+        "忘記密碼"
+      ],
+      "By signing up, you agree to our": [
+        "一旦註冊，即表示你同意我們的"
+      ],
+      "and": [
+        "及"
+      ],
+      "Please enter username": [
+        "請輸入使用者名稱"
+      ],
+      "Please try another username": [
+        "請使用別的使用者名稱"
+      ],
+      "Please enter your email": [
+        "請輸入您的電子郵件地址"
+      ],
+      "The email address is not valid": [
+        "無效的電子郵件地址"
+      ],
+      "Please enter your password": [
+        "請輸入您的密碼"
+      ],
+      "Please enter your password again": [
+        "請再次輸入您的密碼"
+      ],
+      "Please enter your old password": [
+        "請輸入您的舊密碼"
+      ],
+      "Please enter your new password": [
+        "請輸入您的新密碼"
+      ],
+      "Please enter your new password again": [
+        "請再次輸入您的新密碼"
+      ],
+      "These passwords don't match": [
+        "密碼與確認密碼不符"
+      ],
+      "These new passwords don't match": [
+        "新密碼與確認新密碼不符"
+      ],
+      "The email address already exists": [
+        "電子郵件地址已存在"
+      ],
+      "The email and password don't match": [
+        "帳號或密碼錯誤"
+      ],
+      "Something wrong with server, please try again later": [
+        "伺服器發生問題，請稍候再試"
+      ],
+      "Your old password is not correct": [
+        "錯誤的舊密碼"
+      ],
+      "Media": [
+        "素材"
+      ],
+      "Save": [
+        "儲存"
+      ],
+      "Apply": [
+        "套用"
+      ],
+      "Delete": [
+        "刪除"
+      ],
+      "Profile": [
+        "簡歷"
+      ],
+      "Error": [
+        "錯誤"
+      ],
+      "Untitled": [
+        "無標題"
+      ],
+      "ago": [
+        "前"
+      ],
+      "Home": [
+        "首頁"
+      ],
+      "Title": [
+        "標題"
+      ],
+      "Description": [
+        "描述"
+      ],
+      "Click to upload a profile photo": [
+        "點擊上傳個人頭像"
+      ],
+      "Upload Media": [
+        "上傳素材"
+      ],
+      "Edit Profile": [
+        "修改簡歷"
+      ],
+      "Upload your video": [
+        "上傳影片"
+      ],
+      "Create your own imigination": [
+        "創造專屬你的創意"
+      ],
+      "Complete": [
+        "完成"
+      ],
+      "Close": [
+        "關閉"
+      ],
+      "Cancel": [
+        "取消"
+      ],
+      "Confirm": [
+        "確認"
+      ],
+      "SDK Installation": [
+        "安裝SDK"
+      ],
+      "Usage": [
+        "使用方法"
+      ],
+      "Code": [
+        "程式碼"
+      ],
+      "Preview": [
+        "預覽"
+      ],
+      "Download": [
+        "下載"
+      ],
+      "Autoplay": [
+        "自動播放"
+      ],
+      "Processing": [
+        "處理中"
+      ],
+      "Create your imigination on Verpix": [
+        "加入Verpix，創造專屬你的創意"
+      ],
+      "Share to": [
+        "分享至"
+      ],
+      "Say something": [
+        "說些話吧"
+      ],
+      "Post": [
+        "貼文"
+      ],
+      "Copied": [
+        "複製成功"
+      ],
+      "Share Your Media": [
+        "分享素材"
+      ],
+      "Social Media": [
+        "社群平台"
+      ],
+      "Embed": [
+        "內嵌"
+      ],
+      "Delete Media": [
+        "刪除素材"
+      ],
+      "This media will be deleted and you won't be able to find it anymore": [
+        "素材將會被永久刪除"
+      ],
+      "Modify the effect values and click the button to apply": [
+        "修改各個效果的數值並按下套用按鈕"
+      ],
+      "New effects are not applied": [
+        "新效果尚未套用"
+      ],
+      "Effects are modified but not applied. Still save": [
+        "修改的效果尚未套用，仍然要儲存"
+      ],
+      "Please wait, tasks will be completed soon": [
+        "請稍等，工作即將處理完成"
+      ],
+      "Choose File": [
+        "選取檔案"
+      ],
+      "Or drag & drop your video anywhere": [
+        "或將您的影片拖曳至任何地方"
+      ],
+      "Brightness": [
+        "明度"
+      ],
+      "Contrast": [
+        "對比"
+      ],
+      "Hue": [
+        "色相"
+      ],
+      "Saturation": [
+        "飽和度"
+      ],
+      "Vibrance": [
+        "自然飽和度"
+      ],
+      "Sepia": [
+        "棕褐色調"
+      ],
+      "Vignette": [
+        "暈影"
+      ],
+      "Please select a video to upload": [
+        "請選取影片上傳"
+      ],
+      "The total time of video exceeds the limit": [
+        "影片長度超過上限"
+      ],
+      "The video format is not supported, please upload another video": [
+        "不支援的影片格式，請上傳別的影片"
+      ],
+      "Video is converting, please try again later": [
+        "影片正在轉換中，請晚點再試"
+      ],
+      "Non-support media type": [
+        "不支援的素材類型"
+      ],
+      "Something error, please try again later": [
+        "發生錯誤，請稍候再試"
+      ],
+      "A new media is posted": [
+        "新素材上傳成功"
+      ],
+      "Media is updated": [
+        "素材更新成功"
+      ],
+      "Media is deleted": [
+        "素材刪除成功"
+      ],
+      "Profile photo is updated": [
+        "個人頭像更新成功"
+      ],
+      "Your profile is updated": [
+        "簡歷更新成功"
+      ],
+      "Your password is changed": [
+        "密碼更新成功"
+      ],
+      "Effects are applied": [
+        "效果套用完成"
+      ],
+      "Your media is shared successfully": [
+        "您的素材已成功分享"
+      ],
+      "Turn Your World, Turn Your Idea": [
+        "翻動你的世界 玩轉你的創意"
+      ]
+    }
+  }
+}

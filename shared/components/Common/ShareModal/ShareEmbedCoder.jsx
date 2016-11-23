@@ -4,10 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 
-import COMMON_CONTENT from 'content/common/en-us.json';
-
-const CONTENT = COMMON_CONTENT.SHARE_MODAL.EMBED;
-
 if (process.env.BROWSER) {
   require('./ShareEmbedCoder.css');
 }
@@ -21,6 +17,8 @@ const defaultProps = {
 };
 
 class ShareEmbedCoder extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -43,6 +41,7 @@ class ShareEmbedCoder extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { isCopied } = this.state;
     const {
       title,
@@ -70,7 +69,7 @@ class ShareEmbedCoder extends Component {
               <i className="copy icon-lg fa fa-clipboard" />
             </div>
             <h5 className={copiedClass}>
-              {`${CONTENT.COPIED} `}
+              {l('Copied')}
             </h5>
           </div>
         </CopyToClipboard>

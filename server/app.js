@@ -11,20 +11,32 @@ import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
 import merge from 'lodash/merge';
+import Jed from 'jed';
+
+import enLocaleData from '../public/static/lang/en.json';
+import zhTwLocaleData from '../public/static/lang/zh-tw.json';
 
 import {
   fetchComponentsData,
+  detectLocale,
   genHeadContent,
   genDefaultContent
 } from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
+import i18n from 'i18n';
 import Promise from 'lib/utils/promise';
 import api from 'lib/api';
 
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
+
+// Initialize localization
+const i18nToolsRegistry = {
+  'en': new i18n.Tools({ localeData: enLocaleData, locale: 'en' }),
+  'zh-tw': new i18n.Tools({ localeData: zhTwLocaleData, locale: 'zh-tw' })
+};
 
 const app = new Express();
 
@@ -51,7 +63,9 @@ app.get('/embed/@:mediaId', (req, res) => {
   const { mediaId } = req.params;
 
   api.media.getMedia(mediaId).then((response) => {
-    const content = genHeadContent(req, true, response.result);
+    const locale = detectLocale(req);
+    const i18nTools = i18nToolsRegistry[locale];
+    const content = genHeadContent(req, i18nTools, true, response.result);
 
     res.render('pages/embed', merge({}, content, {
       staticUrl: clientConfig.staticUrl
@@ -68,8 +82,7 @@ app.use((req, res) => {
   const accessToken = req.cookies.accessToken || null;
 
   if (!accessToken && req.url === '/') {
-    res.sendFile(path.join(__dirname, '/../public/static/home/index.html'));
-    return;
+    return res.sendFile(path.join(__dirname, '/../public/static/home/index.html'));
   }
 
   if (accessToken) {
@@ -90,6 +103,9 @@ app.use((req, res) => {
 
   const store = configureStore(initState);
 
+  const locale = detectLocale(req);
+  const i18nTools = i18nToolsRegistry[locale];
+
   match({ routes: routes(accessToken), location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
       res.send(500, err.message);
@@ -103,19 +119,20 @@ app.use((req, res) => {
         components  : renderProps.components,
         params      : renderProps.params,
         location    : renderProps.location,
-        userSession : initState.user
+        userSession : initState.user,
+        locale
       })
       .then(() => {
         // Grab the initial state from the store
         const initialState = store.getState();
         const html = renderToString(
           <Provider store={store}>
-            <div>
+            <i18n.Provider i18n={i18nTools}>
               <RouterContext {...renderProps} />
-            </div>
+            </i18n.Provider>
           </Provider>
         );
-        const headContent = genHeadContent(req, false);
+        const headContent = genHeadContent(req, i18nTools, false);
         const content = genDefaultContent(html, initialState, headContent, process.env.NODE_ENV);
 
         res.render('pages/default', content);

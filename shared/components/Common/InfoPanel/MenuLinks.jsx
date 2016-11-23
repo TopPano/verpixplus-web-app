@@ -5,11 +5,8 @@ import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 
-import CONTENT from 'content/common/en-us.json';
 import { renderList } from 'lib/utils';
 import { EXTERNAL_LINKS } from 'constants/common';
-
-const { INFO_PANEL } = CONTENT;
 
 if (process.env.BROWSER) {
   require('./MenuLinks.css');
@@ -29,6 +26,8 @@ const defaultProps = {
 };
 
 class MenuLinks extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -85,28 +84,29 @@ class MenuLinks extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       isAuthenticated,
       links
     } = this.props;
     let linksProps = [{
       to: '/',
-      text: INFO_PANEL.HOME
+      text: l('Home')
     }];
     if (!isAuthenticated) {
       linksProps = linksProps.concat([{
           to: '/signin',
-          text: INFO_PANEL.SIGN_IN
+          text: l('Sign In')
         }, {
           to: '/signup',
-          text: INFO_PANEL.SIGN_UP
+          text: l('Sign Up')
         }]
       );
     } else {
       linksProps = linksProps.concat(
         links.length > 0 ? links : [{
           to: '/upload',
-          text: `${INFO_PANEL.UPLOAD} ${INFO_PANEL.MEDIA}`
+          text: l('Upload Media')
         }]
       );
     }
@@ -114,16 +114,16 @@ class MenuLinks extends Component {
       break: true
     }, {
       to: '/faq',
-      text: INFO_PANEL.SUPPORT,
+      text: l('FAQ'),
       small: true
     }, {
       to: EXTERNAL_LINKS.TERMS_OF_USE,
-      text: CONTENT.TERMS_OF_USE,
+      text: l('Terms of Use'),
       blank: true,
       small: true
     }, {
       to: EXTERNAL_LINKS.PRIVACY_POLICY,
-      text: CONTENT.PRIVACY_POLICY,
+      text: l('Privacy Policy'),
       blank: true,
       small: true
     }]);

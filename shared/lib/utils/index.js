@@ -11,6 +11,7 @@ import imagesStorage from './imagesStorage';
 import imageBlobToDataUrl from './imageBlobToDataUrl.js';
 import getReadableDuration from './getReadableDuration';
 import genErr from './genErr';
+import sprintf from './sprintf';
 import Promise from './promise';
 
 export {
@@ -28,5 +29,6 @@ export {
   imageBlobToDataUrl,
   getReadableDuration,
   genErr,
+  sprintf,
   Promise
 };
