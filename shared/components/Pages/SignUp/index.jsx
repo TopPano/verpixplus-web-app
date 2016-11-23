@@ -4,8 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'is-empty';
 
-import { EXTERNAL_LINKS } from 'constants/common';
-
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';

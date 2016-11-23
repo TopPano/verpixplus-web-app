@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import InfoPanel from 'containers/common/InfoPanel';
 import Brand from './Brand';
@@ -10,6 +10,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const defaultProps = {
@@ -21,9 +22,11 @@ class Header extends Component {
   }
 
   render() {
+    const { isAuthenticated } = this.props;
+
     return (
       <div className='header-component container-center-row'>
-        <Brand />
+        <Brand isAuthenticated={isAuthenticated} />
         <InfoPanel />
       </div>
     );
