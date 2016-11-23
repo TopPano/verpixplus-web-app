@@ -161,11 +161,11 @@ class SignUp extends Component {
           <hr />
           <RegBlockOthers>
             {`${l('By signing up, you agree to our')} `}
-            <ExternalLink to={EXTERNAL_LINKS.TERMS_OF_USE}>
+            <ExternalLink to="/terms">
               {l('Terms of Use')}
             </ExternalLink>
             {` ${l('and')} `}
-            <ExternalLink to={EXTERNAL_LINKS.PRIVACY_POLICY}>
+            <ExternalLink to="/privacy">
               {l('Privacy Policy')}
             </ExternalLink>
           </RegBlockOthers>

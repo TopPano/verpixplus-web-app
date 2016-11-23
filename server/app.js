@@ -76,6 +76,16 @@ app.get('/embed/@:mediaId', (req, res) => {
   });
 });
 
+// Terms of Use page request
+app.get('/terms', (req, res) => {
+  return res.sendFile(path.join(__dirname, '/../public/static/home/terms.html'));
+});
+
+// Privacy Policy page request
+app.get('/privacy', (req, res) => {
+  return res.sendFile(path.join(__dirname, '/../public/static/home/privacy.html'));
+});
+
 // This is fired every time the server side receives a request
 app.use((req, res) => {
   let initState = {};

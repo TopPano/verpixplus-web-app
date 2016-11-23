@@ -5,7 +5,6 @@ import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 
 import { renderList } from 'lib/utils';
-import { EXTERNAL_LINKS } from 'constants/common';
 
 if (process.env.BROWSER) {
   require('./MenuLinks.css');
@@ -111,12 +110,12 @@ class MenuLinks extends Component {
     linksProps = linksProps.concat([{
       break: true
     }, {
-      to: EXTERNAL_LINKS.TERMS_OF_USE,
+      to: '/terms',
       text: l('Terms of Use'),
       external: true,
       small: true
     }, {
-      to: EXTERNAL_LINKS.PRIVACY_POLICY,
+      to: '/privacy',
       text: l('Privacy Policy'),
       external: true,
       small: true
