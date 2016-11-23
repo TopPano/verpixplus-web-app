@@ -1,6 +1,6 @@
 module.exports = {
   sdk: {
-    url: 'http://developers.verpix.me/sdk'
+    url: 'https://d3je762wafoivc.cloudfront.net/sdk'
   },
   facebook: {
     apiRoot: 'https://graph.facebook.com',

@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  apiRoot: 'http://www.verpixplus.me/api',
-  staticUrl: 'http://www.verpix.me'
+  apiRoot: 'https://www.verpix.me/api',
+  staticUrl: 'https://www.verpix.me'
 }
