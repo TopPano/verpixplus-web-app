@@ -24,11 +24,14 @@ const defaultProps = {
 };
 
 class Editor extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mode,
       isProcessing
@@ -37,7 +40,7 @@ class Editor extends Component {
       light: true,
       links: [{
         to: '',
-        text: 'My Gallery'
+        text: l('My Gallery')
       }]
     }
     let mainComponents;
