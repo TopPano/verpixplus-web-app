@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 
