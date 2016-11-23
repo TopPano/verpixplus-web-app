@@ -139,7 +139,7 @@
         "刪除"
       ],
       "Profile": [
-        "簡歷"
+        "個人資料"
       ],
       "Error": [
         "錯誤"
@@ -169,7 +169,7 @@
         "上傳素材"
       ],
       "Edit Profile": [
-        "修改簡歷"
+        "修改個人資料"
       ],
       "Upload your video": [
         "上傳影片"
@@ -310,7 +310,7 @@
         "個人頭像更新成功"
       ],
       "Your profile is updated": [
-        "簡歷更新成功"
+        "個人資料更新成功"
       ],
       "Your password is changed": [
         "密碼更新成功"
