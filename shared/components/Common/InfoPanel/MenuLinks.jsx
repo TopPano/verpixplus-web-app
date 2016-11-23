@@ -55,16 +55,15 @@ class MenuLinks extends Component {
           'small': props.small
         });
 
-        if (props.blank) {
+        if (props.external) {
           return (
-            <Link
+            <a
               id={idx}
               className={linkClass}
-              to={props.to}
-              target="_blank"
+              href={props.to}
             >
               {props.text}
-            </Link>
+            </a>
           );
         } else {
           return (
@@ -72,7 +71,6 @@ class MenuLinks extends Component {
               key={idx}
               className={linkClass}
               to={props.to}
-              target={props.blank ? '_blank' : '_self'}
               onClick={() => { this.handleClickLink(props.to); }}
             >
               {props.text}
@@ -91,7 +89,8 @@ class MenuLinks extends Component {
     } = this.props;
     let linksProps = [{
       to: '/',
-      text: l('Home')
+      text: l('Home'),
+      external: !isAuthenticated
     }];
     if (!isAuthenticated) {
       linksProps = linksProps.concat([{
@@ -113,18 +112,14 @@ class MenuLinks extends Component {
     linksProps = linksProps.concat([{
       break: true
     }, {
-      to: '/faq',
-      text: l('FAQ'),
-      small: true
-    }, {
       to: EXTERNAL_LINKS.TERMS_OF_USE,
       text: l('Terms of Use'),
-      blank: true,
+      external: true,
       small: true
     }, {
       to: EXTERNAL_LINKS.PRIVACY_POLICY,
       text: l('Privacy Policy'),
-      blank: true,
+      external: true,
       small: true
     }]);
     const menuLinks = this.renderLinks(linksProps);
