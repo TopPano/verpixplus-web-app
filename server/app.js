@@ -58,6 +58,20 @@ if (process.env.NODE_ENV === 'development') {
 // Use ejs for template
 app.set('view engine', 'ejs');
 
+// Redirect from http to https
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    // Check it is ELB health check or not
+    if (req.headers['user-agent.match'] !== 'ELB-HealthChecker\/1.0') {
+      // Check it is http request or not
+      if (req.headers['x-forwarded-proto'] === 'http') {
+        return res.redirect(301, `${clientConfig.staticUrl}${req.url}`);
+      }
+    }
+    next();
+  });
+}
+
 // Embed page request
 app.get('/embed/@:mediaId', (req, res) => {
   const { mediaId } = req.params;
@@ -71,7 +85,7 @@ app.get('/embed/@:mediaId', (req, res) => {
       staticUrl: clientConfig.staticUrl
     }));
   }).catch((err) => {
-    console.log(err.stack);
+    console.error(err.stack);
     res.end(err.message);
   });
 });
@@ -148,7 +162,7 @@ app.use((req, res) => {
         res.render('pages/default', content);
       })
       .catch(err => {
-        console.log(err.stack);
+        console.error(err.stack);
         res.end(err.message);
       });
     }
