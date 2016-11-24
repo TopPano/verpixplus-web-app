@@ -32,6 +32,7 @@ import api from 'lib/api';
 import { GA_SDK } from 'constants/common';
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
+import exterApiConfig from 'etc/external-api';
 
 // Initialize localization
 const i18nToolsRegistry = {
@@ -84,7 +85,11 @@ app.get('/embed/@:mediaId', (req, res) => {
 
     res.render('pages/embed', merge({}, content, {
       staticUrl: clientConfig.staticUrl,
-      gaSdk: GA_SDK
+      ga: {
+        active: process.env.NODE_ENV === 'production',
+        sdk: GA_SDK,
+        trackingCode: exterApiConfig.ga.trackingCode
+      }
     }));
   }).catch((err) => {
     console.error(err.stack);
