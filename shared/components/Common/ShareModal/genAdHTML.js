@@ -1,5 +1,5 @@
 // TODO: Fit format of google ad
-export default function genAdHTML(mediaId, width, height, sdk) {
+export default function genAdHTML(mediaId, clickTag, width, height, sdk) {
   const dataWidth = width ? `data-width="${width}"` : '';
   const dataHeight = height ? `data-height="${height}"` : '';
 return `<!doctype html>
@@ -14,10 +14,13 @@ return `<!doctype html>
   <title></title>
   <meta name="title" content="">
   <meta name="description" content="">
+  <script type="text/javascript">
+    var clickTag = "${clickTag}";
+  </script>
 </head>
+<body style="margin: 0;">
   <div class="verpix-livephoto" data-id="${mediaId}" ${dataWidth} ${dataHeight}></div>
   ${sdk}
-<body>
 </body>
 </html>
 `;

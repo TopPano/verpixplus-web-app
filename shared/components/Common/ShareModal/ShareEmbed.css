@@ -2,17 +2,25 @@
 
 .share-embed-component {
   .inputs-wrapper {
-    * {
-      display: inline-block;
-      font-size: 14px;
+    flex-wrap: no-wrap;
+    font-size: 14px;
+
+    p {
+      line-height: 30px;
+      margin: 0 5px 0 0;
     }
 
     input {
-      width: 60px !important;
+      width: 60px;
       height: 30px;
       max-width: 40%;
+      &.click-tag {
+        width: 250px;
+        max-width: 60%;
+      }
     }
   }
+
 
   .preview-btn-wrapper {
     margin-top: 15px;
