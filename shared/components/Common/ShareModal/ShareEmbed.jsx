@@ -32,6 +32,7 @@ class ShareEmbed extends Component {
 
     // Bind "this" to member functions
     this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleClickTagChange = this.handleClickTagChange.bind(this);
     this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
     this.handleClickDownloadBtn = this.handleClickDownloadBtn.bind(this);
 
@@ -39,7 +40,8 @@ class ShareEmbed extends Component {
     this.state = {
       showPreview: false,
       embedWidth: EMBED.DEFAULT_WIDTH,
-      embedHeight: EMBED.DEFAULT_HEIGHT
+      embedHeight: EMBED.DEFAULT_HEIGHT,
+      clickTag: ''
     };
   }
 
@@ -51,6 +53,13 @@ class ShareEmbed extends Component {
     this.setState({
       embedWidth: isInteger(newEmbedWidth) ? newEmbedWidth : embedWidth,
       embedHeight: isInteger(newEmbedHeight) ? newEmbedHeight : embedHeight
+    });
+  }
+
+  // Handler for the input of clickTag changes
+  handleClickTagChange() {
+    this.setState({
+      clickTag: this.refs.inputClickTag.value
     });
   }
 
@@ -66,11 +75,12 @@ class ShareEmbed extends Component {
     const { mediaId } = this.props;
     const {
       embedWidth,
-      embedHeight
+      embedHeight,
+      clickTag
     } = this.state;
     const zip = new JSZip();
 
-    zip.file('index.html', genAdHTML(mediaId, embedWidth, embedHeight, EMBED.SDK_LIVEPHOTO));
+    zip.file('index.html', genAdHTML(mediaId, clickTag, embedWidth, embedHeight, EMBED.SDK_LIVEPHOTO));
     zip.generateAsync({
       type: 'blob'
     }).then((zipBlob) => {
@@ -91,7 +101,8 @@ class ShareEmbed extends Component {
     const {
       showPreview,
       embedWidth,
-      embedHeight
+      embedHeight,
+      clickTag
     } = this.state;
     const { mediaId } = this.props;
     const usageCode = this.genUsageCode(mediaId,'livephoto', embedWidth, embedHeight);
@@ -127,10 +138,11 @@ class ShareEmbed extends Component {
         </div>
           <div className="margin-bottom-10" />
           <div className="inputs-wrapper container-center-col">
+            <p>{`${l('Size')}:`}</p>
             <input
               ref="inputWidth"
               type="text"
-              className="form-control"
+              className="form-control "
               value={embedWidth}
               onChange={this.handleSizeChange}
             />
@@ -143,6 +155,19 @@ class ShareEmbed extends Component {
               onChange={this.handleSizeChange}
             />
           </div>
+          <div className="margin-bottom-10" />
+          <div className="inputs-wrapper container-center-col">
+            <p>{`${l('Click Tag')}:`}</p>
+            <input
+              ref="inputClickTag"
+              type="text"
+              className="click-tag form-control"
+              placeholder={l('Google AdWorlds Click Tag')}
+              value={clickTag}
+              onChange={this.handleClickTagChange}
+            />
+          </div>
+          <div className="margin-bottom-10" />
         <div className="preview-btn-wrapper text-center">
           <FlatButton
             className="share-btn"
@@ -152,6 +177,7 @@ class ShareEmbed extends Component {
           <FlatButton
             className="share-btn"
             text={l('Download')}
+            disabled={clickTag === ''}
             onClick={this.handleClickDownloadBtn}
           />
         </div>
