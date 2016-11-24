@@ -9,7 +9,7 @@ var config =
     require('./development.js');
 
 module.exports = merge({}, base, config, {
-  google: {
+  ga: {
     gaTrackingCode: process.env.GA_CODE
   }
 });

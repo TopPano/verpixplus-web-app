@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  google: {
-    gaTrackingCode: 'UA-75307622-2'
+  ga: {
+    trackingCode: 'UA-75307622-2'
   }
 };
