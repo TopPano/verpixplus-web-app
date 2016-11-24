@@ -7,6 +7,9 @@ module.exports = {
     id: '589634317860022',
     version: '2.6'
   },
+  ga: {
+    url: 'https://www.google-analytics.com/analytics.js'
+  },
   google: {
     apiRoot: 'https://www.googleapis.com',
     shortUrlKey: 'AIzaSyDMWU0bIoW4FS1OvfCT_X8OCBfe6CLOsCw'

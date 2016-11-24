@@ -29,6 +29,7 @@ import i18n from 'i18n';
 import Promise from 'lib/utils/promise';
 import api from 'lib/api';
 
+import { GA_SDK } from 'constants/common';
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
 
@@ -82,7 +83,8 @@ app.get('/embed/@:mediaId', (req, res) => {
     const content = genHeadContent(req, i18nTools, true, response.result);
 
     res.render('pages/embed', merge({}, content, {
-      staticUrl: clientConfig.staticUrl
+      staticUrl: clientConfig.staticUrl,
+      gaSdk: GA_SDK
     }));
   }).catch((err) => {
     console.error(err.stack);

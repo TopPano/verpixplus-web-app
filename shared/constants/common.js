@@ -1,3 +1,5 @@
+/* eslint quotes: 0 */
+
 import externalApiConfig from 'etc/external-api';
 
 export const DEFAULT_PROFILE_PHOTO_URL = '/static/images/profile-photo-default.svg';
@@ -54,3 +56,11 @@ export const EMBED = {
   DEFAULT_WIDTH: 480,
   DEFAULT_HEIGHT: 640
 };
+
+export const GA_SDK =
+  '<script>' +
+  `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){` +
+  `(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),` +
+  `m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)` +
+  `})(window,document,'script',"${externalApiConfig.ga.url}",'ga');` +
+  '</script>';
