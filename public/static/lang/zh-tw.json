@@ -213,6 +213,15 @@
       "Processing": [
         "處理中"
       ],
+      "Public": [
+        "公開"
+      ],
+      "Friends": [
+        "朋友"
+      ],
+      "Only Me": [
+        "只限本人"
+      ],
       "Google AdWorlds Click Tag": [
         "Google聯播網 Click Tag"
       ],
@@ -223,7 +232,7 @@
         "分享至"
       ],
       "Say something": [
-        "說些話吧"
+        "留些話吧"
       ],
       "Post": [
         "貼文"

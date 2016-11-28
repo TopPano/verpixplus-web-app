@@ -115,6 +115,7 @@
     "react-rnd": "4.1.0",
     "react-router": "2.4.1",
     "react-router-redux": "4.0.4",
+    "react-select": "1.0.0-rc.2",
     "redux-logger": "2.6.1",
     "redux-thunk": "2.1.0",
     "screenfull": "3.0.0",

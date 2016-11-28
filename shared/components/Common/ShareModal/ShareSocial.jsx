@@ -3,8 +3,12 @@
 import React, { Component, PropTypes } from 'react';
 import isEmpty from 'is-empty';
 import FacebookLogin from 'react-facebook-login';
+import Select from 'components/Common/Select';
 
-import { DEFAULT_TITLE } from 'constants/common';
+import {
+  DEFAULT_TITLE,
+  FACEBOOK_PRIVACY
+} from 'constants/common';
 import FlatButton from 'components/Common/FlatButton';
 import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api'
@@ -39,6 +43,7 @@ class ShareSocial extends Component {
     // Initialize state
     this.state = {
       fbUserId: '',
+      fbPrivacy: FACEBOOK_PRIVACY.EVERYONE,
       fbAccessToken: '',
       shareTarget: SHARE_TARGET.NONE
     };
@@ -46,6 +51,7 @@ class ShareSocial extends Component {
     // Bind "this" to member functions
     this.handleClickFacebookLoginBtn = this.handleClickFacebookLoginBtn.bind(this);
     this.handleClickShareToFacebookBtn = this.handleClickShareToFacebookBtn.bind(this);
+    this.handleChangeFacebookPrivacyOptions = this.handleChangeFacebookPrivacyOptions.bind(this);
   }
 
   // Genrate the sharing url by media ID
@@ -80,6 +86,7 @@ class ShareSocial extends Component {
     } = this.props;
     const {
       fbUserId,
+      fbPrivacy,
       fbAccessToken
     } = this.state;
     const userDesc = this.refs.shareFBVideoDesc.value;
@@ -93,15 +100,39 @@ class ShareSocial extends Component {
       targetId: fbUserId,
       title: title ? title : l(DEFAULT_TITLE),
       description,
+      privacy: fbPrivacy,
       fbAccessToken
     });
     close();
   }
 
+  // Handler for changing facebook privacy options
+  handleChangeFacebookPrivacyOptions(option) {
+    this.setState({
+      fbPrivacy: option.value
+    })
+  }
+
   render() {
     const { l } = this.context.i18n;
     const fbLoginBtnClass = 'flat-button-component share-btn';
-    const { shareTarget } = this.state;
+    const {
+      fbPrivacy,
+      shareTarget
+    } = this.state;
+    const privacyOptions = [{
+      icon: 'globe',
+      value: FACEBOOK_PRIVACY.EVERYONE,
+      label: l('Public')
+    }, {
+      icon: 'user',
+      value: FACEBOOK_PRIVACY.ALL_FRIENDS,
+      label: l('Friends')
+    }, {
+      icon: 'lock',
+      value: FACEBOOK_PRIVACY.SELF,
+      label: l('Only Me')
+    }];
 
     return (
       <div className="share-social-component">
@@ -132,6 +163,16 @@ class ShareSocial extends Component {
               placeholder={`${l('Say something')}...`}
             />
             <div className="margin-bottom-15" />
+            <div style={{ width: '100%' }}>
+              <Select
+                name="facebook-privacy"
+                className="pull-right"
+                value={fbPrivacy}
+                options={privacyOptions}
+                clearable={false}
+                onChange={this.handleChangeFacebookPrivacyOptions}
+              />
+            </div>
             <div className="margin-bottom-15" />
             <FlatButton
               text={l('Post')}

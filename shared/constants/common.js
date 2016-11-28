@@ -48,6 +48,12 @@ export const SHARE_IMAGE_SIZE = {
 
 export const PROFILE_PICTURE_SIZE =  150;
 
+export const FACEBOOK_PRIVACY = {
+  EVERYONE: 'EVERYONE',
+  ALL_FRIENDS: 'ALL_FRIENDS',
+  SELF: 'SELF'
+};
+
 export const EMBED = {
   SDK_LIVEPHOTO:
   '<script>' +

@@ -4321,6 +4321,11 @@
       "from": "react-hot-api@>=0.4.5 <0.5.0",
       "resolved": "https://registry.npmjs.org/react-hot-api/-/react-hot-api-0.4.7.tgz"
     },
+    "react-input-autosize": {
+      "version": "1.1.0",
+      "from": "react-input-autosize@>=1.1.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-input-autosize/-/react-input-autosize-1.1.0.tgz"
+    },
     "react-json-tree": {
       "version": "0.6.8",
       "from": "react-json-tree@>=0.6.6 <0.7.0",
@@ -4408,6 +4413,11 @@
       "version": "4.0.4",
       "from": "react-router-redux@4.0.4",
       "resolved": "https://registry.npmjs.org/react-router-redux/-/react-router-redux-4.0.4.tgz"
+    },
+    "react-select": {
+      "version": "1.0.0-rc.2",
+      "from": "react-select@latest",
+      "resolved": "https://registry.npmjs.org/react-select/-/react-select-1.0.0-rc.2.tgz"
     },
     "read-cache": {
       "version": "1.0.0",

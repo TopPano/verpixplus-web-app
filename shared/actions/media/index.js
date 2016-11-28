@@ -286,6 +286,7 @@ export function shareFacebookVideo({
   targetId,
   title,
   description,
+  privacy,
   userSession = {},
   fbAccessToken
 }) {
@@ -320,7 +321,10 @@ export function shareFacebookVideo({
         },
         body: JSON.stringify({
           file_url: videoUrl,
-          description
+          description,
+          privacy: {
+            value: privacy
+          }
         })
       };
       const {
