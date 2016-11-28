@@ -10,8 +10,12 @@
   }
 
   .facebook-share-preview {
-    video {
-      max-width: 100%;
+    .facebook-share-settings {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
     }
   }
 }

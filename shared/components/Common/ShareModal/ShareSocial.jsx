@@ -163,22 +163,20 @@ class ShareSocial extends Component {
               placeholder={`${l('Say something')}...`}
             />
             <div className="margin-bottom-15" />
-            <div style={{ width: '100%' }}>
+            <div className="facebook-share-settings">
               <Select
                 name="facebook-privacy"
-                className="pull-right"
                 value={fbPrivacy}
                 options={privacyOptions}
                 clearable={false}
                 onChange={this.handleChangeFacebookPrivacyOptions}
               />
+              <FlatButton
+                text={l('Post')}
+                className="share-btn margin-left-10"
+                onClick={this.handleClickShareToFacebookBtn}
+              />
             </div>
-            <div className="margin-bottom-15" />
-            <FlatButton
-              text={l('Post')}
-              className="share-btn"
-              onClick={this.handleClickShareToFacebookBtn}
-            />
           </div>
         }
       </div>
