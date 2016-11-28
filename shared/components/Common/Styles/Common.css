@@ -1,5 +1,19 @@
 @import 'Variables.css';
 
+/*
+ * cwTeXHei (Chinese-traditional) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'cwTeXHei';
+  font-style: normal;
+  font-weight: 500;
+  src: url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.eot);
+  src: url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.ttf) format('truetype');
+}
+
 .text-single-line {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -65,7 +79,7 @@ textarea {
 }
 
 .title-v1 h1, .title-v1 h2, h1, h2, h3, h4, h5, h6 {
-  font-family: source-sans-pro, sans-serif;
+  font-family: $font-family-main;
 }
 
 /* Customized styles for Bootstrap and Unify */

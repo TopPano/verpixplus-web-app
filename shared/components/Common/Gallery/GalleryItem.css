@@ -2,7 +2,6 @@
 
 $tool-color: #BBAABC;
 $border-radius: 5px;
-$font-family: source-sans-pro, sans-serif;
 
 .gallery-item-component {
   @media (width < 550px) {
@@ -15,7 +14,7 @@ $font-family: source-sans-pro, sans-serif;
     border-radius: $border-radius;
     box-shadow: 1px 1px 1px rgba(184,186,188,0.5);
     padding: 0;
-    font-family: $font-family;
+    font-family: $font-family-main;
 
     .thumbnails-main {
       position: relative;
@@ -95,7 +94,7 @@ $font-family: source-sans-pro, sans-serif;
         p {
           margin: 0;
           color: #7F7F7F;
-          font-family: $font-family;
+          font-family: $font-family-main;
           font-weight: 400;
         }
       }
@@ -112,7 +111,7 @@ $font-family: source-sans-pro, sans-serif;
       background-color: $color-white;
 
       p {
-        $font-family: source-sans-pro, sans-serif;
+        font-family: $font-family-main;
         font-size: 12px;
         color: #7F7F7F;
       }

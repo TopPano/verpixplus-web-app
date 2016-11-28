@@ -9,6 +9,8 @@ $color-transparent-white: rgba(255, 255, 255, 0.5);
 
 $color-main-bg: #EBEBEC;
 
+$font-family-main: source-sans-pro, '微軟正黑體', 'Microsoft JhengHei', 'cwTeXHei', sans-serif;
+
 /* Variables for breakpoints */
 $bp-xs-sm: 768px;
 $bp-sm-md: 992px;
