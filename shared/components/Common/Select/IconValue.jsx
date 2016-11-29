@@ -28,7 +28,24 @@ class IconValue extends Component {
         title={this.props.value.title}
       >
         <span className="Select-value-label">
-          <i style={{ width: '10px'}} className={`fa fa-${value.icon}`} />&nbsp;&nbsp;
+          {
+            value.img &&
+            <div style={{ display: 'inline' }}>
+              <img
+                src={value.img}
+                alt={value.label}
+                width="14"
+                height="14"
+              />
+              &nbsp;&nbsp;
+            </div>
+          }
+          {
+            value.icon &&
+            <div style={{ display: 'inline' }}>
+              <i style={{ width: '10px'}} className={`fa fa-${value.icon}`} />&nbsp;&nbsp;
+            </div>
+          }
           {children}
         </span>
       </div>

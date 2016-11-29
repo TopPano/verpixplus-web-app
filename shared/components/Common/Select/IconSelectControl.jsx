@@ -58,7 +58,24 @@ class IconSelectControl extends Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseMove={this.handleMouseMove}
       >
-        <i style={{ width: '10px'}} className={`fa fa-${option.icon}`} />&nbsp;&nbsp;
+        {
+          option.img &&
+          <div style={{ display: 'inline' }}>
+            <img
+              src={option.img}
+              alt={option.label}
+              width="14"
+              height="14"
+            />
+            &nbsp;&nbsp;
+          </div>
+        }
+        {
+          option.icon &&
+          <div style={{ display: 'inline' }}>
+            <i style={{ width: '10px'}} className={`fa fa-${option.icon}`} />&nbsp;&nbsp;
+          </div>
+        }
         {children}
       </div>
     );
