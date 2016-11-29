@@ -6,7 +6,8 @@ import FacebookLogin from 'react-facebook-login';
 import Select from 'components/Common/Select';
 
 import {
-  getFacebookManagedPages
+  getFacebookManagedPages,
+  getFacebookGroups
 } from './FacebookUtils';
 import {
   DEFAULT_TITLE,
@@ -55,6 +56,8 @@ class ShareSocial extends Component {
       fbUserAccessToken: '',
       fbManagedPages: [],
       fbSelectedPageIdx: -1,
+      fbManagedGroups: [],
+      fbSelectedGroupIdx: -1,
       fbPrivacy: FACEBOOK_PRIVACY.EVERYONE,
       fbTarget: FACEBOOK_TARGET.OWN,
       shareTarget: SHARE_TARGET.NONE
@@ -64,6 +67,7 @@ class ShareSocial extends Component {
     this.handleClickFacebookLoginBtn = this.handleClickFacebookLoginBtn.bind(this);
     this.handleClickShareToFacebookBtn = this.handleClickShareToFacebookBtn.bind(this);
     this.handleChangeFacebookTargetOptions = this.handleChangeFacebookTargetOptions.bind(this);
+    this.handleChangeFacebookSelectedGroup = this.handleChangeFacebookSelectedGroup.bind(this);
     this.handleChangeFacebookSelectedPage = this.handleChangeFacebookSelectedPage.bind(this);
     this.handleChangeFacebookPrivacyOptions = this.handleChangeFacebookPrivacyOptions.bind(this);
   }
@@ -83,10 +87,16 @@ class ShareSocial extends Component {
     if (id && accessToken) {
       getFacebookManagedPages(id).then((pages) => {
         this.setState({
+          fbManagedPages: pages,
+          fbSelectedPageIdx: pages.length > 0 ? 0 : -1
+        });
+        return getFacebookGroups(id);
+      }).then((groups) => {
+        this.setState({
           fbUserId: id,
           fbUserAccessToken: accessToken,
-          fbManagedPages: pages,
-          fbSelectedPageIdx: pages.length > 0 ? 0 : -1,
+          fbManagedGroups: groups,
+          fbSelectedGroupIdx: groups.length > 0 ? 0 : -1,
           shareTarget: SHARE_TARGET.FACEBOOK
         });
       }).catch(() => {
@@ -107,6 +117,8 @@ class ShareSocial extends Component {
     const {
       fbUserId,
       fbUserAccessToken,
+      fbManagedGroups,
+      fbSelectedGroupIdx,
       fbManagedPages,
       fbSelectedPageIdx,
       fbPrivacy,
@@ -122,6 +134,9 @@ class ShareSocial extends Component {
 
     if (fbTarget === FACEBOOK_TARGET.OWN) {
       targetId = fbUserId;
+      fbAccessToken = fbUserAccessToken
+    } else if (fbTarget === FACEBOOK_TARGET.GROUP) {
+      targetId = fbManagedGroups[fbSelectedGroupIdx].id;
       fbAccessToken = fbUserAccessToken
     } else if (fbTarget === FACEBOOK_TARGET.PAGE) {
       targetId = fbManagedPages[fbSelectedPageIdx].id;
@@ -148,6 +163,13 @@ class ShareSocial extends Component {
     })
   }
 
+  // Handler for changing facebook selected group index
+  handleChangeFacebookSelectedGroup(option) {
+    this.setState({
+      fbSelectedGroupIdx: option.value
+    })
+  }
+
   // Handler for changing facebook selected page index
   handleChangeFacebookSelectedPage(option) {
     this.setState({
@@ -163,7 +185,7 @@ class ShareSocial extends Component {
   }
 
   // Render preview for Facebook sharing
-  renderFacebookSharePreview(target, pages, selectedPageIdx, privacy) {
+  renderFacebookSharePreview(target, groups, selectedGroupIdx, pages, selectedPageIdx, privacy) {
     const { l } = this.context.i18n;
     const privacyOptions = [{
       icon: 'globe',
@@ -183,7 +205,33 @@ class ShareSocial extends Component {
       value: FACEBOOK_TARGET.OWN,
       label: l('Share on your own Timeline')
     }];
+    let groupsSelect;
     let pagesSelect;
+
+    if (groups.length > 0) {
+      targetOptions.push({
+        icon: 'users',
+        value: FACEBOOK_TARGET.GROUP,
+        label: l('Share in a group you manage')
+      });
+
+      if (target === FACEBOOK_TARGET.GROUP) {
+        const groupOptions = groups.map((group, idx) => ({
+          value: idx,
+          label: group.name,
+          img: group.imgUrl
+        }));
+        groupsSelect =
+          <Select
+            name="facebook-group"
+            value={selectedGroupIdx}
+            options={groupOptions}
+            searchable={false}
+            clearable={false}
+            onChange={this.handleChangeFacebookSelectedGroup}
+          />
+      }
+    }
 
     if (pages.length > 0 ) {
       targetOptions.push({
@@ -223,6 +271,7 @@ class ShareSocial extends Component {
             clearable={false}
             onChange={this.handleChangeFacebookTargetOptions}
           />
+          {groupsSelect}
           {pagesSelect}
         </div>
         <textarea
@@ -258,6 +307,8 @@ class ShareSocial extends Component {
     const { l } = this.context.i18n;
     const fbLoginBtnClass = 'flat-button-component share-btn';
     const {
+      fbManagedGroups,
+      fbSelectedGroupIdx,
       fbManagedPages,
       fbSelectedPageIdx,
       fbPrivacy,
@@ -266,7 +317,7 @@ class ShareSocial extends Component {
     } = this.state;
     const fbSharePreview =
       shareTarget === SHARE_TARGET.FACEBOOK ?
-      this.renderFacebookSharePreview(fbTarget, fbManagedPages, fbSelectedPageIdx, fbPrivacy) :
+      this.renderFacebookSharePreview(fbTarget, fbManagedGroups, fbSelectedGroupIdx, fbManagedPages, fbSelectedPageIdx, fbPrivacy) :
       null;
 
     return (
@@ -279,7 +330,7 @@ class ShareSocial extends Component {
               <FacebookLogin
                 appId={externalApiConfig.facebook.id}
                 version={externalApiConfig.facebook.version}
-                scope="publish_actions,pages_show_list,manage_pages,publish_pages"
+                scope="publish_actions,user_managed_groups,pages_show_list,manage_pages,publish_pages"
                 callback={this.handleClickFacebookLoginBtn}
                 cssClass={fbLoginBtnClass}
                 textButton="Facebook"
