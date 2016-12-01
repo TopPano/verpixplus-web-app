@@ -32,6 +32,10 @@ export function getFacebookGroups (userId) {
           reject(res.error);
         }
 
+        if (res.data.length === 0) {
+          resolve([]);
+        }
+
         const groups = new Array(res.data.length);
         let count = 0;
 
@@ -64,6 +68,10 @@ export function  getFacebookManagedPages (userId) {
         }
         if (res.error) {
           reject(res.error);
+        }
+
+        if (res.data.length === 0) {
+          resolve([]);
         }
 
         const pages = new Array(res.data.length);
