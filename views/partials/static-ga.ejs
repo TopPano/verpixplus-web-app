@@ -1,0 +1,13 @@
+<% if (ga.active) { %>
+<%- ga.sdk %>
+<script>
+  window.addEventListener('load', function() {
+    window.ga('create', '<%= ga.trackingCode %>', 'auto');
+    window.ga('set', {
+      page: '<%= page %>',
+      title: '<%= title %>'
+    });
+    window.ga('send', 'pageview');
+  });
+</script>
+<% } %>

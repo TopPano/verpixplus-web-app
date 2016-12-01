@@ -1,30 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="https://d3je762wafoivc.cloudfront.net/home/images/favicon.png" type="image/x-icon">
-  <meta name="description" content="">
-  <title>Verpix</title>
+  <% include ../partials/head %>
   <style>
     @import url(https://fonts.googleapis.com/earlyaccess/cwtexhei.css);
   </style>
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/web/assets/mobirise-icons/mobirise-icons.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/icons-mind/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/icon54/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/socicon/css/socicon.min.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/font-un/css/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/swipebox/css/swipebox.min.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/unicore/css/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/dropdown-menu-plugin/style.light.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/mobirise-slider/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/mobirise-gallery/style.css">
-  <link rel="stylesheet" href="https://d3je762wafoivc.cloudfront.net/home/mobirise/css/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/web/assets/mobirise-icons/mobirise-icons.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/icons-mind/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/icon54/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/socicon/css/socicon.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-un/css/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/swipebox/css/swipebox.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/unicore/css/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/dropdown-menu-plugin/style.light.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise-slider/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise-gallery/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise/css/mbr-additional.css" type="text/css">
   <style>
     @media (max-width: 400px) { .mbr-gallery-livephoto { width: 100%; } }
   </style>
@@ -34,12 +28,21 @@
     <nav class="navbar navbar-dropdown bg-color transparent navbar-fixed-top">
         <div class="container">
             <div class="navbar-brand">
-                <a href="/" class="navbar-logo"><img src="https://d3je762wafoivc.cloudfront.net/home/images/verpix-web-logo-white-1.svg" alt="VERPIX"></a>
+                <a href="/" class="navbar-logo"><img src="<%= cdnUrl %>/home/images/verpix-web-logo-white-1.svg" alt="VERPIX"></a>
             </div>
             <button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
                 <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
             </button>
-            <ul class="nav-dropdown collapse pull-xs-right navbar-toggleable-sm nav navbar-nav" id="exCollapsingNavbar"><li class="nav-item"><a class="nav-link link" href="/signin"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;登入</a></li></ul>
+            <ul class="nav-dropdown collapse pull-xs-right navbar-toggleable-sm nav navbar-nav" id="exCollapsingNavbar">
+                <li class="nav-item" id ="locale-switch">
+                    <a style="cursor: pointer;" class="nav-link link"><%= locale === 'zh-tw' ? localesMapping['en'] : localesMapping['zh-tw'] %></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link" href="/signin">
+                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;<%= l('Sign In') %>
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 </section>
@@ -51,8 +54,8 @@
             <div class="row center-content center-content-ipad">
                 <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text-center">
                     <h2>Motion! Rocks</h2><p></p>
-                    <div><p class="lead">翻動你的世界 玩轉你的創意</p></div>
-                    <div><a href="/signup" style="font-size: 18px;" class="btn btn-lg btn-cta btn-default">立即註冊</a></div>
+                    <div><p class="lead"><%= l('Turn Your World, Turn Your Idea') %></p></div>
+                    <div><a href="/signup" style="font-size: 18px;" class="btn btn-lg btn-cta btn-default"><%= l('Try it now') %></a></div>
                 </div>
             </div>
         </div>
@@ -69,19 +72,19 @@
                             <div class="process-row nav nav-tabs">
                                 <div class="process-step" style="display: block; width: 25%;">
                                     <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu1msg-box16-1z"><span class="imind-upload-tocloud mbr-iconfont mbr-iconfont-btn"></span></a></div>
-                                    <small>上傳<br>簡單的上傳影音就完成<br></small>
+                                    <small><%= l('Upload') %><br><%= l('Easy to upload video file as input') %><br></small>
                                 </div>
                                 <div class="process-step" style="display: block; width: 25%;">
                                     <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu2msg-box16-1z"><span class="mbri-video mbr-iconfont mbr-iconfont-btn"></span></a></div>
-                                    <small>編輯<br>自由調整長度跟顏色<br></small>
+                                    <small><%= l('Editing') %><br><%= l('Trim the clip and adjust color') %><br></small>
                                 </div>
                                 <div class="process-step" style="display: block; width: 25%;">
                                     <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu3msg-box16-1z"><span class="icon54-share-conversation2 mbr-iconfont mbr-iconfont-btn"></span></a></div>
-                                    <small>分享<br>分享社群、部落格、網站、廣告聯播網<br></small>
+                                    <small><%= l('Sharing') %><br><%= l('Social media/Blogger/Website/Advertising') %><br></small>
                                 </div>
                                 <div class="process-step" style="display: block; width: 25%;">
                                     <div><a class="btn btn-default btn-circle" data-toggle="tab" href="#menu4msg-box16-1z"><span class="imind-bar-chart mbr-iconfont mbr-iconfont-btn"></span></a></div>
-                                    <small>追蹤<br>了解使用者與消費者的面貌<br></small>
+                                    <small><%= l('Tracking') %><br><%= l('Get the insight of your users') %><br></small>
                                 </div>
                             </div>
                         </div>
@@ -112,14 +115,14 @@
 
 <div id="header20-2d" custom-code="true"><section class="mbr-section--bg-adapted" data-bg-video="https://www.youtube.com/embed/SzIn0ga987c?rel=0&amp;amp;showinfo=0&amp;autoplay=true&amp;loop=true">
     <div class="intro2-title">
-        <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;">線上動圖轉換服務</span></h3>
+      <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;"><%= l('Get ready to see awesome') %></span></h3>
     </div>
     <div class="intro intro2">
         <div class="intro2-wrapper">
           <div class="mbr-overlay" style="opacity: 0.2; background-color: rgb(21, 21, 21);"></div>
           <div class="container"></div>
             <div class="intro2-text text-center">
-              <p class="col-xs-10 col-xs-offset-1 text-center">Verpix提供一個線上動圖轉換服務，將影片轉換成互動媒體後分享出去，達到與使用者互動的效果。</p>
+              <p class="col-xs-10 col-xs-offset-1 text-center"><%= l('Verpix is an online platform that allows you to easily interact with your users through motion graph, and then share them with the world') %></p>
             </div>
         </div>
     </div>
@@ -127,13 +130,13 @@
 
 <div id="header20-21" custom-code="true"><section class="mbr-section--bg-adapted" data-bg-video="https://www.youtube.com/embed/ck6SeBmvQSM?rel=0&amp;amp;showinfo=0&amp;autoplay=true&amp;loop=true">
     <div class="intro2-title">
-        <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;">最簡便的方法</span></h3>
+      <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;"><%= l('We make Motion Garph simple') %></span></h3>
     </div>
     <div class="intro intro2">
         <div class="intro2-wrapper">
           <div class="container"></div>
             <div class="intro2-text text-center">
-              <p class="col-xs-10 col-xs-offset-1 text-center">Verpix平台整合了上傳、編輯、轉檔與分享的功能，讓你的創意可以與客 戶直接互動。 用你平常慣用的相機，如單眼相機、 DV或甚至手機上傳Verpix就能轉換成動圖。</p>
+              <p class="col-xs-10 col-xs-offset-1 text-center"><%= l('Make video as motion graph as simple. The benefit of motion graph effect can get your customer eyes on your idea') %></p>
             </div>
         </div>
     </div>
@@ -147,10 +150,10 @@
                     <div class="timeline-badge"><i class="fa fa-globe"></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="timeline-title">線上作業平台</h4>
+                          <h4 class="timeline-title"><%= l('Browser based platform') %></h4>
                         </div>
                         <div class="timeline-body">
-                            <p>不需要安裝軟體，不需要建立網站，直接通過線上作業平台轉換。我們提供最佳的互動使用經驗。</p>
+                            <p><%= l('No websites to mange, no software to install, our motion graph online service and viewer offers cross-platform service for the desktop and mobile browsers with the best and smoothest motion graph experience') %></p>
                         </div>
                     </div>
                 </li>
@@ -159,10 +162,10 @@
                     <div class="timeline-badge warning"><i class="fa fa-pencil"></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="timeline-title">編輯套件</h4>
+                          <h4 class="timeline-title"><%= l('Full Editing KITS') %></h4>
                         </div>
                         <div class="timeline-body">
-                            <p>提供完整的濾鏡、顏色、色調編輯功能，將這些特效應用在拍攝的影片後分享出去。</p>
+                            <p><%= l('Tone, color, filter, adjusting editor. Apply those image effecter effects to your motion graph, you can edit and choose what you want to share') %></p>
                         </div>
                     </div>
                 </li>
@@ -171,10 +174,10 @@
                     <div class="timeline-badge danger"><i class="fa fa-rss"></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="timeline-title">社群分享</h4>
+                          <h4 class="timeline-title"><%= l('Social media sharing') %></h4>
                         </div>
                         <div class="timeline-body">
-                            <p>每一個動圖都可以簡單的分享到社群網路，通過編輯後，將編輯過的動圖轉換成影片發佈到社群上。</p>
+                            <p><%= l('Each motion graph allows viewers to share it to their social networks. With Verpix, you can share your motion graph directly to social media, only one click!!') %></p>
                         </div>
                     </div>
                 </li>
@@ -183,10 +186,10 @@
                     <div class="timeline-badge default"><i class="fa fa-share"></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="timeline-title">網頁/部落格內嵌</h4>
+                          <h4 class="timeline-title"><%= l('Website/Blogger Embedding') %></h4>
                         </div>
                         <div class="timeline-body">
-                            <p>每一個動圖除了能夠分享到社群，同時也都被賦予了一段程式碼可以讓你內嵌到網站或是部落格，讓你的客戶可以與你的創意互動。</p>
+                          <p><%= l('Every motion graph gets a special HTML embedded code which can integrate into your own website, user can interact with your motion graph') %></p>
                         </div>
                     </div>
                 </li>
@@ -207,14 +210,12 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/001-5.png">
+                            <img src="<%= cdnUrl %>/home/images/001-5.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">修剪長度</h1>
-
-                                    <p class="mbr-hero__subtext">上傳影音檔後，找到最佳的畫面同時修剪出效果最好的長度<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Trim your clip') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Import a video, Trim the clip for the best demonstration') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -224,14 +225,12 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/002-2.png">
+                            <img src="<%= cdnUrl %>/home/images/002-2.png">
                             <div class="row">
                                 <div class=" col-md-8 col-md-offset-2">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">設定自動播放與互動</h1>
-
-                                    <p class="mbr-hero__subtext">可自由設定自動播放並可以於使用者產生互動效果<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Auto play and Interaction') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Select repeat auto-play in loop and interact with users') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -240,31 +239,12 @@
                 </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/003-2.png">
+                            <img src="<%= cdnUrl %>/home/images/003-2.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">色調調整</h1>
-
-                                    <p class="mbr-hero__subtext">簡單快速的顏色、亮度、暗圈調整介面<br></p>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
-                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
-                    <div class="mbr-overlay"></div>
-                        <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/004-5.png">
-                            <div class="row">
-                                <div class=" col-md-6 col-md-offset-1">
-
-                                <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">動圖</h1>
-
-                                    <p class="mbr-hero__subtext">非一般傳統影片而是可與使用者互動的多媒體<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Color/Tone adjustment') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Complete control over your color adjustments') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -274,14 +254,12 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/005-2.png">
+                            <img src="<%= cdnUrl %>/home/images/004-5.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">社群分享</h1>
-
-                                    <p class="mbr-hero__subtext">只要一個點擊就可以方便的分享到社群<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Motion Graph') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('It is not a video but Motion Graph, to interact with users') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -291,14 +269,12 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/006-1.png">
+                            <img src="<%= cdnUrl %>/home/images/005-2.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">網頁/部落格內嵌</h1>
-
-                                    <p class="mbr-hero__subtext">每一個動圖都有程式碼可以內嵌到網站或是部落格<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Share to life') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Share to social media with just one click or embed to your website') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -308,14 +284,12 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/007.png">
+                            <img src="<%= cdnUrl %>/home/images/006-1.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">設定展示視窗大小</h1>
-
-                                    <p class="mbr-hero__subtext">依據你的網站/部落格/廣告畫面設定最佳的展示視窗大小<br></p>
+                                    <h1 class="mbr-hero__text"><%= l('Website/Blogger Embedding') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Every motion graph gets a special HTML embedded code which can integrate into your own website or blogger') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -325,14 +299,27 @@
                     <div class="mbr-box__magnet mbr-box__magnet--center-left">
                     <div class="mbr-overlay"></div>
                         <div>
-                            <img src="https://d3je762wafoivc.cloudfront.net/home/images/008.png">
+                            <img src="<%= cdnUrl %>/home/images/007.png">
                             <div class="row">
                                 <div class=" col-md-6 col-md-offset-1">
-
                                 <div class="mbr-hero">
-                                    <h1 class="mbr-hero__text">廣告聯播</h1>
-
-                                    <p class="mbr-hero__subtext">提供廣告聯播網專用素材下載、可以讓你的創意可以在廣告聯播網被客戶看見<br></p>
+                                  <h1 class="mbr-hero__text"><%= l('Corp out area') %></h1>
+                                  <p class="mbr-hero__subtext"><%= l('Set the crop and select an area to bring to your website or blogger') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/008.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Support for Adverting') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Build the best contents and then broadcast to advertising channel. With our elegant editing feature, you can make your contents different from traditional video, LOW LATENCY, LOW CONGESTION, it is best recipe for AD channel') %><br></p>
                                 </div>
                                 </div>
                             </div>
@@ -370,7 +357,7 @@
     <div id="contact-info" style="padding-top: 100px; padding-bottom: 0px;">
         <div class="container">
             <div class="section-head text-center col-md-8 col-md-offset-2 space50">
-                <h1 class="mbr-editable-content">與我們連繫</h1>
+                <h1 class="mbr-editable-content"><%= l('Contact Us') %></h1>
             </div>
         </div></div>
 </section></div>
@@ -382,7 +369,7 @@
                 <div class="col-md-10 col-md-offset-1" data-form-type="formoid">
 
                     <div data-form-alert="true">
-                        <div class="hide" data-form-alert-success="true">Thanks for filling out form!</div>
+                        <div class="hide" data-form-alert-success="true"><%= l('Thanks for filling out form!') %></div>
                     </div>
                     <form class="positioned" id="contactForm" action="https://#" method="post" data-form-title="CONTACT FORM">
                         <input type="hidden" value="K/x/MoZeV5LvGOWIkEcCm/nWAKkncc3IDT2CruZf/4S0L/FCR/5RxcJ85D3JHXG2itn8C8rjbDR3bzQjCDtEc9qIwyu1T2145HVeopWyDNXq0GwjyjUIz5NUgDbl+R08" data-form-email="true">
@@ -390,21 +377,21 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="name" required="" placeholder="您的稱呼" data-form-field="Name">
+                                    <input type="text" class="form-control" name="name" required="" placeholder="<%= l('Your name') %>" data-form-field="Name">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <input type="email" class="form-control" name="email" required="" placeholder="電子郵件" data-form-field="Email">
+                                    <input type="email" class="form-control" name="email" required="" placeholder="<%= l('Email') %>" data-form-field="Email">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="tel" class="form-control" name="subject" placeholder="主題" data-form-field="subject">
+                            <input type="tel" class="form-control" name="subject" placeholder="<%= l('Subject') %>" data-form-field="subject">
                         </div>
-                        <textarea class="form-control" name="message" rows="7" placeholder="訊息" data-form-field="Message"></textarea>
-                        <div class="submitBtn"><button type="submit" class="btn btn-default btn-ico">送出訊息<i class="fa fa-paper-plane-o"></i></button></div>
+                        <textarea class="form-control" name="message" rows="7" placeholder="<%= l('Message') %>" data-form-field="Message"></textarea>
+                        <div class="submitBtn"><button type="submit" class="btn btn-default btn-ico"><%= l('Send') %><i class="fa fa-paper-plane-o"></i></button></div>
                     </form>
                 </div>
             </div>
@@ -412,38 +399,31 @@
     </div>
 </section>
 
-<section class="mbr-section--bg-adapted mbr-section--relative" id="footer1-8" style="background-color: rgb(235, 235, 236);">
-    <div class="footer-copy" style="padding-top: 20px; padding-bottom: 20px;">
-        <div class="container">© 2016 Toppano Inc. All Rights Reserved &nbsp; &nbsp;❘ &nbsp;<a href="/terms" class="text-gray">服務條款</a> &nbsp;❘ &nbsp;<a href="/privacy" class="text-gray">隱私保護政策</a></div>
-    </div>
-</section>
+<% include ../partials/static-footer %>
 
-
-  <script src="https://d3je762wafoivc.cloudfront.net/home/web/assets/jquery/jquery.min.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/bootstrap/js/bootstrap.min.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/smooth-scroll/SmoothScroll.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/jquery-mb-ytplayer/jquery.mb.YTPlayer.min.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/swipebox/js/jquery.swipebox.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/masonry/masonry.pkgd.min.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="<%= cdnUrl %>/home/web/assets/jquery/jquery.min.js"></script>
+  <script src="<%= cdnUrl %>/home/bootstrap/js/bootstrap.min.js"></script>
+  <script src="<%= cdnUrl %>/home/smooth-scroll/SmoothScroll.js"></script>
+  <script src="<%= cdnUrl %>/home/jquery-mb-ytplayer/jquery.mb.YTPlayer.min.js"></script>
+  <script src="<%= cdnUrl %>/home/swipebox/js/jquery.swipebox.js"></script>
+  <script src="<%= cdnUrl %>/home/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
+  <script src="<%= cdnUrl %>/home/masonry/masonry.pkgd.min.js"></script>
+  <script src="<%= cdnUrl %>/home/imagesloaded/imagesloaded.pkgd.min.js"></script>
   <!--[if lte IE 9]>
-    <script src="https://d3je762wafoivc.cloudfront.net/home/jquery-placeholder/jquery.placeholder.min.js"></script>
+    <script src="<%= cdnUrl %>/home/jquery-placeholder/jquery.placeholder.min.js"></script>
   <![endif]-->
-  <script src="https://d3je762wafoivc.cloudfront.net/home/unicore/js/script.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/dropdown-menu-plugin/script.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/mobirise-gallery/script.js"></script>
-  <script src="https://d3je762wafoivc.cloudfront.net/home/formoid/formoid.min.js"></script>
-  <script>!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",["https://d3je762wafoivc.cloudfront.net/sdk/sdk-livephoto.js"])</script>
-  <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script',"https://www.google-analytics.com/analytics.js",'ga');</script>
+  <script src="<%= cdnUrl %>/home/unicore/js/script.js"></script>
+  <script src="<%= cdnUrl %>/home/dropdown-menu-plugin/script.js"></script>
+  <script src="<%= cdnUrl %>/home/mobirise-gallery/script.js"></script>
+  <script src="<%= cdnUrl %>/home/formoid/formoid.min.js"></script>
+  <%- livephotoSdk %>
+  <% include ../partials/static-ga %>
   <script>
     window.addEventListener('load', function() {
-      window.ga('create', 'UA-75307622-2', 'auto');
-      window.ga('set', {
-        page: '/home',
-        title: 'Verpix'
+      $('#locale-switch').on('click', function() {
+        document.cookie = "locale=<%= locale === 'zh-tw' ? 'en' : 'zh-tw' %>; expires=Thu, 31 Dec 2099 12:00:00 UTC";
+        window.location = window.location.href;
       });
-      window.ga('send', 'pageview');
     });
   </script>
 </body>

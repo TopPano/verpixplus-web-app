@@ -11,7 +11,7 @@ import {
 } from 'constants/common';
 import { SITE_SHARE_IMAGE } from 'constants/site';
 
-export default function genHeadContent(req, i18n, isEmbedPage, media) {
+export default function genHeadContent(url, i18n, isEmbedPage, media) {
   const { l } = i18n;
   let shareContent = {
     image: `${clientConfig.staticUrl}${SITE_SHARE_IMAGE}`,
@@ -19,7 +19,7 @@ export default function genHeadContent(req, i18n, isEmbedPage, media) {
     imageHeight: SHARE_IMAGE_SIZE.LANDSCAPE.HEIGHT,
     title: 'Verpix',
     description: l('Turn Your World, Turn Your Idea'),
-    url: `${req.protocol}://${req.get('Host')}${req.url}`,
+    url,
     robots: process.NODE_ENV === 'production' ? 'index,follow' : 'noindex,nofollow',
     siteName: 'Verpix',
     livephotoSdk: EMBED.SDK_LIVEPHOTO,

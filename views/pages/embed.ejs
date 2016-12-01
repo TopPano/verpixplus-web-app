@@ -52,21 +52,10 @@
   <div class="container-center" style="height: 70px">
     <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
   </div>
+  <% include ../partials/static-ga %>
   <%- livephotoSdk %>
-  <% if (ga.active) { %>
-  <%- ga.sdk %>
-  <% } %>
   <script>
     window.addEventListener('load', function() {
-      <% if (ga.active) { %>
-      window.ga('create', '<%= ga.trackingCode %>', 'auto');
-      window.ga('set', {
-        page: '/embed/@<%= mediaId %>',
-        title: '<%= title %>'
-      });
-      window.ga('send', 'pageview');
-      <% } %>
-
       var content = document.getElementById('content');
       var parentWidth = content.clientWidth - 20;
       var parentHeight = content.clientHeight - 20;

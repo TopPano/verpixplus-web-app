@@ -20,7 +20,8 @@ import {
   fetchComponentsData,
   detectLocale,
   genHeadContent,
-  genDefaultContent
+  genDefaultContent,
+  genStaticPages
 } from './utils';
 
 import routes from 'shared/routes';
@@ -39,6 +40,10 @@ const i18nToolsRegistry = {
   'en': new i18n.Tools({ localeData: enLocaleData, locale: 'en' }),
   'zh-tw': new i18n.Tools({ localeData: zhTwLocaleData, locale: 'zh-tw' })
 };
+
+const homePages = genStaticPages('/home', i18nToolsRegistry, process.env.NODE_ENV);
+const termsPages = genStaticPages('/terms', i18nToolsRegistry, process.env.NODE_ENV);
+const privacyPages = genStaticPages('/privacy', i18nToolsRegistry, process.env.NODE_ENV);
 
 const app = new Express();
 
@@ -81,10 +86,12 @@ app.get('/embed/@:mediaId', (req, res) => {
   api.media.getMedia(mediaId).then((response) => {
     const locale = detectLocale(req);
     const i18nTools = i18nToolsRegistry[locale];
-    const content = genHeadContent(req, i18nTools, true, response.result);
+    const url = `${req.protocol}://${req.get('Host')}${req.url}`;
+    const content = genHeadContent(url, i18nTools, true, response.result);
 
     res.render('pages/embed', merge({}, content, {
       staticUrl: clientConfig.staticUrl,
+      page: `/embed/@${mediaId}`,
       ga: {
         active: process.env.NODE_ENV === 'production',
         sdk: GA_SDK,
@@ -99,12 +106,14 @@ app.get('/embed/@:mediaId', (req, res) => {
 
 // Terms of Use page request
 app.get('/terms', (req, res) => {
-  return res.sendFile(path.join(__dirname, '/../public/static/home/terms.html'));
+  const locale = detectLocale(req);
+  return res.end(termsPages[locale]);
 });
 
 // Privacy Policy page request
 app.get('/privacy', (req, res) => {
-  return res.sendFile(path.join(__dirname, '/../public/static/home/privacy.html'));
+  const locale = detectLocale(req);
+  return res.end(privacyPages[locale]);
 });
 
 // This is fired every time the server side receives a request
@@ -112,8 +121,11 @@ app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
 
+  const locale = detectLocale(req);
+  const i18nTools = i18nToolsRegistry[locale];
+
   if (!accessToken && req.url === '/') {
-    return res.sendFile(path.join(__dirname, '/../public/static/home/index.html'));
+    return res.end(homePages[locale]);
   }
 
   if (accessToken) {
@@ -133,9 +145,6 @@ app.use((req, res) => {
   }
 
   const store = configureStore(initState);
-
-  const locale = detectLocale(req);
-  const i18nTools = i18nToolsRegistry[locale];
 
   match({ routes: routes(accessToken), location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
@@ -163,7 +172,8 @@ app.use((req, res) => {
             </i18n.Provider>
           </Provider>
         );
-        const headContent = genHeadContent(req, i18nTools, false);
+        const url = `${req.protocol}://${req.get('Host')}${req.url}`;
+        const headContent = genHeadContent(url, i18nTools, false);
         const content = genDefaultContent(html, initialState, headContent, process.env.NODE_ENV);
 
         res.render('pages/default', content);
