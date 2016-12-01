@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 
 import { renderList } from 'lib/utils';
+import LanguageEditor from './LanguageEditor';
 
 if (process.env.BROWSER) {
   require('./MenuLinks.css');
@@ -125,6 +126,7 @@ class MenuLinks extends Component {
     return (
       <div className="menu-links-component">
         {menuLinks}
+        <LanguageEditor />
       </div>
     );
   }

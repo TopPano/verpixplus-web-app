@@ -10,6 +10,10 @@ export const DEFAULT_TITLE = 'Untitled';
 
 export const SUPPORTED_LOCALES = ['en', 'zh-tw'];
 export const DEFAULT_LOCALE = 'zh-tw';
+export const LOCALES_MAPPING = {
+  'en': 'English',
+  'zh-tw': '繁體中文'
+};
 
 export const ACCOUNT_LIMIT = {
   USERNAME_MIN_LENGTH: 4,
