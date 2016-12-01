@@ -11,6 +11,13 @@ export const DEFAULT_TITLE = 'Untitled';
 export const SUPPORTED_LOCALES = ['en', 'zh-tw'];
 export const DEFAULT_LOCALE = 'zh-tw';
 
+export const ACCOUNT_LIMIT = {
+  USERNAME_MIN_LENGTH: 4,
+  USERNAME_MAX_LENGTH: 16,
+  PWD_MIN_LENGTH: 6,
+  PWD_MAX_LENGTH: 32
+};
+
 export const EXTERNAL_LINKS = {
   FAQ: 'https://www.facebook.com/verpix/notes',
   TERMS_OF_USE: 'http://toppano.in/termofuse/',

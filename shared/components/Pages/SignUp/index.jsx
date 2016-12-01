@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import isEmail from 'validator/lib/isEmail';
-import isEmpty from 'is-empty';
 
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
@@ -11,6 +9,11 @@ import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockOthers from 'components/Common/RegBlock/RegBlockOthers';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
 import ExternalLink from 'components/Common/ExternalLink';
+import {
+  checkUsername,
+  checkEmail,
+  checkPwdPair
+} from 'components/Common/RegBlock/inputUtils';
 
 if (process.env.BROWSER) {
   require('./SignUp.css');
@@ -35,12 +38,8 @@ class SignUp extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // Username validation
-  // TODO: More tests to be robust
-  isValidName(name) {
-    const regex = new RegExp('[a-z]+((.|_)?[a-z0-9])+'),
-          result = regex.exec(name);
-    return result && result[0] === name;
+  componentWillUnmount() {
+    this.refs.err.clear();
   }
 
   // Handler for RegBlock submit
@@ -49,50 +48,37 @@ class SignUp extends Component {
 
     this.refs.err.clear();
 
-    const { l } = this.context.i18n;
+    const { i18n } = this.context;
     const username = this.refs.username;
     const confirmPwd = this.refs.confirmPwd;
     const email = this.refs.email;
     const pwd = this.refs.pwd;
     const usernameVal = username.getValue();
-    const emailVal = email.getValue();
+    const emailVal = email.getValue().toLowerCase();
     const pwdVal = pwd.getValue();
     const confirmPwdVal = confirmPwd.getValue();
     const { signUp } = this.props;
 
-    // Check username is empty or not
-    if (isEmpty(usernameVal)) {
-      username.err(l('Please enter username'));
+    // Check username value
+    const usernameErr = checkUsername(usernameVal, i18n);
+    if (usernameErr) {
+      username.err(usernameErr);
       return;
     }
-    // Username format validation
-    if (!this.isValidName(usernameVal)) {
-      username.err(l('Please try another username'));
+    // Check email value
+    const emailErr = checkEmail(emailVal, i18n);
+    if (emailErr) {
+      email.err(emailErr);
       return;
     }
-    // Check email is empty or not
-    if (isEmpty(emailVal)) {
-      email.err(l('Please enter your email'));
-      return;
-    }
-    // Email format validation
-    if (!isEmail(emailVal)) {
-      email.err(l('The email address is not valid'));
-      return;
-    }
-    // Check password is empty or not
-    if (isEmpty(pwdVal)) {
-      pwd.err(l('Please enter your password'));
-      return;
-    }
-    // Check confirm-password is empty or not
-    if (isEmpty(confirmPwdVal)) {
-      confirmPwd.err(l('Please enter your password again'));
-      return;
-    }
-    // Check equality of password and confirm-password
-    if (pwdVal !== confirmPwdVal) {
-      pwd.err(l('These passwords don\'t match'));
+    // Check password pair values
+    const pwdPairErr = checkPwdPair(pwdVal, confirmPwdVal, i18n)
+    if (pwdPairErr.err) {
+      if (!pwdPairErr.isConfirm) {
+        pwd.err(pwdPairErr.err);
+      } else {
+        confirmPwd.err(pwdPairErr.err);
+      }
       return;
     }
 
@@ -138,12 +124,14 @@ class SignUp extends Component {
       ref: 'pwd',
       icon: 'lock',
       type: 'password',
-      placeHolder: l('Password')
+      placeHolder: l('Password'),
+      trimValue: false
     }, {
       ref: 'confirmPwd',
       icon: 'key',
       type: 'password',
-      placeHolder: l('Confirm Password')
+      placeHolder: l('Confirm Password'),
+      trimValue: false
     }];
     const btnProps = {
       text: l('Sign Up')

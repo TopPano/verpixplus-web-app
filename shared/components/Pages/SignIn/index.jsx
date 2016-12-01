@@ -2,14 +2,16 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import isEmail from 'validator/lib/isEmail';
-import isEmpty from 'is-empty';
 
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
+import {
+  checkEmail,
+  checkPwd
+} from 'components/Common/RegBlock/inputUtils';
 
 if (process.env.BROWSER) {
   require('./SignIn.css');
@@ -34,32 +36,33 @@ class SignIn extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillUnmount() {
+    this.refs.err.clear();
+  }
+
   // Handler for RegBlock submit
   handleSubmit(e) {
     e.preventDefault();
 
     this.refs.err.clear();
 
-    const { l } = this.context.i18n;
+    const { i18n } = this.context;
     const email = this.refs.email;
     const pwd = this.refs.pwd;
-    const emailVal = email.getValue();
+    const emailVal = email.getValue().toLowerCase();
     const pwdVal = pwd.getValue();
     const { signIn } = this.props;
 
-    // Check email is empty or not
-    if (isEmpty(emailVal)) {
-      email.err(l('Please enter your email'));
+    // Check email value
+    const emailErr = checkEmail(emailVal, i18n);
+    if (emailErr) {
+      email.err(emailErr);
       return;
     }
-    // Email format validation
-    if (!isEmail(emailVal)) {
-      email.err(l('The email address is not valid'));
-      return;
-    }
-    // Check password is empty or not
-    if (isEmpty(pwdVal)) {
-      pwd.err(l('Please enter your password'));
+    // Check password value
+    const pwdErr = checkPwd(pwdVal, i18n);
+    if (pwdErr) {
+      pwd.err(pwdErr);
       return;
     }
 
@@ -100,7 +103,8 @@ class SignIn extends Component {
       ref: 'pwd',
       icon: 'lock',
       type: 'password',
-      placeHolder: l('Password')
+      placeHolder: l('Password'),
+      trimValue: false
     }];
     const btnProps = {
       text: l('Sign In')

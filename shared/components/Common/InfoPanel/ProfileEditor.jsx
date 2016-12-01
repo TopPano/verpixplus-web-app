@@ -1,13 +1,16 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import isEmpty from 'is-empty';
 
 import FlatButton from 'components/Common/FlatButton';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import Modal from 'components/Common/Modal';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
+import {
+  checkPwd,
+  checkPwdPair
+} from 'components/Common/RegBlock/inputUtils';
 
 if (process.env.BROWSER) {
   require('./ProfileEditor.css');
@@ -64,7 +67,7 @@ class ProfileEditor extends Component {
   changePassword() {
     this.refs.pwdErr.clear();
 
-    const { l } = this.context.i18n;
+    const { i18n } = this.context;
     const {
       userId,
       changePassword
@@ -76,27 +79,22 @@ class ProfileEditor extends Component {
     const newPwdVal = newPwd.getValue();
     const confirmNewPwdVal = confirmNewPwd.getValue();
 
-    // Check old password is empty or not
-    if (isEmpty(oldPwdVal)) {
-      oldPwd.err(l('Please enter your old password'));
+    // Check password value
+    const oldPwdErr = checkPwd(oldPwdVal, i18n, 'old password');
+    if (oldPwdErr) {
+      oldPwd.err(oldPwdErr);
       return;
     }
-    // Check new password is empty or not
-    if (isEmpty(newPwdVal)) {
-      newPwd.err(l('Please enter your new password'));
+    // Check new password pair values
+    const newPwdPairErr = checkPwdPair(newPwdVal, confirmNewPwdVal, i18n, 'new password')
+    if (newPwdPairErr.err) {
+      if (!newPwdPairErr.isConfirm) {
+        newPwd.err(newPwdPairErr.err);
+      } else {
+        confirmNewPwd.err(newPwdPairErr.err);
+      }
       return;
     }
-    // Check confirmed new password is empty or not
-    if (isEmpty(confirmNewPwdVal)) {
-      confirmNewPwd.err(l('Please enter your new password again'));
-      return;
-    }
-    // Check equality of new password and confirmed new password
-    if (newPwdVal !== confirmNewPwdVal) {
-      newPwd.err(l('These new passwords don\'t match'));
-      return;
-    }
-
     changePassword({
       userId,
       oldPassword: oldPwdVal,
@@ -153,16 +151,12 @@ class ProfileEditor extends Component {
   // Render content for changing password
   renderPasswordContent(errMsg, clearErrMsg) {
     const { l } = this.context.i18n;
-    const convertedErrMsgs = {
-      'Unauthorized': l('Your old password is not correct')
-    };
 
     return (
       <dl className="password-content dl-horizontal">
         <RegBlockErr
           ref="pwdErr"
           errMsg={errMsg}
-          convertedErrMsgs={convertedErrMsgs}
           clearErrMsg={clearErrMsg}
         />
         <RegBlockInput

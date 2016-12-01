@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import isEmail from 'validator/lib/isEmail';
-import isEmpty from 'is-empty';
 
 import { RESET_PWD_MODE } from 'constants/resetPwd';
 import RegBlock from 'components/Common/RegBlock';
@@ -10,6 +8,7 @@ import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
 import RegBlockInput from 'components/Common/RegBlock/RegBlockInput';
 import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
+import { checkEmail } from 'components/Common/RegBlock/inputUtils';
 
 if (process.env.BROWSER) {
   require('./ResetPwd.css');
@@ -35,25 +34,25 @@ class ResetPwd extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillUnmount() {
+    this.refs.err.clear();
+  }
+
   // Handler for RegBlock submit
   handleSubmit(e) {
     e.preventDefault();
 
     this.refs.err.clear();
 
-    const { l } = this.context.i18n;
+    const { i18n } = this.context;
     const { resetPassword } = this.props;
     const email = this.refs.email;
-    const emailVal = email.getValue();
+    const emailVal = email.getValue().toLowerCase();
 
-    // Check email is empty or not
-    if (isEmpty(emailVal)) {
-      email.err(l('Please enter your email'));
-      return;
-    }
-    // Email format validation
-    if (!isEmail(emailVal)) {
-      email.err(l('The email address is not valid'));
+    // Check email value
+    const emailErr = checkEmail(emailVal, i18n);
+    if (emailErr) {
+      email.err(emailErr);
       return;
     }
 
@@ -84,6 +83,9 @@ class ResetPwd extends Component {
     const errProps = {
       errMsg,
       clearErrMsg,
+      convertedErrMsgs: {
+        EMAIL_NOT_FOUND: 'The email address is not registered'
+      },
       ref: 'err'
     };
     const emailProps = {

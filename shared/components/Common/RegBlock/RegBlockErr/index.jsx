@@ -3,6 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
+import ERR from 'constants/err';
+
 if (process.env.BROWSER) {
   require('./RegBlockErr.css');
 }
@@ -30,22 +32,21 @@ class RegBlockErr extends Component {
 
   // Parse error message and convert them into human readable message
   convertErrMsg(errMsg, convertedErrMsgs, defaultConvertedErrMsgs) {
-    // TODO: Handle for more error message.
+    const { l } = this.context.i18n;
+
     if (!errMsg) {
       return '';
-    } else if (errMsg === 'Unauthorized') {
-      return (
-        convertedErrMsgs[errMsg] ?
-        convertedErrMsgs[errMsg] :
-        defaultConvertedErrMsgs[errMsg]
-      );
-    } else {
-      return (
-        convertedErrMsgs.others ?
-        convertedErrMsgs.others :
-        defaultConvertedErrMsgs.others
-      );
     }
+    if (convertedErrMsgs[errMsg]) {
+      return l(convertedErrMsgs[errMsg]);
+    }
+    if (defaultConvertedErrMsgs[errMsg]) {
+      return l(defaultConvertedErrMsgs[errMsg]);
+    }
+    if (convertedErrMsgs.FETCH_DEFAULT) {
+      return `${l(convertedErrMsgs.FETCH_DEFAULT)}: ${errMsg}`;
+    }
+    return `${l(defaultConvertedErrMsgs.FETCH_DEFAULT)}: ${errMsg}`;
   }
 
   // Clear error message
@@ -60,21 +61,15 @@ class RegBlockErr extends Component {
 
   // TODO: show/hide block with animation
   render() {
-    const { l } = this.context.i18n;
     const {
       errMsg,
       convertedErrMsgs
     } = this.props;
-    const defaultConvertedErrMsgs = {
-      'Existed': l('The email address already exists'),
-      'Unauthorized': l('The email and password don\'t match'),
-      'others': l('Something wrong with server, please try again later')
-    };
     const componentClass = classNames({
       'reg-block-err-component': true,
       'hide': !Boolean(errMsg)
     });
-    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs, defaultConvertedErrMsgs);
+    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs, ERR);
 
     return (
       <div className={componentClass}>

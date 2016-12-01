@@ -1,6 +1,20 @@
 import Base from './Base';
 
 export default class UsersAPI extends Base {
+  signIn(creds) {
+    return this.apiClient.post({
+      url: 'users/login?include=user',
+      payload: creds
+    });
+  }
+
+  signUp(creds) {
+    return this.apiClient.post({
+      url: 'users',
+      payload: creds
+    });
+  }
+
   getProfile(userId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.get({
@@ -33,15 +47,10 @@ export default class UsersAPI extends Base {
     })
   }
 
-  resetPassword(payload, authToken) {
-    if (authToken) {
-      this.apiClient.setAuthToken(authToken);
-    }
-
+  resetPassword(payload) {
     return this.apiClient.post({
       url: 'users/requestResetPassword',
-      payload,
-      requireAuth: true
+      payload
     });
   }
 

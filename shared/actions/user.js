@@ -49,39 +49,12 @@ function registerError(message) {
 
 export function registerUser(creds, successRedirectUrl = '/') {
   return (dispatch) => {
-    if (!creds.username || !creds.email || !creds.password) {
-      const message = 'Missing Registration Information';
-
-      return dispatch(registerError(message));
-    }
-
-    let init = {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(creds)
-    }
     dispatch(requestRegistration());
-    fetch(`${config.apiRoot}/users`, init).then((res) => {
-      if (res.status >= 400) {
-        var error = new Error(res.statusText);
-        error.status = res.status;
-        return Promise.reject(error);
-      }
-      return res.json();
-    }).then((data) => {
-      if(data) {
-        dispatch(loginUser({
-          email: creds.email,
-          password: creds.password
-        }, successRedirectUrl));
-      } else {
-        var error = new Error('Failed to register new user');
-        error.status = 500;
-        Promise.reject(error);
-      }
+    return api.users.signUp(creds).then(() => {
+      dispatch(loginUser({
+        email: creds.email,
+        password: creds.password
+      }, successRedirectUrl));
     }).catch((err) => {
       dispatch(registerError(err.message));
     });
@@ -114,37 +87,10 @@ function loginError(message) {
 
 export function loginUser(creds, successRedirectUrl = '/') {
   return (dispatch) => {
-    if (!creds.email || !creds.password) {
-      const message = 'Missing Login Information';
-
-      return dispatch(loginError(message));
-    }
-
-    const init = {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(creds)
-    }
     dispatch(requestLogin());
-    fetch(`${config.apiRoot}/users/login?include=user`, init).then((res) => {
-      if (res.status >= 400) {
-        var error = new Error(res.statusText);
-        error.status = res.status;
-        return Promise.reject(error);
-      }
-      return res.json();
-    }).then((data) => {
-      if(data) {
-        dispatch(loginSuccess(LOGIN_USER_SUCCESS, data));
-        dispatch(push(successRedirectUrl));
-      } else {
-        var error = new Error('Failed to get user login data');
-        error.status = 500;
-        Promise.reject(error);
-      }
+    return api.users.signIn(creds).then((res) => {
+      dispatch(loginSuccess(LOGIN_USER_SUCCESS, res));
+      dispatch(push(successRedirectUrl));
     }).catch((err) => {
       dispatch(loginError(err.message));
     });
@@ -390,15 +336,18 @@ function resetPasswordSuccess() {
   };
 }
 
-export function resetPassword({ email, userSession = {} }) {
+export function resetPassword({ email }) {
   return (dispatch) => {
     dispatch(resetPasswordRequest());
 
-    return api.users.resetPassword({ email }, userSession.accessToken).then(() => {
+    return api.users.resetPassword({ email }).then(() => {
       dispatch(resetPasswordSuccess());
       dispatch(push('/pwd/reset/sent'));
     }).catch((err) => {
-      handleError(dispatch, RESET_PASSWORD_FAILURE, err);
+      dispatch({
+        type: RESET_PASSWORD_FAILURE,
+        message: err.message
+      })
     });
   };
 }
