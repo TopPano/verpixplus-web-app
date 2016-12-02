@@ -337,6 +337,12 @@
       "This media will be deleted and you won't be able to find it anymore": [
         "素材將會被永久刪除"
       ],
+      "Video duration exceeds limit": [
+        "影片長度超過上限"
+      ],
+      "Only the first %s will be captured. Still continue?": [
+        "只有前%s會被擷取，仍要繼續？"
+      ],
       "Modify the effect values and click the button to apply": [
         "修改各個效果的數值並按下套用按鈕"
       ],

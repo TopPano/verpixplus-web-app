@@ -47,18 +47,16 @@ export default class FrameConverter {
       }
       const video = document.createElement('VIDEO');
 
-      video.setAttribute('src', source);
-      video.setAttribute('muted', true);
-
       this.registerEventListener(video, 'loadedmetadata', () => {
-        if (video.duration > VIDEO_DURATION_LIMIT) {
-          reject(genErr(ERR.EXCEED_VIDEO_TIME_LIMIT));
-        }
         this.isConverting = true;
         this.srcVideo = video;
         this.srcVideo.currentTime = 0;
         this.frames = [];
         this.progress = 0;
+        this.durationLimit =
+          video.duration <= VIDEO_DURATION_LIMIT ?
+          video.duration :
+          VIDEO_DURATION_LIMIT;
         this.hiddenCan = document.createElement('CANVAS');
         this.hiddenCan.setAttribute('width', this.srcVideo.videoWidth);
         this.hiddenCan.setAttribute('height', this.srcVideo.videoHeight);
@@ -82,6 +80,8 @@ export default class FrameConverter {
         });
         this.srcVideo.currentTime = 0;
       });
+      video.setAttribute('src', source);
+      video.setAttribute('muted', true);
     });
   }
 
@@ -100,14 +100,14 @@ export default class FrameConverter {
     imagesStorage.save(storageId, idx, curFrameDataUrl).then(() => {
       const img = new Image();
       img.onload = () => {
-        const progress = this.srcVideo.currentTime / this.srcVideo.duration;
+        const progress = this.srcVideo.currentTime / this.durationLimit;
         const curFrame = img;
 
         this.frames.push(curFrame);
 
         execute(handleProgress, progress);
 
-        if (this.srcVideo.currentTime < this.srcVideo.duration) {
+        if (this.srcVideo.currentTime < this.durationLimit) {
           this.srcVideo.currentTime += SEEK_TIME_STEP;
         } else {
           execute(handleComplete, {
@@ -134,6 +134,7 @@ export default class FrameConverter {
     this.srcVideo = null;
     this.frames = null;
     this.progress = 0;
+    this.durationLimit = 0;
     this.hiddenCan = null;
     this.hiddenCanCtx = null;
   }
