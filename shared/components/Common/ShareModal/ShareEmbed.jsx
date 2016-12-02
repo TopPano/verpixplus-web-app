@@ -35,17 +35,19 @@ class ShareEmbed extends Component {
     this.handleClickTagChange = this.handleClickTagChange.bind(this);
     this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
     this.handleClickDownloadBtn = this.handleClickDownloadBtn.bind(this);
+    this.setCutBased = this.setCutBased.bind(this);
 
     // Initialize state
     this.state = {
       showPreview: false,
       embedWidth: EMBED.DEFAULT_WIDTH,
       embedHeight: EMBED.DEFAULT_HEIGHT,
+      cutBased: 'width',
       clickTag: ''
     };
   }
 
-  // Handler for embed size change
+  // Hndler for embed size change
   handleSizeChange() {
     const { embedWidth, embedHeight } = this.state;
     const newEmbedWidth = toNumber(this.refs.inputWidth.value);
@@ -76,11 +78,12 @@ class ShareEmbed extends Component {
     const {
       embedWidth,
       embedHeight,
+      cutBased,
       clickTag
     } = this.state;
     const zip = new JSZip();
 
-    zip.file('index.html', genAdHTML(mediaId, clickTag, embedWidth, embedHeight, EMBED.SDK_LIVEPHOTO));
+    zip.file('index.html', genAdHTML(mediaId, clickTag, embedWidth, embedHeight, cutBased, EMBED.SDK_LIVEPHOTO));
     zip.generateAsync({
       type: 'blob'
     }).then((zipBlob) => {
@@ -88,12 +91,18 @@ class ShareEmbed extends Component {
     })
   }
 
+  // Set value cutBased state
+  setCutBased(cutBased) {
+    this.setState({ cutBased });
+  }
+
   // Generate the usage code
-  genUsageCode(id, type, width, height) {
+  genUsageCode(id, type, width, height, cutBased) {
     const dataWidth = width > 0 ? `data-width="${width}"` : '';
     const dataHeight = height > 0 ? `data-height="${height}"` : '';
+    const dataCutBased = cutBased === 'height' ? `data-cut-based="${cutBased}"` : '';
 
-    return `<div class="verpix-${type}" data-id="${id}" ${dataWidth} ${dataHeight}></div>`;
+    return `<div class="verpix-${type}" data-id="${id}" ${dataWidth} ${dataHeight} ${dataCutBased}></div>`;
   }
 
   render() {
@@ -102,10 +111,11 @@ class ShareEmbed extends Component {
       showPreview,
       embedWidth,
       embedHeight,
+      cutBased,
       clickTag
     } = this.state;
     const { mediaId } = this.props;
-    const usageCode = this.genUsageCode(mediaId,'livephoto', embedWidth, embedHeight);
+    const usageCode = this.genUsageCode(mediaId, 'livephoto', embedWidth, embedHeight, cutBased);
     const playerClass = classNames({
       'preview-player': true,
       'active': showPreview
@@ -122,6 +132,7 @@ class ShareEmbed extends Component {
               mediaId={mediaId}
               width={embedWidth}
               height={embedHeight}
+              cutBased={cutBased}
             />
           </div>
         </div>
@@ -154,6 +165,34 @@ class ShareEmbed extends Component {
               value={embedHeight}
               onChange={this.handleSizeChange}
             />
+          </div>
+          <div className="margin-bottom-10" />
+          <div className="inputs-wrapper container-center-col">
+            <p>{`${l('Crop based')}:`}</p>
+            <div
+              className="radio"
+              onClick={() => { this.setCutBased('width') }}
+            >
+              <label>
+                <input
+                  type="radio"
+                  value="width"
+                  checked={cutBased === 'width'}
+                />{l('Width')}
+              </label>
+            </div>
+            <div
+              className="radio"
+              onClick={() => { this.setCutBased('height') }}
+            >
+              <label>
+                <input
+                  type="radio"
+                  value="height"
+                  checked={cutBased === 'height'}
+                />{l('Height')}
+              </label>
+            </div>
           </div>
           <div className="margin-bottom-10" />
           <div className="inputs-wrapper container-center-col">

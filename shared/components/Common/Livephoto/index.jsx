@@ -2,6 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { EMBED } from 'constants/common';
+
 if (process.env.BROWSER) {
   require('./Livephoto.css');
 }
@@ -9,13 +11,15 @@ if (process.env.BROWSER) {
 const propTypes = {
   mediaId: PropTypes.string,
   width: PropTypes.number,
-  height: PropTypes.number
+  height: PropTypes.number,
+  cutBased: PropTypes.string
 };
 
 const defaultProps = {
   mediaId: '',
-  width: 0,
-  height: 0
+  width: EMBED.DEFAULT_WIDTH,
+  height: EMBED.DEFAULT_HEIGHT,
+  cutBased: 'width'
 };
 
 class Livephoto extends Component {
@@ -23,34 +27,50 @@ class Livephoto extends Component {
     super(props);
   }
 
+  createLivephoto() {
+    if (!this.instance) {
+      const {
+        mediaId,
+        width,
+        height,
+        cutBased
+      } = this.props;
+      const params = {
+        width,
+        height,
+        cutBased
+      };
+
+      window.verpix.createLivephoto(mediaId, params, (err, instance) => {
+        if (err) {
+          // TODO: Error handling
+        } else {
+          instance.start();
+          this.instance = instance;
+          this.refs.livephoto.appendChild(instance.root);
+        }
+      });
+    }
+  }
+
+  destroyLivephoto() {
+    if (this.instance) {
+      this.instance.stop();
+      this.refs.livephoto.removeChild(this.instance.root);
+      this.instance = null;
+    }
+  }
+
   componentDidMount() {
-    const { mediaId } = this.props;
-
-    window.verpix.createLivephoto(mediaId, {}, (err, instance) => {
-      if (err) {
-        // TODO: Error handling
-      } else {
-        const {
-          width,
-          height
-        } = this.props;
-
-        instance.setWrapperDimension({
-          width,
-          height
-        });
-        instance.start();
-        this.instance = instance;
-        this.refs.livephoto.appendChild(instance.root);
-      }
-    });
+    this.createLivephoto();
   }
 
   componentDidUpdate(prevProps) {
     if (this.instance) {
       const {
         width,
-        height
+        height,
+        cutBased
       } = this.props;
 
       if ((width !== prevProps.width) || (height !== prevProps.height)) {
@@ -59,22 +79,45 @@ class Livephoto extends Component {
           height
         });
       }
+
+      if (cutBased !== prevProps.cutBased) {
+        this.destroyLivephoto();
+        this.createLivephoto();
+      }
     }
   }
 
   componentWillUnmount() {
-    if (this.instance) {
-      this.instance.stop();
-        this.refs.livephoto.removeChild(this.instance.root);
-    }
+    this.destroyLivephoto();
   }
 
   render() {
+    const {
+      width,
+      height
+    } = this.props;
+    const ratio = Math.round((height / width) * 100);
+    const componentStyle = {
+      width: `${width}px`
+    };
+    const outerStyle = {
+      paddingBottom: `${ratio}%`
+    };
+
     return (
       <div
-        ref="livephoto"
+        style={componentStyle}
         className="livephoto-component"
       >
+        <div
+          style={outerStyle}
+          className="livephoto-outer"
+        >
+          <div
+            ref="livephoto"
+            className="livephoto-inner"
+          />
+        </div>
       </div>
     );
   }
