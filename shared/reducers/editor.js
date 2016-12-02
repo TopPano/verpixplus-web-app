@@ -155,6 +155,7 @@ export default function editor(state = DEFAULT_STATE, action) {
       });
     }
     case GET_MEDIA_SUCCESS:
+    {
       const {
         mediaType,
         title,
@@ -171,9 +172,11 @@ export default function editor(state = DEFAULT_STATE, action) {
         caption,
         appliedData: imgsData,
         dimension,
+        playerMode: PLAYER_MODE.PLAY,
         lower: 0,
         upper: imgUrls.length
       });
+    }
     case APPLY_FILTERS_SUCCESS:
       return merge({}, state, {
         isProcessing: false,

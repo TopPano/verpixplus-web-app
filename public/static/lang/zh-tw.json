@@ -406,6 +406,9 @@
       "Non-support media type": [
         "不支援的素材類型"
       ],
+      "Error occurs while loading motion graph, please try again later": [
+        "讀取動圖時發生問題，請稍候再試"
+      ],
       "Something error, please try again later": [
         "發生錯誤，請稍候再試"
       ],

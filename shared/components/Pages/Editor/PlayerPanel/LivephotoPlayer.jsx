@@ -141,6 +141,10 @@ class LivephotoPlayer extends Component {
       let newIdx;
       let newPlayDirection = playDirection;
 
+      if ((upper - lower) <= 0) {
+        return;
+      }
+
       if (playDirection === PLAY_DIRECTION.INCREASE) {
         if (currentIdx === (upper - 1)) {
           newIdx = currentIdx - 1;
@@ -199,7 +203,9 @@ class LivephotoPlayer extends Component {
 
   // Render an image to canvas
   renderImage(imgData) {
-    this.refs.canvas.getContext('2d').drawImage(imgData, 0, 0);
+    if (imgData) {
+      this.refs.canvas.getContext('2d').drawImage(imgData, 0, 0);
+    }
   }
 
   // Get component sytle by calculating resized width and heigth
