@@ -303,7 +303,7 @@ export function shareFacebookVideo({
 
     const timer = setInterval(() => {
       if (progress < 0.99) {
-        const addedProgress = genRandomNum(0.005, 0.02);
+        const addedProgress = genRandomNum(0.0025, 0.01);
         progress =
           ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
         dispatch(updateProgressNotification(id, progress));
