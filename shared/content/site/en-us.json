@@ -1,16 +1,21 @@
 {
   "SITE_NAME": "Verpix",
   "SHARE": {
-    "DEFAULT_CAPTION": "Verpix",
+    "DEFAULT_TITLE": "Verpix",
     "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
   },
   "HEADER": {
+    "LANG": {
+      "TEXT": "LANGUAGES",
+      "LIST": [
+        "English"
+      ]
+    },
     "FAQ": "FAQ",
-    "SIGN_IN": "sigin in"
+    "SIGN_IN": "sigin in",
+    "SIGN_OUT": "sign out"
   },
   "FOOTER": {
-    "TERMS_OF_USE": "Terms of Use",
-    "PRIVACY_POLICY": "Privacy Policy",
     "TWITTER": "Follow @Verpix"
   },
   "MODAL": {

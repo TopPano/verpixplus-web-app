@@ -1,100 +1,141 @@
-import { Promise, execute } from 'lib/utils';
+import {
+  FPS,
+  VIDEO_DURATION_LIMIT
+} from 'constants/editor';
+import ERR from 'constants/err';
+import {
+  Promise,
+  imagesStorage,
+  genErr,
+  execute
+} from 'lib/utils';
+
+const SEEK_TIME_STEP = 1 / FPS;
 
 export default class FrameConverter {
   constructor() {
     this.isConverting = false;
+    this.eventListeners = [];
   }
 
-  convert(source, handleProgress) {
+  registerEventListener(video, event, callback) {
+    if (!video.eventListeners) {
+      video.eventListeners = [];
+    }
+    video.eventListeners.push({
+      event,
+      callback
+    });
+    video.addEventListener(event, callback);
+  }
+
+  unregisterAllEventListenrs(video) {
+    if (video && video.eventListeners) {
+      video.eventListeners.forEach((eventListener) => {
+        video.removeEventListener(eventListener.event, eventListener.callback);
+      });
+    }
+  }
+
+  convert(storageId, source, handleProgress) {
     return new Promise((resolve, reject) => {
       if (!source) {
-        reject('Source is not defined');
+        reject(genErr(ERR.NO_VIDEO_SPECIFIED));
+      }
+      if (this.isConverting) {
+        reject(genErr(ERR.VIDEO_IS_CONVERTING));
       }
       const video = document.createElement('VIDEO');
 
-      video.setAttribute('src', source);
-      video.setAttribute('muted', true);
-      video.addEventListener('loadedmetadata', () => {
+      this.registerEventListener(video, 'loadedmetadata', () => {
+        this.isConverting = true;
         this.srcVideo = video;
-        this.videoCurTime = 0;
+        this.srcVideo.currentTime = 0;
         this.frames = [];
-        this.frameUrls = [],
         this.progress = 0;
+        this.durationLimit =
+          video.duration <= VIDEO_DURATION_LIMIT ?
+          video.duration :
+          VIDEO_DURATION_LIMIT;
         this.hiddenCan = document.createElement('CANVAS');
         this.hiddenCan.setAttribute('width', this.srcVideo.videoWidth);
         this.hiddenCan.setAttribute('height', this.srcVideo.videoHeight);
         this.hiddenCanCtx = this.hiddenCan.getContext('2d');
-        this.srcVideo.addEventListener('play', () => {
-          if (!this.isConverting) {
-            this.isConverting = true;
-            this.videoCurTime = this.srcVideo.currentTime;
-            this.captureFrame(handleProgress, (result) => {
+        this.registerEventListener(video, 'seeked', () => {
+          this.captureFrame(storageId, (progress) => {
+            if (this.isConverting) {
+              handleProgress(progress);
+            }
+          }, (result) => {
+            if (this.isConverting) {
+              this.isConverting = false;
               resolve(result);
-            });
-          }
-        }, false);
-        this.srcVideo.playbackRate = 0.5;
-        this.srcVideo.play();
+            }
+          }, (err) => {
+            if (this.isConverting) {
+              this.isConverting = false;
+              reject(err);
+            }
+          });
+        });
+        this.srcVideo.currentTime = 0;
       });
+      video.setAttribute('src', source);
+      video.setAttribute('muted', true);
     });
   }
 
-  captureFrame(handleProgress, handleComplete) {
-    if (this.srcVideo.ended) {
-      this.isConverting = false;
-      execute(handleComplete, {
-        data: this.frames,
-        dataUrls: this.frameUrls,
-        dimension: {
-          width: this.srcVideo.videoWidth,
-          height: this.srcVideo.videoHeight
-        }
-      });
-      return;
+  captureFrame(storageId, handleProgress, handleComplete, handleFailure) {
+    this.hiddenCanCtx.drawImage(this.srcVideo, 0, 0,
+                                this.srcVideo.videoWidth,
+                                this.srcVideo.videoHeight);
+
+    const curFrameDataUrl = this.hiddenCan.toDataURL('image/jpeg');
+    const idx = this.frames.length;
+
+    if (curFrameDataUrl === 'data:,') {
+      handleFailure(genErr(ERR.VIDEO_FORMAT_NOT_SUPPORTED));
     }
 
-    if (this.srcVideo.paused) {
-      return;
-    }
-
-    if (this.videoCurTime !== this.srcVideo.currentTime) {
-      this.videoCurTime = this.srcVideo.currentTime;
-      this.hiddenCanCtx.drawImage(this.srcVideo, 0, 0,
-                                  this.srcVideo.videoWidth,
-                                  this.srcVideo.videoHeight);
-      const curFrame = this.hiddenCanCtx.getImageData(0, 0,
-                                  this.srcVideo.videoWidth,
-                                  this.srcVideo.videoHeight);
-
-      if (this.frames.length === 0 ||
-          this.diffFrame(this.frames[this.frames.length - 1], curFrame)) {
-        const progress = this.videoCurTime / this.srcVideo.duration;
+    imagesStorage.save(storageId, idx, curFrameDataUrl).then(() => {
+      const img = new Image();
+      img.onload = () => {
+        const progress = this.srcVideo.currentTime / this.durationLimit;
+        const curFrame = img;
 
         this.frames.push(curFrame);
-        this.frameUrls.push(this.hiddenCan.toDataURL('image/jpeg'));
-        execute(handleProgress, progress);
-      }
-    }
 
-    setTimeout(() => {
-      this.captureFrame(handleProgress, handleComplete);
-    }, 0);
+        execute(handleProgress, progress);
+
+        if (this.srcVideo.currentTime < this.durationLimit) {
+          this.srcVideo.currentTime += SEEK_TIME_STEP;
+        } else {
+          execute(handleComplete, {
+            data: this.frames,
+            dimension: {
+              width: this.srcVideo.videoWidth,
+              height: this.srcVideo.videoHeight
+            }
+          });
+        }
+      };
+      img.onerror = (err) => {
+        handleFailure(err);
+      }
+      img.src = curFrameDataUrl;
+    }).catch((err) => {
+      handleFailure(err);
+    });
   }
 
-  diffFrame(a, b) {
-    const al = a.data.length;
-    const bl = b.data.length;
-    if (al !== bl) { return true; }
-    let isDiff = false;
-    for (let i = 0; i < al; i += 4) {
-      if ((a.data[i + 0] - b.data[i + 0]) !== 0 ||
-          (a.data[i + 1] - b.data[i + 1]) !== 0 ||
-          (a.data[i + 2] - b.data[i + 2]) !== 0 ||
-          (a.data[i + 3] - b.data[i + 3]) !== 0) {
-        isDiff = true;
-        break;
-      }
-    }
-    return isDiff;
+  stop() {
+    this.unregisterAllEventListenrs(this.srcVideo);
+    this.isConverting = false;
+    this.srcVideo = null;
+    this.frames = null;
+    this.progress = 0;
+    this.durationLimit = 0;
+    this.hiddenCan = null;
+    this.hiddenCanCtx = null;
   }
 }

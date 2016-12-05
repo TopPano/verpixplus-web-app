@@ -1,0 +1,51 @@
+@import 'Variables.css';
+
+.share-embed-component {
+  .inputs-wrapper {
+    flex-wrap: no-wrap;
+    font-size: 14px;
+
+    p {
+      line-height: 30px;
+      margin: 0 5px 0 0;
+    }
+
+    input[type="text"] {
+      width: 60px;
+      height: 30px;
+      max-width: 40%;
+      &.click-tag {
+        width: 250px;
+        max-width: 60%;
+      }
+    }
+
+    .radio {
+      margin: 0;
+      padding: 0 5px
+    }
+  }
+
+
+  .preview-btn-wrapper {
+    margin-top: 15px;
+
+    .share-btn {
+      margin: 0 10px;
+      display: inline-block;
+    }
+  }
+
+  .preview-player {
+    max-width: 100%;
+    display: none;
+    &.active {
+      display: flex;
+      border: 1px dashed $color-grey;
+    }
+
+    .livephoto-component {
+      max-width: 100%;
+    }
+  }
+}

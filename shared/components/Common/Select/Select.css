@@ -1,0 +1,13 @@
+.select-component {
+  &.is-focused:not(.is-open) > .Select-control {
+    border-color: #BBB;
+    box-shadow:0 0 2px #C9C9C9;
+  }
+
+  .Select-control {
+    border-radius: 0;
+    width: 150px;
+    max-width: 100%;
+    color: #555;
+  }
+}

@@ -6,10 +6,14 @@ import startsWith from 'lodash/startsWith';
 import merge from 'lodash/merge';
 
 import { MEDIA_TYPE } from 'constants/common';
+import { NOTIFICATIONS } from 'constants/notifications';
+import ERR from 'constants/err';
+import { pushNotification } from '../notifications';
 import { getMedia } from '../media';
 import imageUrlsToData from './imageUrlsToData';
 import applyImagesFilters from './applyImagesFilters';
 import FrameConverter from './FrameConverter';
+import { genErr } from 'lib/utils';
 
 export const INIT_UPLOAD = 'INIT_UPLOAD';
 export const INIT_EDIT = 'INIT_EDIT';
@@ -17,9 +21,9 @@ export const INIT_EDIT = 'INIT_EDIT';
 // Filter function for getMedia.
 // Used to construct images RGBA data from image URLs.
 function constructImagesData(res) {
-  const { imgUrls, dimension } = res.result;
+  const { imgUrls } = res.result;
 
-  return imageUrlsToData(imgUrls, dimension).then((imgsData) => {
+  return imageUrlsToData(imgUrls).then((imgsData) => {
     return merge({}, res, {
       result: {
         imgsData
@@ -45,10 +49,15 @@ export function initEditor({ params = {}, location = {} }) {
         mediaId: params.mediaId
       });
 
-      dispatch(getMedia({
-        mediaId,
-        filter: constructImagesData
-      }));
+      // FIXME:
+      // Currently, constructImagesData only supports client side rendering because it uses Image,
+      // which can not render on server side.
+      if (process.env.BROWSER) {
+        dispatch(getMedia({
+          mediaId,
+          filter: constructImagesData
+        }));
+      }
     } else {
       // Other cases, redirect to home page
       dispatch(push('/'));
@@ -61,9 +70,10 @@ export const CONVERT_PROGRESS = 'CONVERT_PROGRESS';
 export const CONVERT_SUCCESS = 'CONVERT_SUCCESS';
 export const CONVERT_FAILURE = 'CONVERT_FAILURE';
 
-function convertRequest() {
+function convertRequest(converter) {
   return {
-    type: CONVERT_REQUEST
+    type: CONVERT_REQUEST,
+    converter
   };
 }
 
@@ -84,29 +94,32 @@ function convertSuccess(mediaType, result) {
 
 function convertFailure(err) {
   return {
-    type: CONVERT_REQUEST,
+    type: CONVERT_FAILURE,
     err
   };
 }
 
-export function convert({ mediaType, source }) {
+export function convert({ storageId, mediaType, source }) {
   return (dispatch) => {
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
-      dispatch(convertRequest(mediaType));
+      const converter = new FrameConverter();
+      dispatch(convertRequest(converter));
 
-      new FrameConverter().convert(source, (progress) => {
+      converter.convert(storageId, source, (progress) => {
         dispatch(convertProgress(progress));
       }).then((result) => {
+        converter.stop();
         dispatch(convertSuccess(mediaType, result));
-      }).catch((message) => {
-        dispatch(convertFailure({ message }));
+      }).catch((err) => {
+        converter.stop();
+        dispatch(convertFailure(err));
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
       // TODO: Handle panophoto
     } else {
-      dispatch(convertFailure({
-        message: `Meida type: ${mediaType} is not supported`
-      }));
+      dispatch(convertFailure(genErr(ERR.MEDIA_NOT_SUPPORTED, {
+        mediaType
+      })));
     }
   };
 }
@@ -140,6 +153,17 @@ export function playerSetAutoplay(autoplay) {
       });
     }
   };
+}
+
+export const CHANGE_EDIT_TARGET = 'CHANGE_EDIT_TARGETE';
+
+export function changeEditTarget(editTarget) {
+  return (dispatch) => {
+      dispatch({
+        type: CHANGE_EDIT_TARGET,
+        editTarget
+      });
+  }
 }
 
 export const TRIM = 'TRIM';
@@ -187,6 +211,7 @@ export function edit({ title, caption }) {
 
 export const ADJUST_FILTERS = 'ADJUST_FILTERS';
 export const APPLY_FILTERS_REQUEST = 'APPLY_FILTERS_REQUEST';
+export const APPLY_FILTERS_PROGRESS = 'APPLY_FILTERS_PROGRESS';
 export const APPLY_FILTERS_SUCCESS = 'APPLY_FILTERS_SUCCESS';
 export const APPLY_FILTERS_FAILURE = 'APPLY_FILTERS_FAILURE';
 
@@ -202,6 +227,14 @@ export function adjustFilters(filters) {
 function applyFiltersRequest() {
   return {
     type: APPLY_FILTERS_REQUEST
+  };
+}
+
+function applyFiltersProgress(idx, appliedImage) {
+  return {
+    type: APPLY_FILTERS_PROGRESS,
+    idx,
+    appliedImage
   };
 }
 
@@ -225,15 +258,28 @@ function applyFiltersRequest() {
   };
 }
 
-export function applyFilters({ data, dimension, filters }) {
+export function applyFilters({ storageId, from, to, filters }) {
   return (dispatch) => {
     dispatch(applyFiltersRequest());
 
-    applyImagesFilters(data, dimension, filters).then((result) => {
+    applyImagesFilters(storageId, from, to, filters, (idx, appliedImage) => {
+      dispatch(applyFiltersProgress(idx, appliedImage));
+    }).then((result) => {
       dispatch(applyFiltersSuccess(result));
+      dispatch(pushNotification(NOTIFICATIONS.APPLY_FILTERS_SUCCESS));
       return null;
     }).catch((err) => {
       dispatch(applyFiltersFailure(err));
+    });
+  }
+}
+
+export const CLEAR_EDITOR_ERR = 'CLEAR_EDITOR_ERR';
+
+export function clearEditorErr() {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_EDITOR_ERR
     });
   }
 }

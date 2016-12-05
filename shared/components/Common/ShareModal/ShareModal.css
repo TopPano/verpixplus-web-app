@@ -1,0 +1,24 @@
+@import 'Variables.css';
+
+.share-modal-component {
+}
+
+.modal-content {
+  .share-btn {
+    background-color: $color-white;
+    border-color: $color-red;
+    color: $color-red;
+    font-size: 14px;
+    line-height: 30px;
+    width: 100px;
+    transition: all .3s ease;
+    &:hover {
+      background-color: $color-red;
+      color: $color-white;
+    }
+    &.disabled:hover {
+      background-color: $color-white;
+      color: $color-red;
+    }
+  }
+}

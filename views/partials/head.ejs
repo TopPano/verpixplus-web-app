@@ -1,0 +1,29 @@
+<meta charset="utf8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title><%= title %></title>
+<meta name="description" content="<%= description %>">
+<meta name="robots" content="<%= robots %>">
+<meta property="fb:app_id" content="<%= facebook.id %>">
+<meta property="og:type" content="video">
+<meta property="og:site_name" content="<%= siteName %>">
+<meta property="og:image" content="<%= image %>">
+<meta property="og:image:width" content="<%= imageWidth %>">
+<meta property="og:image:height" content="<%= imageHeight %>">
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= description %>">
+<meta property="og:url" content="<%= url %>">
+<% if (typeof video !== 'undefined') { %>
+<meta property="og:video:url" content="<%= video %>">
+<meta property="og:video:secure_url" content="<%= video %>">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="<%= imageWidth %>">
+<meta property="og:video:height" content="<%= imageHeight %>">
+<% } %>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@<%= siteName %>" />
+<meta name="twitter:creator" content="@<%= siteName %>" />
+<meta name="twitter:title" content="<%= title %>" />
+<meta name="twitter:description" content="<%= description %>" />
+<meta name="twitter:image" content="<%= image %>" />
+<link rel="shortcut icon" type="image/png" href="/static/images/favicon.png">

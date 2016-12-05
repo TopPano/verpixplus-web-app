@@ -1,12 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import isEmail from 'validator/lib/isEmail';
-import isEmpty from 'is-empty';
-
-import { EXTERNAL_LINKS } from 'constants/common';
-import CONTENT from 'content/sign/en-us.json';
-import SITE_CONTENT from 'content/site/en-us.json';
 
 import RegBlock from 'components/Common/RegBlock';
 import RegBlockHeader from 'components/Common/RegBlock/RegBlockHeader';
@@ -15,8 +9,11 @@ import RegBlockBtn from 'components/Common/RegBlock/RegBlockBtn';
 import RegBlockOthers from 'components/Common/RegBlock/RegBlockOthers';
 import RegBlockErr from 'components/Common/RegBlock/RegBlockErr';
 import ExternalLink from 'components/Common/ExternalLink';
-
-const { ERR_MSG } = CONTENT;
+import {
+  checkUsername,
+  checkEmail,
+  checkPwdPair
+} from 'components/Common/RegBlock/inputUtils';
 
 if (process.env.BROWSER) {
   require('./SignUp.css');
@@ -32,6 +29,8 @@ const defaultProps = {
 };
 
 class SignUp extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -39,12 +38,8 @@ class SignUp extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // Username validation
-  // TODO: More tests to be robust
-  isValidName(name) {
-    const regex = new RegExp('[a-z]+((.|_)?[a-z0-9])+'),
-          result = regex.exec(name);
-    return result && result[0] === name;
+  componentWillUnmount() {
+    this.refs.err.clear();
   }
 
   // Handler for RegBlock submit
@@ -53,49 +48,37 @@ class SignUp extends Component {
 
     this.refs.err.clear();
 
+    const { i18n } = this.context;
     const username = this.refs.username;
     const confirmPwd = this.refs.confirmPwd;
     const email = this.refs.email;
     const pwd = this.refs.pwd;
     const usernameVal = username.getValue();
-    const emailVal = email.getValue();
+    const emailVal = email.getValue().toLowerCase();
     const pwdVal = pwd.getValue();
     const confirmPwdVal = confirmPwd.getValue();
     const { signUp } = this.props;
 
-    // Check username is empty or not
-    if (isEmpty(usernameVal)) {
-      username.err(ERR_MSG.USERNAME.EMPTY);
+    // Check username value
+    const usernameErr = checkUsername(usernameVal, i18n);
+    if (usernameErr) {
+      username.err(usernameErr);
       return;
     }
-    // Username format validation
-    if (!this.isValidName(usernameVal)) {
-      username.err(ERR_MSG.USERNAME.INVALID);
+    // Check email value
+    const emailErr = checkEmail(emailVal, i18n);
+    if (emailErr) {
+      email.err(emailErr);
       return;
     }
-    // Check email is empty or not
-    if (isEmpty(emailVal)) {
-      email.err(ERR_MSG.EMAIL.EMPTY);
-      return;
-    }
-    // Email format validation
-    if (!isEmail(emailVal)) {
-      email.err(ERR_MSG.EMAIL.INVALID);
-      return;
-    }
-    // Check password is empty or not
-    if (isEmpty(pwdVal)) {
-      pwd.err(ERR_MSG.PWD.EMPTY);
-      return;
-    }
-    // Check confirm-password is empty or not
-    if (isEmpty(confirmPwdVal)) {
-      confirmPwd.err(ERR_MSG.CONFIRM_PWD.EMPTY);
-      return;
-    }
-    // Check equality of password and confirm-password
-    if (pwdVal !== confirmPwdVal) {
-      pwd.err(ERR_MSG.PWD.NOT_MATCHED);
+    // Check password pair values
+    const pwdPairErr = checkPwdPair(pwdVal, confirmPwdVal, i18n)
+    if (pwdPairErr.err) {
+      if (!pwdPairErr.isConfirm) {
+        pwd.err(pwdPairErr.err);
+      } else {
+        confirmPwd.err(pwdPairErr.err);
+      }
       return;
     }
 
@@ -108,16 +91,17 @@ class SignUp extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { errMsg, clearErrMsg } = this.props;
     const blockProps = {
       handleSubmit: this.handleSubmit
     }
     const headerProps = {
-      title: CONTENT.HEADER.SIGN_UP.TITLE,
+      title: l('Sign Up'),
       switchTo: {
         url: '/signin',
-        name: CONTENT.HEADER.SIGN_UP.SWITCH_TO.NAME,
-        desc: CONTENT.HEADER.SIGN_UP.SWITCH_TO.DESC
+        name: l('Sign In'),
+        desc: `${l('Have an account')}?`
       }
     };
     const errProps = {
@@ -129,26 +113,28 @@ class SignUp extends Component {
       ref: 'username',
       icon: 'user',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.USERNAME
+      placeHolder: l('Username')
     }, {
       // TODO: use "email" type instead of "text"
       ref: 'email',
       icon: 'envelope',
       type: 'text',
-      placeHolder: CONTENT.INPUTS.EMAIL
+      placeHolder: l('Email')
     }, {
       ref: 'pwd',
       icon: 'lock',
       type: 'password',
-      placeHolder: CONTENT.INPUTS.PWD
+      placeHolder: l('Password'),
+      trimValue: false
     }, {
       ref: 'confirmPwd',
       icon: 'key',
       type: 'password',
-      placeHolder: CONTENT.INPUTS.CONFIRM_PWD
+      placeHolder: l('Confirm Password'),
+      trimValue: false
     }];
     const btnProps = {
-      text: CONTENT.BTN.SIGN_UP.TEXT
+      text: l('Sign Up')
     };
     const inputs = this.renderInputs(inputsProps);
 
@@ -160,13 +146,13 @@ class SignUp extends Component {
           {inputs}
           <hr />
           <RegBlockOthers>
-            {CONTENT.OTHERS.SIGN_UP.AGREE}
-            <ExternalLink to={EXTERNAL_LINKS.TERMS_OF_USE}>
-             {SITE_CONTENT.FOOTER.TERMS_OF_USE}
+            {`${l('By signing up, you agree to our')} `}
+            <ExternalLink to="/terms">
+              {l('Terms of Use')}
             </ExternalLink>
-            {CONTENT.OTHERS.SIGN_UP.AND}
-            <ExternalLink to={EXTERNAL_LINKS.PRIVACY_POLICY}>
-             {SITE_CONTENT.FOOTER.PRIVACY_POLICY}
+            {` ${l('and')} `}
+            <ExternalLink to="/privacy">
+              {l('Privacy Policy')}
             </ExternalLink>
           </RegBlockOthers>
           <RegBlockBtn {...btnProps} />

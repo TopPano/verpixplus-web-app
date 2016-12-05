@@ -1,8 +1,14 @@
 module.exports = {
+  sdk: {
+    url: 'https://d3je762wafoivc.cloudfront.net/sdk'
+  },
   facebook: {
     apiRoot: 'https://graph.facebook.com',
     id: '589634317860022',
     version: '2.6'
+  },
+  ga: {
+    url: 'https://www.google-analytics.com/analytics.js'
   },
   google: {
     apiRoot: 'https://www.googleapis.com',

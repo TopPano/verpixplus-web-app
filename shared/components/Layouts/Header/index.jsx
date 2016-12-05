@@ -1,41 +1,39 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+
+import InfoPanel from 'containers/common/InfoPanel';
 import Brand from './Brand';
-import Topbar from './Topbar'
-import List from './List';
-import ListBtn from './ListBtn';
 
 if (process.env.BROWSER) {
   require('./Header.css');
 }
 
-export default class Header extends Component {
+const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
+};
+
+const defaultProps = {
+};
+
+class Header extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { isAuthenticated } = this.props;
+
     return (
-      <div className='header-component header'>
-        <div className='container'>
-          <Brand />
-          <Topbar />
-          <ListBtn />
-        </div>
-        <List />
+      <div className='header-component container-center-row'>
+        <Brand isAuthenticated={isAuthenticated} />
+        <InfoPanel />
       </div>
     );
   }
 }
 
-Header.displayName = 'LayoutHeaderHeaderComponent';
+Header.propTypes = propTypes;
+Header.defaultProps = defaultProps;
 
-Header.propTypes = {
-  username: PropTypes.string,
-  profilePhotoUrl: PropTypes.string,
-  userId: PropTypes.string,
-  logoutUser: PropTypes.func
-};
-Header.defaultProps = {
-};
+export default Header;

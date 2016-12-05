@@ -2,12 +2,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import range from 'lodash/range';
+import { Line } from 'rc-progress';
 
 import { DEFAULT_TITLE } from 'constants/common';
-import CONTENT from 'content/workspace/en-us.json';
-import Modal from 'components/Common/Modal';
-import Share from 'components/Common/Share';
+import { GALLERY_ITEM_TYPE } from 'constants/workspace';
+import { getReadableDuration } from 'lib/utils';
+import ShareModal from 'containers/common/ShareModal';
+import DeleteModal from 'containers/common/DeleteModal';
 import Preview from './Preview';
 
 if (process.env.BROWSER) {
@@ -16,155 +17,148 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   mediaObj: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  isCreator: PropTypes.bool,
   deleteMedia: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  isCreator: false
 };
 
+const COLOR_MAP = [
+  '#C1272D',
+  '#C22D40',
+  '#DC143C'
+];
+
 class GalleryItem extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
-
-    // Bind "this" to member functions
-    this.openModalDelete = this.openModalDelete.bind(this);
-    this.openModalShare = this.openModalShare.bind(this);
-    this.handleClickModalDeleteBtn = this.handleClickModalDeleteBtn.bind(this);
   }
 
-  // Open the modal for deletion
-  openModalDelete() {
-    if (!this.props.isFetching) {
-      this.refs.modalDelete.open();
-    }
-  }
-
-  // Open the modal for sharing
-  openModalShare() {
-    if (!this.props.isFetching) {
-      this.refs.modalShare.open();
-    }
-  }
-
-  // Handler for clicking delete button
-  handleClickModalDeleteBtn() {
+  getCoverPhoto(mediaObj, id) {
     const {
-      id,
-      deleteMedia
-    } = this.props;
-
-    deleteMedia({
-      mediaId: id
-    });
-  }
-
-  // Select images for feeding to Preview component
-  selectPreviewImages(mediaObj, id) {
-    const {
-      count,
       cdnUrl,
-      shardingKey,
-      quality
+      shardingKey
     } = mediaObj.content;
-    const selectedQuality = quality[quality.length - 1];
-    const imgUrlPrefix = `${cdnUrl}${shardingKey}/media/${id}/live/${selectedQuality}`;
 
-    if (count < 5) {
-      return range(0, count).map((idx) => `${imgUrlPrefix}/${idx}.jpg`);
-    } else {
-      const step = parseInt(count / 5, 10);
-      return range(0, 5).map((idx) => `${imgUrlPrefix}/${idx * step}.jpg`);
-    }
+    return `${cdnUrl}${shardingKey}/media/${id}/live/thumb.jpg`;
+  }
+
+  // Get approximate duration from created time to now
+  getApproximateDuration(created) {
+    const { l, getLocale } = this.context.i18n;
+
+    const readableDuration = getReadableDuration(created, getLocale());
+    const approximateDuration = readableDuration.split(',')[0];
+
+    return `${approximateDuration} ${l('ago')}`;
+  }
+
+  // Render create view
+  renderCreateMain() {
+    const { l } = this.context.i18n;
+
+    return (
+      <div className="create-main container-center-row">
+        <p className="text-center">{l('Create your own imigination')}</p>
+      </div>
+    );
+  }
+
+  // Render progress view
+  renderProgressView(progress) {
+    const { l } = this.context.i18n;
+    const percent = parseInt(progress * 100, 10);
+    const colorIdx = parseInt(progress * COLOR_MAP.length, 10);
+    const color = COLOR_MAP[colorIdx];
+
+    return (
+      <div className="gallery-item-progress container-center-row fill">
+        <p>{`${percent}% ${l('Complete')}`}</p>
+        <Line
+          percent={percent}
+          strokeColor={color}
+          strokeWidth={4}
+          trailWidth={4}
+        />
+      </div>
+    );
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       id,
       mediaObj,
-      isCreator,
+      type,
       isFetching
     } = this.props;
     const {
       title,
-      caption,
-      dimension
+      created,
+      dimension,
+      isVideoCreated,
+      progress
     } = mediaObj;
-    const link = `/edit/@${id}`;
-    const selectedPreviewImages = isCreator ? [] : this.selectPreviewImages(mediaObj, id);
-    const modalDeleteProps = {
-      ref: 'modalDelete',
-      title: CONTENT.DELETE.TITLE,
-      closeBtn: {
-        text: CONTENT.DELETE.CLOSE_BTN
-      },
-      confirmBtn: {
-        icon: 'trash',
-        className: 'btn btn-u btn-u-red pull-right rounded',
-        text: CONTENT.DELETE.CONFIRM_BTN,
-        onClick: this.handleClickModalDeleteBtn
-      },
-      isProcessing: isFetching
-    };
+    const approximateDuration = this.getApproximateDuration(created);
+    const link =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? `/edit/@${id}` :
+      type === GALLERY_ITEM_TYPE.CREATE ? '/upload' :
+      '';
+    const coverPhoto =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? this.getCoverPhoto(mediaObj, id) :
+      type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.svg' :
+      '';
+    const createMain =
+      type === GALLERY_ITEM_TYPE.CREATE ?
+      this.renderCreateMain() :
+      null;
+    const progressView =
+      type === GALLERY_ITEM_TYPE.PROGRESS ?
+      this.renderProgressView(progress) :
+      null;
 
     return(
-      <div className="gallery-item-component col-md-3 col-sm-6 col-xs-12">
-        <div className="thumbnails thumbnail-style rounded">
-          <div className="caption">
-            <h3 className="text-single-line">
-              <strong>
-                <Link
-                  className="hover-effect"
-                  to={link}
-                >
-                  {title ? title : DEFAULT_TITLE}
-                </Link>
-              </strong>
-            </h3>
-            {
-              caption ?
-              <p className="text-single-line">{caption}</p> :
-              <p className="text-single-line" ><br /></p>
-            }
-          </div>
+      <div className="gallery-item-component col-md-3 col-sm-4 col-xs-6">
+        <div className="thumbnails thumbnail-style">
           <Link to={link}>
             <Preview
-              images={selectedPreviewImages}
+              image={coverPhoto}
+              type={type}
               dimension={dimension}
             />
           </Link>
-          <div className="thumbnail-tools">
-            <i
-              className="fa fa-share-square-o clickable"
-              onClick={this.openModalShare}
-            />
-            <i
-              className="fa fa-trash-o clickable"
-              onClick={this.openModalDelete}
-            />
+          <div className="thumbnails-main">
+            <p className="title">{title ? title : l(DEFAULT_TITLE)}</p>
+            <div className="thumbnails-toolsbar">
+              <p className="time text-center">{approximateDuration}</p>
+              <div className="tools">
+                <ShareModal
+                  mediaId={id}
+                  title={title}
+                  isVideoCreated={Boolean(isVideoCreated)}
+                >
+                  <div className="tool tool-share circle clickable" />
+                </ShareModal>
+                <Link to={link}>
+                  <div className="tool tool-edit circle clickable" />
+                </Link>
+                <DeleteModal
+                  mediaId={id}
+                  isProcessing={isFetching}
+                >
+                  <div className="tool tool-delete circle clickable" />
+                </DeleteModal>
+              </div>
+            </div>
+            { createMain }
           </div>
-          {
-            isCreator &&
-            <Link
-              to="/upload"
-              className="creator container-center-row fill clickable rounded"
-            >
-              <i className="fa fa-plus-circle" />
-              <h5><strong>New</strong></h5>
-            </Link>
-          }
+          { progressView }
         </div>
-        <Share
-          ref="modalShare"
-          mediaId={id}
-          isProcessing={isFetching}
-        />
-        <Modal {...modalDeleteProps}>
-          <div>{CONTENT.DELETE.DESC}</div>
-        </Modal>
       </div>
     );
   }

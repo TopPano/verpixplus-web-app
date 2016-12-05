@@ -1,4 +1,6 @@
+import assign from 'lodash/assign';
 import merge from 'lodash/merge';
+
 import {
   INIT_UPLOAD,
   INIT_EDIT,
@@ -9,44 +11,49 @@ import {
   PLAYER_PLAY,
   PLAYER_PAUSE,
   PLAYER_SET_AUTOPLAY,
+  CHANGE_EDIT_TARGET,
   TRIM,
   EDIT_TITLE,
   EDIT_CAPTION,
   ADJUST_FILTERS,
   APPLY_FILTERS_REQUEST,
+  APPLY_FILTERS_PROGRESS,
   APPLY_FILTERS_SUCCESS,
-  APPLY_FILTERS_FAILURE
+  APPLY_FILTERS_FAILURE,
+  CLEAR_EDITOR_ERR
 } from 'actions/editor';
 import {
   GET_MEDIA_REQUEST,
   GET_MEDIA_SUCCESS,
   GET_MEDIA_FAILURE,
-  CREATE_MEDIA_REQUEST,
-  CREATE_MEDIA_SUCCESS,
-  CREATE_MEDIA_FAILURE
+  UPDATE_MEDIA_REQUEST,
+  UPDATE_MEDIA_FAILURE
 } from 'actions/media';
 import {
   MODE,
   PLAYER_MODE,
+  EDIT_TARGET,
   FRAMES_LIMIT
 } from 'constants/editor';
+import { genUUID } from 'lib/utils';
 
 const DEFAULT_STATE = {
   mediaId: '',
+  storageId: '',
   mode: '',
   mediaType: '',
   isProcessing: false,
   title: '',
   caption: '',
   progress: 0,
-  data: [],
+  converter: undefined,
   appliedData: [],
-  dataUrls: [],
-  dimension: { width: 0, height: 0 },
-  playerMode: PLAYER_MODE.PAUSE,
+  dimension: { width: 100, height: 100 },
+  playerMode: PLAYER_MODE.PLAY,
   autoplay: true,
+  editTarget: '',
   lower: 0,
-  upper: FRAMES_LIMIT,
+  upper: 0,
   filters: {
     preset: 'normal',
     adjusts: {},
@@ -58,11 +65,16 @@ const DEFAULT_STATE = {
 export default function editor(state = DEFAULT_STATE, action) {
   switch (action.type) {
     case INIT_UPLOAD:
-      return merge({}, state, {
+    {
+      const storageId = genUUID();
+
+      return merge({}, DEFAULT_STATE, {
+        storageId,
         mode: MODE.WAIT_FILE
       });
+    }
     case INIT_EDIT:
-      return merge({}, state, {
+      return merge({}, DEFAULT_STATE, {
         mediaId: action.mediaId,
         mode: MODE.EDIT
       });
@@ -78,6 +90,10 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         autoplay: action.autoplay
       });
+    case CHANGE_EDIT_TARGET:
+      return merge({}, state, {
+        editTarget: action.editTarget
+      })
     case TRIM:
       return merge({}, state, {
         lower: action.lower,
@@ -99,38 +115,50 @@ export default function editor(state = DEFAULT_STATE, action) {
           isDirty: true
         }
       });
-    case CONVERT_REQUEST:
     case GET_MEDIA_REQUEST:
-    case CREATE_MEDIA_REQUEST:
+    case UPDATE_MEDIA_REQUEST:
     case APPLY_FILTERS_REQUEST:
       return merge({}, state, {
         isProcessing: true,
         progress: 0
       });
+    case CONVERT_REQUEST:
+      return merge({}, state, {
+        isProcessing: true,
+        progress: 0,
+        converter: action.converter
+      });
     case CONVERT_PROGRESS:
       return merge({}, state, {
         progress: action.progress
       });
+    case APPLY_FILTERS_PROGRESS:
+    {
+      delete state.appliedData[action.idx];
+      state.appliedData[action.idx] = action.appliedImage;
+      return state;
+    }
     case CONVERT_SUCCESS:
-      const dataLength = action.result.dataUrls.length;
+    {
+      const dataLength = action.result.data.length;
 
       return merge({}, state, {
         mode: MODE.CREATE,
         isProcessing: false,
         mediaType: action.mediaType,
-        data: action.result.data,
         appliedData: action.result.data,
-        dataUrls: action.result.dataUrls,
         dimension: action.result.dimension,
         playerMode: PLAYER_MODE.PLAY,
+        editTarget: EDIT_TARGET.FRAMES,
         lower: 0,
         upper: dataLength < FRAMES_LIMIT ? dataLength : FRAMES_LIMIT
       });
+    }
     case GET_MEDIA_SUCCESS:
-      // TODO: fill title
+    {
       const {
         mediaType,
-        // title,
+        title,
         caption,
         imgsData,
         imgUrls,
@@ -140,36 +168,34 @@ export default function editor(state = DEFAULT_STATE, action) {
       return merge({}, state, {
         isProcessing: false,
         mediaType,
-        // title,
+        title,
         caption,
-        data: imgsData,
         appliedData: imgsData,
-        dataUrls: imgUrls,
-        dimension
+        dimension,
+        playerMode: PLAYER_MODE.PLAY,
+        lower: 0,
+        upper: imgUrls.length
       });
-    case CREATE_MEDIA_SUCCESS:
-      return merge({}, state, {
-        mediaId: action.response.result.mediaId,
-        mode: MODE.EDIT,
-        isProcessing: false
-      });
+    }
     case APPLY_FILTERS_SUCCESS:
       return merge({}, state, {
         isProcessing: false,
-        appliedData: action.result.appliedData,
-        dataUrls: action.result.dataUrls,
         filters: {
           isDirty: false
         }
       });
     case CONVERT_FAILURE:
     case GET_MEDIA_FAILURE:
-    case CREATE_MEDIA_FAILURE:
+    case UPDATE_MEDIA_FAILURE:
     case APPLY_FILTERS_FAILURE:
       return merge({}, state, {
         isProcessing: false,
         err: action.err
       });
+    case CLEAR_EDITOR_ERR:
+      return assign({}, state, {
+        err: DEFAULT_STATE.err
+      })
     default:
       return state;
   }

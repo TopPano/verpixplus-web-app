@@ -13,11 +13,13 @@ if (process.env.BROWSER) {
 const propTypes = {
   icon: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  placeHolder: PropTypes.string
+  placeHolder: PropTypes.string,
+  trimValue: PropTypes.bool
 };
 
 const defaultProps = {
-  placeHolder: ''
+  placeHolder: '',
+  trimValue: true
 };
 
 class RegBlockInput extends Component {
@@ -40,7 +42,7 @@ class RegBlockInput extends Component {
 
   // Get value of input
   getValue() {
-    return trim(this.refs.input.value);
+    return this.state.inputValue;
   }
 
   // Change to Error mode
@@ -55,7 +57,7 @@ class RegBlockInput extends Component {
   // Handler for input changes
   handleInputChange() {
     this.setState({
-      inputValue: trim(this.refs.input.value),
+      inputValue: this.props.trimValue ? trim(this.refs.input.value) : this.refs.input.value,
       isErr: false,
       errMsg: ''
     });

@@ -1,3 +1,14 @@
 .header-component {
+  height: 98px;
+  position: relative;
+
+  .info-panel-component {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    @media (width <= $bp-sm-md) {
+      top: 15px;
+    }
+  }
 }
 

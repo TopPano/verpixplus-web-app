@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+  <style>
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexhei.css);
+  </style>
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/web/assets/mobirise-icons/mobirise-icons.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/icons-mind/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/icon54/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/socicon/css/socicon.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-un/css/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/swipebox/css/swipebox.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/unicore/css/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/dropdown-menu-plugin/style.light.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise-slider/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise-gallery/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise/css/mbr-additional.css" type="text/css">
+  <style>
+    @media (max-width: 400px) { .mbr-gallery-livephoto { width: 100%; } }
+  </style>
+</head>
+<body>
+<section id="dropdown-menu-2btn-2">
+    <nav class="navbar navbar-dropdown bg-color transparent navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-logo"><img src="<%= cdnUrl %>/home/images/verpix-web-logo-white-1.svg" alt="VERPIX"></a>
+            </div>
+            <button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
+                <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-dropdown collapse pull-xs-right navbar-toggleable-sm nav navbar-nav" id="exCollapsingNavbar">
+                <li class="nav-item" id ="locale-switch">
+                    <a style="cursor: pointer;" class="nav-link link"><%= locale === 'zh-tw' ? localesMapping['en'] : localesMapping['zh-tw'] %></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link" href="/signin">
+                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;<%= l('Sign In') %>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+
+<section class="mbr-section--bg-adapted mbr-after-navbar" id="header17-6" data-bg-video="https://www.youtube.com/embed/rNuOaZGo06Y?rel=0&amp;amp;showinfo=0&amp;autoplay=0&amp;loop=0">
+    <div class="intro intro6">
+        <div class="mbr-overlay" style="opacity: 0.7; background-color: rgb(0, 0, 0);"></div>
+        <div class="container">
+            <div class="row center-content center-content-ipad">
+                <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text-center">
+                    <h2>Motion! Rocks</h2><p></p>
+                    <div><p class="lead"><%= l('Turn Your World, Turn Your Idea') %></p></div>
+                    <div><a href="/signup" style="font-size: 18px;" class="btn btn-lg btn-cta btn-default"><%= l('Try it now') %></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mbr-section--bg-adapted mbr-section--relative" id="msg-box16-1z" style="background-color: rgb(255, 255, 255);">
+    <div class="elements-content" style="padding-top: 100px; padding-bottom: 50px;">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="container">
+                    <div class="row">
+                        <div class="process">
+                            <div class="process-row nav nav-tabs">
+                                <div class="process-step" style="display: block; width: 25%;">
+                                    <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu1msg-box16-1z"><span class="imind-upload-tocloud mbr-iconfont mbr-iconfont-btn"></span></a></div>
+                                    <small><%= l('Upload') %><br><%= l('Easy to upload video file as input') %><br></small>
+                                </div>
+                                <div class="process-step" style="display: block; width: 25%;">
+                                    <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu2msg-box16-1z"><span class="mbri-video mbr-iconfont mbr-iconfont-btn"></span></a></div>
+                                    <small><%= l('Editing') %><br><%= l('Trim the clip and adjust color') %><br></small>
+                                </div>
+                                <div class="process-step" style="display: block; width: 25%;">
+                                    <div><a class="btn btn-circle btn-default" data-toggle="tab" href="#menu3msg-box16-1z"><span class="icon54-share-conversation2 mbr-iconfont mbr-iconfont-btn"></span></a></div>
+                                    <small><%= l('Sharing') %><br><%= l('Social media/Blogger/Website/Advertising') %><br></small>
+                                </div>
+                                <div class="process-step" style="display: block; width: 25%;">
+                                    <div><a class="btn btn-default btn-circle" data-toggle="tab" href="#menu4msg-box16-1z"><span class="imind-bar-chart mbr-iconfont mbr-iconfont-btn"></span></a></div>
+                                    <small><%= l('Tracking') %><br><%= l('Get the insight of your users') %><br></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content">
+                            <div id="menu1msg-box16-1z" class="tab-pane fade active in menu1">
+                                <div class="space20"></div>
+                            </div>
+                            <div id="menu2msg-box16-1z" class="tab-pane fade">
+                                <div class="space20"></div>
+                            </div>
+                            <div id="menu3msg-box16-1z" class="tab-pane fade">
+                                <div class="space20"></div>
+                            </div>
+                            <div id="menu4msg-box16-1z" class="tab-pane fade">
+                                <div class="space20"></div>
+                            </div>
+                            <div id="menu5msg-box16-1z" class="tab-pane fade">
+                                <div class="space20"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="header20-2d" custom-code="true"><section class="mbr-section--bg-adapted" data-bg-video="https://www.youtube.com/embed/SzIn0ga987c?rel=0&amp;amp;showinfo=0&amp;autoplay=true&amp;loop=true">
+    <div class="intro2-title">
+      <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;"><%= l('Get ready to see awesome') %></span></h3>
+    </div>
+    <div class="intro intro2">
+        <div class="intro2-wrapper">
+          <div class="mbr-overlay" style="opacity: 0.2; background-color: rgb(21, 21, 21);"></div>
+          <div class="container"></div>
+            <div class="intro2-text text-center">
+              <p class="col-xs-10 col-xs-offset-1 text-center"><%= l('Verpix is an online platform that allows you to easily interact with your users through motion graph, and then share them with the world') %></p>
+            </div>
+        </div>
+    </div>
+</section></div>
+
+<div id="header20-21" custom-code="true"><section class="mbr-section--bg-adapted" data-bg-video="https://www.youtube.com/embed/ck6SeBmvQSM?rel=0&amp;amp;showinfo=0&amp;autoplay=true&amp;loop=true">
+    <div class="intro2-title">
+      <h3 class="mbr-editable-content text-center"><span style="line-height: 1.1; background-color: inherit;"><%= l('We make Motion Garph simple') %></span></h3>
+    </div>
+    <div class="intro intro2">
+        <div class="intro2-wrapper">
+          <div class="container"></div>
+            <div class="intro2-text text-center">
+              <p class="col-xs-10 col-xs-offset-1 text-center"><%= l('Make video as motion graph as simple. The benefit of motion graph effect can get your customer eyes on your idea') %></p>
+            </div>
+        </div>
+    </div>
+</section></div>
+
+<section class="mbr-section--bg-adapted mbr-section--relative" id="content7-5" style="background-color: rgb(255, 255, 255);">
+    <div class="elements-content" style="padding-top: 100px; padding-bottom: 100px;">
+        <div class="container">
+            <ul class="timeline">
+                <li style="display: block;">
+                    <div class="timeline-badge"><i class="fa fa-globe"></i></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                          <h4 class="timeline-title"><%= l('Browser based platform') %></h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p><%= l('No websites to mange, no software to install, our motion graph online service and viewer offers cross-platform service for the desktop and mobile browsers with the best and smoothest motion graph experience') %></p>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="timeline-inverted" style="display: block;">
+                    <div class="timeline-badge warning"><i class="fa fa-pencil"></i></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                          <h4 class="timeline-title"><%= l('Full Editing KITS') %></h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p><%= l('Tone, color, filter, adjusting editor. Apply those image effecter effects to your motion graph, you can edit and choose what you want to share') %></p>
+                        </div>
+                    </div>
+                </li>
+
+                <li style="display: block;">
+                    <div class="timeline-badge danger"><i class="fa fa-rss"></i></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                          <h4 class="timeline-title"><%= l('Social media sharing') %></h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p><%= l('Each motion graph allows viewers to share it to their social networks. With Verpix, you can share your motion graph directly to social media, only one click!!') %></p>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="timeline-inverted" style="display: block;">
+                    <div class="timeline-badge default"><i class="fa fa-share"></i></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                          <h4 class="timeline-title"><%= l('Website/Blogger Embedding') %></h4>
+                        </div>
+                        <div class="timeline-body">
+                          <p><%= l('Every motion graph gets a special HTML embedded code which can integrate into your own website, user can interact with your motion graph') %></p>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="mbr-slider mbr-section mbr-section--no-padding carousel slide" data-ride="carousel" data-wrap="true" data-interval="5000" id="slider2-23" style="background-color: rgb(255, 255, 255);">
+    <div class="mbr-section__container container boxed-slider" style="padding-top: 50px; padding-bottom: 93px;">
+        <div>
+            <ol class="carousel-indicators">
+                <li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="0" class="active"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="1"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="2"></li><li data-app-prevent-settings="" data-target="#slider2-23" class="" data-slide-to="3"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="4"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="5"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="6"></li><li data-app-prevent-settings="" data-target="#slider2-23" data-slide-to="7"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center active">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/001-5.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Trim your clip') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Import a video, Trim the clip for the best demonstration') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/002-2.png">
+                            <div class="row">
+                                <div class=" col-md-8 col-md-offset-2">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Auto play and Interaction') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Select repeat auto-play in loop and interact with users') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/003-2.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Color/Tone adjustment') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Complete control over your color adjustments') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/004-5.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Motion Graph') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('It is not a video but Motion Graph, to interact with users') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/005-2.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Share to life') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Share to social media with just one click or embed to your website') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/006-1.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Website/Blogger Embedding') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Every motion graph gets a special HTML embedded code which can integrate into your own website or blogger') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/007.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                  <h1 class="mbr-hero__text"><%= l('Corp out area') %></h1>
+                                  <p class="mbr-hero__subtext"><%= l('Set the crop and select an area to bring to your website or blogger') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="mbr-box mbr-section mbr-section--relative mbr-section--fixed-size mbr-section--bg-adapted item dark center">
+                    <div class="mbr-box__magnet mbr-box__magnet--center-left">
+                    <div class="mbr-overlay"></div>
+                        <div>
+                            <img src="<%= cdnUrl %>/home/images/008.png">
+                            <div class="row">
+                                <div class=" col-md-6 col-md-offset-1">
+                                <div class="mbr-hero">
+                                    <h1 class="mbr-hero__text"><%= l('Support for Adverting') %></h1>
+                                    <p class="mbr-hero__subtext"><%= l('Build the best contents and then broadcast to advertising channel. With our elegant editing feature, you can make your contents different from traditional video, LOW LATENCY, LOW CONGESTION, it is best recipe for AD channel') %><br></p>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="mbr-gallery mbr-section mbr-section--no-padding" id="gallery1-27" style="background-color: white;">
+    <div class=" mbr-gallery-layout-default">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 mbr-gallery-livephoto" style="padding: 0;">
+                <div class="verpix-livephoto" style="margin: 0 auto;" data-id="ac1ef1eccc0bb800" data-width="400" data-height="400"></div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 mbr-gallery-livephoto" style="padding: 0;">
+                <div class="verpix-livephoto" style="margin: 0 auto;" data-id="ac45b43157685000" data-cut-based="height" data-width="400" data-height="400"></div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 mbr-gallery-livephoto" style="padding: 0;">
+                <div class="verpix-livephoto" style="margin: 0 auto;" data-id="ac1a9d9279cd6000" data-cut-based="height" data-width="400" data-height="400"></div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 mbr-gallery-livephoto" style="padding: 0;">
+                <div class="verpix-livephoto" style="margin: 0 auto;" data-id="ac45c99d00e85000" data-cut-based="height" data-width="400" data-height="400"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</section>
+
+<div id="contacts5-t" custom-code="true"><section class="mbr-section--bg-adapted mbr-section--relative" style="background-color: rgb(255, 255, 255);">
+
+    <div id="contact-info" style="padding-top: 100px; padding-bottom: 0px;">
+        <div class="container">
+            <div class="section-head text-center col-md-8 col-md-offset-2 space50">
+                <h1 class="mbr-editable-content"><%= l('Contact Us') %></h1>
+            </div>
+        </div></div>
+</section></div>
+
+<section class="mbr-section--bg-adapted mbr-section--relative" id="form1-29" style="background-color: rgb(220, 220, 220);">
+    <div class="contact-form" style="padding-top: 50px; padding-bottom: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1" data-form-type="formoid">
+
+                    <div data-form-alert="true">
+                        <div class="hide" data-form-alert-success="true"><%= l('Thanks for filling out form!') %></div>
+                    </div>
+                    <form class="positioned" id="contactForm" action="https://#" method="post" data-form-title="CONTACT FORM">
+                        <input type="hidden" value="K/x/MoZeV5LvGOWIkEcCm/nWAKkncc3IDT2CruZf/4S0L/FCR/5RxcJ85D3JHXG2itn8C8rjbDR3bzQjCDtEc9qIwyu1T2145HVeopWyDNXq0GwjyjUIz5NUgDbl+R08" data-form-email="true">
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="name" required="" placeholder="<%= l('Your name') %>" data-form-field="Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" required="" placeholder="<%= l('Email') %>" data-form-field="Email">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="tel" class="form-control" name="subject" placeholder="<%= l('Subject') %>" data-form-field="subject">
+                        </div>
+                        <textarea class="form-control" name="message" rows="7" placeholder="<%= l('Message') %>" data-form-field="Message"></textarea>
+                        <div class="submitBtn"><button type="submit" class="btn btn-default btn-ico"><%= l('Send') %><i class="fa fa-paper-plane-o"></i></button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<% include ../partials/static-footer %>
+
+  <script src="<%= cdnUrl %>/home/web/assets/jquery/jquery.min.js"></script>
+  <script src="<%= cdnUrl %>/home/bootstrap/js/bootstrap.min.js"></script>
+  <script src="<%= cdnUrl %>/home/smooth-scroll/SmoothScroll.js"></script>
+  <script src="<%= cdnUrl %>/home/jquery-mb-ytplayer/jquery.mb.YTPlayer.min.js"></script>
+  <script src="<%= cdnUrl %>/home/swipebox/js/jquery.swipebox.js"></script>
+  <script src="<%= cdnUrl %>/home/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
+  <script src="<%= cdnUrl %>/home/masonry/masonry.pkgd.min.js"></script>
+  <script src="<%= cdnUrl %>/home/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <!--[if lte IE 9]>
+    <script src="<%= cdnUrl %>/home/jquery-placeholder/jquery.placeholder.min.js"></script>
+  <![endif]-->
+  <script src="<%= cdnUrl %>/home/unicore/js/script.js"></script>
+  <script src="<%= cdnUrl %>/home/dropdown-menu-plugin/script.js"></script>
+  <script src="<%= cdnUrl %>/home/mobirise-gallery/script.js"></script>
+  <script src="<%= cdnUrl %>/home/formoid/formoid.min.js"></script>
+  <%- livephotoSdk %>
+  <% include ../partials/static-ga %>
+  <script>
+    window.addEventListener('load', function() {
+      $('#locale-switch').on('click', function() {
+        document.cookie = "locale=<%= locale === 'zh-tw' ? 'en' : 'zh-tw' %>; expires=Thu, 31 Dec 2099 12:00:00 UTC";
+        window.location = window.location.href;
+      });
+    });
+  </script>
+</body>
+</html>

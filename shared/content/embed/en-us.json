@@ -1,0 +1,12 @@
+{
+  "SHARE": {
+    "PANO_PHOTO": {
+      "DEFAULT_TITLE": "LOOK it's my awesome 360 photo!!",
+      "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
+    },
+    "LIVE_PHOTO": {
+      "DEFAULT_TITLE": "LOOK it's my awesome MotionGraph!!",
+      "DEFAULT_DESCRIPTION": "Register ＆ add your friends in Verpix to join more activities."
+    }
+  }
+}

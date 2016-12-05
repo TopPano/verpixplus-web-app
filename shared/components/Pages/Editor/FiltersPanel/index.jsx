@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import FiltersItemPresets from './FiltersItemPresets';
 import FiltersItemAdjusts from './FiltersItemAdjusts';
 
 if (process.env.BROWSER) {
@@ -10,11 +9,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
+  storageId: PropTypes.string.isRequired,
+  imagesNum: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired
@@ -29,28 +25,9 @@ class FiltersPanel extends Component {
   }
 
   render() {
-    const {
-      data,
-      dimension,
-      filters,
-      adjustFilters,
-      applyFilters
-    } = this.props;
-
     return (
       <div className="filters-panel-component">
-        <FiltersItemPresets
-          adjustFilters={adjustFilters}
-          filters={filters}
-        />
-        <FiltersItemAdjusts
-          adjustFilters={adjustFilters}
-          data={data}
-          dimension={dimension}
-          filters={filters}
-          adjustFilters={adjustFilters}
-          applyFilters={applyFilters}
-        />
+        <FiltersItemAdjusts {...this.props} />
       </div>
     );
   }

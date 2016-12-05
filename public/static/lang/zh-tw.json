@@ -1,0 +1,577 @@
+{
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+        "lang": ""
+      },
+       "%d second": [
+        "%d 秒",
+        "%d 秒",
+        "%d 秒"
+       ],
+      "FAQ": [
+        "常見問題"
+      ],
+      "Terms of Use": [
+        "服務條款"
+      ],
+      "Privacy Policy": [
+        "隱私保護政策"
+      ],
+      "Language": [
+        "語言"
+      ],
+      "Sign In": [
+        "登入"
+      ],
+      "Sign Up": [
+        "註冊"
+      ],
+      "Sign Out": [
+        "登出"
+      ],
+      "Reset Password": [
+        "重設密碼"
+      ],
+      "Username": [
+        "使用者名稱"
+      ],
+      "Email": [
+        "電子郵件"
+      ],
+      "Autobiography": [
+        "自傳"
+      ],
+      "Password": [
+        "密碼"
+      ],
+      "Confirm Password": [
+        "確認密碼"
+      ],
+      "Old Password": [
+        "舊密碼"
+      ],
+      "New Password": [
+        "新密碼"
+      ],
+      "Confirm New Password": [
+        "確認新密碼"
+      ],
+      "Don't have an account": [
+        "尚未註冊帳號"
+      ],
+      "Have an account": [
+        "已經註冊帳號"
+      ],
+      "Plese provide the email address linked to your account": [
+        "請提供您帳號的電子郵件地址"
+      ],
+      "Thanks! Please check your email box for following process": [
+        "謝謝！請至您的電子信箱收信以完成下個步驟"
+      ],
+      "A new password is sent to your email. Please check your email box, thanks": [
+        "新密碼已經寄至您的電子信箱，請收信查看，謝謝。"
+      ],
+      "Forgot Password": [
+        "忘記密碼"
+      ],
+      "By signing up, you agree to our": [
+        "一旦註冊，即表示你同意我們的"
+      ],
+      "and": [
+        "及"
+      ],
+      "Please enter username": [
+        "請輸入使用者名稱"
+      ],
+      "Please try another username": [
+        "請使用別的使用者名稱"
+      ],
+      "Only lowercase English letters, numbers, underscores and dots can be used": [
+        "只能使用小寫英文字母、數字、底線及點"
+      ],
+      "The first character should be a lowercase English letter": [
+        "第一個字必須是小寫英文字母"
+      ],
+      "The last character should be a lowercase English letter or number": [
+        "最後一個字必須是小寫英文字母或數字"
+      ],
+      "No consecutive undersocres or dots": [
+        "不能有連續的底線或點"
+      ],
+      "Username is too short": [
+        "使用者名稱長度太短"
+      ],
+      "Username is too long": [
+        "使用者名稱長度太長"
+      ],
+      "The password is too short": [
+        "密碼太短"
+      ],
+      "The password is too long": [
+        "密碼太長"
+      ],
+      "The confirmed password is too short": [
+        "確認密碼太短"
+      ],
+      "The confirmed password is too long": [
+        "確認密碼太長"
+      ],
+      "The old password is too short": [
+        "舊密碼太短"
+      ],
+      "The old password is too long": [
+        "舊密碼太長"
+      ],
+      "The new password is too short": [
+        "新密碼太短"
+      ],
+      "The new password is too long": [
+        "新密碼太長"
+      ],
+      "The confirmed new password is too short": [
+        "新確認密碼太短"
+      ],
+      "The confirmed new password is too long": [
+        "新確認密碼太長"
+      ],
+       "At least %d character": [
+         "至少%d個字",
+         "至少%d個字",
+         "至少%d個字"
+       ],
+       "At most %d character": [
+         "最多%d個字",
+         "最多%d個字",
+         "最多%d個字"
+       ],
+      "Please enter your email": [
+        "請輸入您的電子郵件地址"
+      ],
+      "The email address is not valid, please try another address": [
+        "無效的電子郵件地址，請使用別的郵件地址"
+      ],
+      "Please enter your password": [
+        "請輸入您的密碼"
+      ],
+      "Please enter your confirmed password": [
+        "請輸入您的確認密碼"
+      ],
+      "Please enter your old password": [
+        "請輸入您的舊密碼"
+      ],
+      "Please enter your new password": [
+        "請輸入您的新密碼"
+      ],
+      "Please enter your confirmed new password": [
+        "請輸入您的新確認密碼"
+      ],
+      "These passwords don't match": [
+        "密碼與確認密碼不符"
+      ],
+      "Your old password is not correct": [
+        "您的舊密碼不正確"
+      ],
+      "The username is already registered, please try another username": [
+        "使用者名稱已經被註冊，請使用別的名稱"
+      ],
+      "The email address is already registered, please try another addresss": [
+        "電子郵件地址已經被註冊，請使用別的名稱"
+      ],
+      "The email address is not registered": [
+        "未註冊的電子郵件地址"
+      ],
+      "The email address is not registered, please sign in with another address": [
+        "未註冊的電子郵件地址，請用別的地址登入"
+      ],
+      "The email and password don't match": [
+        "帳號或密碼錯誤"
+      ],
+      "Network is disconnected, please ensure your device is connected to network": [
+        "尚未連結網路，請確認您的裝置是否已經正確連上網路"
+      ],
+      "Something wrong with server, please try again later": [
+        "伺服器發生問題，請稍候再試"
+      ],
+      "Your old password is not correct": [
+        "錯誤的舊密碼"
+      ],
+      "Media": [
+        "素材"
+      ],
+      "Save": [
+        "儲存"
+      ],
+      "Apply": [
+        "套用"
+      ],
+      "Delete": [
+        "刪除"
+      ],
+      "Profile": [
+        "個人資料"
+      ],
+      "Error": [
+        "錯誤"
+      ],
+      "Untitled": [
+        "無標題"
+      ],
+      "ago": [
+        "前"
+      ],
+      "Home": [
+        "首頁"
+      ],
+      "Title": [
+        "標題"
+      ],
+      "Description": [
+        "描述"
+      ],
+      "My Gallery": [
+        "素材庫"
+      ],
+      "Click to upload a profile photo": [
+        "點擊上傳個人頭像"
+      ],
+      "Upload Media": [
+        "上傳素材"
+      ],
+      "Edit Profile": [
+        "修改個人資料"
+      ],
+      "Upload your video": [
+        "上傳影片"
+      ],
+      "Create your own imigination": [
+        "創造專屬你的創意"
+      ],
+      "Complete": [
+        "完成"
+      ],
+      "Close": [
+        "關閉"
+      ],
+      "Cancel": [
+        "取消"
+      ],
+      "Confirm": [
+        "確認"
+      ],
+      "SDK Installation": [
+        "安裝SDK"
+      ],
+      "Usage": [
+        "使用方法"
+      ],
+      "Code": [
+        "程式碼"
+      ],
+      "Preview": [
+        "預覽"
+      ],
+      "Download": [
+        "下載"
+      ],
+      "Size": [
+        "尺寸"
+      ],
+      "Crop based": [
+        "裁切基於"
+      ],
+      "Width": [
+        "寬"
+      ],
+      "Height": [
+        "高"
+      ],
+      "Autoplay": [
+        "自動播放"
+      ],
+      "Processing": [
+        "處理中"
+      ],
+      "Public": [
+        "公開"
+      ],
+      "Friends": [
+        "朋友"
+      ],
+      "Only Me": [
+        "只限本人"
+      ],
+      "Share on your own Timeline": [
+        "分享到你自己的動態時報"
+      ],
+      "Share in a group you manage": [
+        "在你管理的社團中分享"
+      ],
+      "Share on a Page you manage": [
+        "在你管理的粉絲專頁上分享"
+      ],
+      "Google AdWorlds Click Tag": [
+        "Google聯播網 Click Tag"
+      ],
+      "Create your imigination on Verpix": [
+        "加入Verpix，創造專屬你的創意"
+      ],
+      "Share to": [
+        "分享至"
+      ],
+      "Say something": [
+        "留些話吧"
+      ],
+      "Post": [
+        "貼文"
+      ],
+      "Copied": [
+        "複製成功"
+      ],
+      "Share Your Media": [
+        "分享素材"
+      ],
+      "Social Media": [
+        "社群平台"
+      ],
+      "Link": [
+        "連結"
+      ],
+      "Embed": [
+        "內嵌"
+      ],
+      "Delete Media": [
+        "刪除素材"
+      ],
+      "This media will be deleted and you won't be able to find it anymore": [
+        "素材將會被永久刪除"
+      ],
+      "Video duration exceeds limit": [
+        "影片長度超過上限"
+      ],
+      "Only the first %s will be captured. Still continue?": [
+        "只有前%s會被擷取，仍要繼續？"
+      ],
+      "Modify the effect values and click the button to apply": [
+        "修改各個效果的數值並按下套用按鈕"
+      ],
+      "New effects are not applied": [
+        "新效果尚未套用"
+      ],
+      "Effects are modified but not applied. Still save": [
+        "修改的效果尚未套用，仍然要儲存"
+      ],
+      "Please wait, tasks will be completed soon": [
+        "請稍等，工作即將處理完成"
+      ],
+      "Choose File": [
+        "選取檔案"
+      ],
+      "Or drag & drop your video anywhere": [
+        "或將您的影片拖曳至任何地方"
+      ],
+      "Brightness": [
+        "明度"
+      ],
+      "Contrast": [
+        "對比"
+      ],
+      "Hue": [
+        "色相"
+      ],
+      "Saturation": [
+        "飽和度"
+      ],
+      "Vibrance": [
+        "自然飽和度"
+      ],
+      "Sepia": [
+        "棕褐色調"
+      ],
+      "Vignette": [
+        "暈影"
+      ],
+      "Please select a video to upload": [
+        "請選取影片上傳"
+      ],
+      "The total time of video exceeds the limit": [
+        "影片長度超過上限"
+      ],
+      "The video format is not supported, please upload another video": [
+        "不支援的影片格式，請上傳別的影片"
+      ],
+      "Video is converting, please try again later": [
+        "影片正在轉換中，請晚點再試"
+      ],
+      "Non-support media type": [
+        "不支援的素材類型"
+      ],
+      "Error occurs while loading motion graph, please try again later": [
+        "讀取動圖時發生問題，請稍候再試"
+      ],
+      "Something error, please try again later": [
+        "發生錯誤，請稍候再試"
+      ],
+      "A new media is posted": [
+        "新素材上傳成功"
+      ],
+      "Media is updated": [
+        "素材更新成功"
+      ],
+      "Media is deleted": [
+        "素材刪除成功"
+      ],
+      "Profile photo is updated": [
+        "個人頭像更新成功"
+      ],
+      "Your profile is updated": [
+        "個人資料更新成功"
+      ],
+      "Your password is changed": [
+        "密碼更新成功"
+      ],
+      "Effects are applied": [
+        "效果套用完成"
+      ],
+      "Your media is shared successfully": [
+        "您的素材已成功分享"
+      ],
+      "Turn Your World, Turn Your Idea": [
+        "翻動你的世界 玩轉你的創意"
+      ],
+
+      "Try it now": [
+        "立即註冊"
+      ],
+      "Upload": [
+        "上傳"
+      ],
+      "Easy to upload video file as input": [
+        "簡單的上傳影音就完成"
+      ],
+      "Editing": [
+        "編輯"
+      ],
+      "Trim the clip and adjust color": [
+        "自由調整長度跟顏色"
+      ],
+      "Sharing": [
+        "分享"
+      ],
+      "Social media/Blogger/Website/Advertising": [
+        "分享社群、部落格、網站、廣告聯播網"
+      ],
+      "Tracking": [
+        "追蹤"
+      ],
+      "Get the insight of your users": [
+        "了解使用者與消費者的面貌"
+      ],
+      "Get ready to see awesome": [
+        "線上動圖轉換服務"
+      ],
+      "Verpix is an online platform that allows you to easily interact with your users through motion graph, and then share them with the world": [
+        "Verpix提供一個線上動圖轉換服務，將影片轉換成互動媒體後分享出去，達到與使用者互動的效果。"
+      ],
+      "We make Motion Garph simple": [
+        "最簡便的方法"
+      ],
+      "Make video as motion graph as simple. The benefit of motion graph effect can get your customer eyes on your idea": [
+        "Verpix平台整合了上傳、編輯、轉檔與分享的功能，讓你的創意可以與客戶直接互動。用你平常慣用的相機，如單眼相機、DV或甚至手機上傳Verpix就能轉換成動圖。"
+      ],
+      "Browser based platform": [
+        "線上作業平台"
+      ],
+      "No websites to mange, no software to install, our motion graph online service and viewer offers cross-platform service for the desktop and mobile browsers with the best and smoothest motion graph experience": [
+        "不需要安裝軟體，不需要建立網站，直接通過線上作業平台轉換。我們提供最佳的互動使用經驗。"
+      ],
+      "Full Editing KITS": [
+        "編輯套件"
+      ],
+      "Tone, color, filter, adjusting editor. Apply those image effecter effects to your motion graph, you can edit and choose what you want to share": [
+        "提供完整的濾鏡、顏色、色調編輯功能，將這些特效應用在拍攝的影片後分享出去。"
+      ],
+      "Social media sharing": [
+        "社群分享"
+      ],
+      "Each motion graph allows viewers to share it to their social networks. With Verpix, you can share your motion graph directly to social media, only one click!!": [
+        "每一個動圖都可以簡單的分享到社群網路，通過編輯後，將編輯過的動圖轉換成影片發佈到社群上。"
+      ],
+      "Website/Blogger Embedding": [
+        "網頁/部落格內嵌"
+      ],
+      "Every motion graph gets a special HTML embedded code which can integrate into your own website, user can interact with your motion graph": [
+        "每一個動圖除了能夠分享到社群，同時也都被賦予了一段程式碼可以讓你內嵌到網站或是部落格，讓你的客戶可以與你的創意互動。"
+      ],
+      "Trim your clip": [
+        "修剪長度"
+      ],
+      "Import a video, Trim the clip for the best demonstration": [
+        "上傳影音檔後，找到最佳的畫面同時修剪出效果最好的長度"
+      ],
+      "Auto play and Interaction": [
+        "設定自動播放與互動"
+      ],
+      "Select repeat auto-play in loop and interact with users": [
+        "可自由設定自動播放並可以於使用者產生互動效果"
+      ],
+      "Color/Tone adjustment": [
+        "色調調整"
+      ],
+      "Complete control over your color adjustments": [
+        "簡單快速的顏色、亮度、暗圈調整介面"
+      ],
+      "Motion Graph": [
+        "動圖"
+      ],
+      "It is not a video but Motion Graph, to interact with users": [
+        "非一般傳統影片而是可與使用者互動的多媒體"
+      ],
+      "Share to life": [
+        "社群分享"
+      ],
+      "Share to social media with just one click or embed to your website": [
+        "只要一個點擊就可以方便的分享到社群"
+      ],
+      "Every motion graph gets a special HTML embedded code which can integrate into your own website or blogger": [
+        "每一個動圖都有程式碼可以內嵌到網站或是部落格"
+      ],
+      "Corp out area": [
+        "設定展示視窗大小"
+      ],
+      "Set the crop and select an area to bring to your website or blogger": [
+        "依據你的網站/部落格/廣告畫面設定最佳的展示視窗大小"
+      ],
+      "Support for Adverting": [
+        "廣告聯播"
+      ],
+      "Build the best contents and then broadcast to advertising channel. With our elegant editing feature, you can make your contents different from traditional video, LOW LATENCY, LOW CONGESTION, it is best recipe for AD channel": [
+        "提供廣告聯播網專用素材下載、可以讓你的創意可以在廣告聯播網被客戶看見"
+      ],
+      "Contact Us": [
+        "與我們連繫"
+      ],
+      "Thanks for filling out form!": [
+        "感謝您，將會儘快與您聯絡"
+      ],
+      "Your name": [
+        "您的稱呼"
+      ],
+      "Subject": [
+        "主題"
+      ],
+      "Message": [
+        "訊息"
+      ],
+      "Send": [
+        "送出"
+      ],
+      "Last Updated: 2016.11.22": [
+        "公布日期：2016 年 11 月 22 日"
+      ]
+    }
+  }
+}

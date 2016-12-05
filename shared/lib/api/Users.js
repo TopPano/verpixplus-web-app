@@ -1,42 +1,68 @@
 import Base from './Base';
-import { Schema, arrayOf } from 'normalizr';
 
 export default class UsersAPI extends Base {
-  getProfile(id, authToken) {
+  signIn(creds) {
+    return this.apiClient.post({
+      url: 'users/login?include=user',
+      payload: creds
+    });
+  }
+
+  signUp(creds) {
+    return this.apiClient.post({
+      url: 'users',
+      payload: creds
+    });
+  }
+
+  getProfile(userId, authToken) {
     if (authToken) { this.apiClient.setAuthToken(authToken); }
     return this.apiClient.get({
-      url: `users/${id}/profile`,
+      url: `users/${userId}/profile`,
       requireAuth: true
     });
   }
 
-  follow(followerId, followeeId) {
+  postProfilePicture(userId, payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
     return this.apiClient.post({
-      url: `users/${followerId}/follow/${followeeId}`,
+      url: `users/${userId}/photo`,
+      payload,
       requireAuth: true
-    });
+    })
   }
 
-  unfollow(followerId, followeeId) {
+  postPassword(userId, payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
     return this.apiClient.post({
-      url: `users/${followerId}/unfollow/${followeeId}`,
+      url: `users/${userId}/changePassword`,
+      payload,
       requireAuth: true
+    })
+  }
+
+  resetPassword(payload) {
+    return this.apiClient.post({
+      url: 'users/requestResetPassword',
+      payload
     });
   }
 
-  listFollowers(id) {
-    return this.apiClient.get({
-      url: `users/${id}/followers`,
-      requireAuth: true,
-      schema: { result: arrayOf(new Schema('followerList', { idAttribute: 'followerId' })) }
-    });
-  }
+  putProfile(userId, payload, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
 
-  listFollowing(id) {
-    return this.apiClient.get({
-      url: `users/${id}/following`,
-      requireAuth: true,
-      schema: { result: arrayOf(new Schema('followingList', { idAttribute: 'followeeId' })) }
+    return this.apiClient.put({
+      url: `users/${userId}`,
+      payload,
+      requireAuth: true
     });
   }
 }

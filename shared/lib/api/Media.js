@@ -1,6 +1,5 @@
 import Base from './Base';
 import { Schema, arrayOf } from 'normalizr';
-import Promise from 'lib/utils/promise';
 
 import { MEDIA_TYPE } from 'constants/common';
 
@@ -30,6 +29,12 @@ export default class MediaAPI extends Base {
     });
   }
 
+  getVideo(mediaId) {
+    return this.apiClient.get({
+      url: `media/${mediaId}/video`
+    });
+  }
+
   postMedia(mediaType, media, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
@@ -47,6 +52,29 @@ export default class MediaAPI extends Base {
       // TODO: Error handling for other cases
       return null;
     }
+  }
+
+  postVideo(mediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    return this.apiClient.post({
+      url: `media/${mediaId}/video`,
+      requireAuth: true
+    });
+  }
+
+  putMedia(mediaId, media, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.put({
+      url: `media/${mediaId}`,
+      payload: media,
+      requireAuth: true,
+      contentType: 'multipart/form-data'
+    });
   }
 
   deleteMedia(mediaId, authToken) {

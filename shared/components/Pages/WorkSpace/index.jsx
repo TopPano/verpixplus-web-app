@@ -4,14 +4,12 @@ import React, { Component, PropTypes } from 'react';
 
 import Summary from './Summary';
 import Gallery from 'components/Common/Gallery';
-import Notifications from 'containers/common/Notifications';
 
 if (process.env.BROWSER) {
   require('./WorkSpace.css');
 }
 
 const propTypes = {
-  user: PropTypes.object.isRequired,
   workspace: PropTypes.object.isRequired,
   deleteMedia: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired
@@ -23,31 +21,29 @@ const defaultProps = {
 class WorkSpace extends Component {
   render() {
     const {
-      user,
       workspace,
       deleteMedia,
       loadMore
     } = this.props;
 
     return (
-      <div className="workspace-component container-fullpage">
+      <div className="workspace-component container container-fullpage">
         <Summary
           username={workspace.username}
-          email={user.email}
-          profilePhotoUrl={workspace.profilePhotoUrl}
-          autobiography={workspace.autobiography}
           numOfMedia={workspace.numOfMedia}
         />
         <Gallery
+          progressMedia={workspace.progressMedia.objs}
+          progressMediaIds={workspace.progressMedia.ids}
           media={workspace.media.objs}
           mediaIds={workspace.media.ids}
           hasNext={workspace.media.hasNext}
           userId={workspace.userId}
+          isProcessing={workspace.isProcessing}
           isFetching={workspace.isFetching}
           deleteMedia={deleteMedia}
           loadMore={loadMore}
         />
-        <Notifications />
       </div>
     );
   }

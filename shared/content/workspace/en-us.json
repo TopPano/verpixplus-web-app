@@ -1,13 +1,15 @@
 {
-  "DELETE": {
-    "TITLE": "Delete Media",
-    "DESC": "This media will be deleted and you won't be able to find it anymore.",
-    "CLOSE_BTN": "Cancel",
-    "CONFIRM_BTN": "Delete"
-  },
   "MORE": "more",
+  "COMPLETE": "Complete",
+  "CREATE": {
+    "MAIN": "Create your own imigination",
+    "DESC": "Upload your video"
+  },
   "OVERALL": {
     "MEDIA": "Media"
+  },
+  "PROFILE_PICTURE": {
+    "TITLE": "Click to upload a profile picture"
   },
   "EDIT_PROFILE": {
     "TITLE": "Edit Profile",
@@ -17,9 +19,25 @@
     },
     "USERNAME": "Username",
     "EMAIL": "Email",
-    "PWD": "Password",
-    "CONFIRM_PWD": "Confirm Password",
+    "OLD_PWD": "Old Password",
+    "NEW_PWD": "New Password",
+    "CONFIRM_NEW_PWD": "Confirm NewPassword",
     "AUTOBIOGRAPHY": "Autobiography",
     "CONFIRM_BTN": "Save"
+  },
+  "ERR_MSG": {
+    "OLD_PWD": {
+      "EMPTY": "Please enter your old password"
+    },
+    "NEW_PWD": {
+      "EMPTY": "Please enter your new password",
+      "NOT_MATCHED": "These new passwords don't match."
+    },
+    "CONFIRM_NEW_PWD": {
+      "EMPTY": "Please enter your new password again"
+    },
+    "AJAX": {
+      "UNAUTHORIZED": "Your old password is not correct"
+    }
   }
 }

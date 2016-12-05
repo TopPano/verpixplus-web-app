@@ -8,10 +8,9 @@ if (process.env.BROWSER) {
 }
 
 const COLOR_MAP = [
-  '#72C02C',
-  '#79D5B3',
-  '#3498DB',
-  '#9B6BCC'
+  '#C1272D',
+  '#C22D40',
+  '#DC143C'
 ];
 
 const propTypes = {
@@ -38,6 +37,8 @@ class FileProgress extends Component {
           <Circle
             percent={percent}
             strokeColor={color}
+            strokeWidth={4}
+            trailWidth={4}
           />
           <p className="progress-text text-center">
             {`${percent}%`}

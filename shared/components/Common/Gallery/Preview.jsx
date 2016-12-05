@@ -1,14 +1,17 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { renderList } from 'lib/utils';
+import classNames from 'classnames';
+
+import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 
 if (process.env.BROWSER) {
   require('./Preview.css');
 }
 
 const propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  image: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -19,69 +22,62 @@ const defaultProps = {
 };
 
 class Preview extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
-  // Render items list
-  renderItemsList(images, dimension) {
-    let imgClass;
-    let imgStyle;
-
-    if (dimension.width <= dimension.height) {
-      // portrait
-      imgClass = 'img-portrait';
-      imgStyle = {
-        width: '100%',
-        height: `${parseInt((dimension.height / dimension.width) * 100, 10)}%`
-      };
-    } else {
-      // landscape
-      imgClass = 'img-landscape';
-      imgStyle = {
-        width: `${parseInt((dimension.width / dimension.height) * 100, 10)}%`,
-        height: '100%'
-      };
-    }
-
-    return renderList(images.slice(0, 5), (image, idx) => (
-      <div
-        className="img-item"
-        key={idx}
-      >
-        <div className="img-wrapper overflow-hidden rounded">
-          <img
-            className={imgClass}
-            style={imgStyle}
-            src={image}
-            alt=""
-          />
-        </div>
-      </div>
-    ));
-  }
-
   render() {
+    const { l } = this.context.i18n;
     const {
-      images,
+      image,
+      type,
       dimension
     } = this.props;
+    let imgClass = '';
 
-    const itemsList = images.length === 0 ? [] : this.renderItemsList(images, dimension);
+    if (dimension) {
+      const {
+        width,
+        height
+      } = dimension;
+
+      imgClass = classNames({
+        portrait: width <= height,
+        landscape: width > height
+      });
+    }
 
     return (
-      <div className="preview-component overflow-hidden">
-        <div className="preview-wrapper">
-          <div className="preview-primary">
-            {itemsList.length === 0 ? null : itemsList[0]}
-          </div>
-          <div className="preview-secondary">
-            {itemsList.slice(1, 5)}
-          </div>
+      <div className="preview-component">
+        <div className="preview-wrapper overflow-hidden">
+          <img
+            className={imgClass}
+            src={image}
+          />
         </div>
-        <div className="preview-overlay container-center-row rounded">
-          <i className="fa fa-pencil" />
-        </div>
+        {
+          type === GALLERY_ITEM_TYPE.COMPLETED &&
+          <div className="preview-overlay container-center-row">
+            <img
+              src="/static/images/workspace/view.png"
+              alt="view"
+            />
+          </div>
+        }
+        {
+          type === GALLERY_ITEM_TYPE.CREATE &&
+          <div className="preview-overlay container-center-row">
+            <img
+              src="/static/images/workspace/add.png"
+              alt="view"
+              width="25"
+              height="25"
+            />
+            <p className="create-description text-center">{l('Upload your video')}</p>
+          </div>
+        }
       </div>
     );
   }

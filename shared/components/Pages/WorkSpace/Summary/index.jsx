@@ -1,12 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 
-import ProfilePhoto from './ProfilePhoto';
-import ProfileInfo from './ProfileInfo';
-import ProfileEditor from './ProfileEditor';
+import { renderList } from 'lib/utils';
 
 if (process.env.BROWSER) {
   require('./Summary.css');
@@ -14,8 +10,6 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   username: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  profilePhotoUrl: PropTypes.string.isRequired,
   numOfMedia: PropTypes.number.isRequired
 };
 
@@ -23,49 +17,52 @@ const defaultProps = {
 };
 
 class Summary extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
+  // Render list of summary-info
+  renderSummaryInfoList(propsList) {
+    return renderList(propsList, (props, idx) => (
+      <div
+        id={idx}
+        className="summary-info"
+      >
+        <img
+          src={props.src}
+          alt={props.alt}
+          width={props.size}
+          height={props.size}
+        />
+        <span>{props.text}</span>
+      </div>
+    ));
+  }
+
   render() {
+    const { l } = this.context.i18n;
     const {
       username,
-      email,
-      profilePhotoUrl,
       numOfMedia
     } = this.props;
+    const summaryInfoPropsList = [{
+      src: '/static/images/workspace/username.png',
+      alt: 'username',
+      size: 17,
+      text: username
+    }, {
+      src: '/static/images/workspace/media.svg',
+      alt: 'media',
+      size: 15,
+      text: `${numOfMedia} ${l('Media').toUpperCase()}`
+    }];
+    const summaryInfoList = this.renderSummaryInfoList(summaryInfoPropsList);
 
     return (
-      <div className="summary-component breadcrumbs">
-        <div className="summary-wrapper container">
-          <Row>
-            <Col
-              className="container-center-row"
-              sm={4}
-            >
-              <ProfilePhoto profilePhotoUrl={profilePhotoUrl} />
-            </Col>
-            <Col
-              className="profile-info-wrapper"
-              sm={6}
-            >
-              <ProfileInfo
-                username={username}
-                email={email}
-                numOfMedia={numOfMedia}
-              />
-            </Col>
-            <Col
-              className="container-center-row"
-              sm={2}
-            >
-              <ProfileEditor
-                username={username}
-                email={email}
-              />
-            </Col>
-          </Row>
-        </div>
+      <div className="summary-component">
+        {summaryInfoList}
       </div>
     );
   }

@@ -10,18 +10,40 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
 
+import merge from 'lodash/merge';
+import Jed from 'jed';
+
+import enLocaleData from '../public/static/lang/en.json';
+import zhTwLocaleData from '../public/static/lang/zh-tw.json';
+
 import {
   fetchComponentsData,
-  genShareContent,
-  renderHTML
+  detectLocale,
+  genHeadContent,
+  genDefaultContent,
+  genStaticPages
 } from './utils';
 
 import routes from 'shared/routes';
 import configureStore from 'store/configureStore';
+import i18n from 'i18n';
 import Promise from 'lib/utils/promise';
+import api from 'lib/api';
 
+import { GA_SDK } from 'constants/common';
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
+import exterApiConfig from 'etc/external-api';
+
+// Initialize localization
+const i18nToolsRegistry = {
+  'en': new i18n.Tools({ localeData: enLocaleData, locale: 'en' }),
+  'zh-tw': new i18n.Tools({ localeData: zhTwLocaleData, locale: 'zh-tw' })
+};
+
+const homePages = genStaticPages('/home', i18nToolsRegistry, process.env.NODE_ENV);
+const termsPages = genStaticPages('/terms', i18nToolsRegistry, process.env.NODE_ENV);
+const privacyPages = genStaticPages('/privacy', i18nToolsRegistry, process.env.NODE_ENV);
 
 const app = new Express();
 
@@ -40,23 +62,85 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
+// Use ejs for template
+app.set('view engine', 'ejs');
+
+// Redirect from http to https
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    // Check it is ELB health check or not
+    if (req.headers['user-agent.match'] !== 'ELB-HealthChecker\/1.0') {
+      // Check it is http request or not
+      if (req.headers['x-forwarded-proto'] === 'http') {
+        return res.redirect(301, `${clientConfig.staticUrl}${req.url}`);
+      }
+    }
+    next();
+  });
+}
+
+// Embed page request
+app.get('/embed/@:mediaId', (req, res) => {
+  const { mediaId } = req.params;
+
+  api.media.getMedia(mediaId).then((response) => {
+    const locale = detectLocale(req);
+    const i18nTools = i18nToolsRegistry[locale];
+    const url = `${req.protocol}://${req.get('Host')}${req.url}`;
+    const content = genHeadContent(url, i18nTools, true, response.result);
+
+    res.render('pages/embed', merge({}, content, {
+      staticUrl: clientConfig.staticUrl,
+      page: `/embed/@${mediaId}`,
+      ga: {
+        active: process.env.NODE_ENV === 'production',
+        sdk: GA_SDK,
+        trackingCode: exterApiConfig.ga.trackingCode
+      }
+    }));
+  }).catch((err) => {
+    console.error(err.stack);
+    res.end(err.message);
+  });
+});
+
+// Terms of Use page request
+app.get('/terms', (req, res) => {
+  const locale = detectLocale(req);
+  return res.end(termsPages[locale]);
+});
+
+// Privacy Policy page request
+app.get('/privacy', (req, res) => {
+  const locale = detectLocale(req);
+  return res.end(privacyPages[locale]);
+});
+
 // This is fired every time the server side receives a request
 app.use((req, res) => {
   let initState = {};
   const accessToken = req.cookies.accessToken || null;
-  const matchViewer = req.url.match(/(\/viewer\/@)+/);
-  const isViewerPage = matchViewer && matchViewer.index === 0;
+
+  const locale = detectLocale(req);
+  const i18nTools = i18nToolsRegistry[locale];
+
+  if (!accessToken && req.url === '/') {
+    return res.end(homePages[locale]);
+  }
 
   if (accessToken) {
     // restore the client state
     initState.user = {
       isFetching: false,
+      isProcessing: {},
       isAuthenticated: true,
+      accessToken,
       userId: req.cookies.userId,
       username: req.cookies.username,
       profilePhotoUrl: req.cookies.profilePhotoUrl,
       email: req.cookies.email,
-      created: req.cookies.created
+      created: req.cookies.created,
+      errMsgs: {}
     };
   }
 
@@ -75,28 +159,27 @@ app.use((req, res) => {
         components  : renderProps.components,
         params      : renderProps.params,
         location    : renderProps.location,
-        userSession : initState.user
+        userSession : initState.user,
+        locale
       })
       .then(() => {
         // Grab the initial state from the store
         const initialState = store.getState();
         const html = renderToString(
           <Provider store={store}>
-            <div>
+            <i18n.Provider i18n={i18nTools}>
               <RouterContext {...renderProps} />
-            </div>
+            </i18n.Provider>
           </Provider>
         );
-        const shareContent = genShareContent(req, isViewerPage, initialState.post);
+        const url = `${req.protocol}://${req.get('Host')}${req.url}`;
+        const headContent = genHeadContent(url, i18nTools, false);
+        const content = genDefaultContent(html, initialState, headContent, process.env.NODE_ENV);
 
-        return renderHTML(html, initialState, clientConfig, shareContent, process.env.NODE_ENV);
-      })
-      .then(html => {
-        // Send the rendered page back to the client
-        res.end(html);
+        res.render('pages/default', content);
       })
       .catch(err => {
-        console.log(err.stack);
+        console.error(err.stack);
         res.end(err.message);
       });
     }

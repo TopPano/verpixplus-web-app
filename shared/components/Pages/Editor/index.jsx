@@ -3,10 +3,13 @@
 import React, { Component, PropTypes } from 'react';
 
 import { MODE } from 'constants/editor';
-import FilePanel from './FilePanel';
-import PlayerPanel from './PlayerPanel';
-import FramePanel from './FramePanel';
-import Sidebar from './Sidebar';
+import InfoPanel from 'containers/common/InfoPanel';
+import FilePanel from 'containers/pages/Editor/FilePanel';
+import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
+import FramePanel from 'containers/pages/Editor/FramePanel';
+import Sidebar from 'containers/pages/Editor/Sidebar';
+import ProcessModal from './ProcessModal';
+import ErrorModal from 'containers/pages/Editor/ErrorModal';
 
 if (process.env.BROWSER) {
   require('./Editor.css');
@@ -14,134 +17,71 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
-  mediaType: PropTypes.string.isRequired,
-  isProcessing: PropTypes.bool.isRequired,
-  progress: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dataUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
-  playerMode: PropTypes.string.isRequired,
-  autoplay: PropTypes.bool.isRequired,
-  lower: PropTypes.number.isRequired,
-  upper: PropTypes.number.isRequired,
-  filters: PropTypes.object.isRequired,
-  convertFile: PropTypes.func.isRequired,
-  playerPlay: PropTypes.func.isRequired,
-  playerPause: PropTypes.func.isRequired,
-  playerSetAutoplay: PropTypes.func.isRequired,
-  trim: PropTypes.func.isRequired,
-  edit: PropTypes.func.isRequired,
-  adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
-  create: PropTypes.func.isRequired
+  isProcessing: PropTypes.bool.isRequired
 };
 
 const defaultProps = {
 };
 
 class Editor extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { l } = this.context.i18n;
     const {
       mode,
-      mediaType,
-      isProcessing,
-      progress,
-      title,
-      caption,
-      data,
-      appliedData,
-      dataUrls,
-      dimension,
-      autoplay,
-      playerMode,
-      lower,
-      upper,
-      filters,
-      convertFile,
-      playerPlay,
-      playerPause,
-      playerSetAutoplay,
-      trim,
-      edit,
-      adjustFilters,
-      applyFilters,
-      create
+      isProcessing
     } = this.props;
-    let mainComponent;
+    const infoPanelProps = {
+      light: true,
+      links: [{
+        to: '',
+        text: l('My Gallery')
+      }]
+    }
+    let mainComponents;
 
     if (mode === MODE.WAIT_FILE) {
       // Wait for user to choose file
-      const filePanelProps = {
-        isProcessing,
-        progress,
-        convertFile
-      };
-      mainComponent =
-        <FilePanel {...filePanelProps} />;
-    } else if (mode === MODE.CREATE || mode === MODE.EDIT) {
+      mainComponents = [<FilePanel />]
+    } else if (mode === MODE.CREATE) {
       // CREATE mode: after choosing file, creates a new media
+      mainComponents = [<PlayerPanel />, <FramePanel />]
+    } else if (mode === MODE.EDIT) {
       // EDIT mode: edit an old media
-      mainComponent =
-        <div className="main-wrapper fill">
-          <PlayerPanel
-            imagesData={data}
-            appliedImagesData={appliedData}
-            dimension={dimension}
-            playerMode={playerMode}
-            autoplay={autoplay}
-            lower={lower}
-            upper={upper}
-            filters={filters}
-          />
-          <FramePanel
-            images={dataUrls}
-            dimension={dimension}
-            lower={lower}
-            upper={upper}
-            playerPlay={playerPlay}
-            playerPause={playerPause}
-            trim={trim}
-          />
-        </div>
+      mainComponents = [<PlayerPanel />]
     } else  {
       // TODO: any other case ?
     }
 
     return (
       <div className="editor-component container-full">
+        <InfoPanel {...infoPanelProps} />
+        <ErrorModal />
         <div className="editor-main">
-          {mainComponent}
+          <div className="main-header container-center-row">
+            <img
+              src="/static/images/editor/logo.svg"
+              alt="logo"
+              width="145"
+              height="33"
+            />
+          </div>
+          <div className="main-content">
+            {mainComponents}
+          </div>
         </div>
         <div className="editor-sidebar">
-          <Sidebar
-            mode={mode}
-            mediaType={mediaType}
-            title={title}
-            caption={caption}
-            data={data}
-            appliedData={appliedData}
-            dimension={dimension}
-            autoplay={autoplay}
-            filters={filters}
-            playerPlay={playerPlay}
-            playerPause={playerPause}
-            playerSetAutoplay={playerSetAutoplay}
-            edit={edit}
-            adjustFilters={adjustFilters}
-            applyFilters={applyFilters}
-            create={create}
-          />
+          <Sidebar />
         </div>
+        {
+          (mode !== MODE.WAIT_FILE) &&
+          <ProcessModal isProcessing={isProcessing} />
+        }
       </div>
     );
   }

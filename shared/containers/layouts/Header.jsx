@@ -3,36 +3,36 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import Header from '../../components/Layouts/Header';
-import { logoutUser } from '../../actions/user';
+import Header from 'components/Layouts/Header';
+
+const propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
+};
+
+const defaultProps = {
+};
 
 class HeaderContainer extends Component {
-  static propTyes = {
-    children: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
-  };
-
-  logout = (dispatch) => {
-    dispatch(logoutUser());
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    const { username, userId, profilePhotoUrl } = this.props.user;
+    const { isAuthenticated } = this.props;
+
     return (
-      <Header
-        username={username}
-        userId={userId}
-        profilePhotoUrl={profilePhotoUrl}
-        logoutUser={this.logout.bind(this, this.props.dispatch)}
-      />
+      <Header isAuthenticated={isAuthenticated} />
     );
   }
 }
 
+HeaderContainer.propTypes = propTypes;
+HeaderContainer.defaultProps = defaultProps;
+
 function mapStateToProps(state) {
-  const { user } = state;
+  const { isAuthenticated } = state.user;
   return {
-    user
+    isAuthenticated
   }
 }
 

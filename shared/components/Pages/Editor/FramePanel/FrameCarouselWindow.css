@@ -1,8 +1,0 @@
-.frame-carousel-window-component {
-  &.active {
-    border: solid 1px #E8AA25;
-  }
-  &:hover, &.changing {
-    border-width: 3px;
-  }
-}

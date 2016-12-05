@@ -1,16 +1,20 @@
+@import 'Variables.css';
+
 .adjust-component {
   padding: 0 10px;
-  * {
-    color: #AAA;
-  }
 
-  h5 {
-    margin-bottom: 5px;
-    cursor: default;
-  }
+  .adjust-text {
+    padding: 5px;
 
-  .adjust-value {
-    background-color: #3B3B3B;
-    padding: 0 5px;
+    p {
+      color: $color-white;
+      margin-bottom: 5px;
+      cursor: default;
+    }
+
+    .adjust-value {
+      background-color: $color-grey;
+      padding: 0 5px;
+    }
   }
 }

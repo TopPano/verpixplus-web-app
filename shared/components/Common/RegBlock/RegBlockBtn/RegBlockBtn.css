@@ -1,2 +1,11 @@
+@import 'Variables.css';
+
 .reg-block-btn-component {
+  .reg-block-btn {
+    width: 100%;
+    &:hover {
+      background-color: #E24D60;
+      color: $color-white;
+    }
+  }
 }

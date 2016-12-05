@@ -23,8 +23,37 @@
     .modal-content {
       background-color: $color-white;
       border: none;
+      border-radius: 0;
       box-shadow: none;
       padding: 10px;
+
+      .modal-title-icon {
+        width: 20px;
+        height: 20px;
+        margin: 2px 5px 3px 0;
+      }
+
+      .modal-btn {
+        width: 70px;
+        font-size: 14px;
+        line-height: 30px;
+        border: none;
+        transition: all .3s ease;
+        &.close-btn {
+          background-color: $color-grey;
+          &:hover {
+            background-color: #AFAFAF;
+            color: $color-white;
+          }
+        }
+        &.confirm-btn {
+          background-color: $color-black;
+          &:hover {
+            background-color: #505050;
+            color: $color-white;
+          }
+        }
+      }
     }
   }
 }

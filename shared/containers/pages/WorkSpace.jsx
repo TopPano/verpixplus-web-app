@@ -10,7 +10,6 @@ import ScrollablePageContainer from './Scrollable';
 import WorkSpace from 'components/Pages/WorkSpace';
 
 const propTypes = {
-  user: PropTypes.object.isRequired,
   workspace: PropTypes.object.isRequired
 };
 
@@ -83,14 +82,10 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
   }
 
   render() {
-    const {
-      user,
-      workspace
-    } = this.props;
+    const { workspace } = this.props;
 
     return (
       <WorkSpace
-        user={user}
         workspace={workspace}
         deleteMedia={this.deleteMedia}
         loadMore={this.loadMore}
