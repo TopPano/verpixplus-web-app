@@ -2,9 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import clientConfig from 'etc/client';
 import Modal from 'components/Common/Modal';
 import MultiTabsContent from 'components/Common/MultiTabsContent';
 import ShareSocial from './ShareSocial';
+import ShareLink from './ShareLink';
 import ShareEmbed from './ShareEmbed';
 
 if (process.env.BROWSER) {
@@ -44,6 +46,11 @@ class ShareModal extends Component {
     this.refs.modal.close();
   }
 
+  // Genrate the sharing url by media ID
+  genShareUrl(mediaId) {
+    return `${clientConfig.staticUrl}/embed/@${mediaId}`;
+  }
+
   render() {
     const { l } = this.context.i18n;
     const {
@@ -61,17 +68,22 @@ class ShareModal extends Component {
         show: false
       }
     };
+    const shareUrl = this.genShareUrl(mediaId);
     const tabsContent = [{
       tab: l('Social Media'),
       content:
         <ShareSocial
           mediaId={mediaId}
           title={title}
+          shareUrl={shareUrl}
           isVideoCreated={isVideoCreated}
           shareFacebookVideo={shareFacebookVideo}
           notifyShareSuccess={notifyShareSuccess}
           close={this.close}
         />
+    }, {
+      tab: l('Link'),
+      content: <ShareLink shareUrl={shareUrl} />
     }, {
       tab: l('Embed'),
       content: <ShareEmbed mediaId={mediaId} />

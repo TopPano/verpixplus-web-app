@@ -14,7 +14,6 @@ import {
   FACEBOOK_PRIVACY
 } from 'constants/common';
 import FlatButton from 'components/Common/FlatButton';
-import clientConfig from 'etc/client';
 import externalApiConfig from 'etc/external-api'
 
 if (process.env.BROWSER) {
@@ -35,9 +34,8 @@ const FACEBOOK_TARGET = {
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  isVideoCreated: PropTypes.bool.isRequired,
+  shareUrl: PropTypes.string.isRequired,
   shareFacebookVideo: PropTypes.func.isRequired,
-  notifyShareSuccess: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired
 };
 
@@ -70,11 +68,6 @@ class ShareSocial extends Component {
     this.handleChangeFacebookSelectedGroup = this.handleChangeFacebookSelectedGroup.bind(this);
     this.handleChangeFacebookSelectedPage = this.handleChangeFacebookSelectedPage.bind(this);
     this.handleChangeFacebookPrivacyOptions = this.handleChangeFacebookPrivacyOptions.bind(this);
-  }
-
-  // Genrate the sharing url by media ID
-  genShareUrl(mediaId) {
-    return `${clientConfig.staticUrl}/embed/@${mediaId}`;
   }
 
   // Handler for clicking facebook sharing button
@@ -111,6 +104,7 @@ class ShareSocial extends Component {
     const {
       mediaId,
       title,
+      shareUrl,
       shareFacebookVideo,
       close
     } = this.props;
@@ -126,7 +120,6 @@ class ShareSocial extends Component {
     } = this.state;
     const userDesc = this.refs.shareFBVideoDesc.value;
     const isEmptyUserDesc = isEmpty(userDesc);
-    const shareUrl = this.genShareUrl(mediaId);
     const signature = `${l('Create your imigination on Verpix')}:\n ${shareUrl}\n#Verpix #MotionGraph`;
     const description = `${userDesc}${isEmptyUserDesc ? '' : '\n\n--\n'}${signature}`;
     let targetId;
