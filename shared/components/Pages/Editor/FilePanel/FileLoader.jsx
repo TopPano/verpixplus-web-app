@@ -33,20 +33,26 @@ class FileLoader extends Component {
     super(props);
 
     // Bind "this" to callback functions
-    this.convertVideo = this.convertVideo.bind(this);
+    this.convert = this.convert.bind(this);
     this.handleDropFile = this.handleDropFile.bind(this);
     this.handleClickBtn = this.handleClickBtn.bind(this);
+
+    // Initialize state
+    this.state = {
+      source: null
+    };
 
     // Accepted MIME types for dropzone
     // TODO:
     // 1. Support image (panophoto)
     // 2. Support for more image and video types
     this.acceptTypes = '';
-    // this.acceptTypes += ACCEPT_TYPES.IMAGE.reduce((pre, cur) => pre + `image/${cur},`, '');
+    this.acceptTypes += ACCEPT_TYPES.IMAGE.reduce((pre, cur) => pre + `image/${cur},`, '');
     this.acceptTypes += ACCEPT_TYPES.VIDEO.reduce((pre, cur) => pre + `video/${cur},`, '');
   }
 
-  convertVideo() {
+  // Convert video to livephoto or image to panophoto
+  convert(mediaType) {
     const {
       storageId,
       convert
@@ -55,7 +61,7 @@ class FileLoader extends Component {
 
     convert({
       storageId,
-      mediaType: MEDIA_TYPE.LIVE_PHOTO,
+      mediaType,
       source
     });
   }
@@ -63,22 +69,35 @@ class FileLoader extends Component {
   // Handler for the file is dropped to zone
   handleDropFile(files) {
     if (isArray(files) && files[0]) {
+      const {
+        storageId,
+        convert
+      } = this.props
       // We limit user only can choose one file
       const file = files[0];
 
+      this.setState({
+        source: file.preview
+      });
+
       if (startsWith(file.type, 'image')) {
-        // TODO: Handle image (panophoto)
-      } else {
-        // Handle video (livephoto)
-        this.setState({
+        // Handle image (panophoto)
+        convert({
+          storageId,
+          mediaType: MEDIA_TYPE.PANO_PHOTO,
           source: file.preview
         });
-
+      } else {
+        // Handle video (livephoto)
         const video = document.createElement('VIDEO');
         // Check video duration exceeds the limit or not
         video.addEventListener('loadedmetadata' , () => {
           if (video.duration <= VIDEO_DURATION_LIMIT) {
-            this.convertVideo();
+            convert({
+              storageId,
+              mediaType: MEDIA_TYPE.LIVE_PHOTO,
+              source: file.preview
+            });
           } else {
             this.refs.modal.open();
           }
@@ -95,11 +114,22 @@ class FileLoader extends Component {
 
   render() {
     const { l, nl } = this.context.i18n;
+    const {
+      storageId,
+      convert
+    } = this.props
+    const { source } = this.state;
     const modalProps = {
       ref: 'modal',
       title: l('Video duration exceeds limit'),
       confirmBtn: {
-        onClick: this.convertVideo
+        onClick: () => {
+          convert({
+            storageId,
+            mediaType: MEDIA_TYPE.LIVE_PHOTO,
+            source
+          });
+        }
       }
     };
     const readableDurationLimit =
@@ -122,7 +152,7 @@ class FileLoader extends Component {
             onClick={this.handleClickBtn}
           />
           <br />
-          <p>{l('Or drag & drop your video anywhere')}</p>
+          <p>{l('Or drag & drop your video / panorama anywhere')}</p>
         </Dropzone>
         <Modal {...modalProps}>
           {sprintf(l('Only the first %s will be captured. Still continue?'), readableDurationLimit)}

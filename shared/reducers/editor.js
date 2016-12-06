@@ -20,6 +20,7 @@ import {
   APPLY_FILTERS_PROGRESS,
   APPLY_FILTERS_SUCCESS,
   APPLY_FILTERS_FAILURE,
+  SET_PANOPHOTO_FUNCTIONS,
   CLEAR_EDITOR_ERR
 } from 'actions/editor';
 import {
@@ -59,6 +60,8 @@ const DEFAULT_STATE = {
     adjusts: {},
     isDirty: false
   },
+  getPanophotoCoordinates: () => {},
+  getPanophotoSnapshot: () => {},
   err: { message: '' }
 };
 
@@ -114,6 +117,11 @@ export default function editor(state = DEFAULT_STATE, action) {
           adjusts: action.filters.adjusts,
           isDirty: true
         }
+      });
+    case SET_PANOPHOTO_FUNCTIONS:
+      return merge({}, state, {
+        getPanophotoCoordinates: action.getPanophotoCoordinates,
+        getPanophotoSnapshot: action.getPanophotoSnapshot
       });
     case GET_MEDIA_REQUEST:
     case UPDATE_MEDIA_REQUEST:

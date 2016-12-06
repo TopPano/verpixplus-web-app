@@ -8,7 +8,8 @@ import applyImageFilters from './applyImageFilters';
 import genRandomNum from './genRandomNum';
 import genUUID from './genUUID';
 import imagesStorage from './imagesStorage';
-import imageBlobToDataUrl from './imageBlobToDataUrl.js';
+import imageBlobToDataUrl from './imageBlobToDataUrl';
+import imageDataUrlToBlob from './imageDataUrlToBlob';
 import getReadableDuration from './getReadableDuration';
 import genErr from './genErr';
 import sprintf from './sprintf';
@@ -27,6 +28,7 @@ export {
   genUUID,
   imagesStorage,
   imageBlobToDataUrl,
+  imageDataUrlToBlob,
   getReadableDuration,
   genErr,
   sprintf,

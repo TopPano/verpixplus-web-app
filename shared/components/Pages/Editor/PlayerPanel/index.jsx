@@ -2,13 +2,16 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { MEDIA_TYPE } from 'constants/common';
 import LivephotoPlayer from './LivephotoPlayer';
+import PanophotoPlayer from './PanophotoPlayer';
 
 if (process.env.BROWSER) {
   require('./PlayerPanel.css');
 }
 
 const propTypes = {
+  meidaType: PropTypes.string.isRequired,
   storageId: PropTypes.string.isRequired,
   appliedData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dimension: PropTypes.shape({
@@ -19,7 +22,8 @@ const propTypes = {
   autoplay: PropTypes.bool.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
-  filters: PropTypes.object.isRequired
+  filters: PropTypes.object.isRequired,
+  setPanophotoFunctions: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -31,9 +35,23 @@ class PlayerPanel extends Component {
   }
 
   render() {
+    const {
+      mediaType,
+      appliedData,
+      setPanophotoFunctions
+    } = this.props;
+
     return (
       <div className="player-panel-component overflow-hidden">
-        <LivephotoPlayer {...this.props} />
+        {
+          (mediaType === MEDIA_TYPE.LIVE_PHOTO) ?
+          <LivephotoPlayer {...this.props} /> :
+          <PanophotoPlayer
+            ref="panophoto"
+            images={appliedData}
+            setPanophotoFunctions={setPanophotoFunctions}
+          />
+        }
       </div>
     );
   }

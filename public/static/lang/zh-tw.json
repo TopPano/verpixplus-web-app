@@ -370,8 +370,8 @@
       "Choose File": [
         "選取檔案"
       ],
-      "Or drag & drop your video anywhere": [
-        "或將您的影片拖曳至任何地方"
+      "Or drag & drop your video / panorama anywhere": [
+        "或將您的影片/全景圖拖曳至任何地方"
       ],
       "Brightness": [
         "明度"
@@ -405,6 +405,9 @@
       ],
       "Video is converting, please try again later": [
         "影片正在轉換中，請晚點再試"
+      ],
+      "Please upload a panorama which has 2:1 aspect ratio": [
+        "請上傳長寬比為2:1的全景圖"
       ],
       "Non-support media type": [
         "不支援的素材類型"

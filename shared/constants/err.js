@@ -16,6 +16,7 @@ const ERR = {
   EXCEED_VIDEO_TIME_LIMIT: 'The total time of video exceeds the limit',
   VIDEO_FORMAT_NOT_SUPPORTED: 'The video format is not supported, please upload another video',
   VIDEO_IS_CONVERTING: 'Video is converting, please try again later',
+  INVALID_PANO_RATIO: 'Please upload a panorama which has 2:1 aspect ratio',
   MEDIA_NOT_SUPPORTED: 'Non-support media type',
   IMAGE_URLS_TO_DATA_FAILURE: 'Error occurs while loading motion graph, please try again later',
 

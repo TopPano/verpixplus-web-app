@@ -1,11 +1,6 @@
 @import 'Variables.css';
 
 .livephoto-player-component {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
   canvas {
     position: absolute;
     top: 0;

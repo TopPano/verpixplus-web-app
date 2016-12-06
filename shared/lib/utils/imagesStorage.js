@@ -25,13 +25,18 @@ function load(storageId, idx) {
   }
 }
 
-function save(storageId, idx, imgDataUrl) {
+function save(storageId, idx, imgDataUrl, inMemory) {
   return new Promise((resolve) => {
     const key = getKey(storageId, idx);
     const currentMaxIdx = maxIndexes.get(storageId);
 
     if (!isNumber(currentMaxIdx) || currentMaxIdx < idx) {
       maxIndexes.set(storageId, idx);
+    }
+
+    if (inMemory) {
+      imgsStorage.set(key, imgDataUrl);
+      resolve();
     }
 
     localforage.setItem(key, imgDataUrl).then(() => {

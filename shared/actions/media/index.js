@@ -20,7 +20,8 @@ import {
 } from '../notifications';
 import {
   genRandomNum,
-  genUUID
+  genUUID,
+  imageDataUrlToBlob
 } from 'lib/utils';
 
 function handleError(dispatch, type, err) {
@@ -208,7 +209,17 @@ function pollingAskMediaStatus(dispatch, progressMediaId, mediaId, progress, ret
   });
 }
 
-export function createMedia({ mediaType, title, caption, data, dimension, userSession = {} }) {
+export function createMedia({
+  mediaType,
+  title,
+  caption,
+  data,
+  thumbnail,
+  dimension,
+  panoLng,
+  panoLat,
+  userSession = {}
+}) {
   return (dispatch) => {
     dispatch(push('/'));
 
@@ -250,13 +261,57 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
         return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
         clearInterval(postMediaTimer);
-        dispatch(createMediaProgress(progressMediaId, progress));
         pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
       }).catch((err) => {
+        clearInterval(postMediaTimer);
         handleError(dispatch, CREATE_MEDIA_FAILURE, err);
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
-      // TODO: Handle panophoto
+      const progressMediaId = genUUID();
+      let postMediaTimer;
+      let progress = 0;
+      let panoBlob;
+
+      dispatch(createMediaRequest({
+        progressMediaId
+      }));
+
+      imageDataUrlToBlob(data[0]).then((imgBlob) => {
+        progress += genRandomNum(0.2, 0.25);
+        dispatch(createMediaProgress(progressMediaId, progress));
+        panoBlob = imgBlob;
+
+        return imageDataUrlToBlob(thumbnail);
+      }).then((thumbnailBlob) => {
+        progress += genRandomNum(0.2, 0.25);
+        dispatch(createMediaProgress(progressMediaId, progress));
+
+        const formData = new FormData();
+
+        formData.append('image', panoBlob);
+        formData.append('thumbnail', thumbnailBlob);
+        formData.append('title', title);
+        formData.append('caption', caption);
+        formData.append('width', dimension.width);
+        formData.append('height', dimension.height);
+        formData.append('lng', panoLng);
+        formData.append('lat', panoLat);
+
+        postMediaTimer = setInterval(() => {
+          const addedProgress = genRandomNum(0.005, 0.01);
+          progress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, progress));
+        }, 500);
+
+        return api.media.postMedia(mediaType, formData, userSession.accessToken);
+      }).then((res) => {
+        clearInterval(postMediaTimer);
+        pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
+      }).catch((err) => {
+        clearInterval(postMediaTimer);
+        handleError(dispatch, CREATE_MEDIA_FAILURE, err);
+      });
     } else {
       const err = new Error(`Meida type: ${mediaType} is not supported`);
       err.status = 400;

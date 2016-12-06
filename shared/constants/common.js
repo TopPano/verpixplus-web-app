@@ -65,11 +65,14 @@ export const FACEBOOK_PRIVACY = {
   SELF: 'SELF'
 };
 
-export const EMBED = {
-  SDK_LIVEPHOTO:
+const sdk =
   '<script>' +
-  `!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",["${externalApiConfig.sdk.url}/sdk-livephoto.js"])` +
-  '</script>',
+  `!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",["${externalApiConfig.sdk.url}/$sdk"])` +
+  '</script>';
+export const EMBED = {
+  SDK: sdk.replace('$sdk', 'sdk.js'),
+  SDK_LIVEPHOTO: sdk.replace('$sdk', 'sdk-livephoto.js'),
+  SDK_PANOPHOTO: sdk.replace('$sdk', 'sdk-panophoto.js'),
   DEFAULT_WIDTH: 480,
   DEFAULT_HEIGHT: 640
 };

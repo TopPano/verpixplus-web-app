@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import { MODE } from 'constants/editor';
+import { MEDIA_TYPE } from 'constants/common';
 import InfoPanel from 'containers/common/InfoPanel';
 import FilePanel from 'containers/pages/Editor/FilePanel';
 import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
@@ -17,6 +18,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
   isProcessing: PropTypes.bool.isRequired
 };
 
@@ -34,6 +36,7 @@ class Editor extends Component {
     const { l } = this.context.i18n;
     const {
       mode,
+      mediaType,
       isProcessing
     } = this.props;
     const infoPanelProps = {
@@ -50,7 +53,10 @@ class Editor extends Component {
       mainComponents = [<FilePanel />]
     } else if (mode === MODE.CREATE) {
       // CREATE mode: after choosing file, creates a new media
-      mainComponents = [<PlayerPanel />, <FramePanel />]
+      mainComponents =
+        mediaType === MEDIA_TYPE.LIVE_PHOTO ?
+        [<PlayerPanel />, <FramePanel />] :
+        [<PlayerPanel />];
     } else if (mode === MODE.EDIT) {
       // EDIT mode: edit an old media
       mainComponents = [<PlayerPanel />]

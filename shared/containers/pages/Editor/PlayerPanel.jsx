@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import { setPanophotoFunctions } from 'actions/editor';
 import PlayerPanel from 'components/Pages/Editor/PlayerPanel'
 
 const propTypes = {
@@ -15,13 +16,26 @@ const defaultProps = {
 class PlayerPanelContainer extends Component {
   constructor(props) {
     super(props);
+
+    // Bind "this" to member functions
+    this.setPanophotoFunctions = this.setPanophotoFunctions.bind(this);
+  }
+
+  // Wrapper function for dispatching setPanophotoFunctions,
+  // which set up the functions of panophoto,
+  // such as get current snapshot of panophoto
+  setPanophotoFunctions(params) {
+    this.props.dispatch(setPanophotoFunctions(params));
   }
 
   render() {
     const { editor } = this.props;
 
     return (
-      <PlayerPanel {...editor} />
+      <PlayerPanel
+        {...editor}
+        setPanophotoFunctions={this.setPanophotoFunctions}
+      />
     );
   }
 }

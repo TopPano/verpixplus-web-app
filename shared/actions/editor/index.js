@@ -13,6 +13,7 @@ import { getMedia } from '../media';
 import imageUrlsToData from './imageUrlsToData';
 import applyImagesFilters from './applyImagesFilters';
 import FrameConverter from './FrameConverter';
+import PanoConverter from './PanoConverter';
 import { genErr } from 'lib/utils';
 
 export const INIT_UPLOAD = 'INIT_UPLOAD';
@@ -101,26 +102,29 @@ function convertFailure(err) {
 
 export function convert({ storageId, mediaType, source }) {
   return (dispatch) => {
-    if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
-      const converter = new FrameConverter();
-      dispatch(convertRequest(converter));
+    let converter;
 
-      converter.convert(storageId, source, (progress) => {
-        dispatch(convertProgress(progress));
-      }).then((result) => {
-        converter.stop();
-        dispatch(convertSuccess(mediaType, result));
-      }).catch((err) => {
-        converter.stop();
-        dispatch(convertFailure(err));
-      });
+    if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
+      converter = new FrameConverter();
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
-      // TODO: Handle panophoto
+      converter = new PanoConverter();
     } else {
       dispatch(convertFailure(genErr(ERR.MEDIA_NOT_SUPPORTED, {
         mediaType
       })));
     }
+
+    dispatch(convertRequest(converter));
+
+    converter.convert(storageId, source, (progress) => {
+      dispatch(convertProgress(progress));
+    }).then((result) => {
+      converter.stop();
+      dispatch(convertSuccess(mediaType, result));
+    }).catch((err) => {
+      converter.stop();
+      dispatch(convertFailure(err));
+    });
   };
 }
 
@@ -280,6 +284,18 @@ export function clearEditorErr() {
   return (dispatch) => {
     dispatch({
       type: CLEAR_EDITOR_ERR
+    });
+  }
+}
+
+export const SET_PANOPHOTO_FUNCTIONS = 'SET_PANOPHOTO_FUNCTIONS';
+
+export function setPanophotoFunctions({ getPanophotoCoordinates, getPanophotoSnapshot }) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_PANOPHOTO_FUNCTIONS,
+      getPanophotoCoordinates,
+      getPanophotoSnapshot
     });
   }
 }

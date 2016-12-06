@@ -35,19 +35,24 @@ export default class MediaAPI extends Base {
     });
   }
 
-  postMedia(mediaType, media, authToken) {
+  postMedia(mediaType, payload, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
     }
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       return this.apiClient.post({
         url: 'media/livephoto',
-        payload: media,
+        payload,
         requireAuth: true,
         contentType: 'multipart/form-data'
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
-      // TODO: Handle panophoto
+      return this.apiClient.post({
+        url: 'media/panophoto',
+        payload,
+        requireAuth: true,
+        contentType: 'multipart/form-data'
+      });
     } else {
       // TODO: Error handling for other cases
       return null;

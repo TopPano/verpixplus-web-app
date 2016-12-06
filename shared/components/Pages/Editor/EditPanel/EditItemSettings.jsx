@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { MODE } from 'constants/editor';
+import { MEDIA_TYPE } from 'constants/common';
 import Modal from 'components/Common/Modal';
 import DeleteModal from 'containers/common/DeleteModal';
 import FlatButton from 'components/Common/FlatButton';
@@ -32,7 +33,9 @@ const propTypes = {
   isProcessing: PropTypes.bool.isRequired,
   playerSetAutoplay: PropTypes.func.isRequired,
   create: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  update: PropTypes.func.isRequired,
+  getPanophotoCoordinates: PropTypes.func.isRequired,
+  getPanophotoSnapshot: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -59,18 +62,41 @@ class EditItemSettings extends Component {
       caption,
       appliedData,
       dimension,
-      lower,
-      upper,
       create
     } = this.props;
 
-    create({
-      mediaType,
-      title,
-      caption,
-      data: appliedData.slice(lower, upper),
-      dimension
-    });
+    if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
+      const {
+        lower,
+        upper
+      } = this.props;
+
+      create({
+        mediaType,
+        title,
+        caption,
+        data: appliedData.slice(lower, upper),
+        dimension
+      });
+    } else {
+      const {
+        getPanophotoCoordinates,
+        getPanophotoSnapshot
+      } = this.props;
+      const thumbnail = getPanophotoSnapshot();
+      const { lng, lat } = getPanophotoCoordinates();
+
+      create({
+        mediaType,
+        title,
+        caption,
+        data: appliedData,
+        thumbnail,
+        dimension,
+        panoLng: lng,
+        panoLat: lat
+      });
+    }
   }
 
   // Wrapper for updating media
