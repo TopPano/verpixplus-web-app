@@ -56,7 +56,17 @@ export function initEditor({ params = {}, location = {} }) {
       if (process.env.BROWSER) {
         dispatch(getMedia({
           mediaId,
-          filter: constructImagesData
+          filter: (res) => {
+            if (res.result.type === MEDIA_TYPE.LIVE_PHOTO) {
+              return constructImagesData(res);
+            } else {
+              return merge({}, res, {
+                result: {
+                  imgsData: res.result.imgUrls
+                }
+              });
+            }
+          }
         }));
       }
     } else {

@@ -63,6 +63,7 @@ class PanophotoPlayer extends Component {
       >
         {
           panophotoDimension &&
+          (images.length > 0) &&
           <Panophoto
             ref="panophoto"
             images={images}

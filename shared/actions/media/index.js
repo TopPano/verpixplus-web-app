@@ -58,17 +58,22 @@ export function getMedia({ mediaId, filter }) {
     return api.media.getMedia(mediaId).then((res) => {
       // 1. Reconsture urls for livephoto
       // 2. Update dimension for the selected quality
-      if (res.result && (res.result.type === MEDIA_TYPE.LIVE_PHOTO)) {
+      if (res && res.result) {
         const {
-          cdnUrl,
+          type,
+          content
+        } = res.result;
+        const {
+          storeUrl,
           count,
           quality,
           shardingKey
-        } = res.result.content;
-        // TODO: Dynamically choose quality
+        } = content;
+        // Choose the highest quality
         const selectedQuality = quality[0];
+        const typeName = (type === MEDIA_TYPE.LIVE_PHOTO) ? 'live' : 'pano';
         const imgUrls =
-          range(0, count).map((idx) => `${cdnUrl}${shardingKey}/media/${mediaId}/live/${selectedQuality}/${idx}.jpg`);
+          range(0, count).map((idx) => `${storeUrl}${shardingKey}/media/${mediaId}/${typeName}/${selectedQuality}/${idx}.jpg`);
         const width = parseInt(selectedQuality.split('X')[0], 10);
         const height = parseInt(selectedQuality.split('X')[1], 10);
 

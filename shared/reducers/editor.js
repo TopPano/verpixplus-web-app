@@ -165,7 +165,7 @@ export default function editor(state = DEFAULT_STATE, action) {
     case GET_MEDIA_SUCCESS:
     {
       const {
-        mediaType,
+        type,
         title,
         caption,
         imgsData,
@@ -175,7 +175,7 @@ export default function editor(state = DEFAULT_STATE, action) {
 
       return merge({}, state, {
         isProcessing: false,
-        mediaType,
+        mediaType: type,
         title,
         caption,
         appliedData: imgsData,
