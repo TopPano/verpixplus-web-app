@@ -3,6 +3,7 @@
 .share-embed-component {
   .inputs-wrapper {
     flex-wrap: no-wrap;
+    margin-bottom: 10px;
     font-size: 14px;
 
     p {
@@ -42,10 +43,6 @@
     &.active {
       display: flex;
       border: 1px dashed $color-grey;
-    }
-
-    .livephoto-component {
-      max-width: 100%;
     }
   }
 }

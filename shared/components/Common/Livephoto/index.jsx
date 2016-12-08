@@ -17,8 +17,8 @@ const propTypes = {
 
 const defaultProps = {
   mediaId: '',
-  width: EMBED.DEFAULT_WIDTH,
-  height: EMBED.DEFAULT_HEIGHT,
+  width: EMBED.DEFAULT_WIDTH_LIVEPHOTO,
+  height: EMBED.DEFAULT_HEIGHT_LIVEPHOTO,
   cutBased: 'width'
 };
 

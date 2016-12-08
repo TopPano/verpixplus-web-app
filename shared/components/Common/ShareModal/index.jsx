@@ -15,8 +15,8 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  isVideoCreated: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
   shareFacebookVideo: PropTypes.func.isRequired,
   notifyShareSuccess: PropTypes.func.isRequired
@@ -55,8 +55,8 @@ class ShareModal extends Component {
     const { l } = this.context.i18n;
     const {
       mediaId,
+      mediaType,
       title,
-      isVideoCreated,
       children,
       shareFacebookVideo,
       notifyShareSuccess
@@ -76,7 +76,6 @@ class ShareModal extends Component {
           mediaId={mediaId}
           title={title}
           shareUrl={shareUrl}
-          isVideoCreated={isVideoCreated}
           shareFacebookVideo={shareFacebookVideo}
           notifyShareSuccess={notifyShareSuccess}
           close={this.close}
@@ -86,7 +85,11 @@ class ShareModal extends Component {
       content: <ShareLink shareUrl={shareUrl} />
     }, {
       tab: l('Embed'),
-      content: <ShareEmbed mediaId={mediaId} />
+      content:
+        <ShareEmbed
+          mediaId={mediaId}
+          mediaType={mediaType}
+        />
     }];
 
     return (

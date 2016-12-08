@@ -281,7 +281,7 @@ class ShareSocial extends Component {
               name="facebook-privacy"
               value={privacy}
               options={privacyOptions}
-              earchable={false}
+              searchable={false}
               clearable={false}
               onChange={this.handleChangeFacebookPrivacyOptions}
             />

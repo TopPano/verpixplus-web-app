@@ -7,8 +7,12 @@ import toNumber from 'lodash/toNumber';
 import fileSaver from 'file-saver';
 import JSZip from 'jszip';
 
-import { EMBED } from 'constants/common';
+import {
+  MEDIA_TYPE,
+  EMBED
+} from 'constants/common';
 import Livephoto from 'components/Common/Livephoto';
+import Panophoto from 'components/Common/Panophoto';
 import FlatButton from 'components/Common/FlatButton';
 import ShareEmbedCoder from './ShareEmbedCoder';
 import genAdHTML from './genAdHTML';
@@ -18,7 +22,8 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  mediaId: PropTypes.string.isRequired
+  mediaId: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired
 };
 
 const defaultProps = {
@@ -31,7 +36,8 @@ class ShareEmbed extends Component {
     super(props);
 
     // Bind "this" to member functions
-    this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleLivephotoSizeChange = this.handleLivephotoSizeChange.bind(this);
+    this.handlePanophotoSizeChange = this.handlePanophotoSizeChange.bind(this);
     this.handleClickTagChange = this.handleClickTagChange.bind(this);
     this.handleClickPreviewBtn = this.handleClickPreviewBtn.bind(this);
     this.handleClickDownloadBtn = this.handleClickDownloadBtn.bind(this);
@@ -40,21 +46,33 @@ class ShareEmbed extends Component {
     // Initialize state
     this.state = {
       showPreview: false,
-      embedWidth: EMBED.DEFAULT_WIDTH,
-      embedHeight: EMBED.DEFAULT_HEIGHT,
+      liveWidth: EMBED.DEFAULT_WIDTH_LIVEPHOTO,
+      liveHeight: EMBED.DEFAULT_HEIGHT_LIVEPHOTO,
+      panoLength: EMBED.DEFAULT_WIDTH_PANOPHOTO,
       cutBased: 'width',
       clickTag: ''
     };
   }
 
-  // Hndler for embed size change
-  handleSizeChange() {
-    const { embedWidth, embedHeight } = this.state;
-    const newEmbedWidth = toNumber(this.refs.inputWidth.value);
-    const newEmbedHeight = toNumber(this.refs.inputHeight.value);
+  // Hndler for livephoto size change
+  handleLivephotoSizeChange() {
+    const {
+      liveWidth,
+      liveHeight
+    } = this.state;
+    const newLiveWidth = toNumber(this.refs.inputLiveWidth.value);
+    const newLiveHeight = toNumber(this.refs.inputPanoHeight.value);
     this.setState({
-      embedWidth: isInteger(newEmbedWidth) ? newEmbedWidth : embedWidth,
-      embedHeight: isInteger(newEmbedHeight) ? newEmbedHeight : embedHeight
+      liveWidth: isInteger(newLiveWidth) ? newLiveWidth : liveWidth,
+      liveHeight: isInteger(newLiveHeight) ? newLiveHeight : liveHeight
+    });
+  }
+
+  // Hndler for panophoto size change
+  handlePanophotoSizeChange() {
+    const newPanoLength = toNumber(this.refs.inputPanoLength.value);
+    this.setState({
+      panoLength: isInteger(newPanoLength) ? newPanoLength : this.state.panoLength
     });
   }
 
@@ -74,16 +92,24 @@ class ShareEmbed extends Component {
 
   // Handler for clicking download button
   handleClickDownloadBtn() {
-    const { mediaId } = this.props;
     const {
-      embedWidth,
-      embedHeight,
+      mediaId,
+      mediaType
+    } = this.props;
+    const {
+      liveWidth,
+      liveHeight,
+      panoLength,
       cutBased,
       clickTag
     } = this.state;
+    const embedWidth = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveWidth : panoLength;
+    const embedHeight = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveHeight : panoLength;
+    const sdkCode = this.genSDKCode(mediaType);
+    const usageCode = this.genUsageCode(mediaId, mediaType, embedWidth, embedHeight, cutBased);
     const zip = new JSZip();
 
-    zip.file('index.html', genAdHTML(mediaId, clickTag, embedWidth, embedHeight, cutBased, EMBED.SDK_LIVEPHOTO));
+    zip.file('index.html', genAdHTML(clickTag, usageCode, sdkCode));
     zip.generateAsync({
       type: 'blob'
     }).then((zipBlob) => {
@@ -96,30 +122,99 @@ class ShareEmbed extends Component {
     this.setState({ cutBased });
   }
 
+  // Generate the SDK code
+  genSDKCode(mediaType) {
+    return (
+      (mediaType === MEDIA_TYPE.LIVE_PHOTO) ?
+      EMBED.SDK_LIVEPHOTO :
+      EMBED.SDK_PANOPHOTO
+    );
+  }
+
   // Generate the usage code
-  genUsageCode(id, type, width, height, cutBased) {
+  genUsageCode(id, mediaType, width, height, cutBased) {
+    const typeName = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? 'livephoto' : 'panophoto';
     const dataWidth = width > 0 ? `data-width="${width}"` : '';
     const dataHeight = height > 0 ? `data-height="${height}"` : '';
-    const dataCutBased = cutBased === 'height' ? `data-cut-based="${cutBased}"` : '';
+    const dataCutBased =
+      ((mediaType === MEDIA_TYPE.LIVE_PHOTO) && (cutBased === 'height')) ?
+      `data-cut-based="${cutBased}"` :
+      '';
 
-    return `<div class="verpix-${type}" data-id="${id}" ${dataWidth} ${dataHeight} ${dataCutBased}></div>`;
+    return `<div class="verpix-${typeName}" data-id="${id}" ${dataWidth} ${dataHeight} ${dataCutBased}></div>`;
+  }
+
+  // Render inputs for choose value of "cutBased"
+  renderCutBasedInputs(cutBased) {
+    const { l } = this.context.i18n;
+
+    return (
+      <div className="inputs-wrapper container-center-col">
+        <p>{`${l('Crop based')}:`}</p>
+        <div
+          className="radio"
+          onClick={() => { this.setCutBased('width') }}
+        >
+          <label>
+            <input
+              type="radio"
+              value="width"
+              checked={cutBased === 'width'}
+            />{l('Width')}
+          </label>
+        </div>
+        <div
+          className="radio"
+          onClick={() => { this.setCutBased('height') }}
+        >
+          <label>
+            <input
+              type="radio"
+              value="height"
+              checked={cutBased === 'height'}
+            />{l('Height')}
+          </label>
+        </div>
+      </div>
+    );
   }
 
   render() {
     const { l } = this.context.i18n;
     const {
       showPreview,
-      embedWidth,
-      embedHeight,
+      liveWidth,
+      liveHeight,
+      panoLength,
       cutBased,
       clickTag
     } = this.state;
-    const { mediaId } = this.props;
-    const usageCode = this.genUsageCode(mediaId, 'livephoto', embedWidth, embedHeight, cutBased);
+    const {
+      mediaId,
+      mediaType
+    } = this.props;
+    const embedWidth = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveWidth : panoLength;
+    const embedHeight = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveHeight : panoLength;
+    const sdkCode = this.genSDKCode(mediaType);
+    const usageCode = this.genUsageCode(mediaId, mediaType, embedWidth, embedHeight, cutBased);
+    const cutBasedInputs = this.renderCutBasedInputs(cutBased);
     const playerClass = classNames({
       'preview-player': true,
       'active': showPreview
     });
+    const player =
+      (mediaType === MEDIA_TYPE.LIVE_PHOTO) ?
+      <Livephoto
+        mediaId={mediaId}
+        width={liveWidth}
+        height={liveHeight}
+        cutBased={cutBased}
+      /> :
+      <Panophoto
+        mediaId={mediaId}
+        width={panoLength}
+        height={panoLength}
+      />
     const codersStyle = {
       display: !showPreview ? 'block' : 'none'
     };
@@ -128,18 +223,13 @@ class ShareEmbed extends Component {
       <div className="share-embed-component">
         <div className="container-center-row">
           <div className={playerClass}>
-            <Livephoto
-              mediaId={mediaId}
-              width={embedWidth}
-              height={embedHeight}
-              cutBased={cutBased}
-            />
+            {player}
           </div>
         </div>
         <div style={codersStyle}>
           <ShareEmbedCoder
             title={l('SDK Installation')}
-            text={EMBED.SDK_LIVEPHOTO}
+            text={sdkCode}
           />
           <hr />
           <ShareEmbedCoder
@@ -147,66 +237,53 @@ class ShareEmbed extends Component {
             text={usageCode}
           />
         </div>
-          <div className="margin-bottom-10" />
+        <div className="margin-bottom-10" />
+        {
+          (mediaType === MEDIA_TYPE.LIVE_PHOTO) &&
           <div className="inputs-wrapper container-center-col">
             <p>{`${l('Size')}:`}</p>
             <input
-              ref="inputWidth"
+              ref="inputLiveWidth"
               type="text"
-              className="form-control "
-              value={embedWidth}
-              onChange={this.handleSizeChange}
+              className="form-control"
+              value={liveWidth}
+              onChange={this.handleLivephotoSizeChange}
             />
             <i className="fa fa-times margin-left-5 margin-right-5" />
             <input
-              ref="inputHeight"
+              ref="inputPanoHeight"
               type="text"
               className="form-control"
-              value={embedHeight}
-              onChange={this.handleSizeChange}
+              value={liveHeight}
+              onChange={this.handleLivephotoSizeChange}
             />
           </div>
-          <div className="margin-bottom-10" />
+        }
+        {
+          (mediaType === MEDIA_TYPE.PANO_PHOTO) &&
           <div className="inputs-wrapper container-center-col">
-            <p>{`${l('Crop based')}:`}</p>
-            <div
-              className="radio"
-              onClick={() => { this.setCutBased('width') }}
-            >
-              <label>
-                <input
-                  type="radio"
-                  value="width"
-                  checked={cutBased === 'width'}
-                />{l('Width')}
-              </label>
-            </div>
-            <div
-              className="radio"
-              onClick={() => { this.setCutBased('height') }}
-            >
-              <label>
-                <input
-                  type="radio"
-                  value="height"
-                  checked={cutBased === 'height'}
-                />{l('Height')}
-              </label>
-            </div>
-          </div>
-          <div className="margin-bottom-10" />
-          <div className="inputs-wrapper container-center-col">
-            <p>{`${l('Click Tag')}:`}</p>
+            <p>{`${l('Size')}:`}</p>
             <input
-              ref="inputClickTag"
+              ref="inputPanoLength"
               type="text"
-              className="click-tag form-control"
-              placeholder={l('Google AdWorlds Click Tag')}
-              value={clickTag}
-              onChange={this.handleClickTagChange}
+              className="form-control"
+              value={panoLength}
+              onChange={this.handlePanophotoSizeChange}
             />
           </div>
-          <div className="margin-bottom-10" />
+        }
+        { (mediaType === MEDIA_TYPE.LIVE_PHOTO) && cutBasedInputs }
+        <div className="inputs-wrapper container-center-col">
+          <p>{`${l('Click Tag')}:`}</p>
+          <input
+            ref="inputClickTag"
+            type="text"
+            className="click-tag form-control"
+            placeholder={l('Google AdWorlds Click Tag')}
+            value={clickTag}
+            onChange={this.handleClickTagChange}
+          />
+        </div>
         <div className="preview-btn-wrapper text-center">
           <FlatButton
             className="share-btn"

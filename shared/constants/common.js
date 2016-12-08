@@ -73,8 +73,10 @@ export const EMBED = {
   SDK: sdk.replace('$sdk', 'sdk.js'),
   SDK_LIVEPHOTO: sdk.replace('$sdk', 'sdk-livephoto.js'),
   SDK_PANOPHOTO: sdk.replace('$sdk', 'sdk-panophoto.js'),
-  DEFAULT_WIDTH: 480,
-  DEFAULT_HEIGHT: 640
+  DEFAULT_WIDTH_LIVEPHOTO: 480,
+  DEFAULT_HEIGHT_LIVEPHOTO: 640,
+  DEFAULT_WIDTH_PANOPHOTO: 500,
+  DEFAULT_HEIGHT_PANOPHOTO: 500
 };
 
 export const GA_SDK =

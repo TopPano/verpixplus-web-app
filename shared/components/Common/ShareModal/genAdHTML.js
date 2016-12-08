@@ -1,8 +1,5 @@
 // TODO: Fit format of google ad
-export default function genAdHTML(mediaId, clickTag, width, height, cutBased, sdk) {
-  const dataWidth = width ? `data-width="${width}"` : '';
-  const dataHeight = height ? `data-height="${height}"` : '';
-  const dataCutBased = cutBased === 'height' ? `data-cut-based="${cutBased}"` : '';
+export default function genAdHTML(clickTag, usage, sdk) {
 return `<!doctype html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
@@ -20,7 +17,9 @@ return `<!doctype html>
   </script>
 </head>
 <body style="margin: 0;">
-  <div class="verpix-livephoto" data-id="${mediaId}" ${dataWidth} ${dataHeight} ${dataCutBased}></div>
+  <a href="javascript:window.open(window.clickTag)" style="display: inline-block">
+    ${usage}
+  </a>
   ${sdk}
 </body>
 </html>

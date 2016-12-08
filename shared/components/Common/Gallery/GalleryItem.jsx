@@ -101,7 +101,6 @@ class GalleryItem extends Component {
       title,
       created,
       dimension,
-      isVideoCreated,
       progress
     } = mediaObj;
     const approximateDuration = this.getApproximateDuration(created);
@@ -139,8 +138,8 @@ class GalleryItem extends Component {
               <div className="tools">
                 <ShareModal
                   mediaId={id}
+                  mediaType={mediaObj.type}
                   title={title}
-                  isVideoCreated={Boolean(isVideoCreated)}
                 >
                   <div className="tool tool-share circle clickable" />
                 </ShareModal>

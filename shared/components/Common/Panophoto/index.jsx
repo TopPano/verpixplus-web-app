@@ -9,15 +9,17 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mediaId: PropTypes.string,
   images: PropTypes.arrayOf(PropTypes.object.isRequired),
   width: PropTypes.number,
   height: PropTypes.number
 };
 
 const defaultProps = {
+  mediaId: '',
   images: [],
-  width: EMBED.DEFAULT_WIDTH,
-  height: EMBED.DEFAULT_HEIGHT
+  width: EMBED.DEFAULT_WIDTH_PANOPHOTO,
+  height: EMBED.DEFAULT_HEIGHT_PANOPHOTO
 };
 
 class Panophoto extends Component {
@@ -32,12 +34,15 @@ class Panophoto extends Component {
   createPanophoto() {
     if (!this.instance) {
       const {
+        mediaId,
         images,
         width,
         height
       } = this.props;
-      // TODO: source by using mediaId
-      const source = images.length ? images : null;
+      const source =
+        (images.length > 0) ? images :
+        mediaId ? mediaId :
+        null;
       const params = {
         width,
         height
@@ -84,6 +89,19 @@ class Panophoto extends Component {
 
   componentDidMount() {
     this.createPanophoto();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.instance) {
+      const {
+        width,
+        height
+      } = this.props;
+
+      if ((width !== prevProps.width) || (height !== prevProps.height)) {
+        this.instance.setVisibleSize(width, height);
+      }
+    }
   }
 
   componentWillUnmount() {
