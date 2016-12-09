@@ -2,7 +2,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { shareFacebookVideo } from 'actions/media';
+import {
+  shareFacebookVideo,
+  shareFacebookPanophoto
+} from 'actions/media';
 import { pushNotification } from 'actions/notifications';
 import { NOTIFICATIONS } from 'constants/notifications';
 
@@ -25,6 +28,7 @@ class ShareModalContainer extends Component {
 
     // Bind "this" to member functions
     this.shareFacebookVideo = this.shareFacebookVideo.bind(this);
+    this.shareFacebookPanophoto = this.shareFacebookPanophoto.bind(this);
     this.notifyShareSuccess = this.notifyShareSuccess.bind(this);
   }
 
@@ -32,6 +36,12 @@ class ShareModalContainer extends Component {
   // which shares a video to Facebook
   shareFacebookVideo(params) {
     this.props.dispatch(shareFacebookVideo(params));
+  }
+
+  // Wrapper for dispatching shareFacebookPanophoto,
+  // which shares a panophoto to Facebook
+  shareFacebookPanophoto(params) {
+    this.props.dispatch(shareFacebookPanophoto(params));
   }
 
   // Wrapper for dispatching pushNotifications,
@@ -45,6 +55,7 @@ class ShareModalContainer extends Component {
       <ShareModal
         {...this.props}
         shareFacebookVideo={this.shareFacebookVideo}
+        shareFacebookPanophoto={this.shareFacebookPanophoto}
         notifyShareSuccess={this.notifyShareSuccess}
       >
         {this.props.children}

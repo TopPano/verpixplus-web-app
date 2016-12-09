@@ -17,12 +17,15 @@ const propTypes = {
   mediaId: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  panoSourcePhoto: PropTypes.string,
   children: PropTypes.node.isRequired,
   shareFacebookVideo: PropTypes.func.isRequired,
+  shareFacebookPanophto: PropTypes.func.isRequired,
   notifyShareSuccess: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  panoSourcePhoto: ''
 };
 
 class ShareModal extends Component {
@@ -57,8 +60,10 @@ class ShareModal extends Component {
       mediaId,
       mediaType,
       title,
+      panoSourcePhoto,
       children,
       shareFacebookVideo,
+      shareFacebookPanophoto,
       notifyShareSuccess
     } = this.props;
     const modalProps = {
@@ -74,9 +79,12 @@ class ShareModal extends Component {
       content:
         <ShareSocial
           mediaId={mediaId}
+          mediaType={mediaType}
           title={title}
+          panoSourcePhoto={panoSourcePhoto}
           shareUrl={shareUrl}
           shareFacebookVideo={shareFacebookVideo}
+          shareFacebookPanophoto={shareFacebookPanophoto}
           notifyShareSuccess={notifyShareSuccess}
           close={this.close}
         />

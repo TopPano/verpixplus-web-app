@@ -4,7 +4,10 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Line } from 'rc-progress';
 
-import { DEFAULT_TITLE } from 'constants/common';
+import {
+  MEDIA_TYPE,
+  DEFAULT_TITLE
+} from 'constants/common';
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 import { getReadableDuration } from 'lib/utils';
 import ShareModal from 'containers/common/ShareModal';
@@ -39,13 +42,29 @@ class GalleryItem extends Component {
     super(props);
   }
 
+  // Get cover photo of media
   getCoverPhoto(mediaObj, id) {
     const {
-      cdnUrl,
+      storeUrl,
+      shardingKey
+    } = mediaObj.content;
+    const typeName = (mediaObj.type === MEDIA_TYPE.LIVE_PHOTO) ? 'live' : 'pano';
+
+    return `${storeUrl}${shardingKey}/media/${id}/${typeName}/thumb.jpg`;
+  }
+
+  // Get source photo of panophoto
+  getPanoSourcePhoto(mediaObj, id) {
+    const {
+      storeUrl,
       shardingKey
     } = mediaObj.content;
 
-    return `${cdnUrl}${shardingKey}/media/${id}/live/thumb.jpg`;
+    return (
+      (mediaObj.type === MEDIA_TYPE.PANO_PHOTO) ?
+      `${storeUrl}${shardingKey}/media/${id}/pano/source.jpg` :
+      ''
+    );
   }
 
   // Get approximate duration from created time to now
@@ -112,6 +131,8 @@ class GalleryItem extends Component {
       type === GALLERY_ITEM_TYPE.COMPLETED ? this.getCoverPhoto(mediaObj, id) :
       type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.svg' :
       '';
+    const panoSourcePhoto =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? this.getPanoSourcePhoto(mediaObj, id) : '';
     const createMain =
       type === GALLERY_ITEM_TYPE.CREATE ?
       this.renderCreateMain() :
@@ -140,6 +161,7 @@ class GalleryItem extends Component {
                   mediaId={id}
                   mediaType={mediaObj.type}
                   title={title}
+                  panoSourcePhoto={panoSourcePhoto}
                 >
                   <div className="tool tool-share circle clickable" />
                 </ShareModal>

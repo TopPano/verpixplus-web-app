@@ -10,6 +10,7 @@ import {
   getFacebookGroups
 } from './FacebookUtils';
 import {
+  MEDIA_TYPE,
   DEFAULT_TITLE,
   FACEBOOK_PRIVACY
 } from 'constants/common';
@@ -34,12 +35,15 @@ const FACEBOOK_TARGET = {
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  panoSourcePhoto: PropTypes.string,
   shareUrl: PropTypes.string.isRequired,
   shareFacebookVideo: PropTypes.func.isRequired,
+  shareFacebookPanophto: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  panoSourcePhoto: ''
 };
 
 class ShareSocial extends Component {
@@ -103,9 +107,12 @@ class ShareSocial extends Component {
     const { l } = this.context.i18n;
     const {
       mediaId,
+      mediaType,
       title,
+      panoSourcePhoto,
       shareUrl,
       shareFacebookVideo,
+      shareFacebookPanophoto,
       close
     } = this.props;
     const {
@@ -118,9 +125,11 @@ class ShareSocial extends Component {
       fbPrivacy,
       fbTarget
     } = this.state;
+
     const userDesc = this.refs.shareFBVideoDesc.value;
     const isEmptyUserDesc = isEmpty(userDesc);
-    const signature = `${l('Create your imigination on Verpix')}:\n ${shareUrl}\n#Verpix #MotionGraph`;
+    const hashtags = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? '#Verpix #MotionGraph' : '#Verpix #360Photo #Verpix360'
+    const signature = `${l('Create your imigination on Verpix')}:\n ${shareUrl}\n${hashtags}`;
     const description = `${userDesc}${isEmptyUserDesc ? '' : '\n\n--\n'}${signature}`;
     let targetId;
     let fbAccessToken;
@@ -138,14 +147,25 @@ class ShareSocial extends Component {
       // TODO: Error handling
     }
 
-    shareFacebookVideo({
-      mediaId,
-      targetId,
-      title: title ? title : l(DEFAULT_TITLE),
-      description,
-      privacy: fbPrivacy,
-      fbAccessToken
-    });
+    if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
+      shareFacebookVideo({
+        mediaId,
+        targetId,
+        title: title ? title : l(DEFAULT_TITLE),
+        description,
+        privacy: fbPrivacy,
+        fbAccessToken
+      });
+    } else {
+      shareFacebookPanophoto({
+        targetId,
+        title: title ? title : l(DEFAULT_TITLE),
+        panoUrl: panoSourcePhoto,
+        description,
+        privacy: fbPrivacy,
+        fbAccessToken
+      });
+    }
     close();
   }
 

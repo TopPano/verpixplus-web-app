@@ -26,9 +26,9 @@ import {
   CREATE_MEDIA_SUCCESS,
   // TODO: Handle failure for media creation
   // CREATE_MEDIA_FAILURE,
-  SHARE_FACEBOOK_VIDEO_REQUEST,
-  SHARE_FACEBOOK_VIDEO_SUCCESS,
-  SHARE_FACEBOOK_VIDEO_FAILURE,
+  SHARE_FACEBOOK_REQUEST,
+  SHARE_FACEBOOK_SUCCESS,
+  SHARE_FACEBOOK_FAILURE,
   DELETE_MEDIA_REQUEST,
   DELETE_MEDIA_SUCCESS,
   DELETE_MEDIA_FAILURE
@@ -42,7 +42,7 @@ const DEFAULT_STATE = {
     updateProfilePicture: false,
     updateProfile: false,
     changePassword: false,
-    shareFacebookVideo: false
+    shareFacebook: false
   },
   userId: undefined,
   username: undefined,
@@ -109,10 +109,10 @@ export default function workspace(state=DEFAULT_STATE, action) {
           changePassword: true
         }
       });
-    case SHARE_FACEBOOK_VIDEO_REQUEST:
+    case SHARE_FACEBOOK_REQUEST:
       return merge({}, state, {
         isProcessing: {
-          shareFacebookVideo: true
+          shareFacebook: true
         }
       });
     case CREATE_MEDIA_PROGRESS:
@@ -221,10 +221,10 @@ export default function workspace(state=DEFAULT_STATE, action) {
           changePassword: false
         }
       });
-    case SHARE_FACEBOOK_VIDEO_SUCCESS:
+    case SHARE_FACEBOOK_SUCCESS:
       return merge({}, state, {
         isProcessing: {
-          shareFacebookVideo: false
+          shareFacebook: false
         }
       });
     case EDIT_AUTOBIOGRAPHY:
@@ -258,10 +258,10 @@ export default function workspace(state=DEFAULT_STATE, action) {
           changePassword: false
         }
       });
-    case SHARE_FACEBOOK_VIDEO_FAILURE:
+    case SHARE_FACEBOOK_FAILURE:
       return merge({}, state, {
         isProcessing: {
-          shareFacebookVideo: false
+          shareFacebook: false
         }
       });
     case CLEAR_ERR_MSG_CHANGE_PASSWORD:

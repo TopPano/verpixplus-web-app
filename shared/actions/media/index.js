@@ -325,19 +325,19 @@ export function createMedia({
   };
 }
 
-export const SHARE_FACEBOOK_VIDEO_REQUEST = 'SHARE_FACEBOOK_VIDEO_REQUEST';
-export const SHARE_FACEBOOK_VIDEO_SUCCESS = 'SHARE_FACEBOOK_VIDEO_SUCCESS';
-export const SHARE_FACEBOOK_VIDEO_FAILURE = 'SHARE_FACEBOOK_VIDEO_FAILURE';
+export const SHARE_FACEBOOK_REQUEST = 'SHARE_FACEBOOK_REQUEST';
+export const SHARE_FACEBOOK_SUCCESS = 'SHARE_FACEBOOK_SUCCESS';
+export const SHARE_FACEBOOK_FAILURE = 'SHARE_FACEBOOK_FAILURE';
 
-function shareFacebookVideoRequest() {
+function shareFacebookRequest() {
   return {
-    type: SHARE_FACEBOOK_VIDEO_REQUEST
+    type: SHARE_FACEBOOK_REQUEST
   };
 }
 
-function shareFacebookVideoSuccess() {
+function shareFacebookSuccess() {
   return {
-    type: SHARE_FACEBOOK_VIDEO_SUCCESS
+    type: SHARE_FACEBOOK_SUCCESS
   };
 }
 
@@ -354,7 +354,7 @@ export function shareFacebookVideo({
     const id = genUUID();
     let progress = 0;
 
-    dispatch(shareFacebookVideoRequest());
+    dispatch(shareFacebookRequest());
     dispatch(pushNotification({
       type: NOTIFICATION_TYPES.PROGRESS,
       title,
@@ -394,18 +394,94 @@ export function shareFacebookVideo({
       const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${fbAccessToken}`;
 
       return fetch(url, init);
-    }).then(() => {
+    }).then((res) => {
+      return res.json();
+    }).then((result) => {
+      if (result.error) {
+        return Promise.reject(result.error);
+      }
       clearInterval(timer);
-      dispatch(shareFacebookVideoSuccess());
+      dispatch(shareFacebookSuccess());
       dispatch(updateProgressNotification(id, 1));
       dispatch(popNotification(id));
       dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
     }).catch((err) => {
       clearInterval(timer);
       dispatch(popNotification(id));
-      handleError(dispatch, SHARE_FACEBOOK_VIDEO_FAILURE, err);
+      handleError(dispatch, SHARE_FACEBOOK_FAILURE, err);
     });
   };
+}
+
+export function shareFacebookPanophoto({
+  targetId,
+  panoUrl,
+  title,
+  description,
+  privacy,
+  fbAccessToken
+}) {
+  return (dispatch) => {
+    const id = genUUID();
+    let progress = 0;
+
+    dispatch(shareFacebookRequest());
+    dispatch(pushNotification({
+      type: NOTIFICATION_TYPES.PROGRESS,
+      title,
+      progress
+    }, id));
+
+    const timer = setInterval(() => {
+      if (progress < 0.99) {
+        const addedProgress = genRandomNum(0.0025, 0.01);
+        progress =
+          ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
+        dispatch(updateProgressNotification(id, progress));
+      } else {
+        clearInterval(timer);
+      }
+    }, 200);
+
+    const {
+      apiRoot,
+      version
+    } = externalApiConfig.facebook;
+    const url = `${apiRoot}/v${version}/${targetId}/photos?access_token=${fbAccessToken}`;
+
+    const init = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: panoUrl,
+        caption: description,
+        allow_spherical_photo: true,
+        privacy: {
+          value: privacy
+        }
+      })
+    };
+
+    fetch(url, init).then((res) => {
+      return res.json();
+    }).then((result) => {
+      if (result.error) {
+        return Promise.reject(result.error);
+      }
+      clearInterval(timer);
+      dispatch(shareFacebookSuccess());
+      dispatch(updateProgressNotification(id, 1));
+      dispatch(popNotification(id));
+      dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
+    }).catch((err) => {
+      clearInterval(timer);
+      dispatch(popNotification(id));
+      handleError(dispatch, SHARE_FACEBOOK_FAILURE, err);
+    });
+  }
 }
 
 export const UPDATE_MEDIA_REQUEST = 'UPDATE_MEDIA_REQUEST';
