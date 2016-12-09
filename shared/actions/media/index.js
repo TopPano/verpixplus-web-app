@@ -65,13 +65,25 @@ export function getMedia({ mediaId, filter }) {
         } = res.result;
         const {
           storeUrl,
-          count,
           quality,
           shardingKey
         } = content;
-        // Choose the highest quality
-        const selectedQuality = quality[0];
-        const typeName = (type === MEDIA_TYPE.LIVE_PHOTO) ? 'live' : 'pano';
+        let selectedQuality;
+        let count;
+        let typeName;
+
+        if (type === MEDIA_TYPE.LIVE_PHOTO) {
+          // Choose the highest quality
+          selectedQuality = quality[0];
+          count = content.count;
+          typeName = 'live';
+        } else {
+          // Choose the highest quality
+          selectedQuality = quality[0].size;
+          count = quality[0].tiles;
+          typeName = 'pano';
+        }
+
         const imgUrls =
           range(0, count).map((idx) => `${storeUrl}${shardingKey}/media/${mediaId}/${typeName}/${selectedQuality}/${idx}.jpg`);
         const width = parseInt(selectedQuality.split('X')[0], 10);
