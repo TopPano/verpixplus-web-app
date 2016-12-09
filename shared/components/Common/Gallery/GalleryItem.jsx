@@ -62,7 +62,7 @@ class GalleryItem extends Component {
 
     return (
       (mediaObj.type === MEDIA_TYPE.PANO_PHOTO) ?
-      `${storeUrl}${shardingKey}/media/${id}/pano/source.jpg` :
+      `${storeUrl}${shardingKey}/media/${id}/pano/src.jpg` :
       ''
     );
   }
