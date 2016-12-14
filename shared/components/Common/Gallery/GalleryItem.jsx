@@ -149,6 +149,7 @@ class GalleryItem extends Component {
             <Preview
               image={coverPhoto}
               type={type}
+              mediaType={mediaObj.type}
               dimension={dimension}
             />
           </Link>

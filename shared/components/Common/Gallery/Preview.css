@@ -39,6 +39,12 @@ $border-radius: 5px;
     }
   }
 
+  .preview-type {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
   .preview-overlay {
     position: absolute;
     top: 0;

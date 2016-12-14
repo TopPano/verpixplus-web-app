@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
+import { MEDIA_TYPE } from 'constants/common';
 import { GALLERY_ITEM_TYPE } from 'constants/workspace';
 
 if (process.env.BROWSER) {
@@ -12,6 +13,7 @@ if (process.env.BROWSER) {
 const propTypes = {
   image: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -33,6 +35,7 @@ class Preview extends Component {
     const {
       image,
       type,
+      mediaType,
       dimension
     } = this.props;
     let imgClass = '';
@@ -65,6 +68,16 @@ class Preview extends Component {
               alt="view"
             />
           </div>
+        }
+        {
+          type === GALLERY_ITEM_TYPE.COMPLETED &&
+          <img
+            className="preview-type"
+            src={`/static/images/workspace/type-${mediaType === MEDIA_TYPE.LIVE_PHOTO ? 'livephoto' : 'panophoto'}.png`}
+            alt="view"
+            width="25"
+            height="25"
+          />
         }
         {
           type === GALLERY_ITEM_TYPE.CREATE &&
