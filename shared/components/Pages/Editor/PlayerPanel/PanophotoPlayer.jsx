@@ -28,16 +28,17 @@ class PanophotoPlayer extends Component {
   }
 
   componentDidMount() {
-    const parentWidth = this.refs.panophotoPlayer.parentNode.clientWidth - 40;
-    const parentHeight = this.refs.panophotoPlayer.parentNode.clientHeight - 15;
-    const length = (parentWidth < parentHeight) ? parentWidth : parentHeight;
+    if (process.env.BROWSER) {
+      const playerWidth = this.refs.panophotoPlayer.clientWidth;
+      const playerHeight = this.refs.panophotoPlayer.clientHeight;
 
-    this.setState({
-      panophotoDimension: {
-        width: length,
-        height: length
-      }
-    });
+      this.setState({
+        panophotoDimension: {
+          width: playerWidth,
+          height: playerHeight
+        }
+      });
+    }
   }
 
   componentDidUpdate() {

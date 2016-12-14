@@ -1,2 +1,8 @@
 .panophoto-player-component {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: calc(100% - 280px);
+  height: 100%;
 }
