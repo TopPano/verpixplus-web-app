@@ -79,12 +79,12 @@ class Panophoto extends Component {
     return this.instance.getCurrentCoordinates();
   }
 
-  getCurrentSnapshot() {
+  getCurrentSnapshot(params) {
     if (!this.instance) {
       return 'data:image/jpeg;base64,';
     }
 
-    return this.instance.getCurrentSnapshot();
+    return this.instance.getCurrentSnapshot(params);
   }
 
   componentDidMount() {

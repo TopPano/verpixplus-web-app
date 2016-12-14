@@ -83,7 +83,9 @@ class EditItemSettings extends Component {
         getPanophotoCoordinates,
         getPanophotoSnapshot
       } = this.props;
-      const thumbnail = getPanophotoSnapshot();
+      const thumbnail = getPanophotoSnapshot({
+        ratio: dimension.width / dimension.height
+      });
       const { lng, lat } = getPanophotoCoordinates();
 
       create({

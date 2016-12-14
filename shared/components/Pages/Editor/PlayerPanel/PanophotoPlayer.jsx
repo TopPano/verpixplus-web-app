@@ -47,7 +47,7 @@ class PanophotoPlayer extends Component {
       });
       this.props.setPanophotoFunctions({
         getPanophotoCoordinates: this.refs.panophoto.getCurrentCoordinates,
-        getPanophotoSnapshot: this.refs.panophoto.getCurrentSnapshot
+        getPanophotoSnapshot: params => this.refs.panophoto.getCurrentSnapshot(params)
       });
     }
   }
