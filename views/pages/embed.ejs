@@ -21,12 +21,23 @@
       -ms-flex-direction: column;
       flex-direction: column;
     }
+    .logo {
+      z-index: 1;
+    }
     .content {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       height: calc(100vh - 168px);
       padding: 10px;
+    }
+    .panophoto {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
     }
     .footer-text {
       color: #7F7F7F;
@@ -36,6 +47,7 @@
       text-align: center;
       line-height: 17px;
       margin: 0 0 10px 0;
+      z-index: 1;
     }
   </style>
   <script>
@@ -44,7 +56,7 @@
 </head>
 <body style="height: 100%; margin: 0; background-color: #EBEBEC;">
   <div class="container-center" style="height: 98px">
-    <a href="<%= staticUrl %>">
+    <a class="logo" href="<%= staticUrl %>">
       <img src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
     </a>
   </div>
@@ -53,17 +65,16 @@
     <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
   </div>
   <% include ../partials/static-ga %>
-  <%- livephotoSdk %>
+  <%- (type === MEDIA_TYPE.LIVE_PHOTO) ? livephotoSdk : panophotoSdk %>
   <script>
     window.addEventListener('load', function() {
       var content = document.getElementById('content');
-      var parentWidth = content.clientWidth - 20;
-      var parentHeight = content.clientHeight - 20;
-
+      <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
       window.verpix.createLivephoto('<%= mediaId %>', {}, (err, instance) => {
         if (err) {
           window.location = '/';
         } else {
+          var parentHeight = content.clientHeight - 20;
           var origDimension = instance.getOriginalDimension();
           var origWidth = origDimension.width;
           var origHeight = origDimension.height;
@@ -79,6 +90,22 @@
           instance.start();
         }
       });
+      <% } else { %>
+      var params = {
+        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+      };
+
+      window.verpix.createPanophoto('<%= mediaId %>', params, (err, instance) => {
+        if (err) {
+          window.location = '/';
+        } else {
+          instance.root.className = 'panophoto';
+          content.appendChild(instance.root);
+          instance.start();
+        }
+      });
+      <% } %>
     });
   </script>
 </body>

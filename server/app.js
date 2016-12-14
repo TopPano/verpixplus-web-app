@@ -30,7 +30,10 @@ import i18n from 'i18n';
 import Promise from 'lib/utils/promise';
 import api from 'lib/api';
 
-import { GA_SDK } from 'constants/common';
+import {
+  MEDIA_TYPE,
+  GA_SDK
+} from 'constants/common';
 import serverConfig from 'etc/server';
 import clientConfig from 'etc/client';
 import exterApiConfig from 'etc/external-api';
@@ -84,12 +87,15 @@ app.get('/embed/@:mediaId', (req, res) => {
   const { mediaId } = req.params;
 
   api.media.getMedia(mediaId).then((response) => {
+    const { type } = response.result;
     const locale = detectLocale(req);
     const i18nTools = i18nToolsRegistry[locale];
     const url = `${req.protocol}://${req.get('Host')}${req.url}`;
     const content = genHeadContent(url, i18nTools, true, response.result);
 
     res.render('pages/embed', merge({}, content, {
+      type,
+      MEDIA_TYPE,
       staticUrl: clientConfig.staticUrl,
       page: `/embed/@${mediaId}`,
       ga: {

@@ -23,6 +23,7 @@ export default function genHeadContent(url, i18n, isEmbedPage, media) {
     robots: process.NODE_ENV === 'production' ? 'index,follow' : 'noindex,nofollow',
     siteName: 'Verpix',
     livephotoSdk: EMBED.SDK_LIVEPHOTO,
+    panophotoSdk: EMBED.SDK_PANOPHOTO,
     sdk: EMBED.SDK,
     facebook: {
       id: externalApiConfig.facebook.id,
