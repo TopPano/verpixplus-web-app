@@ -6,7 +6,7 @@ export const MODE = {
 };
 
 export const ACCEPT_TYPES = {
-  IMAGE: ['jpeg', 'png'],
+  IMAGE: ['jpeg'],
   VIDEO: ['mp4', 'webm']
 };
 
