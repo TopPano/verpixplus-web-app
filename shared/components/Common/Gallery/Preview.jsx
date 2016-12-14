@@ -75,7 +75,7 @@ class Preview extends Component {
               width="25"
               height="25"
             />
-            <p className="create-description text-center">{l('Upload your video')}</p>
+            <p className="create-description text-center">{l('Upload your video / panorama')}</p>
           </div>
         }
       </div>
