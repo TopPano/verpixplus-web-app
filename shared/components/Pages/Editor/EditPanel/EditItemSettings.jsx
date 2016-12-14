@@ -149,6 +149,7 @@ class EditItemSettings extends Component {
     const { l } = this.context.i18n;
     const {
       mode,
+      mediaType,
       mediaId,
       autoplay,
       filters,
@@ -181,15 +182,18 @@ class EditItemSettings extends Component {
     return (
       <div className="edit-item-settings-component">
         <SidebarItem>
-          <div className="autoplay overflow-h">
-            <SwitchButton
-              checked={autoplay}
-              onChange={this.handleChangeAutoplay}
-            />
-            <p className="">
-              {l('Autoplay')}
-            </p>
-          </div>
+          {
+            (mediaType === MEDIA_TYPE.LIVE_PHOTO) &&
+            <div className="autoplay overflow-h">
+              <SwitchButton
+                checked={autoplay}
+                onChange={this.handleChangeAutoplay}
+              />
+              <p className="">
+                {l('Autoplay')}
+              </p>
+            </div>
+          }
           <div className="margin-bottom-60" />
           <div className="btns-wrapper">
             <FlatButton {...saveBtnProps} />
