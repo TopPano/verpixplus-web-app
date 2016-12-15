@@ -1,6 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import isNumber from 'lodash/isNumber';
+import merge from 'lodash/merge';
 
 import { EMBED } from 'constants/common';
 
@@ -12,7 +14,9 @@ const propTypes = {
   mediaId: PropTypes.string,
   images: PropTypes.arrayOf(PropTypes.object.isRequired),
   width: PropTypes.number,
-  height: PropTypes.number
+  height: PropTypes.number,
+  initialLng: PropTypes.number,
+  initialLat: PropTypes.number
 };
 
 const defaultProps = {
@@ -37,16 +41,21 @@ class Panophoto extends Component {
         mediaId,
         images,
         width,
-        height
+        height,
+        initialLng,
+        initialLat
       } = this.props;
       const source =
         (images.length > 0) ? images :
         mediaId ? mediaId :
         null;
-      const params = {
+      let params = {
         width,
         height
       };
+
+      params = !isNumber(initialLng) ? params : merge({}, params, { initialLng });
+      params = !isNumber(initialLat) ? params : merge({}, params, { initialLat });
 
       window.verpix.createPanophoto(source, params, (err, instance) => {
         if (err) {

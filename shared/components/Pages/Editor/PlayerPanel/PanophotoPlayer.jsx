@@ -10,6 +10,8 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   images: PropTypes.arrayOf(PropTypes.object.isRequired),
+  initialLng: PropTypes.number.isRequired,
+  initialLat: PropTypes.number.isRequired,
   setPanophotoFunctions: PropTypes.func.isRequired
 };
 
@@ -54,7 +56,11 @@ class PanophotoPlayer extends Component {
   }
 
   render() {
-    const { images } = this.props;
+    const {
+      images,
+      initialLng,
+      initialLat
+    } = this.props;
     const { panophotoDimension } = this.state;
 
     return (
@@ -70,6 +76,8 @@ class PanophotoPlayer extends Component {
             images={images}
             width={panophotoDimension.width}
             height={panophotoDimension.height}
+            initialLng={initialLng}
+            initialLat={initialLat}
           />
         }
       </div>

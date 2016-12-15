@@ -55,6 +55,8 @@ const DEFAULT_STATE = {
   editTarget: '',
   lower: 0,
   upper: 0,
+  initialPanoLng: 0,
+  initialPanoLat: 0,
   filters: {
     preset: 'normal',
     adjusts: {},
@@ -182,7 +184,9 @@ export default function editor(state = DEFAULT_STATE, action) {
         dimension,
         playerMode: PLAYER_MODE.PLAY,
         lower: 0,
-        upper: imgUrls.length
+        upper: imgUrls.length,
+        initialPanoLng: dimension.lng,
+        initialPanoLat: dimension.lat
       });
     }
     case APPLY_FILTERS_SUCCESS:

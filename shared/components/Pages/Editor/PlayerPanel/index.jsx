@@ -22,6 +22,8 @@ const propTypes = {
   autoplay: PropTypes.bool.isRequired,
   lower: PropTypes.number.isRequired,
   upper: PropTypes.number.isRequired,
+  initialPanoLng: PropTypes.number.isRequired,
+  initialPanoLat: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   setPanophotoFunctions: PropTypes.func.isRequired
 };
@@ -38,6 +40,8 @@ class PlayerPanel extends Component {
     const {
       mediaType,
       appliedData,
+      initialPanoLng,
+      initialPanoLat,
       setPanophotoFunctions
     } = this.props;
 
@@ -49,6 +53,8 @@ class PlayerPanel extends Component {
           <PanophotoPlayer
             ref="panophoto"
             images={appliedData}
+            initialLng={initialPanoLng}
+            initialLat={initialPanoLat}
             setPanophotoFunctions={setPanophotoFunctions}
           />
         }
