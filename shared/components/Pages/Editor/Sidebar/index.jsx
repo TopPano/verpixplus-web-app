@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import Scrollbar from 'react-custom-scrollbars';
 
+import { MEDIA_TYPE } from 'constants/common';
 import { MODE } from 'constants/editor';
 import { EDIT_TARGET } from 'constants/editor';
 import { renderList } from 'lib/utils';
@@ -18,6 +19,7 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mode: PropTypes.string.isRequired,
+  mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
   playerPlay: PropTypes.func.isRequired,
@@ -107,6 +109,7 @@ class Sidebar extends Component {
     const { selectedIdx } = this.state;
     const {
       mode,
+      mediaType,
       title,
       caption,
       edit
@@ -136,10 +139,14 @@ class Sidebar extends Component {
     if (mode === MODE.WAIT_FILE) {
       menuItemsProps = [editMenuItemProp];
       panels = [editPanel];
-      // panels = [filtersPanel];
     } else if (mode === MODE.CREATE) {
-      menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
-      panels = [editPanel, filtersPanel];
+      if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
+        menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
+        panels = [editPanel, filtersPanel];
+      } else {
+        menuItemsProps = [editMenuItemProp];
+        panels = [editPanel];
+      }
     } else if (mode === MODE.EDIT) {
       menuItemsProps = [editMenuItemProp];
       panels = [editPanel];
