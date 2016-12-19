@@ -128,7 +128,7 @@ class ShareSocial extends Component {
 
     const userDesc = this.refs.shareFBVideoDesc.value;
     const isEmptyUserDesc = isEmpty(userDesc);
-    const hashtags = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? '#Verpix #MotionGraph' : '#Verpix #360Photo #Verpix360'
+    const hashtags = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? '#Verpix #MotionGraph #Verpix360' : '#Verpix #360Photo #Verpix360'
     const signature = `${l('Create your imigination on Verpix')}:\n ${shareUrl}\n${hashtags}`;
     const description = `${userDesc}${isEmptyUserDesc ? '' : '\n\n--\n'}${signature}`;
     let targetId;
