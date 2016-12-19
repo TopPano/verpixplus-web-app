@@ -38,7 +38,8 @@ class Livephoto extends Component {
       const params = {
         width,
         height,
-        cutBased
+        cutBased,
+        disableGA: true
       };
 
       window.verpix.createLivephoto(mediaId, params, (err, instance) => {

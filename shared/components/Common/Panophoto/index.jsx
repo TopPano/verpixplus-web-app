@@ -51,7 +51,8 @@ class Panophoto extends Component {
         null;
       let params = {
         width,
-        height
+        height,
+        disableGA: true
       };
 
       params = !isNumber(initialLng) ? params : merge({}, params, { initialLng });
