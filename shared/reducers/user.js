@@ -26,6 +26,7 @@ import {
   RESET_PASSWORD_FAILURE,
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
+  EDIT_GA_ID,
   EDIT_AUTOBIOGRAPHY,
   CLEAR_ERR_MSG_CHANGE_PASSWORD
 } from '../actions/user';
@@ -48,6 +49,7 @@ const DEFAULT_STATE = {
   username: undefined,
   profilePhotoUrl: undefined,
   email: undefined,
+  gaId: undefined,
   autobiography: undefined,
   created: undefined,
   numOfMedia: 0,
@@ -64,6 +66,7 @@ function updateStateForLoginSuccess(
   username,
   profilePhotoUrl,
   email,
+  gaId,
   autobiography,
   created
 ) {
@@ -86,6 +89,7 @@ function updateStateForLoginSuccess(
     username,
     accessToken,
     profilePhotoUrl: _profilePhotoUrl,
+    gaId,
     autobiography,
     email,
     created,
@@ -134,6 +138,7 @@ export default function user(state=DEFAULT_STATE, action) {
         username,
         profilePhotoUrl,
         media,
+        gaId,
         autobiography
       } = action.response.profile;
 
@@ -144,6 +149,7 @@ export default function user(state=DEFAULT_STATE, action) {
         userId: sid,
         username,
         profilePhotoUrl: profilePhotoUrl ? profilePhotoUrl : DEFAULT_PROFILE_PHOTO_URL,
+        gaId,
         autobiography,
         numOfMedia: media
       });
@@ -157,6 +163,7 @@ export default function user(state=DEFAULT_STATE, action) {
       });
     case UPDATE_PROFILE_SUCCESS:
       return merge({}, state, {
+        gaId: action.response.gaId,
         autobiography: action.response.autobiography,
         isProcessing: {
           updateProfile: false
@@ -177,10 +184,11 @@ export default function user(state=DEFAULT_STATE, action) {
           username,
           profilePhotoUrl,
           email,
+          gaId,
           autobiography
         }
       } = action.response;
-      return updateStateForLoginSuccess(state, id, userId, username, profilePhotoUrl, email, autobiography, created);
+      return updateStateForLoginSuccess(state, id, userId, username, profilePhotoUrl, email, gaId, autobiography, created);
     }
     case CREATE_MEDIA_SUCCESS:
       return merge({}, state, {
@@ -214,6 +222,7 @@ export default function user(state=DEFAULT_STATE, action) {
         accessToken: undefined,
         profilePhotoUrl: undefined,
         email: undefined,
+        gaId: undefined,
         autobiography: undefined,
         created: undefined,
         numOfMedia: 0,
@@ -259,6 +268,10 @@ export default function user(state=DEFAULT_STATE, action) {
         isFetching: false,
         isAuthenticated: false,
         errMsg: action.message
+      });
+    case EDIT_GA_ID:
+      return merge({}, state, {
+        gaId: action.gaId
       });
     case EDIT_AUTOBIOGRAPHY:
       return merge({}, state, {

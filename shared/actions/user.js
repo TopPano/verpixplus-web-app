@@ -250,6 +250,17 @@ export function updateProfilePicture({ userId, profilePicture, userSession = {} 
   };
 }
 
+export const EDIT_GA_ID = 'EDIT_GA_ID';
+
+export function editGAId(gaId) {
+  return (dispatch) => {
+    dispatch({
+      type: EDIT_GA_ID,
+      gaId
+    })
+  };
+}
+
 export const EDIT_AUTOBIOGRAPHY = 'EDIT_AUTOBIOGRAPHY';
 
 export function editAutobiography(autobiography) {
@@ -278,11 +289,11 @@ function updateProfileSuccess(response) {
   };
 }
 
-export function updateProfile({ userId, autobiography, userSession = {} }) {
+export function updateProfile({ userId, gaId, autobiography, userSession = {} }) {
   return (dispatch) => {
     dispatch(updateProfileRequest());
 
-    return api.users.putProfile(userId, { autobiography }, userSession.accessToken).then((res) => {
+    return api.users.putProfile(userId, { autobiography, gaId }, userSession.accessToken).then((res) => {
       dispatch(updateProfileSuccess(res));
       dispatch(pushNotification(NOTIFICATIONS.UPDATE_PROFILE_SUCCESS));
     }).catch((err) => {
