@@ -8,6 +8,7 @@ import {
   loadUserSummary,
   updateProfilePicture,
   updateProfile,
+  editGAId,
   editAutobiography,
   changePassword,
   clearErrMsgChangePassword,
@@ -36,6 +37,7 @@ class InfoPanelPageContainer extends Component {
     // Bind "this" to member function
     this.updateProfilePhoto = this.updateProfilePhoto.bind(this);
     this.updateProfile = this.updateProfile.bind(this);
+    this.editGAId = this.editGAId.bind(this);
     this.editAutobiography = this.editAutobiography.bind(this);
     this.changePassword = this.changePassword.bind(this);
     this.clearErrMsgChangePassword = this.clearErrMsgChangePassword.bind(this);
@@ -52,6 +54,12 @@ class InfoPanelPageContainer extends Component {
   // which updates the profile content of user
   updateProfile(params) {
     this.props.dispatch(updateProfile(params));
+  }
+
+  // Wrapper function for dispatching editGAId
+  // which edits then content of Google Analytics Tracking Id
+  editGAId(gaId) {
+    this.props.dispatch(editGAId(gaId));
   }
 
   // Wrapper function for dispatching editAutobiography
@@ -84,6 +92,7 @@ class InfoPanelPageContainer extends Component {
         {...this.props}
         updateProfilePhoto={this.updateProfilePhoto}
         updateProfile={this.updateProfile}
+        editGAId={this.editGAId}
         editAutobiography={this.editAutobiography}
         changePassword={this.changePassword}
         clearErrMsgChangePassword={this.clearErrMsgChangePassword}

@@ -26,6 +26,7 @@ const propTypes = {
   })),
   updateProfilePhoto: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
+  editGAId: PropTypes.func.isRequired,
   editAutobiography: PropTypes.func.isRequired,
   changePassword: PropTypes.func.isRequired,
   clearErrMsgChangePassword: PropTypes.func.isRequired,
@@ -118,6 +119,7 @@ class InfoPanel extends Component {
       links,
       updateProfilePhoto,
       updateProfile,
+      editGAId,
       editAutobiography,
       changePassword,
       clearErrMsgChangePassword
@@ -128,6 +130,7 @@ class InfoPanel extends Component {
       profilePhotoUrl,
       username,
       email,
+      gaId,
       autobiography,
       numOfMedia,
       isProcessing,
@@ -196,9 +199,11 @@ class InfoPanel extends Component {
                   userId={userId}
                   username={username}
                   email={email}
+                  gaId={gaId}
                   autobiography={autobiography}
                   errMsgs={errMsgs}
                   updateProfile={updateProfile}
+                  editGAId={editGAId}
                   editAutobiography={editAutobiography}
                   changePassword={changePassword}
                   clearErrMsgChangePassword={clearErrMsgChangePassword}

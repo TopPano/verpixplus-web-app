@@ -25,10 +25,12 @@ const propTypes = {
   userId: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  gaId: PropTypes.string.isRequired,
   autobiography: PropTypes.string.isRequired,
   isProcessing: PropTypes.object.isRequired,
   errMsgs: PropTypes.object.isRequired,
   updateProfile: PropTypes.func.isRequired,
+  editGAId: PropTypes.func.isRequired,
   editAutobiography: PropTypes.func.isRequired,
   changePassword: PropTypes.func.isRequired,
   clearErrMsgChangePassword: PropTypes.func.isRequired
@@ -45,6 +47,7 @@ class ProfileEditor extends Component {
 
     // Bind "this" to member functions
     this.openModal = this.openModal.bind(this);
+    this.handleChangeGAId = this.handleChangeGAId.bind(this);
     this.handleChangeAutobiography = this.handleChangeAutobiography.bind(this);
     this.handleClickConfirmBtn = this.handleClickConfirmBtn.bind(this);
   }
@@ -53,12 +56,14 @@ class ProfileEditor extends Component {
   updateProfile() {
     const {
       userId,
+      gaId,
       autobiography,
       updateProfile
     } = this.props;
 
     updateProfile({
       userId,
+      gaId,
       autobiography
     });
   }
@@ -107,6 +112,11 @@ class ProfileEditor extends Component {
     this.refs.modal.open();
   }
 
+  // Handler for changing Google Analytics Tracking Id
+  handleChangeGAId(e) {
+    this.props.editGAId(e.target.value);
+  }
+
   // Handler for changing autobiography
   handleChangeAutobiography(e) {
     this.props.editAutobiography(e.target.value);
@@ -124,7 +134,7 @@ class ProfileEditor extends Component {
   }
 
   // Render content for editting profile
-  renderProfileContent(username, email, autobiography) {
+  renderProfileContent(username, email, gaId, autobiography) {
     const { l } = this.context.i18n;
 
     return (
@@ -134,6 +144,15 @@ class ProfileEditor extends Component {
         <hr />
         <dt><strong>{l('Email')}</strong></dt>
         <dd>{email}</dd>
+        <hr />
+        <dt><strong>{l('GA Tracking Id')}</strong></dt>
+        <dd>
+          <input
+            className="form-control"
+            value={gaId}
+            onChange={this.handleChangeGAId}
+          />
+        </dd>
         <hr />
         <dt><strong>{l('Autobiography')}</strong></dt>
         <dd>
@@ -186,6 +205,7 @@ class ProfileEditor extends Component {
     const {
       username,
       email,
+      gaId,
       autobiography,
       isProcessing,
       errMsgs,
@@ -200,7 +220,7 @@ class ProfileEditor extends Component {
       },
       isProcessing: isProcessing.updateProfile || isProcessing.changePassword
     };
-    const profileContent = this.renderProfileContent(username, email, autobiography);
+    const profileContent = this.renderProfileContent(username, email, gaId, autobiography);
     const passwordContent = this.renderPasswordContent(errMsgs.changePassword, clearErrMsgChangePassword);
     const tabsContent = [{
       tab: l('Profile'),
