@@ -52,6 +52,7 @@ class Panophoto extends Component {
       let params = {
         width,
         height,
+        disableCDN: true,
         disableGA: true
       };
 
