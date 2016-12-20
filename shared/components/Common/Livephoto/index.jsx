@@ -39,6 +39,7 @@ class Livephoto extends Component {
         width,
         height,
         cutBased,
+        disableCDN: true,
         disableGA: true
       };
 
