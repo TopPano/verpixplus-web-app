@@ -70,7 +70,7 @@
     window.addEventListener('load', function() {
       var content = document.getElementById('content');
       <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
-      window.verpix.createLivephoto('<%= mediaId %>', {}, (err, instance) => {
+      window.verpix.createLivephoto('<%= mediaId %>', {}, function (err, instance) {
         if (err) {
           window.location = '/';
         } else {
@@ -96,7 +96,7 @@
         height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
       };
 
-      window.verpix.createPanophoto('<%= mediaId %>', params, (err, instance) => {
+      window.verpix.createPanophoto('<%= mediaId %>', params, function (err, instance) {
         if (err) {
           window.location = '/';
         } else {
