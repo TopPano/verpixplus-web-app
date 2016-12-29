@@ -35,7 +35,7 @@ const FACEBOOK_TARGET = {
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  panoSourcePhoto: PropTypes.string,
+  panoSharedPhoto: PropTypes.string,
   shareUrl: PropTypes.string.isRequired,
   shareFacebookVideo: PropTypes.func.isRequired,
   shareFacebookPanophto: PropTypes.func.isRequired,
@@ -43,7 +43,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  panoSourcePhoto: ''
+  panoSharedPhoto: ''
 };
 
 class ShareSocial extends Component {
@@ -109,7 +109,7 @@ class ShareSocial extends Component {
       mediaId,
       mediaType,
       title,
-      panoSourcePhoto,
+      panoSharedPhoto,
       shareUrl,
       shareFacebookVideo,
       shareFacebookPanophoto,
@@ -160,7 +160,7 @@ class ShareSocial extends Component {
       shareFacebookPanophoto({
         targetId,
         title: title ? title : l(DEFAULT_TITLE),
-        panoUrl: panoSourcePhoto,
+        panoUrl: panoSharedPhoto,
         description,
         privacy: fbPrivacy,
         fbAccessToken
