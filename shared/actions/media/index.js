@@ -287,25 +287,18 @@ export function createMedia({
       const progressMediaId = genUUID();
       let postMediaTimer;
       let progress = 0;
-      let panoBlob;
 
       dispatch(createMediaRequest({
         progressMediaId
       }));
 
-      imageDataUrlToBlob(data[0]).then((imgBlob) => {
-        progress += genRandomNum(0.2, 0.25);
-        dispatch(createMediaProgress(progressMediaId, progress));
-        panoBlob = imgBlob;
-
-        return imageDataUrlToBlob(thumbnail);
-      }).then((thumbnailBlob) => {
+      imageDataUrlToBlob(thumbnail).then((thumbnailBlob) => {
         progress += genRandomNum(0.2, 0.25);
         dispatch(createMediaProgress(progressMediaId, progress));
 
         const formData = new FormData();
 
-        formData.append('image', panoBlob);
+        formData.append('image', data[0]);
         formData.append('thumbnail', thumbnailBlob);
         formData.append('title', title);
         formData.append('caption', caption);

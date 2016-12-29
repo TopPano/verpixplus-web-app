@@ -85,7 +85,7 @@ class FileLoader extends Component {
         convert({
           storageId,
           mediaType: MEDIA_TYPE.PANO_PHOTO,
-          source: file.preview
+          source: file
         });
       } else {
         // Handle video (livephoto)
