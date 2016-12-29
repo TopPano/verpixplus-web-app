@@ -28,7 +28,7 @@ export default class PanoConverter {
       img.onload = () => {
         // Check the aspect ratio of panorama is valid or not
         ratio = img.width / img.height;
-        if(ratio > 2.02 && ratio < 1.98) {
+        if(ratio > 2.02 || ratio < 1.98) {
           this.stop();
           reject(genErr(ERR.INVALID_PANO_RATIO));
         }
