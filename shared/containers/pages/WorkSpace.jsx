@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { connectDataFetchers } from 'lib/utils';
 import { loadUserSummary } from 'actions/user';
 import { loadUserMedia, deleteMedia } from 'actions/media';
+import { clearWorkspaceErr } from 'actions/workspace';
 import ScrollablePageContainer from './Scrollable';
 import WorkSpace from 'components/Pages/WorkSpace';
 
@@ -28,6 +29,7 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     // Bind "this" to member function
     this.deleteMedia = this.deleteMedia.bind(this);
     this.loadMore = this.loadMore.bind(this);
+    this.clearErr = this.clearErr.bind(this);
   }
 
   // Overide parent member function
@@ -81,6 +83,12 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
     this.props.dispatch(deleteMedia(params));
   }
 
+  // Wrapper function for dispatching clearWorkspaceErr,
+  // which clears the error of workspace state
+  clearErr() {
+    this.props.dispatch(clearWorkspaceErr());
+  }
+
   render() {
     const { workspace } = this.props;
 
@@ -89,6 +97,7 @@ class WorkSpacePageContainer extends ScrollablePageContainer {
         workspace={workspace}
         deleteMedia={this.deleteMedia}
         loadMore={this.loadMore}
+        clearErr={this.clearErr}
       />
     );
   }
