@@ -8,7 +8,8 @@ import {
   connectDataFetchers
 } from 'lib/utils';
 import {
-  initEditor
+  initEditor,
+  clearEditorErr
 } from 'actions/editor';
 import Editor from 'components/Pages/Editor';
 
@@ -22,6 +23,15 @@ const defaultProps = {
 class EditorPageContainer extends Component {
   constructor(props) {
     super(props);
+
+    // Bind "this" to member functions
+    this.clearErr = this.clearErr.bind(this);
+  }
+
+  // Wrapper function for dispatching clearEditorErr,
+  // which clears the error of editor state
+  clearErr() {
+    this.props.dispatch(clearEditorErr());
   }
 
   componentWillUnmount() {
@@ -45,6 +55,7 @@ class EditorPageContainer extends Component {
     return (
       <Editor
         {...editor}
+        clearErr={this.clearErr}
       >
         {this.props.children}
       </Editor>
