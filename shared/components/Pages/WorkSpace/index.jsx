@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import ErrorModal from 'components/Common/ErrorModal';
 import Summary from './Summary';
 import Gallery from 'components/Common/Gallery';
 
@@ -12,7 +13,8 @@ if (process.env.BROWSER) {
 const propTypes = {
   workspace: PropTypes.object.isRequired,
   deleteMedia: PropTypes.func.isRequired,
-  loadMore: PropTypes.func.isRequired
+  loadMore: PropTypes.func.isRequired,
+  clearErr: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -23,7 +25,8 @@ class WorkSpace extends Component {
     const {
       workspace,
       deleteMedia,
-      loadMore
+      loadMore,
+      clearErr
     } = this.props;
 
     return (
@@ -43,6 +46,10 @@ class WorkSpace extends Component {
           isFetching={workspace.isFetching}
           deleteMedia={deleteMedia}
           loadMore={loadMore}
+        />
+        <ErrorModal
+          err={workspace.err}
+          clearErr={clearErr}
         />
       </div>
     );

@@ -53,16 +53,16 @@ class GalleryItem extends Component {
     return `${storeUrl}${shardingKey}/media/${id}/${typeName}/thumb.jpg`;
   }
 
-  // Get source photo of panophoto
-  getPanoSourcePhoto(mediaObj, id) {
+  // Get panophoto for sharing
+  getPanoSharedPhoto(mediaObj, id) {
     const {
-      storeUrl,
+      cdnUrl,
       shardingKey
     } = mediaObj.content;
 
     return (
       (mediaObj.type === MEDIA_TYPE.PANO_PHOTO) ?
-      `${storeUrl}${shardingKey}/media/${id}/pano/src.jpg` :
+      `${cdnUrl}${shardingKey}/media/${id}/pano/share.jpg` :
       ''
     );
   }
@@ -131,8 +131,8 @@ class GalleryItem extends Component {
       type === GALLERY_ITEM_TYPE.COMPLETED ? this.getCoverPhoto(mediaObj, id) :
       type === GALLERY_ITEM_TYPE.CREATE ? '/static/images/workspace/cover-photo-create.svg' :
       '';
-    const panoSourcePhoto =
-      type === GALLERY_ITEM_TYPE.COMPLETED ? this.getPanoSourcePhoto(mediaObj, id) : '';
+    const panoSharedPhoto =
+      type === GALLERY_ITEM_TYPE.COMPLETED ? this.getPanoSharedPhoto(mediaObj, id) : '';
     const createMain =
       type === GALLERY_ITEM_TYPE.CREATE ?
       this.renderCreateMain() :
@@ -162,7 +162,7 @@ class GalleryItem extends Component {
                   mediaId={id}
                   mediaType={mediaObj.type}
                   title={title}
-                  panoSourcePhoto={panoSourcePhoto}
+                  panoSharedPhoto={panoSharedPhoto}
                 >
                   <div className="tool tool-share circle clickable" />
                 </ShareModal>

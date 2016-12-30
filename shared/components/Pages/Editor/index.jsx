@@ -10,7 +10,7 @@ import PlayerPanel from 'containers/pages/Editor/PlayerPanel';
 import FramePanel from 'containers/pages/Editor/FramePanel';
 import Sidebar from 'containers/pages/Editor/Sidebar';
 import ProcessModal from './ProcessModal';
-import ErrorModal from 'containers/pages/Editor/ErrorModal';
+import ErrorModal from 'components/Common/ErrorModal';
 
 if (process.env.BROWSER) {
   require('./Editor.css');
@@ -19,7 +19,11 @@ if (process.env.BROWSER) {
 const propTypes = {
   mode: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
-  isProcessing: PropTypes.bool.isRequired
+  isProcessing: PropTypes.bool.isRequired,
+  err: PropTypes.shape({
+    message: PropTypes.string.isRequired
+  }).isRequired,
+  clearErr: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -37,7 +41,9 @@ class Editor extends Component {
     const {
       mode,
       mediaType,
-      isProcessing
+      isProcessing,
+      err,
+      clearErr
     } = this.props;
     const infoPanelProps = {
       light: true,
@@ -67,7 +73,10 @@ class Editor extends Component {
     return (
       <div className="editor-component container-full">
         <InfoPanel {...infoPanelProps} />
-        <ErrorModal />
+        <ErrorModal
+          err={err}
+          clearErr={clearErr}
+        />
         <div className="editor-main">
           <div className="main-header container-center-row">
             <img

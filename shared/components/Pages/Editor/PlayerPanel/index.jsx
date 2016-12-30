@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import { MEDIA_TYPE } from 'constants/common';
+import { MODE } from 'constants/editor';
 import LivephotoPlayer from './LivephotoPlayer';
 import PanophotoPlayer from './PanophotoPlayer';
 
@@ -11,6 +12,7 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
+  mode: PropTypes.string.isRequired,
   meidaType: PropTypes.string.isRequired,
   storageId: PropTypes.string.isRequired,
   appliedData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
@@ -38,6 +40,7 @@ class PlayerPanel extends Component {
 
   render() {
     const {
+      mode,
       mediaType,
       appliedData,
       initialPanoLng,
@@ -52,7 +55,7 @@ class PlayerPanel extends Component {
           <LivephotoPlayer {...this.props} /> :
           <PanophotoPlayer
             ref="panophoto"
-            images={appliedData}
+            images={(mode === MODE.EDIT) ? appliedData : appliedData.map(data => data.preview)}
             initialLng={initialPanoLng}
             initialLat={initialPanoLat}
             setPanophotoFunctions={setPanophotoFunctions}
