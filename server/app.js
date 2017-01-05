@@ -4,6 +4,8 @@ import path from 'path';
 import Express from 'express';
 import cookieParser from 'cookie-parser';
 import qs from 'qs';
+import nodemailer from 'nodemailer';
+import bodyParser from 'body-parser';
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -81,6 +83,45 @@ if (process.env.NODE_ENV === 'production') {
     next();
   });
 }
+
+// Setup smtp trasporter
+// TODO: how to authenticate without explict password ?
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'verpix.smtp@gmail.com',
+    pass: 'nhlcltsvexgdatza'
+  }
+});
+
+// Mail sending request
+app.post('/mail', bodyParser.json(), (req, res) => {
+  if (!req.body) return res.sendStatus(400);
+  const {
+    name,
+    email,
+    subject,
+    message
+  } = req.body;
+
+  const mailOpts = {
+    from: email,
+    to: 'service@verpix.me',
+    subject: `${subject} (from ${email})`,
+    text: `From: ${email}\nName: ${name}\nSubject: ${subject}\nMessage:\n${message}`
+  };
+
+  transporter.sendMail(mailOpts, (err, info) => {
+    if (err) {
+      console.error('err', err);
+      return res.end(err);
+    }
+    return res.end(JSON.stringify({
+      success: 'Email is sent successfully',
+      status: 200
+    }));
+  });
+});
 
 // Embed page request
 app.get('/embed/@:mediaId', (req, res) => {

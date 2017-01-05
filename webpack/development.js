@@ -6,6 +6,7 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 // Add needed plugins here
+let DashboardPlugin = require('webpack-dashboard/plugin');
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -15,6 +16,7 @@ let config = Object.assign({}, baseConfig, {
     './client'
   ],
   plugins: [
+    new DashboardPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({

@@ -12,7 +12,7 @@
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
-    "dev": "NODE_ENV='development' node server/index.js",
+    "dev": "NODE_ENV='development' webpack-dashboard -- node server/index.js",
     "start": "NODE_ENV='production' pm2 start server/index.js --name verpix-web-app",
     "stop": "NODE_ENV='production' pm2 delete verpix-web-app -s &> /dev/null",
     "docker-start": "NODE_ENV='production' pm2-docker start server/index.js",
@@ -32,6 +32,7 @@
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-1": "6.5.0",
     "babel-register": "6.9.0",
+    "body-parser": "1.15.2",
     "bower-webpack-plugin": "0.1.9",
     "chai": "3.5.0",
     "copyfiles": "0.2.1",
@@ -56,6 +57,7 @@
     "karma-webpack": "1.7.0",
     "minimist": "1.2.0",
     "mocha": "2.5.3",
+    "nodemailer": "2.7.0",
     "null-loader": "0.1.1",
     "open": "0.0.5",
     "phantomjs-prebuilt": "2.1.7",
@@ -73,6 +75,7 @@
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "1.13.1",
+    "webpack-dashboard": "0.2.0",
     "webpack-hot-middleware": "2.10.0"
   },
   "dependencies": {
