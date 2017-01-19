@@ -143,7 +143,8 @@ app.get('/embed/@:mediaId', (req, res) => {
         active: process.env.NODE_ENV === 'production',
         sdk: GA_SDK,
         trackingCode: exterApiConfig.ga.trackingCode
-      }
+      },
+      query: req.query
     }));
   }).catch((err) => {
     console.error(err.stack);

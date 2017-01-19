@@ -89,23 +89,27 @@
         header.style.visibility = 'visible';
       }
       <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
-      window.verpix.createLivephoto('<%= mediaId %>', {}, function (err, instance) {
+      var params = !isIframe ? {} : {
+        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+        cutBased: '<%= query.cutBased === 'height' ? 'height' : 'width' %>'
+      };
+      window.verpix.createLivephoto('<%= mediaId %>', params, function (err, instance) {
         if (err) {
           window.location = '/';
         } else {
-          var parentHeight =
-            isIframe ?
-            window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight :
-            content.clientHeight - 20;
-          var origDimension = instance.getOriginalDimension();
-          var origWidth = origDimension.width;
-          var origHeight = origDimension.height;
+          if (!isIframe) {
+            var parentHeight = content.clientHeight - 20;
+            var origDimension = instance.getOriginalDimension();
+            var origWidth = origDimension.width;
+            var origHeight = origDimension.height;
 
-          if (origHeight > parentHeight) {
-            instance.setWrapperDimension({
-              width: parseInt(origWidth * (parentHeight / origHeight) ,10),
-              height: parentHeight
-            });
+            if (origHeight > parentHeight) {
+              instance.setWrapperDimension({
+                width: parseInt(origWidth * (parentHeight / origHeight) ,10),
+                height: parentHeight
+              });
+            }
           }
 
           content.appendChild(instance.root);

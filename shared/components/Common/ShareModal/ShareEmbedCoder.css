@@ -1,6 +1,10 @@
 @import 'Variables.css';
 
 .share-embed-coder-component {
+  h6 {
+    margin-bottom: 5px;
+  }
+
   .text-wrapper {
     position: relative;
 

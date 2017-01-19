@@ -9,11 +9,12 @@ if (process.env.BROWSER) {
 }
 
 const propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   text: PropTypes.string.isRequired
 };
 
 const defaultProps = {
+  title: ''
 };
 
 class ShareEmbedCoder extends Component {
@@ -54,7 +55,7 @@ class ShareEmbedCoder extends Component {
 
     return (
       <div className="share-embed-coder-component heading">
-        <h5>{title}</h5>
+        <h6>{title}</h6>
         <CopyToClipboard
           text={text}
           onCopy={this.handleCopy}

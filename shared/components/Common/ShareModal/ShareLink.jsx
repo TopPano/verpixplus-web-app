@@ -16,22 +16,16 @@ const defaultProps = {
 };
 
 class ShareLink extends Component {
-  static contextTypes = { i18n: PropTypes.object };
-
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { l } = this.context.i18n;
     const { shareUrl } = this.props;
 
     return (
       <div className="share-link-component">
-        <ShareEmbedCoder
-          title={l('Link')}
-          text={shareUrl}
-        />
+        <ShareEmbedCoder text={shareUrl} />
       </div>
     );
   }

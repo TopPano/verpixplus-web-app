@@ -23,7 +23,8 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
-  mediaType: PropTypes.string.isRequired
+  mediaType: PropTypes.string.isRequired,
+  shareUrl: PropTypes.string.isRequired
 };
 
 const defaultProps = {
@@ -122,6 +123,15 @@ class ShareEmbed extends Component {
     this.setState({ cutBased });
   }
 
+  // Generate the iframe code
+  genIframeCode(mediaType, shareUrl, embedWidth, embedHeight, cutBased) {
+    const queryCutBased =
+      ((mediaType === MEDIA_TYPE.LIVE_PHOTO) && (cutBased === 'height')) ?
+      `?cutBased=${cutBased}` :
+      '';
+    return `<iframe width="${embedWidth}" height="${embedHeight}" src="${shareUrl}${queryCutBased}" frameborder="0" scrolling="no" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>`;
+  }
+
   // Generate the SDK code
   genSDKCode(mediaType) {
     return (
@@ -191,10 +201,12 @@ class ShareEmbed extends Component {
     } = this.state;
     const {
       mediaId,
-      mediaType
+      mediaType,
+      shareUrl
     } = this.props;
     const embedWidth = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveWidth : panoLength;
     const embedHeight = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveHeight : panoLength;
+    const iframeCode = this.genIframeCode(mediaType, shareUrl, embedWidth, embedHeight, cutBased);
     const sdkCode = this.genSDKCode(mediaType);
     const usageCode = this.genUsageCode(mediaId, mediaType, embedWidth, embedHeight, cutBased);
     const cutBasedInputs = this.renderCutBasedInputs(cutBased);
@@ -227,16 +239,20 @@ class ShareEmbed extends Component {
           </div>
         </div>
         <div style={codersStyle}>
+          <p className="embed-title container-center-col">{l('Embed in iframe')}</p>
+          <ShareEmbedCoder text={iframeCode} />
+          <hr />
+          <p className="embed-title container-center-col">{l('Embed by SDK')}</p>
           <ShareEmbedCoder
-            title={l('SDK Installation')}
+            title={`1. ${l('SDK Installation')}`}
             text={sdkCode}
           />
-          <hr />
           <ShareEmbedCoder
-            title={l('Usage')}
+            title={`2. ${l('Usage')}`}
             text={usageCode}
           />
         </div>
+        <hr />
         <div className="margin-bottom-10" />
         {
           (mediaType === MEDIA_TYPE.LIVE_PHOTO) &&

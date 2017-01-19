@@ -265,6 +265,12 @@
       "Confirm": [
         "確認"
       ],
+      "Embed in iframe": [
+        "內嵌於iframe"
+      ],
+      "Embed by SDK": [
+        "使用SDK內嵌"
+      ],
       "SDK Installation": [
         "安裝SDK"
       ],

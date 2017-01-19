@@ -97,6 +97,7 @@ class ShareModal extends Component {
         <ShareEmbed
           mediaId={mediaId}
           mediaType={mediaType}
+          shareUrl={shareUrl}
         />
     }];
 

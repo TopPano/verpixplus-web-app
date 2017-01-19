@@ -1,6 +1,10 @@
 @import 'Variables.css';
 
 .share-embed-component {
+  .embed-title {
+    font-size: 16px;
+  }
+
   .inputs-wrapper {
     flex-wrap: no-wrap;
     margin-bottom: 10px;
@@ -26,7 +30,6 @@
       padding: 0 5px
     }
   }
-
 
   .preview-btn-wrapper {
     margin-top: 15px;
