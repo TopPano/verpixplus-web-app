@@ -55,26 +55,48 @@
   </script>
 </head>
 <body style="height: 100%; margin: 0; background-color: #EBEBEC;">
-  <div class="container-center" style="height: 98px">
-    <a class="logo" href="<%= staticUrl %>">
-      <img src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
+  <div id="header" class="container-center" style="height: 98px; visibility: hidden;">
+    <a class="logo" href="<%= staticUrl %>" target="_blank">
+      <img id="logo-img" src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
     </a>
   </div>
   <div id="content" class="content container-center"></div>
-  <div class="container-center" style="height: 70px">
+  <div id ="footer" class="container-center" style="height: 70px; visibility: hidden;">
     <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
   </div>
   <% include ../partials/static-ga %>
   <%- (type === MEDIA_TYPE.LIVE_PHOTO) ? livephotoSdk : panophotoSdk %>
   <script>
     window.addEventListener('load', function() {
+      var isIframe = window != window.top;
+      var header = document.getElementById('header');
+      var footer = document.getElementById('footer');
       var content = document.getElementById('content');
+      var logoImg = document.getElementById('logo-img');
+      if (!isIframe) {
+        header.style.visibility = 'visible';
+        footer.style.visibility = 'visible';
+      } else {
+        footer.remove();
+        content.style.height = '100vh';
+        content.style.padding = '0';
+        logoImg.width = 90;
+        logoImg.height = 13;
+        header.style.position = 'absolute';
+        header.style.right = '10px';
+        header.style.bottom = '12px';
+        header.style.height = '11px';
+        header.style.visibility = 'visible';
+      }
       <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
       window.verpix.createLivephoto('<%= mediaId %>', {}, function (err, instance) {
         if (err) {
           window.location = '/';
         } else {
-          var parentHeight = content.clientHeight - 20;
+          var parentHeight =
+            isIframe ?
+            window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight :
+            content.clientHeight - 20;
           var origDimension = instance.getOriginalDimension();
           var origWidth = origDimension.width;
           var origHeight = origDimension.height;
