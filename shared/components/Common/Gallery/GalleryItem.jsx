@@ -83,7 +83,7 @@ class GalleryItem extends Component {
 
     return (
       <div className="create-main container-center-row">
-        <p className="text-center">{l('Create your own imigination')}</p>
+        <p className="text-center">{l('Create your own imagination')}</p>
       </div>
     );
   }
