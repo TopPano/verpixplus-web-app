@@ -79,12 +79,15 @@ class Editor extends Component {
         />
         <div className="editor-main">
           <div className="main-header container-center-row">
-            <img
-              src="/static/images/editor/logo.svg"
-              alt="logo"
-              width="145"
-              height="33"
-            />
+            {
+              (mediaType !== MEDIA_TYPE.PANO_PHOTO) &&
+              <img
+                src="/static/images/editor/logo.svg"
+                alt="logo"
+                width="145"
+                height="33"
+              />
+            }
           </div>
           <div className="main-content">
             {mainComponents}
