@@ -73,11 +73,13 @@
       var footer = document.getElementById('footer');
       var content = document.getElementById('content');
       if (!isIframe) {
-        <% if (type === MEDIA_TYPE.PANO_PHOTO) { %>
-        footer.children[0].style.margin = '50px 0 0 0';
-        <% } %>
+        <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
         header.style.visibility = 'visible';
         footer.style.visibility = 'visible';
+        <% } else {  %>
+        header.remove();
+        footer.remove();
+        <% }  %>
       } else {
         header.remove();
         footer.remove();
