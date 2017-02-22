@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import isInteger from 'lodash/isInteger';
 import toNumber from 'lodash/toNumber';
 import fileSaver from 'file-saver';
+import fetch from 'isomorphic-fetch';
 import JSZip from 'jszip';
 
 import {
@@ -24,7 +25,8 @@ if (process.env.BROWSER) {
 const propTypes = {
   mediaId: PropTypes.string.isRequired,
   mediaType: PropTypes.string.isRequired,
-  shareUrl: PropTypes.string.isRequired
+  shareUrl: PropTypes.string.isRequired,
+  altPhotoUrl: PropTypes.string
 };
 
 const defaultProps = {
@@ -95,7 +97,8 @@ class ShareEmbed extends Component {
   handleClickDownloadBtn() {
     const {
       mediaId,
-      mediaType
+      mediaType,
+      altPhotoUrl
     } = this.props;
     const {
       liveWidth,
@@ -107,15 +110,30 @@ class ShareEmbed extends Component {
     const embedWidth = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveWidth : panoLength;
     const embedHeight = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? liveHeight : panoLength;
     const sdkCode = this.genSDKCode(mediaType);
-    const usageCode = this.genUsageCode(mediaId, mediaType, embedWidth, embedHeight, cutBased);
+    const usageCode = this.genUsageCode(mediaId, mediaType, embedWidth, embedHeight, cutBased, 'assets/alt.jpg');
     const zip = new JSZip();
 
-    zip.file('index.html', genAdHTML(clickTag, usageCode, sdkCode));
-    zip.generateAsync({
-      type: 'blob'
+    fetch(altPhotoUrl, {
+      headers: {
+        'Accept': 'image/jpeg'
+      }
+    }).then((res) => {
+      if (res.status >= 400) {
+        throw new Error(res);
+      }
+      return res.arrayBuffer();
+    }).then((altPhoto) => {
+      zip.file('index.html', genAdHTML(clickTag, usageCode, sdkCode));
+      zip.file('assets/alt.jpg', altPhoto);
+
+      return zip.generateAsync({
+        type: 'blob'
+      });
     }).then((zipBlob) => {
       fileSaver.saveAs(zipBlob, `ad-${mediaId}.zip`);
-    })
+    }).catch(() => {
+      // TODO: Error handling
+    });
   }
 
   // Set value cutBased state
@@ -142,7 +160,7 @@ class ShareEmbed extends Component {
   }
 
   // Generate the usage code
-  genUsageCode(id, mediaType, width, height, cutBased) {
+  genUsageCode(id, mediaType, width, height, cutBased, altPhoto = '') {
     const typeName = (mediaType === MEDIA_TYPE.LIVE_PHOTO) ? 'livephoto' : 'panophoto';
     const dataWidth = width > 0 ? `data-width="${width}"` : '';
     const dataHeight = height > 0 ? `data-height="${height}"` : '';
@@ -150,8 +168,9 @@ class ShareEmbed extends Component {
       ((mediaType === MEDIA_TYPE.LIVE_PHOTO) && (cutBased === 'height')) ?
       `data-cut-based="${cutBased}"` :
       '';
+    const dataAltPhoto = altPhoto ? `data-alt-photo="${altPhoto}"` : '';
 
-    return `<div class="verpix-${typeName}" data-id="${id}" ${dataWidth} ${dataHeight} ${dataCutBased}></div>`;
+    return `<div class="verpix-${typeName}" data-id="${id}" ${dataWidth} ${dataHeight} ${dataAltPhoto} ${dataCutBased}></div>`;
   }
 
   // Render inputs for choose value of "cutBased"

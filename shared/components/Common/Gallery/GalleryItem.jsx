@@ -67,6 +67,7 @@ class GalleryItem extends Component {
     );
   }
 
+
   // Get approximate duration from created time to now
   getApproximateDuration(created) {
     const { l, getLocale } = this.context.i18n;
@@ -163,6 +164,7 @@ class GalleryItem extends Component {
                   mediaType={mediaObj.type}
                   title={title}
                   panoSharedPhoto={panoSharedPhoto}
+                  altPhotoUrl={coverPhoto}
                 >
                   <div className="tool tool-share circle clickable" />
                 </ShareModal>
