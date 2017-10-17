@@ -9,17 +9,25 @@ export function getPosition(e) {
 
 export function getX(e) {
   if(isMobile()) {
-    return e.touches[0].pageX - e.target.getBoundingClientRect().left;
+    if (e.touches && e.touches[0]) {
+      return e.touches[0].pageX;
+    } else {
+      return null;
+    }
   } else {
-    return e.offsetX;
+    return e.clientX;
   }
 }
 
 export function getY(e) {
   if(isMobile()) {
-    return e.touches[0].pageY - e.target.getBoundingClientRect().top;
+    if (e.touches && e.touches[0]) {
+      return e.touches[0].pageY;
+    } else {
+      return null;
+    }
   } else {
-    return e.offsetY;
+    return e.clientY;
   }
 }
 

@@ -3,9 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
-import CONTENT from 'content/sign/en-us.json';
-
-const { ERR_MSG } = CONTENT;
+import ERR from 'constants/err';
 
 if (process.env.BROWSER) {
   require('./RegBlockErr.css');
@@ -13,13 +11,17 @@ if (process.env.BROWSER) {
 
 const propTypes = {
   errMsg: PropTypes.string.isRequired,
+  convertedErrMsgs: PropTypes.object,
   clearErrMsg: PropTypes.func.isRequired
 };
 
 const defaultProps = {
+  convertedErrMsgs: {}
 };
 
 class RegBlockErr extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -29,15 +31,22 @@ class RegBlockErr extends Component {
   }
 
   // Parse error message and convert them into human readable message
-  convertErrMsg(errMsg) {
-    // TODO: Handle for more error message.
+  convertErrMsg(errMsg, convertedErrMsgs, defaultConvertedErrMsgs) {
+    const { l } = this.context.i18n;
+
     if (!errMsg) {
       return '';
-    } else if (errMsg === 'Unauthorized') {
-      return ERR_MSG.AJAX.UNAUTHORIZED;
-    } else {
-      return ERR_MSG.AJAX.OTHERS;
     }
+    if (convertedErrMsgs[errMsg]) {
+      return l(convertedErrMsgs[errMsg]);
+    }
+    if (defaultConvertedErrMsgs[errMsg]) {
+      return l(defaultConvertedErrMsgs[errMsg]);
+    }
+    if (convertedErrMsgs.FETCH_DEFAULT) {
+      return `${l(convertedErrMsgs.FETCH_DEFAULT)}: ${errMsg}`;
+    }
+    return `${l(defaultConvertedErrMsgs.FETCH_DEFAULT)}: ${errMsg}`;
   }
 
   // Clear error message
@@ -52,12 +61,15 @@ class RegBlockErr extends Component {
 
   // TODO: show/hide block with animation
   render() {
-    const { errMsg } = this.props;
+    const {
+      errMsg,
+      convertedErrMsgs
+    } = this.props;
     const componentClass = classNames({
       'reg-block-err-component': true,
       'hide': !Boolean(errMsg)
     });
-    const convertedErrMsg = this.convertErrMsg(errMsg);
+    const convertedErrMsg = this.convertErrMsg(errMsg, convertedErrMsgs, ERR);
 
     return (
       <div className={componentClass}>

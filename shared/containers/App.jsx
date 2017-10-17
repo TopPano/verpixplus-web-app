@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+import Notifications from 'containers/common/Notifications';
 import { initialize, navigate } from '../lib/utils/googleAnalytics';
 
 export default class App extends Component {
@@ -19,6 +20,7 @@ export default class App extends Component {
     return (
       <div id='app-view'>
         {this.props.children}
+        <Notifications />
       </div>
     );
   }

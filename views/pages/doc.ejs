@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/head %>
+  <style>
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexhei.css);
+  </style>
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/socicon/css/socicon.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/unicore/css/style.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/dropdown-menu-plugin/style.light.css">
+  <link rel="stylesheet" href="<%= cdnUrl %>/home/mobirise/css/mbr-additional.css" type="text/css">
+</head>
+<body>
+<% if (page === '/terms') { %>
+<section id="dropdown-menu-2btn-c">
+<% } else { %>
+<section id="dropdown-menu-2btn-u">
+<% } %>
+    <nav class="navbar navbar-dropdown bg-color transparent navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-logo"><img src="<%= cdnUrl %>/home/images/verpix-web-logo-white-1.svg" alt="VERPIX"></a>
+            </div>
+        </div>
+    </nav>
+</section>
+
+<section class="mbr-section--bg-adapted mbr-section--relative mbr-after-navbar" id="msg-box18-d" data-bg-video="https://www.youtube.com/embed/qybUK_2zK6w?rel=0&amp;amp;showinfo=0&amp;autoplay=0&amp;loop=0">
+    <div class="intro page_head text-center" style="padding-top: 160px; padding-bottom: 80px;">
+        <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(3, 169, 244);"></div>
+        <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3><%= title %></h3>
+                    <p><%= l('Last Updated: 2016.11.22') %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div></section>
+
+<% if (page === '/terms') { %>
+<%- include('terms/' + locale) %>
+<% } else { %>
+<%- include('privacy/' + locale) %>
+<% } %>
+
+<% include ../partials/static-footer %>
+
+  <script src="<%= cdnUrl %>/home/web/assets/jquery/jquery.min.js"></script>
+  <script src="<%= cdnUrl %>/home/bootstrap/js/bootstrap.min.js"></script>
+  <script src="<%= cdnUrl %>/home/smooth-scroll/SmoothScroll.js"></script>
+  <script src="<%= cdnUrl %>/home/jquery-mb-ytplayer/jquery.mb.YTPlayer.min.js"></script>
+  <script src="<%= cdnUrl %>/home/unicore/js/script.js"></script>
+  <script src="<%= cdnUrl %>/home/dropdown-menu-plugin/script.js"></script>
+  <% include ../partials/static-ga %>
+</body>
+</html>

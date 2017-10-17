@@ -1,0 +1,14 @@
+@import 'Variables.css';
+
+.profile-editor-component {
+  .profile-editor-btn {
+    margin: 0 20px 15px 20px;
+  }
+}
+
+.password-content {
+  padding: 10px 25px 0 10px;
+  input.form-control {
+    background-color: $color-white;
+  }
+}

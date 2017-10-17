@@ -14,7 +14,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-export default class ServiceBlock extends Component {
+class ServiceBlock extends Component {
   constructor(props) {
     super(props);
   }

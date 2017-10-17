@@ -1,0 +1,23 @@
+@import 'Variables.css';
+
+.menu-links-component {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+
+  .menu-link {
+    margin-top: 15px;
+    color: $color-white;
+    font-size: 18px;
+    line-height: 23px;
+    transition: color .3s ease;
+    &.small {
+      font-size: 14px;
+      line-height: 18px;
+      margin-top: 20px;
+    }
+    &:hover {
+      color: #FCF474;
+    }
+  }
+}

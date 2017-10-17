@@ -1,2 +1,13 @@
+@import 'Variables.css';
+
 .footer-component {
+  height: 70px;
+
+  p {
+    color: #7F7F7F;
+    font-size: 10px;
+    font-family: $font-family-main;
+    font-weight: 400;
+    text-align: center;
+  }
 }

@@ -1,6 +1,5 @@
 import Base from './Base';
 import { Schema, arrayOf } from 'normalizr';
-import Promise from 'lib/utils/promise';
 
 import { MEDIA_TYPE } from 'constants/common';
 
@@ -30,23 +29,57 @@ export default class MediaAPI extends Base {
     });
   }
 
-  postMedia(mediaType, media, authToken) {
+  getVideo(mediaId) {
+    return this.apiClient.get({
+      url: `media/${mediaId}/video`
+    });
+  }
+
+  postMedia(mediaType, payload, authToken) {
     if (authToken) {
       this.apiClient.setAuthToken(authToken);
     }
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
       return this.apiClient.post({
         url: 'media/livephoto',
-        payload: media,
+        payload,
         requireAuth: true,
         contentType: 'multipart/form-data'
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
-      // TODO: Handle panophoto
+      return this.apiClient.post({
+        url: 'media/panophoto',
+        payload,
+        requireAuth: true,
+        contentType: 'multipart/form-data'
+      });
     } else {
       // TODO: Error handling for other cases
       return null;
     }
+  }
+
+  postVideo(mediaId, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+    return this.apiClient.post({
+      url: `media/${mediaId}/video`,
+      requireAuth: true
+    });
+  }
+
+  putMedia(mediaId, media, authToken) {
+    if (authToken) {
+      this.apiClient.setAuthToken(authToken);
+    }
+
+    return this.apiClient.put({
+      url: `media/${mediaId}`,
+      payload: media,
+      requireAuth: true,
+      contentType: 'multipart/form-data'
+    });
   }
 
   deleteMedia(mediaId, authToken) {

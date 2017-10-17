@@ -21,12 +21,10 @@ const PLAY_DIRECTION = {
 const PLAY_RATE = 20;
 // The duration for showing loading overlay
 const LOADING_DURATION = 500;
-// The id of hidden canvas which is used to apply filters
-const FILTERS_CANVAS_ID = 'livephoto-player-hidden-canvas';
 
 const propTypes = {
-  imagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  appliedImagesData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  storageId: PropTypes.string.isRequired,
+  appliedData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired
@@ -47,6 +45,7 @@ class LivephotoPlayer extends Component {
 
     // Initialize state
     this.state = {
+      parentDimension: null,
       currentIdx: -1,
       playDirection: PLAY_DIRECTION.INCREASE,
       isLoading: false
@@ -54,6 +53,13 @@ class LivephotoPlayer extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      parentDimension: {
+        width: this.refs.livephoto.parentNode.clientWidth - 40,
+        height: this.refs.livephoto.parentNode.clientHeight - 15
+      }
+    });
+
     const {
       playerMode,
       autoplay,
@@ -64,21 +70,17 @@ class LivephotoPlayer extends Component {
       this.play(lower);
     }
 
-    this.caman = {
-      instance: Caman(`#${FILTERS_CANVAS_ID}`),
-      isBusy: false
-    };
+    this.isApplyingFilters = false
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { currentIdx } = this.state;
     const {
-      imagesData,
-      appliedImagesData,
+      storageId,
+      appliedData,
       playerMode,
       autoplay,
       lower,
-      dimension,
       filters
     } = this.props;
     const enablePlay =
@@ -89,9 +91,9 @@ class LivephotoPlayer extends Component {
       (prevProps.autoplay && !autoplay && playerMode === PLAYER_MODE.PLAY);
 
     if (prevState.currentIdx !== currentIdx) {
-      this.renderImageByIndex(appliedImagesData, currentIdx, dimension);
-    } else if ((!autoplay || playerMode === PLAYER_MODE.PAUSE) && !isEqual(prevProps.filters, filters)) {
-      this.applyFilters(imagesData, currentIdx, dimension, filters);
+      this.renderImageByIndex(appliedData, currentIdx);
+    } else if ((!autoplay || playerMode === PLAYER_MODE.PAUSE) && (filters.isDirty || !isEqual(prevProps.filters, filters))) {
+      this.applyFilters(storageId, appliedData.length, currentIdx, filters);
     }
 
     if (enablePlay) {
@@ -139,6 +141,10 @@ class LivephotoPlayer extends Component {
       let newIdx;
       let newPlayDirection = playDirection;
 
+      if ((upper - lower) <= 0) {
+        return;
+      }
+
       if (playDirection === PLAY_DIRECTION.INCREASE) {
         if (currentIdx === (upper - 1)) {
           newIdx = currentIdx - 1;
@@ -172,75 +178,91 @@ class LivephotoPlayer extends Component {
   }
 
   // Render an selected image from of images
-  renderImageByIndex(imgsData, idx, dimension) {
+  renderImageByIndex(imgsData, idx) {
     if (inRange(idx, 0, imgsData.length)) {
-      this.renderImage(imgsData[idx], dimension);
+      this.renderImage(imgsData[idx]);
     }
   }
 
   // Apply filters to canvas
   // FIXME:
-  // When the function is called, if isBusy euqals to true, filters will not be applied.
-  applyFilters(imgsData, idx, dimension, filters) {
-    if (!this.caman.isBusy && inRange(idx, 0, imgsData.length)) {
-      this.caman.isBusy = true;
+  // When the function is called, if isApplyingFilters euqals to true, filters will not be applied.
+  applyFilters(storageId, imgsNum, idx, filters) {
+    if (!this.isApplyingFilters && inRange(idx, 0, imgsNum)) {
+      this.isApplyingFilters = true;
 
-      applyImageFilters(this.caman.instance, imgsData[idx], dimension, filters).then((appliedImgData) => {
-        this.renderImage(appliedImgData, dimension);
-        this.caman.isBusy = false;
+      applyImageFilters(storageId, idx, filters, 'image').then((result) => {
+        this.renderImage(result);
+        this.isApplyingFilters = false;
       }).catch(() => {
-        this.caman.isBusy = false;
+        // TODO: Error handling
+        this.isApplyingFilters = false;
       });
     }
   }
 
   // Render an image to canvas
-  renderImage(imgData, dimension) {
-    this.refs.canvas.getContext('2d').putImageData(imgData, 0, 0, 0, 0, dimension.width, dimension.height);
+  renderImage(imgData) {
+    if (imgData) {
+      this.refs.canvas.getContext('2d').drawImage(imgData, 0, 0);
+    }
+  }
+
+  // Get component sytle by calculating resized width and heigth
+  getComponentStyle(dimension, parentDimension) {
+    const {
+      width,
+      height
+    } = dimension;
+    let newWidth = width;
+    let newHeight = height;
+
+    if (parentDimension) {
+      if (width > height) {
+        // Landscape
+        newWidth = width > parentDimension.width ? parentDimension.width : width;
+        newHeight = parseInt(height * (newWidth / width), 10);
+      } else {
+        // Portrait
+        newHeight = height > parentDimension.height ? parentDimension.height : height;
+        newWidth = parseInt(width * (newHeight / height), 10);
+      }
+    }
+
+    return {
+      width: `${newWidth}px`,
+      height: `${newHeight}px`
+    };
   }
 
   render() {
-    const { isLoading } = this.state;
+    const {
+      isLoading,
+      parentDimension
+    } = this.state;
     const { dimension } = this.props;
-    const dimensionRatio = Math.round((dimension.height / dimension.width) * 100);
-    const componentStyle = {
-      width: `${dimension.width}px`
-    };
-    const wrapperStyle = {
-      paddingBottom: `${dimensionRatio}%`
-    };
+    const componentStyle = this.getComponentStyle(dimension, parentDimension);
 
     return (
       <div
+        ref="livephoto"
         className="livephoto-player-component"
         style={componentStyle}
       >
-        <div
-          className="livephoto-player-wrapper"
-          style={wrapperStyle}
-        >
-          <canvas
-            ref="canvas"
-            width={dimension.width}
-            height={dimension.height}
-          />
-          <canvas
-            ref="filtersCanvas"
-            id={FILTERS_CANVAS_ID}
-            width={dimension.width}
-            height={dimension.height}
-            style={{ display: 'none' }}
-          />
-          {
-            isLoading &&
-            <div className="loading-overlay container-center-row">
-              <img
-                src="/static/images/loading-ring.svg"
-                alt="loading-ring"
-              />
-            </div>
-          }
-        </div>
+        <canvas
+          ref="canvas"
+          width={dimension.width}
+          height={dimension.height}
+        />
+        {
+          isLoading &&
+          <div className="loading-overlay container-center-row">
+            <img
+              src="/static/images/loading-ring.svg"
+              alt="loading-ring"
+            />
+          </div>
+        }
       </div>
     );
   }

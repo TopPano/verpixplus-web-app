@@ -1,0 +1,13 @@
+.language-editor-component {
+  position: relative;
+
+  .language-select {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+
+    .Select-control, .Select-menu-outer {
+      width: 150px;
+    }
+  }
+}

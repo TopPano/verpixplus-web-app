@@ -1,15 +1,17 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import classNames from 'classnames';
 import Scrollbar from 'react-custom-scrollbars';
 
+import { MEDIA_TYPE } from 'constants/common';
 import { MODE } from 'constants/editor';
+import { EDIT_TARGET } from 'constants/editor';
 import { renderList } from 'lib/utils';
 import MenuItem from './MenuItem';
 import EditPanel from '../EditPanel';
-import FiltersPanel from '../FiltersPanel';
-import SharePanel from '../SharePanel';
+import FiltersPanel from 'containers/pages/Editor/FiltersPanel';
 
 if (process.env.BROWSER) {
   require('./Sidebar.css');
@@ -20,21 +22,10 @@ const propTypes = {
   mediaType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   caption: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  appliedData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
-  autoplay: PropTypes.bool.isRequired,
-  filters: PropTypes.object.isRequired,
   playerPlay: PropTypes.func.isRequired,
   playerPause: PropTypes.func.isRequired,
-  playerSetAutoplay: PropTypes.func.isRequired,
-  edit: PropTypes.func.isRequired,
-  adjustFilters: PropTypes.func.isRequired,
-  applyFilters: PropTypes.func.isRequired,
-  create: PropTypes.func.isRequired
+  changeEditTarget: PropTypes.func.isRequired,
+  edit: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -58,7 +49,8 @@ class Sidebar extends Component {
     const {
       mode,
       playerPlay,
-      playerPause
+      playerPause,
+      changeEditTarget
     } = this.props;
 
     if (selectedIdx !== idx) {
@@ -66,9 +58,11 @@ class Sidebar extends Component {
         if (selectedIdx === 0 && idx === 1) {
           // Chnage from edit to filters panel
           playerPause();
+          changeEditTarget(EDIT_TARGET.FILTERS);
         } else if (selectedIdx === 1 && idx === 0) {
           // Chnage from filters to edit panel
           playerPlay();
+          changeEditTarget(EDIT_TARGET.FRAMES);
         }
       }
 
@@ -117,52 +111,26 @@ class Sidebar extends Component {
       mode,
       mediaType,
       title,
-      data,
-      appliedData,
       caption,
-      dimension,
-      autoplay,
-      playerSetAutoplay,
-      filters,
-      edit,
-      adjustFilters,
-      applyFilters,
-      create
+      edit
     } = this.props;
     const editMenuItemProp = {
-      icon: 'pencil-square'
+      icon: 'edit'
     };
     const filtersMenuItemProp = {
-      icon: 'picture-o'
-    };
-    const shareMenuItemProp = {
-      icon: 'share-alt-square'
+      icon: 'filters'
     };
     const editPanel =
       <EditPanel
         key="edit-panel"
-        mode={mode}
-        mediaType={mediaType}
         title={title}
         caption={caption}
-        appliedData={appliedData}
-        dimension={dimension}
-        autoplay={autoplay}
-        playerSetAutoplay={playerSetAutoplay}
         edit={edit}
-        create={create}
       />
     const filtersPanel =
       <FiltersPanel
         key="filters-panel"
-        data={data}
-        dimension={dimension}
-        filters={filters}
-        adjustFilters={adjustFilters}
-        applyFilters={applyFilters}
       />
-    const sharePanel =
-      <SharePanel key="share-panel" />
     let menuItemsProps = [];
     let menuItems;
     let panels = [];
@@ -172,20 +140,38 @@ class Sidebar extends Component {
       menuItemsProps = [editMenuItemProp];
       panels = [editPanel];
     } else if (mode === MODE.CREATE) {
-      menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
-      panels = [editPanel, filtersPanel];
+      if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
+        menuItemsProps = [editMenuItemProp, filtersMenuItemProp];
+        panels = [editPanel, filtersPanel];
+      } else {
+        menuItemsProps = [editMenuItemProp];
+        panels = [editPanel];
+      }
     } else if (mode === MODE.EDIT) {
-      menuItemsProps = [editMenuItemProp, shareMenuItemProp];
-      panels = [editPanel, sharePanel];
+      menuItemsProps = [editMenuItemProp];
+      panels = [editPanel];
     }
 
     menuItems = this.renderMenuItems(menuItemsProps, selectedIdx);
     sidebarPanels = this.renderSidebarPanels(panels, selectedIdx);
 
     return (
-      <div className="sidebar-component fill bg-color-dark">
-        <div className="menu bg-color-light-grey">
-          {menuItems}
+      <div className="sidebar-component fill">
+        <div className="menu">
+          <Link
+            className="sidebar-back"
+            to="/"
+          >
+            <img
+              src="/static/images/editor/back.svg"
+              alt="go back"
+              width="40"
+              height="40"
+            />
+          </Link>
+          <div className="menu-items">
+            {menuItems}
+          </div>
         </div>
         <Scrollbar
           universal

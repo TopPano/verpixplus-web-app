@@ -26,7 +26,7 @@ class RegBlockBtn extends Component {
         <div className="col-md-10 col-md-offset-1">
           <button
             type="submit"
-            className="btn-u btn-block"
+            className="reg-block-btn flat-button-component"
           >
             {text}
           </button>

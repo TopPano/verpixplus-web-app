@@ -1,5 +1,19 @@
 @import 'Variables.css';
 
+/*
+ * cwTeXHei (Chinese-traditional) http://www.google.com/fonts/earlyaccess
+ */
+@font-face {
+  font-family: 'cwTeXHei';
+  font-style: normal;
+  font-weight: 500;
+  src: url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.eot);
+  src: url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.eot?#iefix) format('embedded-opentype'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.woff2) format('woff2'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.woff) format('woff'),
+       url(//fonts.gstatic.com/ea/cwtexhei/v3/cwTeXHei-zhonly.ttf) format('truetype');
+}
+
 .text-single-line {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -14,7 +28,6 @@
 .text-link {
   &:link, &:visited, &:hover, &:active {
     cursor: pointer;
-    color: $text-color-primary;
     text-decoration: none;
   }
 }
@@ -45,7 +58,7 @@
 }
 
 .container-fullpage {
-  min-height: 100vh;
+  min-height: calc(100vh - 168px);
 }
 
 .rounded-bottom {
@@ -53,39 +66,23 @@
   border-bottom-right-radius: 4px;
 }
 
+.circle {
+  border-radius: 50%;
+}
+
+.main-bg {
+  background-color: #EBEBEB;
+}
+
 textarea {
   resize: none;
+}
+
+.title-v1 h1, .title-v1 h2, h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-main;
 }
 
 /* Customized styles for Bootstrap and Unify */
 .btn:focus {
   color: inherit;
-}
-
-/* Customized styles for Bootstrap Modal Dialog. */
-.modal-backdrop.in {
-  opacity: 0.25;
-}
-.modal {
-  text-align: center;
-  &:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: ' ';
-    height: 100%;
-  }
-
-  .modal-dialog {
-    display: inline-block;
-    text-align: left;
-    vertical-align: middle;
-    width: 90%;
-    max-width: 600px;
-    .modal-content {
-      background-color: rgba(0, 0, 0, 0.5);
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-    }
-  }
 }

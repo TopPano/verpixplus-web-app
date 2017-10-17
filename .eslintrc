@@ -19,7 +19,7 @@
   },
   "globals": {
     "ga": true,
-    "Caman": true
+    "fx": true
   },
   "rules": {
     "comma-dangle": 1,

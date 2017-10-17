@@ -1,0 +1,136 @@
+<!doctype html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<html>
+<head style="height: 100%">
+  <% include ../partials/head %>
+  <style>
+    .container-center {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+    .logo {
+      z-index: 1;
+    }
+    .content {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      height: calc(100vh - 168px);
+      padding: 10px;
+    }
+    .panophoto {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    .footer-text {
+      color: #7F7F7F;
+      font-size: 10px;
+      font-family: source-sans-pro, sans-serif;
+      font-weight: 400;
+      text-align: center;
+      line-height: 17px;
+      margin: 0 0 10px 0;
+      z-index: 1;
+    }
+  </style>
+  <script>
+     document.write('\x3Cscript src="' + (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//webfonts.creativecloud.com/source-sans-pro:n4,n7:default.js" type="text/javascript">\x3C/script>');
+  </script>
+</head>
+<body style="height: 100%; margin: 0; background-color: #EBEBEC;">
+  <div id="header" class="container-center" style="height: 98px; visibility: hidden;">
+    <a class="logo" href="<%= staticUrl %>" target="_blank">
+      <img src="<%= staticUrl %>/static/images/header/logo.svg" alt="logo" width="153" height="22">
+    </a>
+  </div>
+  <div id="content" class="content container-center"></div>
+  <div id ="footer" class="container-center" style="height: 70px; visibility: hidden;">
+    <p class="footer-text">&copy; 2016 Toppano. All Rights Reserved.</p>
+  </div>
+  <% include ../partials/static-ga %>
+  <%- (type === MEDIA_TYPE.LIVE_PHOTO) ? livephotoSdk : panophotoSdk %>
+  <script>
+    window.addEventListener('load', function() {
+      var isIframe = window != window.top;
+      var header = document.getElementById('header');
+      var footer = document.getElementById('footer');
+      var content = document.getElementById('content');
+      if (!isIframe) {
+        <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
+        header.style.visibility = 'visible';
+        footer.style.visibility = 'visible';
+        <% } else {  %>
+        header.remove();
+        footer.remove();
+        <% }  %>
+      } else {
+        header.remove();
+        footer.remove();
+        content.style.height = '100vh';
+        content.style.padding = '0';
+      }
+      <% if (type === MEDIA_TYPE.LIVE_PHOTO) { %>
+      var params = !isIframe ? {} : {
+        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+        cutBased: '<%= query.cutBased === 'height' ? 'height' : 'width' %>'
+      };
+      window.verpix.createLivephoto('<%= mediaId %>', params, function (err, instance) {
+        if (err) {
+          window.location = '/';
+        } else {
+          if (!isIframe) {
+            var parentHeight = content.clientHeight - 20;
+            var origDimension = instance.getOriginalDimension();
+            var origWidth = origDimension.width;
+            var origHeight = origDimension.height;
+
+            if (origHeight > parentHeight) {
+              instance.setWrapperDimension({
+                width: parseInt(origWidth * (parentHeight / origHeight) ,10),
+                height: parentHeight
+              });
+            }
+          }
+
+          content.appendChild(instance.root);
+          instance.start();
+        }
+      });
+      <% } else { %>
+      var params = {
+        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+      };
+
+      window.verpix.createPanophoto('<%= mediaId %>', params, function (err, instance) {
+        if (err) {
+          window.location = '/';
+        } else {
+          instance.root.className = 'panophoto';
+          content.appendChild(instance.root);
+          instance.start();
+        }
+      });
+      <% } %>
+    });
+  </script>
+</body>
+</html>

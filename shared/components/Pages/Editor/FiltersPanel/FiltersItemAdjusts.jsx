@@ -2,24 +2,18 @@
 
 import React, { Component, PropTypes } from 'react';
 
-import EDITOR_CONTENT from 'content/editor/en-us.json';
 import { renderList } from 'lib/utils';
-import IconButton from 'components/Common/IconButton';
+import FlatButton from 'components/Common/FlatButton';
 import SidebarItem from '../SidebarItem';
 import Adjust from './Adjust';
-
-const CONTENT = EDITOR_CONTENT.FILTERS_PANEL.ADJUSTS;
 
 if (process.env.BROWSER) {
   require('./FiltersItemAdjusts.css');
 }
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dimension: PropTypes.shape({
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  }).isRequired,
+  storageId: PropTypes.string.isRequired,
+  imagesNum: PropTypes.number.isRequired,
   filters: PropTypes.object.isRequired,
   adjustFilters: PropTypes.func.isRequired,
   applyFilters: PropTypes.func.isRequired
@@ -29,6 +23,8 @@ const defaultProps = {
 };
 
 class FiltersItemAdjusts extends Component {
+  static contextTypes = { i18n: PropTypes.object };
+
   constructor(props) {
     super(props);
 
@@ -39,15 +35,16 @@ class FiltersItemAdjusts extends Component {
   // Handler for clicking apply button
   handleClickApply() {
     const {
-      data,
-      dimension,
+      storageId,
+      imagesNum,
       filters,
       applyFilters
     } = this.props;
 
     applyFilters({
-      data,
-      dimension,
+      storageId,
+      from: 0,
+      to: imagesNum,
       filters
     });
   }
@@ -66,99 +63,66 @@ class FiltersItemAdjusts extends Component {
   }
 
   render() {
+    const { l } = this.context.i18n;
     const { filters } = this.props;
     const adjustListProps = [{
       type: 'brightness',
-      title: CONTENT.BRIGHTNESS,
+      title: l('Brightness'),
       initialValue: 0,
-      min: -100,
-      max: 100
+      min: -1,
+      max: 1
     }, {
       type: 'contrast',
-      title: CONTENT.CONTRAST,
+      title: l('Contrast'),
       initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'saturation',
-      title: CONTENT.SATURATION,
-      initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'vibrance',
-      title: CONTENT.VIBRANCE,
-      initialValue: 0,
-      min: -100,
-      max: 100
-    }, {
-      type: 'exposure',
-      title: CONTENT.EXPOSURE,
-      initialValue: 0,
-      min: -100,
-      max: 100
+      min: -1,
+      max: 1
     }, {
       type: 'hue',
-      title: CONTENT.HUE,
+      title: l('Hue'),
       initialValue: 0,
-      min: 0,
-      max: 100
+      min: -1,
+      max: 1
+    }, {
+      type: 'saturation',
+      title: l('Saturation'),
+      initialValue: 0,
+      min: -1,
+      max: 1
+    }, {
+      type: 'vibrance',
+      title: l('Vibrance'),
+      initialValue: 0,
+      min: -1,
+      max: 1
     }, {
       type: 'sepia',
-      title: CONTENT.SEPIA,
+      title: l('Sepia'),
       initialValue: 0,
       min: 0,
-      max: 100
+      max: 1
     }, {
-      type: 'gamma',
-      title: CONTENT.GAMMA,
+      type: 'vignette',
+      title: l('Vignette'),
       initialValue: 0,
       min: 0,
-      max: 10,
-      step: 0.1
-    }, {
-      type: 'noise',
-      title: CONTENT.NOISE,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'clip',
-      title: CONTENT.CLIP,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'sharpen',
-      title: CONTENT.SHARPEN,
-      initialValue: 0,
-      min: 0,
-      max: 100
-    }, {
-      type: 'stackBlur',
-      title: CONTENT.BLUR,
-      initialValue: 0,
-      min: 0,
-      max: 20
+      max: 1
     }];
     const adjustList = this.renderAdjustList(adjustListProps);
     const applyBtnProps = {
-      className: 'btn btn-u text-uppercase rounded margin-right-10',
+      className: 'sidebar-btn',
       icon: 'file-image-o',
-      text: CONTENT.APPLY,
+      text: l('Apply'),
       disabled: !filters.isDirty,
-      handleClick: this.handleClickApply
+      onClick: this.handleClickApply
     }
 
     return (
       <div className="filters-item-adjusts-component">
-        <SidebarItem
-          icon="adjust"
-          title={CONTENT.TITLE}
-        >
+        <SidebarItem>
           {adjustList}
           <div className="margin-bottom-25" />
-          <IconButton {...applyBtnProps} />
+          <FlatButton {...applyBtnProps} />
         </SidebarItem>
       </div>
     );

@@ -1,0 +1,13 @@
+@import 'Variables.css';
+
+.brand-component {
+  .logo {
+    width: 153px;
+    height: 22px;
+    @media (width <= $bp-sm-md) {
+      width: 131px;
+      height: 19px;
+    }
+  }
+}
+

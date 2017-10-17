@@ -1,25 +1,33 @@
 {
   "FILE_PANEL": {
     "LOADER": {
-      "BTN": "CHOOSE FILE",
+      "BTN": "Choose File",
       "DESC": "Or drag & drop your video anywhere"
     }
+  },
+  "FRAME_PANEL": {
+    "DISABLED_TEXT": "Please modify the effect values and click the button to apply"
   },
   "EDIT_PANEL": {
     "TITLE": {
       "TITLE": "Title",
-      "PLACE_HOLDER": "Your title"
+      "PLACE_HOLDER": "Title"
     },
     "CAPTION": {
       "TITLE": "Caption",
-      "PLACE_HOLDER": "Write description here"
+      "PLACE_HOLDER": "Description"
     },
     "SETTINGS": {
       "TITLE": "Settings",
       "AUTOPLAY": "Autoplay",
-      "POST": "Post",
+      "SAVE": "Save",
       "UPDATE": "Update",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "CANCEL": "Cancel",
+      "WARN_MODAL": {
+        "TITLE": "New filters is not applied",
+        "DESC": "Filters is modified but not applied. Still post?"
+      }
     }
   },
   "FILTERS_PANEL": {
@@ -52,6 +60,7 @@
       "CONTRAST": "Contrast",
       "SATURATION": "Saturation",
       "VIBRANCE": "Vibrance",
+      "VIGNETTE": "Vignette",
       "EXPOSURE": "Exposure",
       "HUE": "Hue",
       "SEPIA": "Sepia",
@@ -72,5 +81,9 @@
       "USAGE": "Usage",
       "COPIED": "Copied"
     }
+  },
+  "PROCESS_MODAL": {
+    "TITLE": "Processing",
+    "DESC": "Please wait, tasks will be completed soon"
   }
 }

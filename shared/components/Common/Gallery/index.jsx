@@ -2,15 +2,23 @@
 
 import React, { Component, PropTypes } from 'react';
 
+import { GALLERY_ITEM_TYPE } from 'constants/workspace';
+import Loading from 'components/Common/Loading';
+import GalleryItem from './GalleryItem';
+
 if (process.env.BROWSER) {
   require('./Gallery.css');
 }
 
 const propTypes = {
+  progresMedia: PropTypes.object.isRequired,
+  progressMediaIds: PropTypes.array.isRequired,
   media: PropTypes.object.isRequired,
   mediaIds: PropTypes.array.isRequired,
   hasNext: PropTypes.bool.isRequired,
   deleteMedia: PropTypes.func.isRequired,
+  isProcessing: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   loadMore: PropTypes.func.isRequired
 };
 
@@ -22,14 +30,100 @@ class Gallery extends Component {
     super(props);
   }
 
+  // Render list of gallery items
+  renderItems(progressMedia, progressMediaIds, media, mediaIds, isProcessing, isFetching, deleteMedia) {
+    let items = new Array();
+    // Item for creation
+    const createMediaObj = {
+      dimension: {
+        width: 260,
+        height: 180
+      }
+    };
+    const createItem = (
+      <GalleryItem
+        key="item-create"
+        id=""
+        type={GALLERY_ITEM_TYPE.CREATE}
+        mediaObj={createMediaObj}
+        isProcessing={isProcessing}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    );
+    // Progressing Items
+    const progressItems = progressMediaIds.map((id) => (
+      <GalleryItem
+        key={id}
+        id={id}
+        type={GALLERY_ITEM_TYPE.PROGRESS}
+        mediaObj={progressMedia[id]}
+        isProcessing={isProcessing}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    ));
+    // Completed items
+    const completedItems = mediaIds.map((id) => (
+      <GalleryItem
+        key={id}
+        id={id}
+        type={GALLERY_ITEM_TYPE.COMPLETED}
+        mediaObj={media[id]}
+        isProcessing={isProcessing}
+        isFetching={isFetching}
+        deleteMedia={deleteMedia}
+      />
+    ));
+
+    items.push(createItem);
+    items = items.concat(progressItems);
+    items = items.concat(completedItems);
+
+    return items;
+  }
+
   render() {
-    const { media, mediaIds, hasNext } = this.props;
-    return(
-      <div className="gallery-component container-fluid">
-        <div className="gallery-wrapper">
+    const {
+      media,
+      mediaIds,
+      progressMedia,
+      progressMediaIds,
+      hasNext,
+      isFetching,
+      isProcessing,
+      deleteMedia,
+      loadMore
+    } = this.props;
+    const numOfItems = progressMediaIds.length + mediaIds.length + 1;
+    const remainder = numOfItems % 4;
+    const renderAll = !hasNext || (remainder === 0);
+    const slicedMediaIds =
+      renderAll ? mediaIds : mediaIds.slice(0, mediaIds.length - remainder);
+    const items =
+      this.renderItems(progressMedia, progressMediaIds, media, slicedMediaIds, isProcessing, isFetching, deleteMedia);
+
+    return (
+      <div className="gallery-component">
+        <div className="row marrgin-bottom-30">
+          {items}
         </div>
-        {hasNext &&
-          <div className="gallery-more-btn" onClick={this.handleClickMoreBtn}>{'more'}</div>
+        {
+          hasNext &&
+          <div className="text-center">
+            {
+              isFetching ?
+              <Loading size={30} /> :
+              <img
+                className="clickable"
+                src="/static/images/workspace/load-more-btn.svg"
+                alt="load more"
+                width="40"
+                height="40"
+                onClick={loadMore}
+              />
+            }
+          </div>
         }
       </div>
     );

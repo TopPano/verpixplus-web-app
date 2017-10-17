@@ -1,0 +1,25 @@
+@import 'Variables.css';
+
+.multi-tabs-content-component {
+  .tab-v1 .nav-tabs {
+    border-bottom-color: $color-red;
+
+    > .active > a {
+      background-color: $color-red;
+    }
+
+    > li > a:hover {
+      background-color: $color-red;
+    }
+  }
+
+  dt {
+    strong {
+      float: left;
+    }
+  }
+
+  hr {
+    margin: 15px 0;
+  }
+}

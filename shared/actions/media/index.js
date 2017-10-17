@@ -1,12 +1,28 @@
 import api from 'lib/api';
+import fetch from 'isomorphic-fetch';
 import isFunction from 'lodash/isFunction';
 import merge from 'lodash/merge';
 import range from 'lodash/range';
 import { push } from 'react-router-redux';
 
+import externalApiConfig from 'etc/external-api';
 import { MEDIA_TYPE } from 'constants/common';
+import {
+  NOTIFICATIONS,
+  NOTIFICATION_TYPES
+} from 'constants/notifications';
 import concatImages from './concatImages';
-
+import createVideo from './createVideo';
+import {
+  pushNotification,
+  updateProgressNotification,
+  popNotification
+} from '../notifications';
+import {
+  genRandomNum,
+  genUUID,
+  imageDataUrlToBlob
+} from 'lib/utils';
 
 function handleError(dispatch, type, err) {
   dispatch({
@@ -42,14 +58,34 @@ export function getMedia({ mediaId, filter }) {
     return api.media.getMedia(mediaId).then((res) => {
       // 1. Reconsture urls for livephoto
       // 2. Update dimension for the selected quality
-      if (res.result.type === MEDIA_TYPE.LIVE_PHOTO) {
-        const { count, quality, shardingKey } = res.result.content;
-        // TODO: Get cdnUrl from res
-        const cdnUrl = 'http://52.198.24.135:6559';
-        // TODO: Dynamically choose quality
-        const selectedQuality = quality[0];
+      if (res && res.result) {
+        const {
+          type,
+          content
+        } = res.result;
+        const {
+          storeUrl,
+          quality,
+          shardingKey
+        } = content;
+        let selectedQuality;
+        let count;
+        let typeName;
+
+        if (type === MEDIA_TYPE.LIVE_PHOTO) {
+          // Choose the highest quality
+          selectedQuality = quality[0];
+          count = content.count;
+          typeName = 'live';
+        } else {
+          // Choose the highest quality
+          selectedQuality = quality[0].size;
+          count = quality[0].tiles;
+          typeName = 'pano';
+        }
+
         const imgUrls =
-          range(0, count).map((idx) => `${cdnUrl}/${shardingKey}/media/${mediaId}/live/${selectedQuality}/${idx}.jpg`);
+          range(0, count).map((idx) => `${storeUrl}${shardingKey}/media/${mediaId}/${typeName}/${selectedQuality}/${idx}.jpg`);
         const width = parseInt(selectedQuality.split('X')[0], 10);
         const height = parseInt(selectedQuality.split('X')[1], 10);
 
@@ -79,7 +115,6 @@ export function getMedia({ mediaId, filter }) {
     });
   }
 }
-
 
 export const LOAD_USER_MEDIA_REQUEST = 'LOAD_USER_MEDIA_REQUEST';
 export const LOAD_USER_MEDIA_SUCCESS = 'LOAD_USER_MEDIA_SUCCESS';
@@ -121,12 +156,22 @@ export function loadUserMedia({ id, lastMediaId, params = {}, userSession = {} }
 
 
 export const CREATE_MEDIA_REQUEST = 'CREATE_MEDIA_REQUEST';
+export const CREATE_MEDIA_PROGRESS = 'CREATE_MEDIA_PROGRESS';
 export const CREATE_MEDIA_SUCCESS = 'CREATE_MEDIA_SUCCESS';
 export const CREATE_MEDIA_FAILURE = 'CREATE_MEDIA_FAILURE';
 
-function createMediaRequest() {
+function createMediaRequest(media) {
   return {
-    type: CREATE_MEDIA_REQUEST
+    type: CREATE_MEDIA_REQUEST,
+    media
+  };
+}
+
+function createMediaProgress(progressMediaId, progress) {
+  return {
+    type: CREATE_MEDIA_PROGRESS,
+    progressMediaId,
+    progress
   };
 }
 
@@ -137,13 +182,79 @@ function createMediaSuccess(response) {
   };
 }
 
-export function createMedia({ mediaType, title, caption, data, dimension, userSession = {} }) {
+// Interval for asking creation status
+const MEDIA_POLLING_INTERVAL = 300;
+// maximun times for asking media creation status
+const MEDIA_RETRY_MAX_TIMES = 500;
+
+function pollingAskMediaStatus(dispatch, progressMediaId, mediaId, progress, retryTimes) {
+  api.media.getMedia(mediaId).then((res) => {
+    const { status } = res.result;
+
+    switch (status) {
+      case 'completed':
+      {
+        dispatch(createMediaProgress(progressMediaId, 1));
+        setTimeout(() => {
+          dispatch(createMediaSuccess(merge({}, res, { progressMediaId })));
+          dispatch(pushNotification(NOTIFICATIONS.POST_MEDIA_SUCCESS));
+        }, 500);
+        return;
+      }
+      case 'pending':
+        if (retryTimes < MEDIA_RETRY_MAX_TIMES) {
+          const addedProgress = genRandomNum(0.005, 0.01);
+          const newProgress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, newProgress));
+          setTimeout(() => {
+            pollingAskMediaStatus(dispatch, progressMediaId, mediaId, newProgress, retryTimes + 1);
+          }, MEDIA_POLLING_INTERVAL);
+        } else {
+          handleError(dispatch, CREATE_MEDIA_FAILURE, new Error('Timeout'));
+        }
+        return;
+      case 'failed':
+        handleError(dispatch, CREATE_MEDIA_FAILURE, new Error('Create media failed'));
+        return;
+      default:
+        handleError(dispatch, CREATE_MEDIA_FAILURE, new Error(`Unknown media status: ${status}`));
+        return;
+    }
+  }).catch((err) => {
+    handleError(dispatch, CREATE_MEDIA_FAILURE, err);
+  });
+}
+
+export function createMedia({
+  mediaType,
+  title,
+  caption,
+  data,
+  thumbnail,
+  dimension,
+  panoLng,
+  panoLat,
+  userSession = {}
+}) {
   return (dispatch) => {
+    dispatch(push('/'));
+
     if (mediaType === MEDIA_TYPE.LIVE_PHOTO) {
-      dispatch(createMediaRequest());
+      const progressMediaId = genUUID();
+      const concatMaxProgress = genRandomNum(0.4, 0.5);
+      let postMediaTimer;
+      let progress = 0;
+
+      dispatch(createMediaRequest({
+        progressMediaId
+      }));
 
       // TODO: dynamically choose thumbnail index
-      concatImages(data).then((concatImgs) => {
+      concatImages(data, (percent) => {
+        progress = percent * concatMaxProgress;
+        dispatch(createMediaProgress(progressMediaId, progress));
+      }).then((result) => {
         const formData = new FormData();
 
         // TODO: dynamically value for action and orientation
@@ -153,18 +264,64 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
         formData.append('orientation', 'portrait');
         formData.append('width', dimension.width);
         formData.append('height', dimension.height);
-        formData.append('imgArrBoundary', concatImgs.separator);
-        formData.append('thumbnail', concatImgs.thumbnail);
-        formData.append('image', concatImgs.zip);
+        formData.append('imgArrBoundary', result.separator);
+        formData.append('thumbnail', result.thumbnail);
+        formData.append('image', result.concatImgs);
+
+        postMediaTimer = setInterval(() => {
+          const addedProgress = genRandomNum(0.005, 0.01);
+          progress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, progress));
+        }, 500);
 
         return api.media.postMedia(mediaType, formData, userSession.accessToken);
       }).then((res) => {
-        dispatch(createMediaSuccess(res));
+        clearInterval(postMediaTimer);
+        pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
       }).catch((err) => {
+        clearInterval(postMediaTimer);
         handleError(dispatch, CREATE_MEDIA_FAILURE, err);
       });
     } else if (mediaType === MEDIA_TYPE.PANO_PHOTO) {
-      // TODO: Handle panophoto
+      const progressMediaId = genUUID();
+      let postMediaTimer;
+      let progress = 0;
+
+      dispatch(createMediaRequest({
+        progressMediaId
+      }));
+
+      imageDataUrlToBlob(thumbnail).then((thumbnailBlob) => {
+        progress += genRandomNum(0.2, 0.25);
+        dispatch(createMediaProgress(progressMediaId, progress));
+
+        const formData = new FormData();
+
+        formData.append('image', data[0]);
+        formData.append('thumbnail', thumbnailBlob);
+        formData.append('title', title);
+        formData.append('caption', caption);
+        formData.append('width', dimension.width);
+        formData.append('height', dimension.height);
+        formData.append('lng', panoLng);
+        formData.append('lat', panoLat);
+
+        postMediaTimer = setInterval(() => {
+          const addedProgress = genRandomNum(0.005, 0.01);
+          progress =
+            (progress + addedProgress) < 1 ? (progress + addedProgress) : progress;
+          dispatch(createMediaProgress(progressMediaId, progress));
+        }, 500);
+
+        return api.media.postMedia(mediaType, formData, userSession.accessToken);
+      }).then((res) => {
+        clearInterval(postMediaTimer);
+        pollingAskMediaStatus(dispatch, progressMediaId, res.result.mediaId, progress, 0);
+      }).catch((err) => {
+        clearInterval(postMediaTimer);
+        handleError(dispatch, CREATE_MEDIA_FAILURE, err);
+      });
     } else {
       const err = new Error(`Meida type: ${mediaType} is not supported`);
       err.status = 400;
@@ -173,6 +330,200 @@ export function createMedia({ mediaType, title, caption, data, dimension, userSe
   };
 }
 
+export const SHARE_FACEBOOK_REQUEST = 'SHARE_FACEBOOK_REQUEST';
+export const SHARE_FACEBOOK_SUCCESS = 'SHARE_FACEBOOK_SUCCESS';
+export const SHARE_FACEBOOK_FAILURE = 'SHARE_FACEBOOK_FAILURE';
+
+function shareFacebookRequest() {
+  return {
+    type: SHARE_FACEBOOK_REQUEST
+  };
+}
+
+function shareFacebookSuccess() {
+  return {
+    type: SHARE_FACEBOOK_SUCCESS
+  };
+}
+
+export function shareFacebookVideo({
+  mediaId,
+  targetId,
+  title,
+  description,
+  privacy,
+  userSession = {},
+  fbAccessToken
+}) {
+  return (dispatch) => {
+    const id = genUUID();
+    let progress = 0;
+
+    dispatch(shareFacebookRequest());
+    dispatch(pushNotification({
+      type: NOTIFICATION_TYPES.PROGRESS,
+      title,
+      progress
+    }, id));
+
+    const timer = setInterval(() => {
+      if (progress < 0.99) {
+        const addedProgress = genRandomNum(0.0025, 0.01);
+        progress =
+          ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
+        dispatch(updateProgressNotification(id, progress));
+      } else {
+        clearInterval(timer);
+      }
+    }, 200);
+
+    createVideo(mediaId, userSession.accessToken).then((videoUrl) => {
+      const init = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          file_url: videoUrl,
+          description,
+          privacy: {
+            value: privacy
+          }
+        })
+      };
+      const {
+        apiRoot,
+        version
+      } = externalApiConfig.facebook;
+      const url = `${apiRoot}/v${version}/${targetId}/videos?access_token=${fbAccessToken}`;
+
+      return fetch(url, init);
+    }).then((res) => {
+      return res.json();
+    }).then((result) => {
+      if (result.error) {
+        return Promise.reject(result.error);
+      }
+      clearInterval(timer);
+      dispatch(shareFacebookSuccess());
+      dispatch(updateProgressNotification(id, 1));
+      dispatch(popNotification(id));
+      dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
+    }).catch((err) => {
+      clearInterval(timer);
+      dispatch(popNotification(id));
+      handleError(dispatch, SHARE_FACEBOOK_FAILURE, err);
+    });
+  };
+}
+
+export function shareFacebookPanophoto({
+  targetId,
+  panoUrl,
+  title,
+  description,
+  privacy,
+  fbAccessToken
+}) {
+  return (dispatch) => {
+    const id = genUUID();
+    let progress = 0;
+
+    dispatch(shareFacebookRequest());
+    dispatch(pushNotification({
+      type: NOTIFICATION_TYPES.PROGRESS,
+      title,
+      progress
+    }, id));
+
+    const timer = setInterval(() => {
+      if (progress < 0.99) {
+        const addedProgress = genRandomNum(0.0025, 0.01);
+        progress =
+          ((progress + addedProgress) < 0.99) ? progress + addedProgress : 0.99;
+        dispatch(updateProgressNotification(id, progress));
+      } else {
+        clearInterval(timer);
+      }
+    }, 200);
+
+    const {
+      apiRoot,
+      version
+    } = externalApiConfig.facebook;
+    const url = `${apiRoot}/v${version}/${targetId}/photos?access_token=${fbAccessToken}`;
+
+    const init = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        url: panoUrl,
+        caption: description,
+        allow_spherical_photo: true,
+        privacy: {
+          value: privacy
+        }
+      })
+    };
+
+    fetch(url, init).then((res) => {
+      return res.json();
+    }).then((result) => {
+      if (result.error) {
+        return Promise.reject(result.error);
+      }
+      clearInterval(timer);
+      dispatch(shareFacebookSuccess());
+      dispatch(updateProgressNotification(id, 1));
+      dispatch(popNotification(id));
+      dispatch(pushNotification(NOTIFICATIONS.SHARE_SUCCESS));
+    }).catch((err) => {
+      clearInterval(timer);
+      dispatch(popNotification(id));
+      handleError(dispatch, SHARE_FACEBOOK_FAILURE, err);
+    });
+  }
+}
+
+export const UPDATE_MEDIA_REQUEST = 'UPDATE_MEDIA_REQUEST';
+export const UPDATE_MEDIA_SUCCESS = 'UPDATE_MEDIA_SUCCESS';
+export const UPDATE_MEDIA_FAILURE = 'UPDATE_MEDIA_FAILURE';
+
+function updateMediaRequest() {
+  return {
+    type: UPDATE_MEDIA_REQUEST
+  };
+}
+
+function updateMediaSuccess(response) {
+  return {
+    type: UPDATE_MEDIA_SUCCESS,
+    response
+  };
+}
+
+export function updateMedia({ mediaId, title, caption, userSession = {} }) {
+  return (dispatch) => {
+    dispatch(updateMediaRequest());
+
+    const formData = new FormData();
+
+    formData.append('title', title);
+    formData.append('caption', caption);
+
+    api.media.putMedia(mediaId, formData, userSession.accessToken).then((res) => {
+      dispatch(updateMediaSuccess(res));
+      dispatch(push('/'));
+      dispatch(pushNotification(NOTIFICATIONS.UPDATE_MEDIA_SUCCESS));
+    }).catch((err) => {
+      handleError(dispatch, UPDATE_MEDIA_FAILURE, err);
+    });
+  };
+}
 
 export const DELETE_MEDIA_REQUEST = 'DELETE_MEDIA_REQUEST';
 export const DELETE_MEDIA_SUCCESS = 'DELETE_MEDIA_SUCCESS';
@@ -190,6 +541,8 @@ export function deleteMedia({ mediaId, userSession = {} }) {
         type: DELETE_MEDIA_SUCCESS,
         response
       });
+      dispatch(push('/'));
+      dispatch(pushNotification(NOTIFICATIONS.DELETE_MEDIA_SUCCESS));
     }).catch((err) => {
       handleError(dispatch, DELETE_MEDIA_FAILURE, err);
     });

@@ -76,26 +76,30 @@ export default class ApiClient {
     }
 
     if (method !== 'get' && method !== 'head') {
-      if (contentType === 'multipart/form-data') {
-        init.body = body;
-      } else {
+      if (contentType === 'application/json') {
         init.body = JSON.stringify(body);
+        init.headers['Content-Type'] = contentType;
+      } else {
+        init.body = body;
       }
     }
 
     return fetch(`${config.apiRoot}/${urlWithQuery}`, init).then((res) => {
-      if (res.status >= 400) {
-        return Promise.reject({ status: res.status, message: res.statusText });
-      }
       return res.json();
     }).then((data) => {
-      if (data && !data.error) {
-        if (schema) {
-          return normalize(data, schema);
-        }
-        return data;
+      if (!data) {
+        return Promise.reject(new Error('EMPTY_RESPONSE'));
       }
-      return Promise.reject(data.error);
+      if (data.error) {
+        const err = new Error(data.error.code ? data.error.code : data.error.message);
+        err.status = data.error.status;
+
+        return Promise.reject(err);
+      }
+      if (schema) {
+        return normalize(data, schema);
+      }
+      return data;
     }).catch((err) => {
       return Promise.reject(err);
     });
